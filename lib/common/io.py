@@ -1,7 +1,8 @@
 
 
 def read(filename):
-    return open(filename, encoding='utf-8').read()
+    with open(filename, encoding='utf-8') as f:
+        return f.read()
 
 
 def write(filename, content):
