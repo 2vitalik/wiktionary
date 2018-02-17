@@ -1,6 +1,6 @@
 from os.path import join, exists, isfile
 
-from core import conf
+from core.conf import conf
 from lib.common.io import read
 from lib.common.unicode import char_info
 
