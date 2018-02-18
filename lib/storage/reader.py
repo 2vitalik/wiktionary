@@ -3,8 +3,8 @@ from bisect import bisect_left
 from os.path import join, exists, isfile
 
 from core.conf import conf
-from lib.common.io import read, write
-from lib.common.unicode import char_info
+from lib.utils.io import read, write
+from lib.utils.unicode import char_info
 from lib.storage.const import MAX_DEPTH, SEPARATOR
 
 

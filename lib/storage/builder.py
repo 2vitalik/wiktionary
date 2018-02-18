@@ -1,8 +1,8 @@
 import os
 from os.path import join
 
-from lib.common.io import write
-from lib.common.timing import timing
+from lib.utils.io import write
+from lib.utils.timing import timing
 from lib.storage.const import SEPARATOR
 from lib.storage.structure import StructureBuilder
 

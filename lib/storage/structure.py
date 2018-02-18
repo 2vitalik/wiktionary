@@ -1,7 +1,7 @@
 from collections import Counter
 
-from lib.common.timing import timing
-from lib.common.unicode import char_info
+from lib.utils.timing import timing
+from lib.utils.unicode import char_info
 from lib.storage.const import MAX_DEPTH
 
 
