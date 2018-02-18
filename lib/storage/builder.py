@@ -1,5 +1,6 @@
 import os
 from os.path import join
+from shutil import copy
 
 from lib.utils.io import write
 from lib.utils.timing import timing
@@ -8,15 +9,17 @@ from lib.storage.structure import StructureBuilder
 
 
 class BaseStorageBuilder:
-    def __init__(self, path, titles):
+    def __init__(self, path, titles, max_count=1000):
         self.path = path
         self.titles = titles
-        self.structure = StructureBuilder(titles).structure
+        self.max_count = max_count
+        self.structure = StructureBuilder(titles, max_count).structure
         self.create_fs()
 
     @timing
     def create_fs(self):
         self.create_dir(self.path, self.structure, level=1)
+        write(join(self.path, '_sys', 'max_count'), str(self.max_count))
 
     def create_dir(self, path, data, level):
         os.mkdir(path)
@@ -31,6 +34,7 @@ class BaseStorageBuilder:
                 self.create_dir(new_path, sub_data, level + 1)
             else:
                 self.save_data(new_path, prefix, sub_data)
+                copy(new_path, f'{new_path}.bak')
 
     def save_data(self, path, prefix, titles):
         raise NotImplementedError()
@@ -38,7 +42,7 @@ class BaseStorageBuilder:
 
 class SimpleStorageBuilder(BaseStorageBuilder):
     def save_data(self, path, prefix, titles):
-        lines = [f'{title}\t{self.data(title)}' for title in titles]
+        lines = [f'{title}\t{self.data(title)}' for title in sorted(titles)]
         write(path, '\n'.join(lines))
 
     def data(self, title):

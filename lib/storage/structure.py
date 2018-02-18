@@ -6,8 +6,9 @@ from lib.storage.const import MAX_DEPTH
 
 
 class StructureBuilder:
-    def __init__(self, titles):
+    def __init__(self, titles, max_count):
         self.titles = titles
+        self.max_count = max_count
         self.char_info = {}
         self.structure = {}
 
@@ -38,12 +39,12 @@ class StructureBuilder:
     @timing
     def build_structure(self):
         for category, count in self.categories.items():
-            if count > 1000:
+            if count > self.max_count:
                 self.structure[category] = {}
 
         for (category, name), count in self.names.items():
             category_dict = self.structure.get(category)
-            if count > 1000:
+            if count > self.max_count:
                 category_dict[name] = {}
 
         for i in range(1, MAX_DEPTH):
@@ -52,7 +53,7 @@ class StructureBuilder:
                     base_dict = self.name_dict(prefix)
                 else:
                     base_dict = self.prefix_dict(prefix)
-                if count > 1000:
+                if count > self.max_count:
                     base_dict[prefix] = {}
 
     def name_dict(self, letter):
