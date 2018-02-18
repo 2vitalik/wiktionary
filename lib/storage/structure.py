@@ -75,8 +75,6 @@ class StructureBuilder:
     def fill_structure(self):
         for title in self.titles:
             block = self.get_block(title)
-            if block is None:  # todo: remove this?
-                continue
             block.append(title)
 
     def get_block(self, title):
@@ -101,4 +99,5 @@ class StructureBuilder:
 
             prefixes = prefixes[prefix]
 
+        # todo: Возможно всё-таки возвращать здесь последний блок?
         raise StorageError(u'Prefix length is too big.')
