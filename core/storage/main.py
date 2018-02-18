@@ -40,4 +40,5 @@ if __name__ == '__main__':
     # content = MainStorage().get('привет', 'content')
     # print(content)
 
-    MainStorage().update('выпив', content='Вот так вот :)')
+    # MainStorage().update('выпив', content='Вот так вот :)')
+    MainStorage().delete('выпив')

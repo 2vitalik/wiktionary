@@ -9,23 +9,6 @@ from lib.storage.handlers.base import BaseStorageHandler
 from lib.utils.io import read, write
 
 
-class ContentStorageHandler(BaseStorageHandler):
-
-    # todo: Использовать `cache` для ускорения массового считывания
-
-    def get(self, title):
-        path = self.block_path(title)
-        return ContentsBlock(path, title, self).content
-
-    def update(self, title, value):
-        path = self.block_path(title)
-        ContentsBlock(path, title, self).content = value
-
-    def delete(self, title, value):
-        path = self.block_path(title)
-        # todo
-
-
 class ContentsBlock:
     def __init__(self, path, title, handler):
         self.path = path
@@ -42,15 +25,22 @@ class ContentsBlock:
             self.index = None
 
     @property
-    def content(self):
+    def data(self):
         if self.index is None:
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
         return self.contents[self.index]
 
-    @content.setter
-    def content(self, value):
-        copy(self.path, f'{self.path}.bak')
+    @data.deleter
+    def data(self):
+        if self.index is None:
+            raise StorageError(f"Block doesn't contain title: '{self.title}'")
+        del self.titles[self.index]
+        self.contents[0] = '\n'.join(self.titles)
+        del self.contents[self.index]
+        self.save()
 
+    @data.setter
+    def data(self, value):
         if self.index is None:  # info: случай добавления нового элемента
             self.index = bisect_left(self.titles, self.title)
             self.titles.insert(self.index, self.title)
@@ -59,10 +49,13 @@ class ContentsBlock:
         else:
             self.contents[self.index] = value
 
-        write(self.path, SEPARATOR.join(self.contents))
-
+        self.save()
         if len(self.titles) > self.handler.max_count:
             self.split_block()
+
+    def save(self):
+        copy(self.path, f'{self.path}.bak')
+        write(self.path, SEPARATOR.join(self.contents))
 
     def split_block(self):
         os.rename(self.path, f'{self.path}.old')
@@ -78,7 +71,13 @@ class ContentsBlock:
 class SplitContentsStorageBuilder(ContentsStorageBuilder):
     def __init__(self, *args, contents_dict=None, **kwargs):
         self.contents_dict = contents_dict
-        super(SplitContentsStorageBuilder, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
-    def content(self, title):
+    def data(self, title):
         return self.contents_dict[title]
+
+
+class ContentStorageHandler(BaseStorageHandler):
+    block_class = ContentsBlock
+
+    # todo: Использовать `cache` для ускорения массового считывания

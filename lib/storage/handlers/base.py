@@ -6,9 +6,26 @@ from lib.utils.unicode import char_info
 
 
 class BaseStorageHandler:
+    block_class = None
+
     def __init__(self, path, max_count):
         self.path = path
         self.max_count = max_count
+
+    def block(self, title):
+        if not self.block_class:
+            raise NotImplementedError('You need set `block_class` attribute')
+        path = self.block_path(title)
+        return self.block_class(path, title, self)
+
+    def get(self, title):
+        return self.block(title).data
+
+    def update(self, title, value):
+        self.block(title).data = value
+
+    def delete(self, title):
+        del self.block(title).data
 
     def block_path(self, title):
         category, name = char_info(title[0])

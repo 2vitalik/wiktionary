@@ -54,5 +54,5 @@ class Storage:
 
     def delete(self, title):
         # log('deleted.txt', page.log())
-        for table, handler in self.handlers:
+        for table, handler in self.handlers.items():
             handler.delete(title)

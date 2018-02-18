@@ -61,8 +61,8 @@ class ContentsStorageBuilder(BaseStorageBuilder):
         titles.sort()
         titles_str = '\n'.join(titles)
         contents = [f"Prefix: {prefix}\n{titles_str}"]
-        contents += [self.content(title) for title in titles]
+        contents += [self.data(title) for title in titles]
         write(path, SEPARATOR.join(contents))
 
-    def content(self, title):
+    def data(self, title):
         raise NotImplementedError()
