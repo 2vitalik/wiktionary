@@ -2,24 +2,24 @@ import os
 from bisect import bisect_left
 from shutil import copy
 
+from lib.storage.blocks.base import BaseBlock
 from lib.storage.builder import ContentsStorageBuilder
 from lib.storage.const import SEPARATOR
 from lib.storage.error import StorageError
 from lib.utils.io import read, write
 
 
-class ContentsBlock:
-    def __init__(self, path, title, handler):
-        self.path = path
-        self.title = title
-        self.handler = handler
+class ContentsBlock(BaseBlock):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         block_content = read(self.path)
         if not block_content:
             raise StorageError(f'Block is empty: "{self.path}"')
         self.contents = block_content.split(SEPARATOR)
         self.titles = self.contents[0].split('\n')
         try:
-            self.index = self.titles.index(title)
+            self.index = self.titles.index(self.title)
         except ValueError:
             self.index = None
 

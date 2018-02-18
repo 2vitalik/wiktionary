@@ -1,25 +1,24 @@
+import os
 from bisect import bisect_left
 from shutil import copy
 
-import os
-
+from lib.storage.blocks.base import BaseBlock
 from lib.storage.builder import SimpleStorageBuilder
 from lib.storage.error import StorageError
 from lib.utils.io import read, write
 
 
-class SimpleBlock:
-    def __init__(self, path, title, handler):
-        self.path = path
-        self.title = title
-        self.handler = handler
+class SimpleBlock(BaseBlock):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
         block_content = read(self.path)
         if not block_content:
             raise StorageError(f'Block is empty: "{self.path}"')
         self.contents = block_content.split('\n')
         self.titles = [line.split('\t')[0] for line in self.contents]
         try:
-            self.index = self.titles.index(title)
+            self.index = self.titles.index(self.title)
         except ValueError:
             self.index = None
 
