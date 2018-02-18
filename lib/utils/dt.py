@@ -17,10 +17,16 @@ def t():  # info: short function to return time
     return datetime.now().strftime("[%H:%M:%S]")
 
 
-def dtf(fmt):  # info: datetime format
-    value = datetime.now() + timedelta(hours=PLUS_HOURS)
+def dt(value=None, utc=False):
+    return dtf('dt', value, utc)
+
+
+def dtf(fmt, value=None, utc=False):  # info: datetime format
+    value = value or datetime.now()
+    if not utc:
+        value += timedelta(hours=PLUS_HOURS)
     return value.strftime(formats[fmt])
 
 
-def dtp(fmt, value):  # info: datetime parse
+def dtp(value, fmt='dt'):  # info: datetime parse
     return datetime.strptime(value, formats[fmt])
