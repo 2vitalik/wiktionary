@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 
-PLUS_HOURS = 3  # info: difference with server time
+PLUS_HOURS = 2  # info: difference with server time
 
 formats = {
     'dt': '%Y-%m-%d %H:%M:%S',
