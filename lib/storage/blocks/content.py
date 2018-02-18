@@ -5,7 +5,6 @@ from shutil import copy
 from lib.storage.builder import ContentsStorageBuilder
 from lib.storage.const import SEPARATOR
 from lib.storage.error import StorageError
-from lib.storage.handlers.base import BaseStorageHandler
 from lib.utils.io import read, write
 
 
@@ -72,9 +71,3 @@ class SplitContentsStorageBuilder(ContentsStorageBuilder):
 
     def data(self, title):
         return self.contents_dict[title]
-
-
-class ContentStorageHandler(BaseStorageHandler):
-    block_class = ContentsBlock
-
-    # todo: Использовать `cache` для ускорения массового считывания

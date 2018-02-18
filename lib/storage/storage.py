@@ -2,8 +2,8 @@ import os
 from os.path import join, exists
 
 from lib.storage.error import StorageError
-from lib.storage.handlers.content import ContentStorageHandler
-from lib.storage.handlers.simple import SimpleStorageHandler
+from lib.storage.handlers import ContentStorageHandler, \
+    SimpleStorageHandler
 from lib.utils.dt import dt
 from lib.utils.io import write, read
 

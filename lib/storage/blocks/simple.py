@@ -5,7 +5,6 @@ import os
 
 from lib.storage.builder import SimpleStorageBuilder
 from lib.storage.error import StorageError
-from lib.storage.handlers.base import BaseStorageHandler
 from lib.utils.io import read, write
 
 
@@ -27,7 +26,7 @@ class SimpleBlock:
     def get(self):
         if self.index is None:
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
-        return self.contents[self.index]
+        return self.contents[self.index].split('\t', maxsplit=1)[1]
 
     def delete(self):
         if self.index is None:
@@ -75,7 +74,3 @@ class SplitSimpleStorageBuilder(SimpleStorageBuilder):
 
     def data(self, title):
         return self.data_dict[title]
-
-
-class SimpleStorageHandler(BaseStorageHandler):
-    block_class = SimpleBlock

@@ -1,5 +1,7 @@
 from os.path import join, exists, isfile
 
+from lib.storage.blocks.content import ContentsBlock
+from lib.storage.blocks.simple import SimpleBlock
 from lib.storage.const import MAX_DEPTH
 from lib.storage.error import StorageError
 from lib.utils.unicode import char_info
@@ -48,3 +50,13 @@ class BaseStorageHandler:
                 return candidate
 
         raise StorageError(f"Path does't exist for title '{title}'")
+
+
+class ContentStorageHandler(BaseStorageHandler):
+    block_class = ContentsBlock
+
+    # todo: Использовать `cache` для ускорения массового считывания
+
+
+class SimpleStorageHandler(BaseStorageHandler):
+    block_class = SimpleBlock

@@ -30,8 +30,10 @@ class MainStorage(Storage):
 
 
 if __name__ == '__main__':
-    # content = MainStorage().get('привет', 'content')
-    # print(content)
+    content = MainStorage().get('привет', 'content')
+    print(content)
+    info = MainStorage().get('привет', 'info')
+    print(info)
     # print('=' * 100)
     #
     # content = content.replace('{{длина слова', '{{ДЛИНА СЛОВА!!')
@@ -41,4 +43,4 @@ if __name__ == '__main__':
     # print(content)
 
     # MainStorage().update('выпив', content='Вот так вот :)')
-    MainStorage().delete('выпив')
+    # MainStorage().delete('выпив')
