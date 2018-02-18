@@ -1,49 +1,33 @@
 import os
 from bisect import bisect_left
-from os.path import join, exists, isfile
 
-from core.conf import conf
+from lib.storage.const import SEPARATOR
+from lib.storage.error import StorageError
+from lib.storage.handlers.base import BaseStorageHandler
 from lib.utils.io import read, write
-from lib.utils.unicode import char_info
-from lib.storage.const import MAX_DEPTH, SEPARATOR
 
 
-class StorageError(Exception):
-    pass
+class ContentStorageHandler(BaseStorageHandler):
+
+    # todo: Использовать `cache` для ускорения массового считывания
+
+    def get(self, title):
+        path = self.block_path(title)
+        return ContentsBlock(path, title).content
+
+    def update(self, title, value):
+        path = self.block_path(title)
+        ContentsBlock(path, title).content = value
+
+    def delete(self, title, value):
+        path = self.block_path(title)
+        # todo
 
 
-def block_path(title):
-    path = conf.STORAGE_PATH
-    category, name = char_info(title[0])
-
-    candidates = [
-        join(path, category),
-        join(path, category, name),
-    ]
-
-    path = candidates[-1]
-    for i in range(min(len(title), MAX_DEPTH)):
-        key = str(ord(title[i]))  # код соответствующего символа
-        path = join(path, key)
-        candidates.append(path)
-
-    for candidate in candidates:
-        if not exists(candidate):
-            raise StorageError(f"Path does't exist: '{candidate}'")
-        if isfile(candidate):
-            return candidate
-
-    raise StorageError(f"Path does't exist for title '{title}'")
-
-
-class Block:
-    cache = {}  # todo: Использовать `cache` для ускорения массового считывания
-    cached = []
-    cache_size = 400
-
-    def __init__(self, title):
+class ContentsBlock:
+    def __init__(self, path, title):
+        self.path = path
         self.title = title
-        self.path = block_path(title)
         self.contents = read(self.path).split(SEPARATOR)
         self.titles = self.contents[0].split('\n')
         try:
@@ -60,7 +44,7 @@ class Block:
     @content.setter
     def content(self, value):
         if self.index is None:  # info: случай добавления нового элемента
-            if len(self.titles) > 1000:
+            if len(self.titles) > 1000:  # todo: self.max_count instead ?
                 self.split_block()
                 # todo
                 return
@@ -76,7 +60,3 @@ class Block:
         os.rename(self.path, f'{self.path}.old')
         os.mkdir(self.path)
         # todo
-
-
-if __name__ == '__main__':
-    print(Block('привет').content)
