@@ -19,13 +19,13 @@ class BaseStorageHandler:
         return self.block_class(path, title, self)
 
     def get(self, title):
-        return self.block(title).data
+        return self.block(title).get()
 
     def update(self, title, value):
-        self.block(title).data = value
+        self.block(title).update(value)
 
     def delete(self, title):
-        del self.block(title).data
+        self.block(title).delete()
 
     def block_path(self, title):
         category, name = char_info(title[0])

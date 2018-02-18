@@ -24,14 +24,12 @@ class ContentsBlock:
         except ValueError:
             self.index = None
 
-    @property
-    def data(self):
+    def get(self):
         if self.index is None:
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
         return self.contents[self.index]
 
-    @data.deleter
-    def data(self):
+    def delete(self):
         if self.index is None:
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
         del self.titles[self.index]
@@ -39,8 +37,7 @@ class ContentsBlock:
         del self.contents[self.index]
         self.save()
 
-    @data.setter
-    def data(self, value):
+    def update(self, value):
         if self.index is None:  # info: случай добавления нового элемента
             self.index = bisect_left(self.titles, self.title)
             self.titles.insert(self.index, self.title)
