@@ -1,7 +1,8 @@
 import os
-from os.path import join
+from os.path import join, exists
 from shutil import copy
 
+from lib.storage.error import StorageError
 from lib.utils.io import write
 from lib.utils.timing import timing
 from lib.storage.const import SEPARATOR
@@ -9,10 +10,11 @@ from lib.storage.structure import StructureBuilder
 
 
 class BaseStorageBuilder:
-    def __init__(self, path, titles, max_count=1000):
+    def __init__(self, path, titles, max_count=1000, splitting=False):
         self.path = path
         self.titles = titles
         self.max_count = max_count
+        self.splitting = splitting
         self.structure = StructureBuilder(titles, max_count).structure
         self.create_fs()
 
@@ -21,20 +23,25 @@ class BaseStorageBuilder:
         self.create_dir(self.path, self.structure, level=1)
         write(join(self.path, '_sys', 'max_count'), str(self.max_count))
 
-    def create_dir(self, path, data, level):
-        os.mkdir(path)
-        for prefix, sub_data in data.items():
+    def create_dir(self, path, structure, level):
+        if not self.splitting or not exists(path):
+            os.mkdir(path)
+        for prefix, sub_structure in structure.items():
             # print(' ' * level, prefix)
             key = prefix
             if level > 2:
                 key = str(ord(prefix[-1]))
             new_path = join(path, key)
-            if type(sub_data) == dict:
+            if type(sub_structure) == dict:
                 print(' ' * level, prefix)
-                self.create_dir(new_path, sub_data, level + 1)
+                self.create_dir(new_path, sub_structure, level + 1)
             else:
-                self.save_data(new_path, prefix, sub_data)
+                if exists(new_path):
+                    raise StorageError(f"File shouldn't exist: '{new_path}'")
+                self.save_data(new_path, prefix, sub_structure)
                 copy(new_path, f'{new_path}.bak')
+                if self.splitting:
+                    copy(new_path, f'{new_path}.new')
 
     def save_data(self, path, prefix, titles):
         raise NotImplementedError()
