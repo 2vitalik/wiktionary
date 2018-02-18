@@ -1,5 +1,6 @@
 from collections import Counter
 
+from lib.storage.error import StorageError
 from lib.utils.timing import timing
 from lib.utils.unicode import char_info
 from lib.storage.const import MAX_DEPTH
@@ -100,4 +101,4 @@ class StructureBuilder:
 
             prefixes = prefixes[prefix]
 
-        # todo: return `prefixes`?
+        raise StorageError(u'Prefix length is too big.')
