@@ -1,5 +1,6 @@
 import os
 from bisect import bisect_left
+from shutil import copy
 
 from lib.storage.const import SEPARATOR
 from lib.storage.error import StorageError
@@ -13,11 +14,11 @@ class ContentStorageHandler(BaseStorageHandler):
 
     def get(self, title):
         path = self.block_path(title)
-        return ContentsBlock(path, title).content
+        return ContentsBlock(path, title, self.max_count).content
 
     def update(self, title, value):
         path = self.block_path(title)
-        ContentsBlock(path, title).content = value
+        ContentsBlock(path, title, self.max_count).content = value
 
     def delete(self, title, value):
         path = self.block_path(title)
@@ -25,10 +26,14 @@ class ContentStorageHandler(BaseStorageHandler):
 
 
 class ContentsBlock:
-    def __init__(self, path, title):
+    def __init__(self, path, title, max_count):
         self.path = path
         self.title = title
-        self.contents = read(self.path).split(SEPARATOR)
+        self.max_count = max_count
+        block_content = read(self.path)
+        if not block_content:
+            raise StorageError(f'Block is empty: "{self.path}"')
+        self.contents = block_content.split(SEPARATOR)
         self.titles = self.contents[0].split('\n')
         try:
             self.index = self.titles.index(title)
@@ -43,8 +48,9 @@ class ContentsBlock:
 
     @content.setter
     def content(self, value):
+        copy(self.path, f'{self.path}.bak')
         if self.index is None:  # info: случай добавления нового элемента
-            if len(self.titles) > 1000:  # todo: self.max_count instead ?
+            if len(self.titles) > self.max_count:
                 self.split_block()
                 # todo
                 return

@@ -5,7 +5,7 @@ from lib.storage.error import StorageError
 from lib.storage.handlers.content import ContentStorageHandler
 from lib.storage.handlers.simple import SimpleStorageHandler
 from lib.utils.dt import dt
-from lib.utils.io import write
+from lib.utils.io import write, read
 
 
 class Storage:
@@ -22,7 +22,9 @@ class Storage:
         self.handlers = {}
         for table, handler_type in tables.items():
             table_path = join(path, table)
-            self.handlers[table] = self.handler_types[handler_type](table_path)
+            max_count = int(read(join(table_path, '_sys', 'max_count')))
+            self.handlers[table] = self.handler_types[handler_type](table_path,
+                                                                    max_count)
 
     def __del__(self):
         if self.locked:

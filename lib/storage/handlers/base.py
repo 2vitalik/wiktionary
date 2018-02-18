@@ -6,8 +6,9 @@ from lib.utils.unicode import char_info
 
 
 class BaseStorageHandler:
-    def __init__(self, path):
+    def __init__(self, path, max_count):
         self.path = path
+        self.max_count = max_count
 
     def block_path(self, title):
         category, name = char_info(title[0])
