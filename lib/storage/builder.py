@@ -1,3 +1,4 @@
+import json
 import os
 from os.path import join, exists
 from shutil import copy
@@ -25,12 +26,13 @@ class BaseStorageBuilder:
 
     def create_dir(self, path, structure, level):
         if not self.splitting or not exists(path):
-            os.mkdir(path)
+            os.makedirs(path)
         for prefix, sub_structure in structure.items():
             # print(' ' * level, prefix)
             key = prefix
             if level > 2:
-                key = str(ord(prefix[-1]))
+                code = ord(prefix[-1]) if len(prefix) + 2 >= level else 0
+                key = f'{code} - {hex(code)}'
             new_path = join(path, key)
             if type(sub_structure) == dict:
                 print(' ' * level, prefix)
@@ -39,7 +41,6 @@ class BaseStorageBuilder:
                 if exists(new_path):
                     raise StorageError(f"File shouldn't exist: '{new_path}'")
                 self.save_data(new_path, prefix, sub_structure)
-                copy(new_path, f'{new_path}.bak')
                 if self.splitting:
                     copy(new_path, f'{new_path}.new')
 

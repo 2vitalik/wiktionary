@@ -1,5 +1,6 @@
 import os
 from bisect import bisect_left
+from os.path import exists
 from shutil import copy
 
 from lib.storage.blocks.base import BaseBlock
@@ -30,7 +31,9 @@ class ContentsBlock(BaseBlock):
 
     def delete(self):
         if self.index is None:
-            raise StorageError(f"Block doesn't contain title: '{self.title}'")
+            # todo: log('Уже удалён')
+            pass
+            # raise StorageError(f"Block doesn't contain title: '{self.title}'")
         del self.titles[self.index]
         self.contents[0] = '\n'.join(self.titles)
         del self.contents[self.index]
@@ -38,7 +41,7 @@ class ContentsBlock(BaseBlock):
 
     def update(self, value):
         if self.index is None:  # info: случай добавления нового элемента
-            self.index = bisect_left(self.titles, self.title)
+            self.index = bisect_left(self.titles[1:], self.title) + 1
             self.titles.insert(self.index, self.title)
             self.contents[0] = '\n'.join(self.titles)
             self.contents.insert(self.index, value)

@@ -2,6 +2,7 @@ from os.path import join, exists, isfile
 
 from lib.storage.const import MAX_DEPTH
 from lib.storage.error import StorageError
+from lib.utils.io import write
 from lib.utils.unicode import char_info
 
 
@@ -24,19 +25,23 @@ class BaseBlock:
         category, name = char_info(title[0])
 
         candidates = [
-            join(self.handler.path, category),
-            join(self.handler.path, category, name),
+            (category, join(self.handler.path, category)),
+            (name, join(self.handler.path, category, name)),
         ]
 
-        path = candidates[-1]
-        for i in range(min(len(title), MAX_DEPTH)):
-            key = str(ord(title[i]))  # код соответствующего символа
-            path = join(path, key)
-            candidates.append(path)
+        path = candidates[-1][1]
+        for i in range(MAX_DEPTH):
+            code = ord(title[i]) if i < len(title) else 0
+            key = f'{code} - {hex(code)}'
 
-        for candidate in candidates:
+            key = str(hex(ord(title[i])))  # код соответствующего символа
+            path = join(path, key)
+            candidates.append((title[:i + 1], path))
+
+        for prefix, candidate in candidates:
             if not exists(candidate):
-                raise StorageError(f"Path does't exist: '{candidate}'")
+                write(candidate, f"Prefix: {prefix}")
+                return candidate
             if isfile(candidate):
                 return candidate
 

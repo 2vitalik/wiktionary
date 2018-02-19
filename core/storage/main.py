@@ -1,4 +1,4 @@
-from os.path import join
+from os.path import join, exists
 
 from core.conf import conf
 from lib.storage.storage import Storage
@@ -22,6 +22,8 @@ class MainStorage(Storage):
 
     @property
     def latest_edited(self):
+        if not exists(self.latest_edited_filename):
+            return None
         return dtp(read(self.latest_edited_filename))
 
     @latest_edited.setter
@@ -30,10 +32,8 @@ class MainStorage(Storage):
 
 
 if __name__ == '__main__':
-    content = MainStorage().get('привет', 'content')
-    print(content)
-    info = MainStorage().get('привет', 'info')
-    print(info)
+    # content = MainStorage().get('привет', 'content')
+    # print(content)
     # print('=' * 100)
     #
     # content = content.replace('{{длина слова', '{{ДЛИНА СЛОВА!!')
@@ -41,6 +41,16 @@ if __name__ == '__main__':
     #
     # content = MainStorage().get('привет', 'content')
     # print(content)
-
+    #
     # MainStorage().update('выпив', content='Вот так вот :)')
     # MainStorage().delete('выпив')
+
+    # info = MainStorage().get('привет', 'info')
+    # print(info)
+
+    # MainStorage().update('привет', info='test!! :)')
+
+    info = MainStorage().get('привет', 'info')
+    print(info)
+
+    # MainStorage().delete('привет')

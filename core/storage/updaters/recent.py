@@ -5,6 +5,8 @@ from core.storage.updaters.base import BaseStorageUpdater
 
 
 def reduce_seconds(dt):
+    if not dt:
+        return None
     return Timestamp(dt.year, dt.month, dt.day, dt.hour, dt.minute)
 
 
@@ -24,3 +26,7 @@ class RecentStorageUpdater(BaseStorageUpdater):
             latest_edited = latest_edited or reduce_seconds(edited)
         if latest_edited:
             self.storage.latest_edited = latest_edited
+
+
+if __name__ == '__main__':
+    RecentStorageUpdater()
