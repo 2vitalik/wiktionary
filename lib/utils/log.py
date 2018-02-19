@@ -8,7 +8,7 @@ def log(filename, line, path=None):
     if path:
         filename = join(path, filename)
     ensure_parent_dir(filename)
-    append(filename, f'{dt(): {line}}')
+    append(filename, f'{dt()}: {line}')
 
 
 def log_day(slug, value, path=None):

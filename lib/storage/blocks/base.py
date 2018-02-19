@@ -33,8 +33,6 @@ class BaseBlock:
         for i in range(MAX_DEPTH):
             code = ord(title[i]) if i < len(title) else 0
             key = f'{code} - {hex(code)}'
-
-            key = str(hex(ord(title[i])))  # код соответствующего символа
             path = join(path, key)
             candidates.append((title[:i + 1], path))
 
