@@ -29,7 +29,9 @@ class SimpleBlock(BaseBlock):
 
     def delete(self):
         if self.index is None:
-            raise StorageError(f"Block doesn't contain title: '{self.title}'")
+            # todo: log('Уже удалён')
+            return
+            # raise StorageError(f"Block doesn't contain title: '{self.title}'")
         del self.titles[self.index]
         del self.contents[self.index]
         self.save()

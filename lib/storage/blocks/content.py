@@ -32,7 +32,7 @@ class ContentsBlock(BaseBlock):
     def delete(self):
         if self.index is None:
             # todo: log('Уже удалён')
-            pass
+            return
             # raise StorageError(f"Block doesn't contain title: '{self.title}'")
         del self.titles[self.index]
         self.contents[0] = '\n'.join(self.titles)
