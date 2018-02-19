@@ -19,6 +19,7 @@ class BaseStorageUpdater:
             redirect = page.isRedirectPage()
         except NoPage:
             self.storage.delete(title)
+            log_day('deleted.txt', title, path=self.storage.logs_path)
             return None
 
         info = f"{dt(edited, utc=True)}, {'R' if redirect else 'A'}"
