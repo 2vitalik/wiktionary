@@ -2,7 +2,7 @@ from pywikibot import NoPage
 
 from core.storage.main import MainStorage
 from lib.utils.dt import dt
-from lib.utils.log import log_day
+from lib.utils.log import log_day, log_hour
 
 
 class BaseStorageUpdater:
@@ -24,7 +24,11 @@ class BaseStorageUpdater:
 
         info = f"{dt(edited, utc=True)}, {'R' if redirect else 'A'}"
         self.storage.update(title, content=content, info=info)
+        log_hour('changed', f'<{info}> - {title}')
         return edited
 
     def log_day(self, slug, value):
         log_day(slug, value, path=self.storage.logs_path)
+
+    def log_hour(self, slug, value):
+        log_hour(slug, value, path=self.storage.logs_path)
