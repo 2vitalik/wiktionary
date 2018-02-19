@@ -23,8 +23,8 @@ def dt(value=None, utc=False):
 
 def dtf(fmt, value=None, utc=False):  # info: datetime format
     value = value or datetime.now()
-    if not utc:
-        value += timedelta(hours=PLUS_HOURS)
+    # if not utc:
+    #     value += timedelta(hours=PLUS_HOURS)
     return value.strftime(formats[fmt])
 
 
