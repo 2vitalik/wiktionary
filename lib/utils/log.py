@@ -1,6 +1,6 @@
 from os.path import join
 
-from lib.utils.dt import dtf
+from lib.utils.dt import dtf, dt
 from lib.utils.io import ensure_parent_dir, append
 
 
@@ -8,7 +8,7 @@ def log(filename, line, path=None):
     if path:
         filename = join(path, filename)
     ensure_parent_dir(filename)
-    append(filename, line)
+    append(filename, f'{dt(): {line}}')
 
 
 def log_day(slug, value, path=None):
