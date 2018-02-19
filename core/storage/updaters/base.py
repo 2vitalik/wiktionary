@@ -24,7 +24,7 @@ class BaseStorageUpdater:
 
         info = f"{dt(edited, utc=True)}, {'R' if redirect else 'A'}"
         self.storage.update(title, content=content, info=info)
-        log_hour('changed', f'<{info}> - {title}')
+        self.log_hour('changed', f'<{info}> - {title}')
         return edited
 
     def log_day(self, slug, value):
