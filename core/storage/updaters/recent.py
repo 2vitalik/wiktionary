@@ -2,6 +2,7 @@ from pywikibot import Timestamp
 from pywikibot.pagegenerators import RecentChangesPageGenerator
 
 from core.storage.updaters.base import BaseStorageUpdater
+from lib.utils.dt import dt
 
 
 def reduce_seconds(dt):
@@ -15,6 +16,7 @@ class RecentStorageUpdater(BaseStorageUpdater):
         super().__init__()
         start = reduce_seconds(start)
         end = reduce_seconds(end or self.storage.latest_edited)
+        print(dt(), '- Processing recent pages until:', dt(end))
         generator = \
             RecentChangesPageGenerator(start=start, end=end, namespaces=[0])
 
@@ -26,6 +28,7 @@ class RecentStorageUpdater(BaseStorageUpdater):
             latest_edited = latest_edited or reduce_seconds(edited)
         if latest_edited:
             self.storage.latest_edited = latest_edited
+            print(dt(), '- New `latest_edited`:', dt(latest_edited))
 
 
 if __name__ == '__main__':

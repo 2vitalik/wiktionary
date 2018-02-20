@@ -1,7 +1,7 @@
 from pywikibot import NoPage
 
 from core.storage.main import MainStorage
-from lib.utils.dt import dt
+from lib.utils.dt import dt, t
 from lib.utils.log import log_day, log_hour
 
 
@@ -12,18 +12,21 @@ class BaseStorageUpdater:
     def process_page(self, page):
         title = page.title()  # todo: except InvalidTitle ?
         self.log_day('titles', title)
-
+        print(t(), title, end=' ', flush=True)
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
             redirect = page.isRedirectPage()
         except NoPage:
             self.storage.delete(title)
+            print('- deleted')
             log_day('deleted.txt', title, path=self.storage.logs_path)
             return None
 
-        info = f"{dt(edited, utc=True)}, {'R' if redirect else 'A'}"
+        edited_str = dt(edited, utc=True)
+        info = f"{edited_str}, {'R' if redirect else 'A'}"
         self.storage.update(title, content=content, info=info)
+        print('- updated:', edited_str)
         self.log_hour('changed', f'<{info}> - {title}')
         return edited
 
