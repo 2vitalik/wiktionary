@@ -38,6 +38,7 @@ class ContentsBlock(BaseBlock):
         self.contents[0] = '\n'.join(self.titles)
         del self.contents[self.index]
         self.save()
+        # todo: log('Удалён')
 
     def update(self, value):
         if self.index is None:  # info: случай добавления нового элемента
@@ -46,9 +47,13 @@ class ContentsBlock(BaseBlock):
             self.contents[0] = '\n'.join(self.titles)
             self.contents.insert(self.index, value)
         else:
+            if self.contents[self.index] == value:
+                # todo: log('Содержимое не изменилось')
+                return  # info: содержимое не изменилось
             self.contents[self.index] = value
 
         self.save()
+        # todo: log('Сохранён')
         if len(self.titles) > self.handler.max_count:
             self.split_block()
 
@@ -57,6 +62,7 @@ class ContentsBlock(BaseBlock):
         write(self.path, SEPARATOR.join(self.contents))
 
     def split_block(self):
+        # todo: log('Разделение файла')
         os.rename(self.path, f'{self.path}.old')
         os.mkdir(self.path)
         contents_dict = {title: content
@@ -65,6 +71,7 @@ class ContentsBlock(BaseBlock):
         SplitContentsStorageBuilder(self.handler.path, self.titles[1:],
                                     self.handler.max_count, splitting=True,
                                     contents_dict=contents_dict)
+        # todo: log('Успех')
 
 
 class SplitContentsStorageBuilder(ContentsStorageBuilder):
