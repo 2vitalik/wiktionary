@@ -13,13 +13,15 @@ def reduce_seconds(dt):
 
 class RecentStorageUpdater(BaseStorageUpdater):
     def __init__(self, start=None, end=None):
-        super().__init__()
-        start = reduce_seconds(start)
-        end = reduce_seconds(end or self.storage.latest_edited)
-        print(dt(), '- Processing recent pages until:', dt(end))
-        generator = \
-            RecentChangesPageGenerator(start=start, end=end, namespaces=[0])
+        self.start = reduce_seconds(start)
+        self.end = reduce_seconds(end or self.storage.latest_edited)
+        super().__init__()  # важно поместить его именно здесь
 
+    def run(self):
+        print(dt(), '- Processing recent pages until:', dt(self.end))
+        generator = \
+            RecentChangesPageGenerator(start=self.start, end=self.end,
+                                       namespaces=[0])
         latest_edited = None
         for page in generator:
             edited = self.process_page(page)

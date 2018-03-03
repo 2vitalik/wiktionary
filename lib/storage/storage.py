@@ -27,7 +27,7 @@ class Storage:
                                                                     max_count)
 
     def __del__(self):
-        if self.locked:
+        if self.locked and exists(self.lock_filename):
             os.remove(self.lock_filename)
 
     @property
@@ -36,10 +36,17 @@ class Storage:
 
     def lock(self):
         if exists(self.lock_filename):
-            raise StorageError(f'Storage is already locked: '
+            raise StorageError(f"Can't lock: Storage is already locked: "
                                f'"{self.lock_filename}"')
         write(self.lock_filename, dt())
         self.locked = True
+
+    def unlock(self):
+        if not exists(self.lock_filename):
+            raise StorageError(f"Can't unlock: Storage wan't locked: "
+                               f'"{self.lock_filename}"')
+        os.remove(self.lock_filename)
+        self.locked = False
 
     @property
     def logs_path(self):

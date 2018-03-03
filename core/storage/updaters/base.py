@@ -6,8 +6,23 @@ from lib.utils.log import log_day, log_hour
 
 
 class BaseStorageUpdater:
+    """
+    Обновление информации для хранилища.
+
+    Примечание:
+    Класс будет функционировать только во время работы конструктора,
+    затем освобождает ресурсы (unlock для Storage)
+    """
     def __init__(self):
+        """
+        Примечание: В классах наследниках конструктор надо вызывать в хвосте
+        """
         self.storage = MainStorage(lock=True)
+        self.run()
+        self.storage.unlock()
+
+    def run(self):
+        raise NotImplementedError()
 
     def process_page(self, page):
         title = page.title()  # todo: except InvalidTitle ?
