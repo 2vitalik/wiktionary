@@ -13,15 +13,15 @@ class BaseStorageUpdater:
     Класс будет функционировать только во время работы конструктора,
     затем освобождает ресурсы (unlock для Storage)
     """
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
         """
         Примечание: В классах наследниках конструктор надо вызывать в хвосте
         """
         self.storage = MainStorage(lock=True)
-        self.run()
+        self.run(*args, **kwargs)
         self.storage.unlock()
 
-    def run(self):
+    def run(self, *args, **kwargs):
         raise NotImplementedError()
 
     def process_page(self, page):
