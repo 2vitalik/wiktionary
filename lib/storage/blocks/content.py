@@ -54,7 +54,7 @@ class ContentsBlock(BaseBlock):
 
         self.save()
         # todo: log('Сохранён')
-        if len(self.titles) > self.handler.max_count:
+        if len(self.titles) - 1 > self.handler.max_count:  # -1 -- это 1я строка
             self.split_block()
 
     def save(self):

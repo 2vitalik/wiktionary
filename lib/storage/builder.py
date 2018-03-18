@@ -38,7 +38,7 @@ class BaseStorageBuilder:
                 print(' ' * level, prefix)
                 self.create_dir(new_path, sub_structure, level + 1)
             else:
-                if exists(new_path):
+                if exists(new_path) and not self.splitting:
                     raise StorageError(f"File shouldn't exist: '{new_path}'")
                 self.save_data(new_path, prefix, sub_structure)
                 if self.splitting:
