@@ -27,7 +27,7 @@ class BaseStorageUpdater:
     def process_page(self, page):
         title = page.title()  # todo: except InvalidTitle ?
         self.log_day('titles', title)
-        print(t(), title, end=' ', flush=True)
+        print(t(), title.encode('utf-8'), end=' ', flush=True)
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
