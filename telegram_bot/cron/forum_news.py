@@ -1,3 +1,4 @@
+import sys; sys.path.append('../..')
 import json
 import re
 from os.path import exists, join
