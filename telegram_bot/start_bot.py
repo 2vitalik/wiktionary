@@ -1,3 +1,4 @@
+import sys; sys.path.append('..')
 import logging
 
 from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
