@@ -41,7 +41,6 @@ class Page:
         self.is_parsing = False
         self.parsed = False
         self._top = None
-        self._langs_order = None
         self._langs = None
 
     @property
@@ -54,11 +53,6 @@ class Page:
     def langs(self):
         return self._langs
 
-    @property
-    @parsed
-    def langs_order(self):
-        return self._langs_order
-
     # @property
     # @parsed
     # def homonyms_order(self):  # todo
@@ -70,24 +64,22 @@ class Page:
             return self.langs[key]
         if type(key) == int:
             index = int(key)
-            lang = self.langs_order[index]
+            lang = list(self.langs.keys())[index]
             return self.langs[lang]
         # if key in self.headers:
         #     return Lan...
 
     @parsed
     def __getattr__(self, key):
-        if key in self._langs:
-            return self._langs[key]
+        if key in self.langs:
+            return self.langs[key]
 
     @parsing
     def _parse(self):
         parts = P.lang_header.split(self.content)
         self._top = parts.pop(0)
-        self._langs_order = list()  # todo: remove all these `order` lists because of Python 3.6 feature
         self._langs = dict()
         for header, lang, content in chunks(parts, 3):
-            self._langs_order.append(lang)
             if lang in self._langs:
                 # todo: create special DuplicatedException(type, title)
                 raise Exception(f'Duplicated language on the page '
@@ -111,7 +103,6 @@ class LanguageSection:
         self.is_parsing = False
         self.parsed = False
         self._top = None
-        self._homonyms_order = None
         self._homonyms = None
 
     @property
@@ -124,41 +115,33 @@ class LanguageSection:
     def homonyms(self):
         return self._homonyms
 
-    @property
-    @parsed
-    def homonyms_order(self):
-        return self._homonyms_order
-
     @parsed
     def __getitem__(self, key):
-        if key in self._homonyms:
-            return self._homonyms[key]
+        if key in self.homonyms:
+            return self.homonyms[key]
         if type(key) == int:
             index = int(key)
-            lang = self.homonyms_order[index]
-            return self._homonyms[lang]
+            lang = list(self.homonyms.keys())[index]
+            return self.homonyms[lang]
         # if key in self.headers:
         #     return Lan
 
     @parsed
     def __getattr__(self, key):
-        if key in self._homonyms:
-            return self._homonyms[key]
+        if key in self.homonyms:
+            return self.homonyms[key]
 
     @parsing
     def _parse(self):
         parts = P.second_header.split(self.content)
         if len(parts) == 1:
-            self._homonyms_order = ['']
             self._homonyms = {
                 '': HomonymSection(self, '', '', parts[0]),
             }
             return
         self._top = parts.pop(0)
-        self._homonyms_order = list()
         self._homonyms = dict()
         for header, value, content in chunks(parts, 3):
-            self._homonyms_order.append(value)
             if value in self._homonyms:
                 raise Exception(f'Duplicated homonym on the page '
                                 f'"{self.title}"')
@@ -177,7 +160,6 @@ class HomonymSection:
         self.is_parsing = False
         self.parsed = False
         self._top = None
-        self._blocks_order = None
         self._blocks = None
 
     @property
@@ -190,41 +172,33 @@ class HomonymSection:
     def blocks(self):
         return self._blocks
 
-    @property
-    @parsed
-    def blocks_order(self):
-        return self._blocks_order
-
     @parsed
     def __getitem__(self, key):
-        if key in self._blocks:
-            return self._blocks[key]
+        if key in self.blocks:
+            return self.blocks[key]
         if type(key) == int:
             index = int(key)
-            lang = self.blocks_order[index]
-            return self._blocks[lang]
+            lang = list(self.blocks.keys())[index]
+            return self.blocks[lang]
         # if key in self.headers:
         #     return Lan
 
     @parsed
     def __getattr__(self, key):
-        if key in self._blocks:
-            return self._blocks[key]
+        if key in self.blocks:
+            return self.blocks[key]
 
     @parsing
     def _parse(self):
         parts = P.third_header.split(self.content)
         if len(parts) == 1:
-            self._blocks_order = ['']
             self._blocks = {
                 '': BlockSection(self, '', '', parts[0]),
             }
             return
         self._top = parts.pop(0)
-        self._blocks_order = list()
         self._blocks = dict()
         for header, value, content in chunks(parts, 3):
-            self._blocks_order.append(value)
             if value in self._blocks:
                 raise Exception(f'Duplicated block on the page "{self.title}"')
             self._blocks[value] = BlockSection(self, header, value, content)
@@ -241,7 +215,6 @@ class BlockSection:
         self.is_parsing = False
         self.parsed = False
         self._top = None
-        self._sub_blocks_order = None
         self._sub_blocks = None
 
     @property
@@ -254,41 +227,33 @@ class BlockSection:
     def sub_blocks(self):
         return self._sub_blocks
 
-    @property
-    @parsed
-    def sub_blocks_order(self):
-        return self._sub_blocks_order
-
     @parsed
     def __getitem__(self, key):
-        if key in self._sub_blocks:
-            return self._sub_blocks[key]
+        if key in self.sub_blocks:
+            return self.sub_blocks[key]
         if type(key) == int:
             index = int(key)
-            lang = self.sub_blocks_order[index]
-            return self._sub_blocks[lang]
+            lang = list(self.sub_blocks.keys())[index]
+            return self.sub_blocks[lang]
         # if key in self.headers:
         #     return Lan
 
     @parsed
     def __getattr__(self, key):
-        if key in self._sub_blocks:
-            return self._sub_blocks[key]
+        if key in self.sub_blocks:
+            return self.sub_blocks[key]
 
     @parsing
     def _parse(self):
         parts = P.forth_header.split(self.content)
         if len(parts) == 1:
-            self._sub_blocks_order = ['']
             self._sub_blocks = {
                 '': SubBlockSection(self, '', '', parts[0]),
             }
             return
         self._top = parts.pop(0)
-        self._sub_blocks_order = list()
         self._sub_blocks = dict()
         for header, value, content in chunks(parts, 3):
-            self._sub_blocks_order.append(value)
             if value in self._sub_blocks:
                 raise Exception(f'Duplicated sub-block on the page '
                                 f'"{self.title}"')
