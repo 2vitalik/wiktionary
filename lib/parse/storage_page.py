@@ -1,8 +1,8 @@
 from core.storage.main import MainStorage
-from lib.parse.page import BasePage
+from lib.parse.page import Page
 
 
-class StoragePage(BasePage):
+class StoragePage(Page):
     storage = MainStorage()
 
     def __init__(self, title):

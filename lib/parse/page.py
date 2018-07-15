@@ -23,7 +23,7 @@ def parsing(func):
     return wrapped
 
 
-class BasePage:
+class Page:
     headers = {
         'morphology': 'Морфологические и синтаксические свойства',
         # ...
