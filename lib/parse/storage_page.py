@@ -1,5 +1,5 @@
 from core.storage.main import MainStorage
-from lib.parse.page import Page
+from lib.parse.sections.page import Page
 
 
 class StoragePage(Page):

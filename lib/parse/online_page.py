@@ -1,4 +1,4 @@
-from lib.parse.page import Page
+from lib.parse.sections.page import Page
 from lib.utils.wikibot import load_page
 
 
