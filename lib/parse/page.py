@@ -53,10 +53,10 @@ class Page:
     def langs(self):
         return self._langs
 
-    # @property
-    # @parsed
-    # def homonyms_order(self):  # todo
-    #     return self....
+    @property
+    @parsed
+    def homonyms(self):
+        return HomonymsGrouper(self.langs)
 
     @parsed
     def __getitem__(self, key):
@@ -87,17 +87,35 @@ class Page:
             self._langs[lang] = LanguageSection(self, header, lang, content)
 
 
-class HomonymsGrouper:  # todo: (new idea)
-    def __init__(self):
-        pass
+class HomonymsGrouper:
+    def __init__(self, langs):
+        self.langs = langs
+
+    @property
+    def all(self):
+        data = {}
+        for lang, lang_section in self.langs.items():
+            for homonym, homonym_section in lang_section.homonyms.items():
+                key = (lang, homonym)
+                data[key] = homonym_section
+        return data
+
+    @property
+    def grouped(self):
+        data = {}
+        for lang, lang_section in self.langs.items():
+            data[lang] = dict()
+            for homonym, homonym_section in lang_section.homonyms.items():
+                data[lang][homonym] = homonym_section
+        return data
 
 
 class LanguageSection:
-    def __init__(self, base, wiki_header, header, content):
+    def __init__(self, base, wiki_header, lang, content):
         self.base = base
         self.title = base.title
         self.wiki_header = wiki_header
-        self.header = header
+        self.lang = lang
         self.content = content
 
         self.is_parsing = False
@@ -155,7 +173,6 @@ class HomonymSection:
         self.wiki_header = wiki_header
         self.header = header
         self.content = content
-        self._parse()
 
         self.is_parsing = False
         self.parsed = False
