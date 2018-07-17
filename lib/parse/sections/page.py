@@ -1,3 +1,4 @@
+from lib.parse.groupers.block import BlockGrouper
 from lib.parse.utils.decorators import parsed, parsing
 from lib.parse.groupers.homonym import HomonymsGrouper
 from lib.parse.patterns import P
@@ -48,8 +49,9 @@ class Page:
             index = int(key)
             lang = list(self.langs.keys())[index]
             return self.langs[lang]
-        # if key in self.headers:
-        #     return Lan...
+        if key in self.headers:
+            return BlockGrouper(self.langs, self.headers[key])
+        return BlockGrouper(self.langs, key)
 
     @parsed
     def __getattr__(self, key):
