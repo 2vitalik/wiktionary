@@ -36,10 +36,15 @@ class Page:
     def langs(self):
         return self._langs
 
+    @parsed
+    def __iter__(self):
+        for lang, language in self.langs.items():
+            yield lang, language
+
     @property
     @parsed
     def homonyms(self):
-        return HomonymsGrouper(self.langs)
+        return HomonymsGrouper(self)
 
     @parsed
     def __getitem__(self, key):
@@ -50,8 +55,8 @@ class Page:
             lang = list(self.langs.keys())[index]
             return self.langs[lang]
         if key in self.headers:
-            return BlockGrouper(self.langs, self.headers[key])
-        return BlockGrouper(self.langs, key)
+            return BlockGrouper(self, self.headers[key])
+        return BlockGrouper(self, key)
 
     @parsed
     def __getattr__(self, key):

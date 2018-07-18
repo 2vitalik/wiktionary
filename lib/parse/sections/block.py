@@ -28,6 +28,11 @@ class BlockSection:
         return self._sub_blocks
 
     @parsed
+    def __iter__(self):
+        for sub_header, sub_block in self.sub_blocks.items():
+            yield sub_header, sub_block
+
+    @parsed
     def __getitem__(self, key):
         if key in self.sub_blocks:
             return self.sub_blocks[key]

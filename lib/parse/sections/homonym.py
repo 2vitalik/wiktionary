@@ -28,6 +28,11 @@ class HomonymSection:
         return self._blocks
 
     @parsed
+    def __iter__(self):
+        for header, block in self.blocks.items():
+            yield header, block
+
+    @parsed
     def __getitem__(self, key):
         if key in self.blocks:
             return self.blocks[key]
@@ -35,8 +40,6 @@ class HomonymSection:
             index = int(key)
             lang = list(self.blocks.keys())[index]
             return self.blocks[lang]
-        # if key in self.headers:
-        #     return Lan
 
     @parsed
     def __getattr__(self, key):

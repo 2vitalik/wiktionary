@@ -28,15 +28,20 @@ class LanguageSection:
         return self._homonyms
 
     @parsed
+    def __iter__(self):
+        for homonym_header, homonym in self.homonyms.items():
+            yield homonym_header, homonym
+
+    @parsed
     def __getitem__(self, key):
         if key in self.homonyms:
             return self.homonyms[key]
         if type(key) == int:
             index = int(key)
-            lang = list(self.homonyms.keys())[index]
-            return self.homonyms[lang]
+            header = list(self.homonyms.keys())[index]
+            return self.homonyms[header]
         # if key in self.headers:
-        #     return Lan
+        #     return BlockGrouper(self, self.headers[key])  # todo
 
     @parsed
     def __getattr__(self, key):
