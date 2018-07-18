@@ -1,11 +1,11 @@
 from lib.parse.groupers.base import BaseGrouper
 
 
-class BlockGrouper(BaseGrouper):
+class BlocksGrouper(BaseGrouper):
     fields = ('lang', 'homonym', 'block')
 
     def __init__(self, page, header):
-        super(BlockGrouper, self).__init__()
+        super(BlocksGrouper, self).__init__()
         self.page = page
         self.header = header
         
