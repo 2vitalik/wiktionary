@@ -1,21 +1,18 @@
-class HomonymsGrouper:
+from lib.parse.groupers.base import BaseGrouper
+
+
+class HomonymsGrouper(BaseGrouper):
+    fields = ('lang', 'homonym')
+
     def __init__(self, langs):
+        super().__init__()
         self.langs = langs
 
-    @property
-    def all(self):
-        data = {}
-        for lang, lang_section in self.langs.items():
-            for homonym, homonym_section in lang_section.homonyms.items():
-                key = (lang, homonym)
-                data[key] = homonym_section
-        return data
+    def __iter__(self):
+        for lang, language in self.langs.items():
+            for homonym_header, homonym in language.homonyms.items():
+                key = (lang, homonym_header)
+                yield key, homonym
 
-    @property
-    def grouped(self):
-        data = {}
-        for lang, lang_section in self.langs.items():
-            data[lang] = dict()
-            for homonym, homonym_section in lang_section.homonyms.items():
-                data[lang][homonym] = homonym_section
-        return data
+    def all(self):
+        return self.grouped(like_items=True, unique=True)
