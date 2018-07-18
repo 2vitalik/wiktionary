@@ -9,10 +9,9 @@ class HomonymsGrouper(BaseGrouper):
         self.page = page
 
     def __iter__(self):
-        for lang, language in self.page:
-            for homonym_header, homonym in language:
-                key = (lang, homonym_header)
-                yield key, homonym
+        for (lang, homonym_header), homonym in self.page.deep(2):
+            key = (lang, homonym_header)
+            yield key, homonym
 
     def all(self):
         return self.grouped(like_items=True, unique=True)

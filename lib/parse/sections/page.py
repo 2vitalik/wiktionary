@@ -3,10 +3,11 @@ from lib.parse.utils.decorators import parsed, parsing
 from lib.parse.groupers.homonym import HomonymsGrouper
 from lib.parse.patterns import P
 from lib.parse.sections.language import LanguageSection
+from lib.parse.utils.iterators import DeepIterator
 from lib.utils.collection import chunks
 
 
-class Page:
+class Page(DeepIterator):
     headers = {
         'morphology': 'Морфологические и синтаксические свойства',
         # ...

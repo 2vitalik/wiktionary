@@ -1,10 +1,11 @@
 from lib.parse.utils.decorators import parsed, parsing
 from lib.parse.sections.homonym import HomonymSection
 from lib.parse.patterns import P
+from lib.parse.utils.iterators import DeepIterator
 from lib.utils.collection import chunks
 
 
-class LanguageSection:
+class LanguageSection(DeepIterator):
     def __init__(self, base, wiki_header, lang, content):
         self.base = base
         self.title = base.title
