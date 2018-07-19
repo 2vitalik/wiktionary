@@ -1,3 +1,4 @@
+from lib.parse.groupers.blocks.any_blocks import AnyBlocksGrouper
 from lib.parse.utils.decorators import parsed, parsing
 from lib.parse.sections.homonym import HomonymSection
 from lib.parse.patterns import P
@@ -42,7 +43,7 @@ class LanguageSection(DeepIterator):
             header = list(self.homonyms.keys())[index]
             return self.homonyms[header]
         # if key in self.headers:
-        #     return BlockGrouper(self, self.headers[key])  # todo
+        #     return AnyBlocksGrouper(self, self.headers[key])  # todo
 
     @parsed
     def __getattr__(self, key):
