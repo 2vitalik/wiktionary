@@ -1,6 +1,6 @@
 from lib.parse.groupers.block import BlocksGrouper
 from lib.parse.utils.decorators import parsed, parsing
-from lib.parse.groupers.homonym import HomonymsGrouper
+from lib.parse.groupers.homonyms import HomonymsGrouper
 from lib.parse.patterns import P
 from lib.parse.sections.language import LanguageSection
 from lib.parse.utils.iterators import DeepIterator
