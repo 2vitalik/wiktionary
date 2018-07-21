@@ -1,4 +1,4 @@
-from lib.parse.groupers.blocks.any_blocks import AnyBlocksGrouper
+from lib.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
 from lib.parse.utils.decorators import parsed, parsing
 from lib.parse.sections.homonym import HomonymSection
 from lib.parse.patterns import P

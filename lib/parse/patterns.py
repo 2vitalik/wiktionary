@@ -11,13 +11,13 @@ class P(object):
                    re.MULTILINE)
 
     second_header = \
-        re.compile("^(== *(?P<value>[^=].*?[^=]) *== *)$",
+        re.compile('^(== *(?P<value>[^=].*?[^=]) *== *)$',
                    re.MULTILINE)
 
     third_header = \
-        re.compile("^(=== *(?P<value>[^=].*?[^=]) *=== *)$",
+        re.compile('^(=== *(?P<value>[^=].*?[^=]) *=== *)$',
                    re.MULTILINE)
 
     forth_header = \
-        re.compile("^(==== *(?P<value>[^=].*?[^=]) *==== *)$",
+        re.compile('^(==== *(?P<value>[^=].*?[^=]) *==== *)$',
                    re.MULTILINE)

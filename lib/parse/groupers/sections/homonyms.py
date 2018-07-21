@@ -1,7 +1,7 @@
-from lib.parse.groupers.base import BaseGrouper
+from lib.parse.groupers.sections.base import BaseSectionsGrouper
 
 
-class HomonymsGrouper(BaseGrouper):
+class HomonymsGrouper(BaseSectionsGrouper):
     fields = ('lang', 'homonym')
 
     def __init__(self, page):

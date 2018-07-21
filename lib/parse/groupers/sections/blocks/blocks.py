@@ -1,4 +1,4 @@
-from lib.parse.groupers.blocks.base_blocks import BaseBlocksGrouper
+from lib.parse.groupers.sections.blocks.base_blocks import BaseBlocksGrouper
 
 
 class BlocksGrouper(BaseBlocksGrouper):

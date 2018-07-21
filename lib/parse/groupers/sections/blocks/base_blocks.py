@@ -1,7 +1,7 @@
-from lib.parse.groupers.base import BaseGrouper
+from lib.parse.groupers.sections.base import BaseSectionsGrouper
 
 
-class BaseBlocksGrouper(BaseGrouper):
+class BaseBlocksGrouper(BaseSectionsGrouper):
     def __init__(self, base, header=None, no_sub_blocks=False):
         super().__init__()
         self.base = base  # object we're searching in
