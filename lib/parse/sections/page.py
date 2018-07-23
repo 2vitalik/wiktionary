@@ -37,18 +37,17 @@ class Page(BaseSection, DeepIterator):
 
     @parsed
     def __getitem__(self, index):
-        if index in self.languages:
-            return self.languages[index]
-        if type(index) == int:
-            lang = list(self.languages.keys())[int(index)]
-            return self.languages[lang]
+        result = super().__getattr__(index)
+        if result is not None:
+            return result
         if index in self.headers:
             return AnyBlocksGrouper(self, self.headers[index])
         return AnyBlocksGrouper(self, index)
 
     @parsed
     def __getattr__(self, attr):
-        if attr in self.languages:
-            return self.languages[attr]
+        result = super().__getattr__(attr)
+        if result is not None:
+            return result
         if attr in self.headers:
             return AnyBlocksGrouper(self, self.headers[attr])

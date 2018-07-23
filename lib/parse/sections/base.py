@@ -44,6 +44,19 @@ class BaseSection:
         return self._sub_sections
 
     @parsed
+    def __getitem__(self, index):
+        if index in self.sub_sections:
+            return self.sub_sections[index]
+        if type(index) == int:
+            key = list(self.sub_sections.keys())[int(index)]
+            return self.sub_sections[key]
+
+    @parsed
+    def __getattr__(self, attr):
+        if attr in self.sub_sections:
+            return self.sub_sections[attr]
+
+    @parsed
     def __iter__(self):
         for key, section in self.sub_sections.items():
             yield key, section

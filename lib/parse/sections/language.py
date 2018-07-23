@@ -39,15 +39,8 @@ class LanguageSection(BaseSection, DeepIterator):
 
     @parsed
     def __getitem__(self, index):
-        if index in self.homonyms:
-            return self.homonyms[index]
-        if type(index) == int:
-            header = list(self.homonyms.keys())[int(index)]
-            return self.homonyms[header]
+        result = super().__getitem__(index)
+        if result is not None:
+            return result
         # if index in self.headers:
         #     return AnyBlocksGrouper(self, self.headers[index])  # todo
-
-    @parsed
-    def __getattr__(self, attr):
-        if attr in self.homonyms:
-            return self.homonyms[attr]

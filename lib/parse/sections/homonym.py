@@ -27,16 +27,3 @@ class HomonymSection(BaseSection, DeepIterator):
     @parsed
     def sub_blocks(self):
         return SubBlocksGrouper(self)
-
-    @parsed
-    def __getitem__(self, index):
-        if index in self.blocks:
-            return self.blocks[index]
-        if type(index) == int:
-            lang = list(self.blocks.keys())[int(index)]
-            return self.blocks[lang]
-
-    @parsed
-    def __getattr__(self, attr):
-        if attr in self.blocks:
-            return self.blocks[attr]

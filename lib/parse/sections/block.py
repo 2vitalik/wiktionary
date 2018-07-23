@@ -13,16 +13,3 @@ class BlockSection(BaseSection, DeepIterator):
     @parsed
     def sub_blocks(self):
         return self.sub_sections
-
-    @parsed
-    def __getitem__(self, index):
-        if index in self.sub_blocks:
-            return self.sub_blocks[index]
-        if type(index) == int:
-            lang = list(self.sub_blocks.keys())[int(index)]
-            return self.sub_blocks[lang]
-
-    @parsed
-    def __getattr__(self, attr):
-        if attr in self.sub_blocks:
-            return self.sub_blocks[attr]
