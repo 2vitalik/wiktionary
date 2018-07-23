@@ -1,37 +1,22 @@
-from lib.parse.utils.decorators import parsed, parsing
+from lib.parse.sections.base import BaseSection
+from lib.parse.utils.decorators import parsed
 from lib.parse.sections.block import BlockSection
-from lib.parse.patterns import P
+from lib.parse.patterns import R
 from lib.parse.utils.iterators import DeepIterator
-from lib.utils.collection import chunks
 
 
-class HomonymSection(DeepIterator):
-    def __init__(self, base, wiki_header, header, content):
-        self.base = base
-        self.title = base.title
-        self.wiki_header = wiki_header
-        self.header = header
-        self.content = content
+class HomonymSection(BaseSection, DeepIterator):
+    parse_pattern = R.third_header
+    child_section_type = BlockSection
 
-        self.is_parsing = False
-        self.parsed = False
-        self._top = None
-        self._blocks = None
-
-    @property
-    @parsed
-    def top(self):
-        return self._top
+    def __init__(self, base, full_header, header, content):
+        super().__init__(base, full_header, header, content)
+        # todo: сгенерировать `self._key` попроще
 
     @property
     @parsed
     def blocks(self):
-        return self._blocks
-
-    @parsed
-    def __iter__(self):
-        for header, block in self.blocks.items():
-            yield header, block
+        return self.sub_sections
 
     @parsed
     def __getitem__(self, key):
@@ -46,18 +31,3 @@ class HomonymSection(DeepIterator):
     def __getattr__(self, key):
         if key in self.blocks:
             return self.blocks[key]
-
-    @parsing
-    def _parse(self):
-        parts = P.third_header.split(self.content)
-        if len(parts) == 1:
-            self._blocks = {
-                '': BlockSection(self, '', '', parts[0]),
-            }
-            return
-        self._top = parts.pop(0)
-        self._blocks = dict()
-        for header, value, content in chunks(parts, 3):
-            if value in self._blocks:
-                raise Exception(f'Duplicated block on the page "{self.title}"')
-            self._blocks[value] = BlockSection(self, header, value, content)

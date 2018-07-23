@@ -1,7 +1,10 @@
-class SubBlockSection:
-    def __init__(self, base, wiki_header, header, content):
-        self.base = base
-        self.title = base.title
-        self.wiki_header = wiki_header
-        self.header = header
-        self.content = content
+from lib.parse.sections.base import BaseSection
+from lib.parse.utils.decorators import parsing
+
+
+class SubBlockSection(BaseSection):
+    is_leaf = True
+
+    @parsing
+    def _parse(self):
+        self._sub_sections = dict()
