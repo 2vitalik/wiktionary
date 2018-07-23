@@ -10,8 +10,8 @@ class HomonymsGrouper(BaseSectionsGrouper):
 
     def __iter__(self):
         for (lang, homonym_header), homonym in self.page.deep(2):
-            key = (lang, homonym_header)
-            yield key, homonym
+            path = (lang, homonym_header)
+            yield path, homonym
 
     def all(self):
         return self.grouped(like_items=True, unique=True)

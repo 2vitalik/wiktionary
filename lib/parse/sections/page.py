@@ -36,20 +36,19 @@ class Page(BaseSection, DeepIterator):
         return HomonymsGrouper(self)
 
     @parsed
-    def __getitem__(self, key):
-        if key in self.languages:
-            return self.languages[key]
-        if type(key) == int:
-            index = int(key)
-            lang = list(self.languages.keys())[index]
+    def __getitem__(self, index):
+        if index in self.languages:
+            return self.languages[index]
+        if type(index) == int:
+            lang = list(self.languages.keys())[int(index)]
             return self.languages[lang]
-        if key in self.headers:
-            return AnyBlocksGrouper(self, self.headers[key])
-        return AnyBlocksGrouper(self, key)
+        if index in self.headers:
+            return AnyBlocksGrouper(self, self.headers[index])
+        return AnyBlocksGrouper(self, index)
 
     @parsed
-    def __getattr__(self, key):
-        if key in self.languages:
-            return self.languages[key]
-        if key in self.headers:
-            return AnyBlocksGrouper(self, self.headers[key])
+    def __getattr__(self, attr):
+        if attr in self.languages:
+            return self.languages[attr]
+        if attr in self.headers:
+            return AnyBlocksGrouper(self, self.headers[attr])

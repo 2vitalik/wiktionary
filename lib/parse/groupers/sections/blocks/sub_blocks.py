@@ -7,10 +7,10 @@ class SubBlocksGrouper(BaseBlocksGrouper):
             if self.header:  # если мы что-то ищем:
                 for sub_header, sub_block in block:
                     if sub_header == self.header:
-                        key = (lang, homonym_header, header)
-                        yield key, sub_block
+                        path = (lang, homonym_header, header)
+                        yield path, sub_block
             else:  # если хотим получить все *под*заголовки:
                 for sub_header, sub_block in block:
                     if sub_header == self.header:
-                        key = (lang, homonym_header, header, sub_header)
-                        yield key, sub_block
+                        path = (lang, homonym_header, header, sub_header)
+                        yield path, sub_block

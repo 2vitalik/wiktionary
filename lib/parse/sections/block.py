@@ -15,15 +15,14 @@ class BlockSection(BaseSection, DeepIterator):
         return self.sub_sections
 
     @parsed
-    def __getitem__(self, key):
-        if key in self.sub_blocks:
-            return self.sub_blocks[key]
-        if type(key) == int:
-            index = int(key)
-            lang = list(self.sub_blocks.keys())[index]
+    def __getitem__(self, index):
+        if index in self.sub_blocks:
+            return self.sub_blocks[index]
+        if type(index) == int:
+            lang = list(self.sub_blocks.keys())[int(index)]
             return self.sub_blocks[lang]
 
     @parsed
-    def __getattr__(self, key):
-        if key in self.sub_blocks:
-            return self.sub_blocks[key]
+    def __getattr__(self, attr):
+        if attr in self.sub_blocks:
+            return self.sub_blocks[attr]

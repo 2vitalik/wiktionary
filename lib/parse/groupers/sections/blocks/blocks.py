@@ -9,9 +9,9 @@ class BlocksGrouper(BaseBlocksGrouper):
         for (lang, homonym_header, header), block in self.base.deep(self.level):
             if self.header:  # если мы что-то ищем:
                 if header == self.header:
-                    key = (lang, homonym_header)
-                    yield key, block
+                    path = (lang, homonym_header)
+                    yield path, block
                     continue
             else:  # если хотим получить все заголовки:
-                key = (lang, homonym_header, header)
-                yield key, block
+                path = (lang, homonym_header, header)
+                yield path, block

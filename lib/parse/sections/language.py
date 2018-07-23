@@ -38,17 +38,16 @@ class LanguageSection(BaseSection, DeepIterator):
         return SubBlocksGrouper(self)
 
     @parsed
-    def __getitem__(self, key):
-        if key in self.homonyms:
-            return self.homonyms[key]
-        if type(key) == int:
-            index = int(key)
-            header = list(self.homonyms.keys())[index]
+    def __getitem__(self, index):
+        if index in self.homonyms:
+            return self.homonyms[index]
+        if type(index) == int:
+            header = list(self.homonyms.keys())[int(index)]
             return self.homonyms[header]
-        # if key in self.headers:
-        #     return AnyBlocksGrouper(self, self.headers[key])  # todo
+        # if index in self.headers:
+        #     return AnyBlocksGrouper(self, self.headers[index])  # todo
 
     @parsed
-    def __getattr__(self, key):
-        if key in self.homonyms:
-            return self.homonyms[key]
+    def __getattr__(self, attr):
+        if attr in self.homonyms:
+            return self.homonyms[attr]
