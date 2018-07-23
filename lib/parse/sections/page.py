@@ -51,3 +51,5 @@ class Page(BaseSection, DeepIterator):
     def __getattr__(self, key):
         if key in self.languages:
             return self.languages[key]
+        if key in self.headers:
+            return AnyBlocksGrouper(self, self.headers[key])

@@ -1,3 +1,5 @@
+from lib.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
+from lib.parse.groupers.sections.blocks.sub_blocks import SubBlocksGrouper
 from lib.parse.sections.base import BaseSection
 from lib.parse.utils.decorators import parsed
 from lib.parse.sections.block import BlockSection
@@ -17,6 +19,14 @@ class HomonymSection(BaseSection, DeepIterator):
     @parsed
     def blocks(self):
         return self.sub_sections
+
+    @parsed
+    def any_blocks(self):
+        return AnyBlocksGrouper(self)
+
+    @parsed
+    def sub_blocks(self):
+        return SubBlocksGrouper(self)
 
     @parsed
     def __getitem__(self, key):

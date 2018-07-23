@@ -22,8 +22,6 @@ class BlockSection(BaseSection, DeepIterator):
             index = int(key)
             lang = list(self.sub_blocks.keys())[index]
             return self.sub_blocks[lang]
-        # if key in self.headers:
-        #     return Lan
 
     @parsed
     def __getattr__(self, key):
