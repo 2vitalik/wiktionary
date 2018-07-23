@@ -1,13 +1,13 @@
 from lib.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
 from lib.parse.sections.base import BaseSection
+from lib.parse.sections.grouper_mixins.languages import LanguagesGrouperMixin
 from lib.parse.utils.decorators import parsed
-from lib.parse.groupers.sections.homonyms import HomonymsGrouper
 from lib.parse.patterns import R
 from lib.parse.sections.language import LanguageSection
 from lib.parse.utils.iterators import DeepIterator
 
 
-class Page(BaseSection, DeepIterator):
+class Page(BaseSection, LanguagesGrouperMixin, DeepIterator):
     parse_pattern = R.first_header
     child_section_type = LanguageSection
 
@@ -24,16 +24,6 @@ class Page(BaseSection, DeepIterator):
         self.is_redirect = is_redirect  # todo: implement in inheritors
         self.is_category = title.startswith(u'Категория:')
         self.is_template = title.startswith(u'Шаблон:')
-
-    @property
-    @parsed
-    def languages(self):
-        return self.sub_sections
-
-    @property
-    @parsed
-    def homonyms(self):
-        return HomonymsGrouper(self)
 
     @parsed
     def __getitem__(self, index):
