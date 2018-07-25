@@ -5,7 +5,7 @@ from lib.parse.sections.grouper_mixins.blocks import BlocksGroupersMixin
 from lib.parse.utils.iterators import DeepIterator
 
 
-class HomonymSection(BaseSection, BlocksGroupersMixin, DeepIterator):
+class HomonymSection(BlocksGroupersMixin, DeepIterator, BaseSection):
     parse_pattern = R.third_header
     child_section_type = BlockSection
 

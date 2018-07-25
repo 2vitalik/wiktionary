@@ -1,8 +1,5 @@
 
 class DeepIterator:
-    def __iter__(self):
-        raise NotImplementedError()
-
     def deep(self, levels=1):
         if levels == 1:
             yield from self.deep_iterate_1()

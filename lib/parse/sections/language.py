@@ -1,12 +1,11 @@
 from lib.parse.sections.base import BaseSection
 from lib.parse.sections.grouper_mixins.homonyms import HomonymsGroupersMixin
-from lib.parse.utils.decorators import parsed
 from lib.parse.sections.homonym import HomonymSection
 from lib.parse.patterns import TR, R
 from lib.parse.utils.iterators import DeepIterator
 
 
-class LanguageSection(BaseSection, HomonymsGroupersMixin, DeepIterator):
+class LanguageSection(HomonymsGroupersMixin, DeepIterator, BaseSection):
     parse_pattern = R.second_header
     child_section_type = HomonymSection
 
@@ -17,11 +16,3 @@ class LanguageSection(BaseSection, HomonymsGroupersMixin, DeepIterator):
         if not m:
             raise Exception
         self._key = m.group('lang')
-
-    @parsed
-    def __getitem__(self, index):
-        result = super().__getitem__(index)
-        if result is not None:
-            return result
-        # if index in self.headers:
-        #     return AnyBlocksGrouper(self, self.headers[index])  # todo

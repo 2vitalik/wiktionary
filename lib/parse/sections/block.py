@@ -5,6 +5,6 @@ from lib.parse.patterns import R
 from lib.parse.utils.iterators import DeepIterator
 
 
-class BlockSection(BaseSection, SubBlocksGroupersMixin, DeepIterator):
+class BlockSection(SubBlocksGroupersMixin, DeepIterator, BaseSection):
     parse_pattern = R.forth_header
     child_section_type = SubBlockSection

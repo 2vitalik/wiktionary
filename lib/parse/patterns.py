@@ -1,6 +1,25 @@
 import re
 
 
+class H:
+    headers = {
+        'morphology': 'Морфологические и синтаксические свойства',
+        'pronunciation': 'Произношение',
+        'semantic': 'Семантические свойства',
+        'definition': 'Значение',
+        'synonyms': 'Синонимы',
+        'antonyms': 'Антонимы',
+        'hyperonyms': 'Гиперонимы',
+        'hyponyms': 'Гипонимы',
+        'related_words': 'Родственные слова',
+        'etymology': 'Этимология',
+        'phrases': 'Фразеологизмы и устойчивые сочетания',
+        'translate': 'Перевод',
+        'bibliography': 'Библиография',
+    }
+    morphology = headers['morphology']
+
+
 class TP:  # Template Pattern
     base = '{{\s*(__RE__)\s*(?:\}\}|\|)'
 
