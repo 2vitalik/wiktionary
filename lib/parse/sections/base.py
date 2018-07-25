@@ -53,7 +53,10 @@ class BaseSection:
             key = list(self.sub_sections.keys())[int(index)]
             return self.sub_sections[key]
         if index in H.headers:
-            return AnyBlocksGrouper(self, H.headers[index])
+            return AnyBlocksGrouper(self, index)
+        key = H.get_key(index)
+        if key:
+            return AnyBlocksGrouper(self, key)
         return AnyBlocksGrouper(self, index)
 
     @parsed
@@ -61,7 +64,7 @@ class BaseSection:
         if attr in self.sub_sections:
             return self.sub_sections[attr]
         if attr in H.headers:
-            return AnyBlocksGrouper(self, H.headers[attr])
+            return AnyBlocksGrouper(self, attr)
 
     @parsed
     def __iter__(self):

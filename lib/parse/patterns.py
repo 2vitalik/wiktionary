@@ -18,6 +18,13 @@ class H:
         'bibliography': 'Библиография',
     }
     morphology = headers['morphology']
+    # todo ...
+
+    @staticmethod
+    def get_key(header):
+        for key, value in H.headers.items():
+            if header == value:
+                return key
 
 
 class TP:  # Template Pattern

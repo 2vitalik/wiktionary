@@ -5,7 +5,7 @@ from lib.parse.sections.language import LanguageSection
 from lib.parse.utils.iterators import DeepIterator
 
 
-class Page(BaseSection, LanguagesGrouperMixin, DeepIterator):
+class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
     parse_pattern = R.first_header
     child_section_type = LanguageSection
 
