@@ -18,7 +18,18 @@ class H:
         'bibliography': 'Библиография',
     }
     morphology = headers['morphology']
-    # todo ...
+    pronunciation = headers['pronunciation']
+    semantic = headers['semantic']
+    definition = headers['definition']
+    synonyms = headers['synonyms']
+    antonyms = headers['antonyms']
+    hyperonyms = headers['hyperonyms']
+    hyponyms = headers['hyponyms']
+    related_words = headers['related_words']
+    etymology = headers['etymology']
+    phrases = headers['phrases']
+    translate = headers['translate']
+    bibliography = headers['bibliography']
 
     @staticmethod
     def get_key(header):
