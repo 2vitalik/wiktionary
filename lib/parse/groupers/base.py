@@ -8,6 +8,10 @@ class BaseGrouper:
         self.base = base
         self._cache = {}
 
+    @property
+    def keys(self):
+        return self.base.keys
+
     def values(self, *args, unique=False):
         return self.grouped(*args, like_items=False, unique=unique)
 

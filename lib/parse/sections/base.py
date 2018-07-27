@@ -48,6 +48,11 @@ class BaseSection(BaseSectionsGrouper):
     def sub_sections(self):
         return self._sub_sections
 
+    @property
+    @parsed
+    def keys(self):
+        return list(self._sub_sections.keys())
+
     @parsed
     def __getitem__(self, index):
         if index in self.sub_sections:
