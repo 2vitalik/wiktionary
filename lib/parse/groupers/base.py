@@ -23,7 +23,8 @@ class BaseGrouper:
             args = self.fields
         if like_items and len(args) == len(self.fields):
             args = args[:-1]  # because last layer will be redundant
-        if self._cache.get(args) is None:
+        cache_key = (args, like_items, unique)
+        if self._cache.get(cache_key) is None:
             indexes = [self.fields.index(arg) for arg in args]
-            self._cache[args] = group(self, indexes, like_items, unique)
-        return self._cache[args]
+            self._cache[cache_key] = group(self, indexes, like_items, unique)
+        return self._cache[cache_key]
