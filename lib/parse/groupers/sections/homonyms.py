@@ -3,8 +3,7 @@ from lib.parse.groupers.sections.base import BaseSectionsGrouper
 
 class HomonymsGrouper(BaseSectionsGrouper):
     def __init__(self, base):
-        super().__init__()
-        self.base = base
+        super().__init__(base)
         types = {
             'Page': {'level': 2, 'fields': ('lang', 'homonym')},
             'Language': {'level': 1, 'fields': ('homonym', )},

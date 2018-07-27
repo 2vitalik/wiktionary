@@ -3,8 +3,7 @@ from lib.parse.groupers.sections.base import BaseSectionsGrouper
 
 class BaseBlocksGrouper(BaseSectionsGrouper):
     def __init__(self, base, header=None, no_sub_blocks=False):
-        super().__init__()
-        self.base = base  # object we're searching in
+        super().__init__(base)  # `base` is the object we're searching in
         self.header = header  # header we're searching for
         types = {
             'Page': {'level': 3,

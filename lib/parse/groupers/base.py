@@ -4,7 +4,8 @@ from lib.utils.collection import group
 class BaseGrouper:
     fields = None
 
-    def __init__(self):
+    def __init__(self, base):
+        self.base = base
         self._cache = {}
 
     def values(self, *args, unique=False):
