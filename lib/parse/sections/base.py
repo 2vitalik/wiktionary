@@ -1,15 +1,18 @@
+from lib.parse.groupers.sections.base import BaseSectionsGrouper
 from lib.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
 from lib.parse.patterns import H
 from lib.parse.utils.decorators import parsed, parsing
 from lib.utils.collection import chunks
 
 
-class BaseSection:
+class BaseSection(BaseSectionsGrouper):
     is_leaf = False
     parse_pattern = None
     child_section_type = None
 
     def __init__(self, base, full_header, header, content):
+        super().__init__(base)
+
         if not self.is_leaf:
             if not self.parse_pattern:
                 raise NotImplementedError('`parse_pattern` is absent')
