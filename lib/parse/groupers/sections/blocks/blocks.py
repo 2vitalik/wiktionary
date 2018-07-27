@@ -6,12 +6,14 @@ class BlocksGrouper(BaseBlocksGrouper):
         super().__init__(base, header, no_sub_blocks=True)
 
     def __iter__(self):
-        for (lang, homonym_header, header), block in self.base.deep(self.level):
+        for path, block in self.base.deep(self.level):
+            # `path` is (lang, homonym_header, header) here
             if self.header:  # если мы что-то ищем:
+                header = path[-1]
                 if header == self.header:
-                    path = (lang, homonym_header)
-                    yield path, block
+                    return_path = path[:-1]  # без header
+                    # `return_path` is (lang, homonym_header) here
+                    yield return_path, block
                     continue
             else:  # если хотим получить все заголовки:
-                path = (lang, homonym_header, header)
                 yield path, block

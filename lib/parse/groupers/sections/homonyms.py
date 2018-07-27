@@ -6,7 +6,7 @@ class HomonymsGrouper(BaseSectionsGrouper):
         super().__init__(base)
         types = {
             'Page': {'level': 2, 'fields': ('lang', 'homonym')},
-            'Language': {'level': 1, 'fields': ('homonym', )},
+            'LanguageSection': {'level': 1, 'fields': ('homonym', )},
         }
         base_type = type(base).__name__  # get class name
         if base_type not in types:

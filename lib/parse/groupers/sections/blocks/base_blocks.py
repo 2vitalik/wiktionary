@@ -6,15 +6,19 @@ class BaseBlocksGrouper(BaseSectionsGrouper):
         super().__init__(base)  # `base` is the object we're searching in
         self.header = header  # header we're searching for
         types = {
-            'Page': {'level': 3,
-                     'fields': ('lang', 'homonym', 'block', 'sub_block')},
-            'Language': {'level': 2,
-                         'fields': ('homonym', 'block', 'sub_block')},
-            'Homonym': {'level': 1,
-                        'fields': ('block', 'sub_block')},
+            'Page': {
+                'level': 3,
+                'fields': ('lang', 'homonym', 'block', 'sub_block')
+            },
+            'LanguageSection': {
+                'level': 2,
+                'fields': ('homonym', 'block', 'sub_block')
+            },
+            'HomonymSection': {
+                'level': 1,
+                'fields': ('block', 'sub_block')
+            },
         }
-        if no_sub_blocks:
-            del types['Homonym']  # because we have just attr `blocks` there
         base_type = type(base).__name__  # get class name
         if base_type not in types:
             # try to get parent class (e.g. useful for StoragePage etc.)
