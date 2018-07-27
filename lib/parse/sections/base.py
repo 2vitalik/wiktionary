@@ -32,6 +32,17 @@ class BaseSection(BaseSectionsGrouper):
         self._top = None
         self._sub_sections = None
 
+    def __str__(self):
+        name = type(self).__name__
+        return f'{name}({self.key})'
+
+    def __repr__(self):
+        return str(self)
+
+    def __eq__(self, other):
+        return self.full_header == other.full_header and \
+            self.header == other.header and self.content == other.content
+
     @property
     def key(self):
         if self._key is not None:
