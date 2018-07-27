@@ -6,6 +6,8 @@ from lib.parse.utils.iterators import DeepIterator
 
 
 class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
+    fields = ('lang', )
+
     parse_pattern = R.first_header
     child_section_type = LanguageSection
 

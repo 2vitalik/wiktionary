@@ -6,6 +6,8 @@ from lib.parse.utils.iterators import DeepIterator
 
 
 class LanguageSection(HomonymsGroupersMixin, DeepIterator, BaseSection):
+    fields = ('homonym', )
+
     parse_pattern = R.second_header
     child_section_type = HomonymSection
 
@@ -14,5 +16,5 @@ class LanguageSection(HomonymsGroupersMixin, DeepIterator, BaseSection):
 
         m = TR.lang_header.match(self.header)
         if not m:
-            raise Exception
+            raise Exception()  # todo: написать сообщение
         self._key = m.group('lang')

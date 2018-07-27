@@ -6,6 +6,8 @@ from lib.parse.utils.iterators import DeepIterator
 
 
 class BlockSection(SubBlocksGroupersMixin, DeepIterator, BaseSection):
+    fields = ('sub_block', )
+
     parse_pattern = R.forth_header
     child_section_type = SubBlockSection
 
