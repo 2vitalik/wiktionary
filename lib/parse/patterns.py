@@ -31,6 +31,7 @@ class TP:  # Template Pattern
     base = '{{\s*(__RE__)\s*(?:\}\}|\|)'
 
     lang_header = '{{-(?P<lang>[-\w]+)-(?:\|[^}]*)?\}\}'
+    homonym_header = '{{з(?:аголовок)?\|(?P<args>[^}]+)\}\}'
 
     any_1 = \
         re.compile('({{\s*([^{|}]+)\s*[^{}]*\}\})')
@@ -42,6 +43,7 @@ class TP:  # Template Pattern
 
 class TR:  # Template Regex
     lang_header = re.compile(TP.lang_header)
+    homonym_header = re.compile(TP.homonym_header)
 
 
 class P:
