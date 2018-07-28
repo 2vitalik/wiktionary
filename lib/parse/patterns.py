@@ -73,3 +73,10 @@ class R:
     forth_header = re.compile(P.header.replace('__N__', '4'), re.MULTILINE)
 
     lang_header = re.compile(f'^(= *{TP.lang_header} *= *)$', re.MULTILINE)
+
+
+def find_templates(content):
+    for p in [TP.any_3, TP.any_2, TP.any_1]:
+        templates = p.findall(content)
+        for tpl in templates:
+            yield tpl
