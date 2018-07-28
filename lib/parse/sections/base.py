@@ -32,6 +32,7 @@ class BaseSection(BaseSectionsGrouper):
         self._key = None
         self._top = None
         self._sub_sections = None
+        self._old_content = content
 
     def __str__(self):
         name = type(self).__name__
@@ -113,3 +114,30 @@ class BaseSection(BaseSectionsGrouper):
                 raise Exception(f'Duplicated header key `{key}` on the page '
                                 f'"{self.title}"')
             self._sub_sections[key] = child_section
+
+    @property
+    def sub_sections_content(self):
+        if self._sub_sections is None:
+            return
+        content = self.top
+        for key, section in self.sub_sections.items():
+            content += section.new_content
+        return content
+
+    @property
+    def new_content(self):
+        sub_sections_content = self.sub_sections_content
+        sub_sections_changed = \
+            sub_sections_content and sub_sections_content != self._old_content
+        field_content_changed = self.content != self._old_content
+        if sub_sections_changed and field_content_changed:
+            raise Exception('Both contents types was changed, ambiguity.')
+        if field_content_changed:
+            content = self.content
+        elif sub_sections_changed:
+            content = sub_sections_content
+        else:
+            content = self._old_content
+        if self.full_header:
+            content = f'{self.full_header}{content}'
+        return content
