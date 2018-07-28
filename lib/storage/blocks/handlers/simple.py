@@ -2,13 +2,13 @@ import os
 from bisect import bisect_left
 from shutil import copy
 
-from lib.storage.blocks.base import BaseBlock
+from lib.storage.blocks.handlers.base import BaseBlockHandler
 from lib.storage.builder import SimpleStorageBuilder
 from lib.storage.error import StorageError
 from lib.utils.io import read, write
 
 
-class SimpleBlock(BaseBlock):
+class SimpleBlockHandler(BaseBlockHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

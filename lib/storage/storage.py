@@ -63,3 +63,6 @@ class Storage:
         # log('deleted.txt', page.log())
         for table, handler in self.handlers.items():
             handler.delete(title)
+
+    def iterate(self, table):
+        yield from self.handlers[table]

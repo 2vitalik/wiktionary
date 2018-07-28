@@ -6,7 +6,7 @@ from lib.utils.io import write
 from lib.utils.unicode import char_info
 
 
-class BaseBlock:
+class BaseBlockHandler:
     def __init__(self, title, handler):
         self.title = title
         self.handler = handler

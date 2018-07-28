@@ -1,16 +1,15 @@
 import os
 from bisect import bisect_left
-from os.path import exists
 from shutil import copy
 
-from lib.storage.blocks.base import BaseBlock
+from lib.storage.blocks.handlers.base import BaseBlockHandler
 from lib.storage.builder import ContentsStorageBuilder
 from lib.storage.const import SEPARATOR
 from lib.storage.error import StorageError
 from lib.utils.io import read, write
 
 
-class ContentsBlock(BaseBlock):
+class ContentsBlockHandler(BaseBlockHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 

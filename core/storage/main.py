@@ -1,6 +1,7 @@
 from os.path import join, exists
 
 from core.conf import conf
+from lib.parse.sections.page import Page
 from lib.storage.storage import Storage
 from lib.utils.dt import dtp, dt
 from lib.utils.io import read, write
@@ -29,6 +30,10 @@ class MainStorage(Storage):
     @latest_edited.setter
     def latest_edited(self, value):
         write(self.latest_edited_filename, dt(value, utc=True))
+
+    def iterate_pages(self):
+        for title, content in self.iterate('content'):
+            yield title, Page(title, content)
 
 
 if __name__ == '__main__':
