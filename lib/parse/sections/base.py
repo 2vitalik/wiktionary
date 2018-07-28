@@ -1,5 +1,6 @@
 from lib.parse.groupers.sections.base import BaseSectionsGrouper
 from lib.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
+from lib.parse.groupers.sections.empty import EmptyBaseSectionsGrouper
 from lib.parse.patterns import H
 from lib.parse.utils.decorators import parsed, parsing
 from lib.utils.collection import chunks
@@ -84,6 +85,7 @@ class BaseSection(BaseSectionsGrouper):
             return self.sub_sections[attr]
         if attr in H.headers:
             return AnyBlocksGrouper(self, attr)
+        return EmptyBaseSectionsGrouper()
 
     @parsed
     def __iter__(self):
