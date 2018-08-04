@@ -68,16 +68,28 @@ class BaseSection(BaseSectionsGrouper):
 
     @parsed
     def __getitem__(self, index):
+        # Непосредственное обращение к дочернему элементу?
         if index in self.sub_sections:
             return self.sub_sections[index]
+
+        # Обращение по числовому индексу?
         if type(index) == int:
             key = list(self.sub_sections.keys())[int(index)]
             return self.sub_sections[key]
-        if index in H.headers:
+
+        # Обращение по стандартному заголовку?
+        header_key = H.get_key(index)
+        if header_key:
+            if header_key in self.sub_sections:
+                return self.sub_sections[header_key]
+            else:
+                return AnyBlocksGrouper(self, header_key)
+
+        # Обращение по ключу заголовка?
+        if index in H.headers.keys():
             return AnyBlocksGrouper(self, index)
-        key = H.get_key(index)
-        if key:
-            return AnyBlocksGrouper(self, key)
+
+        # По умолчанию пытаемся сгруппировать по неизвестному заголовку:
         return AnyBlocksGrouper(self, index)
 
     @parsed
