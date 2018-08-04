@@ -7,23 +7,23 @@ def chunks(items, chunk_len):
         yield items[i:i+chunk_len]
 
 
-def rest_key(key, indexes):
+def rest_path(path, indexes):
     """
-    Build new `key` without parts with indexes from `indexes`.
+    Build new `path` without parts with indexes from `indexes`.
     This function is used in `group` function only.
 
     Arguments:
-    - `key`: tuple of keys
+    - `path`: tuple of keys
     - `indexes`: indexes to be filtered
 
     Examples:
-        rest_key(('a', 'b', 'c'), (0, )) -> ('b', 'c')
-        rest_key(('a', 'b', 'c'), (0, 1)) -> 'c'
-        rest_key(('a', 'b', 'c', 'd'), (2, 1)) -> ('a', 'd')
+        rest_path(('a', 'b', 'c'), (0, )) -> ('b', 'c')
+        rest_path(('a', 'b', 'c'), (0, 1)) -> 'c'
+        rest_path(('a', 'b', 'c', 'd'), (2, 1)) -> ('a', 'd')
     """
     indexes = tuple(filter(lambda x: x != -1, indexes))  # exclude `-1` values
-    result = tuple([val for ind, val in enumerate(key) if ind not in indexes])
-    if len(indexes) == len(key) - 1:
+    result = tuple([val for ind, val in enumerate(path) if ind not in indexes])
+    if len(indexes) == len(path) - 1:
         result = result[0]  # because we have only one value in tuple
     return result
 
@@ -55,36 +55,36 @@ def group(data, indexes, like_items, unique):
     result = {}
 
     if like_items:
-        indexes += (-1, )  # additional layer that will be a dict with rest_keys
+        indexes += (-1, )  # additional layer that will be a dict with rest keys
 
-    for key, value in data:
+    for path, value in data:
         curr = result
         for i, index in enumerate(indexes):
-            # prepare current sub_key to use in dicts:
+            # prepare current key to use in dicts:
             if index == -1:
                 if not like_items:
                     raise Exception("Index '-1' should be used only when "
                                     "`like_items=True`")
-                sub_key = rest_key(key, indexes)  # latest key for `items`
+                key = rest_path(path, indexes)  # latest key for `items`
             else:
-                sub_key = key[index]  # next key to go deeper
+                key = path[index]  # next key to go deeper
 
             if not unique:  # use list() on the last layer
                 if i < len(indexes) - 1:
                     default = dict()  # not a last step, so create a new dict()
                 else:
                     default = list()  # last step, so create a list()
-                curr = curr.setdefault(sub_key, default)  # go deeper
+                curr = curr.setdefault(key, default)  # go deeper
 
             else:  # use unique values on the last layer
                 if i < len(indexes) - 1:
                     default = dict()  # not a last step, so create a new dict()
-                    curr = curr.setdefault(sub_key, default)  # go deeper
+                    curr = curr.setdefault(key, default)  # go deeper
                 else:  # last step
-                    if sub_key in curr:
+                    if key in curr:
                         raise Exception("When `unique=True` entries can't be "
                                         "duplicated inside a grouped block")
-                    curr[sub_key] = value  # write single unique value here
+                    curr[key] = value  # write single unique value here
 
         if not unique:
             # let's fill list() on the last layer
