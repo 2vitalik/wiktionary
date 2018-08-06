@@ -69,10 +69,10 @@ function export.get(frame)
 --	end
 --	output = output .. '}}'
 
-    if _.set(forms['error']) then
+    if _.has_value(forms['error']) then
          output = output .. '\n' .. wu.div_red(forms['error'])
     end
-    if _.set(forms['error_category']) then
+    if _.has_value(forms['error_category']) then
          output = output .. '[[Категория:' .. forms['error_category'] .. ']]'
     end
 

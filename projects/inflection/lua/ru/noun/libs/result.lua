@@ -19,7 +19,7 @@ local function replace_underscore_with_hyphen(forms)
 	}  -- list
 	for i, new_key in pairs(keys) do  -- list
 		old_key = mw.ustring.gsub(new_key, '-', '_')
-		if _.check(forms[old_key]) then
+		if _.has_key(forms[old_key]) then
 			forms[new_key] = forms[old_key]
 		end
 	end
@@ -65,7 +65,7 @@ local function forward_args(forms, args)
 		'voc-sg',  'loc-sg',  'prt-sg',
 	}  -- list
 	for i, key in pairs(keys) do  -- list
-		if _.set(args[key]) then
+		if _.has_value(args[key]) then
 			if args[key] == '-' then
 				forms[key] = args[key]
 			else
@@ -81,12 +81,12 @@ local function forward_args(forms, args)
 		'pt', 'st', 'затрудн', 'клитика',
 	}  -- list
 	for i, key in pairs(keys) do  -- list
-		if _.set(args[key]) then
+		if _.has_value(args[key]) then
 			forms[key] = args[key]
 		end
 	end
 
-	if args['коммент'] then
+	if _.has_key(args['коммент']) then
 		if not forms['коммент'] then
 			forms['коммент'] = ''
 		end
@@ -158,7 +158,7 @@ function export.default(data, additional)
 	forms['stem_type'] = data.stem_type  -- for testcases
 	forward_gender_animacy(forms, data)
 	forward_args(forms, data.args)
-	if not forms['зализняк'] then
+	if not _.has_key(forms['зализняк']) then
 		forms['зализняк'] = '??'
 	end
 	return forms

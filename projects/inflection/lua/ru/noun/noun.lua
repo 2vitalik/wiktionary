@@ -60,7 +60,7 @@ local function main_algorithm(data)
 			return result.default(data, forms)
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
-		elseif _.set(data.rest_index) then
+		elseif _.has_value(data.rest_index) then
 			return result.default(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- dict
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:

@@ -118,13 +118,17 @@ function export.log_table(t, name)
 	end
 end
 
-function export.check2(value)
+function export.has_key(value)
 	-- just return value itself (need for python conversion scripts)
 	return value
 end
 
-function export.set(value)
+function export.has_value(value)
 	-- just check if variable `value` has non-empty value
+	return value and value ~= ''
+end
+
+function export.set(value)  -- FIXME: Remove this when push to `prod` version
 	return value and value ~= ''
 end
 

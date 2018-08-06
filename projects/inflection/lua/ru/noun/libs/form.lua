@@ -170,7 +170,7 @@ local function prt_case(forms, args, index)  -- Разделительный п�
 	if _.contains(index, 'Р2') or _.contains(index, 'Р₂') then
 		forms['prt_sg'] = forms['dat_sg']
 	end
-	if _.set(args['Р']) then
+	if _.has_value(args['Р']) then
 		forms['prt_sg'] = args['Р']
 	end
 end
@@ -199,14 +199,14 @@ local function loc_case(forms, args, index)  -- Местный падеж
 			forms['loc_sg'] = forms['loc_sg'] .. ' // ' .. forms['prp_sg']
 		end
 	end
-	if _.set(args['М']) then
+	if _.has_value(args['М']) then
 		forms['loc_sg'] = args['М']
 	end
 end
 
 
 local function voc_case(forms, args, index, word)  -- Звательный падеж
-	if _.set(args['З']) then
+	if _.has_value(args['З']) then
 		forms['voc_sg'] = args['З']
 	elseif _.contains(index, 'З') then
 		if _.endswith(word, {'а', 'я'}) then

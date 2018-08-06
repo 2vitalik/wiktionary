@@ -55,7 +55,7 @@ function tests:check(word_stressed, index, expected, comment)
 --		end
 
 		local actual = ''
-		if _.set(forms['error']) then
+		if _.has_value(forms['error']) then
 			actual = forms['error']
 			mw.log('Error: "' .. tostring(actual) .. '"')
 		else
