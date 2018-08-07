@@ -150,7 +150,7 @@ end
 local function init(data)
 	local several_vovwels, has_stress
 
-	-- INFO: Исходное слово без ударения:
+--	INFO: Исходное слово без ударения:
 	data.word = _.replaced(data.word_stressed, '́ ', '')
 
 	if data.adj then
@@ -163,7 +163,7 @@ local function init(data)
 			data.stem_stressed = _.replaced(data.word_stressed, '{vowel}́ ?[йяе]$', '')
 		end
 	else
-	-- INFO: Удаляем окончания (-а, -е, -ё, -о, -я, -й, -ь), чтобы получить основу:
+--		INFO: Удаляем окончания (-а, -е, -ё, -о, -я, -й, -ь), чтобы получить основу:
 		data.stem = _.replaced(data.word, '[аеёийоьыя]$', '')
 		data.stem_stressed = _.replaced(data.word_stressed, '[аеёийоьыя]́ ?$', '')
 	end
@@ -316,7 +316,7 @@ function export.parse(args)
 		mw.log('> Случай с вариациями //')
 
 		if _.contains(data.animacy, '//') then
-			-- INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
+--			INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
 			return data, {error='Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?'}  -- dict
 		end
 

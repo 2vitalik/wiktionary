@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local function get_base_stem_type(stem_type)
 	local change_stem_type
 
-	-- INFO: Выбор подходящего из двух типов
+--	INFO: Выбор подходящего из двух типов
 	change_stem_type = {}  -- dict
 	-- hard
 	change_stem_type['hard']  = 'hard'

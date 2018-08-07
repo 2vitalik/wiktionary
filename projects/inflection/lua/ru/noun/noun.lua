@@ -61,11 +61,11 @@ local function main_algorithm(data)
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
 		elseif _.has_value(data.rest_index) then
-			return result.default(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- dict
+			return result.default(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- b-dict
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:
 		else
-			return result.default(data, {})  -- dict
+			return result.default(data, {})  -- b-dict
 		end
 	end
 
@@ -89,11 +89,11 @@ local function main_algorithm(data)
 	mw.log('@ data.stem_type: ' .. tostring(data.stem_type))
 	mw.log('@ data.base_stem_type: ' .. tostring(data.base_stem_type))
 	if not data.stem_type then
-		return result.default(data, {error='Неизвестный тип основы'})  -- dict
+		return result.default(data, {error='Неизвестный тип основы'})  -- b-dict
 	end
 
 --	INFO: Вычисление схемы ударения:
-	data.stress_schema = stress.get_noun_stress_schema(data.stress_type, data.adj)
+	data.stress_schema = stress.get_noun_stress_schema(data.stress_type)
 	_.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
 	_.log_table(data.stress_schema['ending'], "data.stress_schema['ending']")
 
@@ -199,7 +199,7 @@ function export.forms(base, args, frame)
 		end
 		forms = form.plus_forms(sub_forms)
 	else
---		INFO: Стандартный случай без вариациямй:
+--		INFO: Стандартный случай без вариаций:
 		forms = main_algorithm(data)
 	end
 

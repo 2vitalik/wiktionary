@@ -28,7 +28,7 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		_.replace(stems, 'all_pl', 'ёнок$', 'я́т')
 		_.replace(stems, 'all_pl', 'о́нок$', 'а́т')
 
-		-- INFO: Эмуляция среднего рода `1a` для форм мн. числа
+--		INFO: Эмуляция среднего рода `1a` для форм мн. числа
 		endings['nom_pl'] = 'а'
 		endings['gen_pl'] = ''
 
@@ -41,10 +41,10 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		_.replace(stems, 'all_pl', 'ёночек$', 'я́тк')
 		_.replace(stems, 'all_pl', 'о́ночек$', 'а́тк')
 
-		-- INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
+--		INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
 		export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data)
 
-		-- INFO: По сути должно примениться только к мн. формам (случай `B`)
+--		INFO: По сути должно примениться только к мн. формам (случай `B`)
 		export.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index .. '*', data)
 
 		endings['gen_pl'] = ''  -- INFO: Странный фикс, но он нужен.. <_<
