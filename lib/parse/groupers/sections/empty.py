@@ -6,6 +6,7 @@ class EmptyBaseSectionsGrouper(BaseSectionsGrouper):
 
     def __init__(self):
         super().__init__(self)
+        self.content = ''
 
     def __iter__(self):
         yield from ()
