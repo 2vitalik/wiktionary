@@ -220,7 +220,7 @@ def get_response(title, lang, homonym):
     reply_text, other_langs, other_homonyms, lang = \
         get_response_data(title, title_redirect, lang, homonym, content)
     reply_text += '\n🔎 <a href="https://ru.wiktionary.org/wiki/{0}">' \
-                  'Викисловарь</a>'.format(title.replace(' ', '%20'))
+                  'Викисловарь</a>'.format(quote_plus(title))
 
     buttons = []
     if other_langs:
