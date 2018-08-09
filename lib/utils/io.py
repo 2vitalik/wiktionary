@@ -19,6 +19,8 @@ def append(filename, line):
 
 
 def ensure_dir(path):
+    if not path:
+        return
     if not exists(path):
         os.makedirs(path)
 
