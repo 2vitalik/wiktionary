@@ -11,13 +11,17 @@ class HomonymSection(BlocksGroupersMixin, DeepIterator, BaseSection):
     parse_pattern = R.third_header
     child_section_type = BlockSection
 
-    def __init__(self, base, full_header, header, content):
-        super().__init__(base, full_header, header, content)
+    def __init__(self, base, full_header, header, content, silent):
+        super().__init__(base, full_header, header, content, silent)
 
         if self.header == '':
             self._key = ''
         else:
             m = TR.homonym_header.match(self.header)
-            if not m:
-                raise Exception()
-            self._key = m.group('args')
+            if m:
+                self._key = m.group('args')
+            else:
+                if self.silent:
+                    self._key = self.header
+                else:
+                    raise Exception(f'Wrong homonym header: "{self.header}"')

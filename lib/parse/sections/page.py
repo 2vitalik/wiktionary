@@ -12,8 +12,8 @@ class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
     parse_pattern = R.first_header
     child_section_type = LanguageSection
 
-    def __init__(self, title, content, is_redirect=None):
-        super().__init__(None, None, None, content)
+    def __init__(self, title, content, is_redirect=None, silent=False):
+        super().__init__(None, None, None, content, silent)
         self.title = title
         self.is_redirect = is_redirect  # todo: implement in inheritors
         self.is_category = title.startswith(u'Категория:')

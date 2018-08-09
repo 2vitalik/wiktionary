@@ -11,10 +11,18 @@ class LanguageSection(HomonymsGroupersMixin, DeepIterator, BaseSection):
     parse_pattern = R.second_header
     child_section_type = HomonymSection
 
-    def __init__(self, base, full_header, header, content):
-        super().__init__(base, full_header, header, content)
+    def __init__(self, base, full_header, header, content, silent):
+        super().__init__(base, full_header, header, content, silent)
 
-        m = TR.lang_header.match(self.header)
-        if not m:
-            raise Exception()  # todo: написать сообщение
-        self._key = m.group('lang')
+        if self.header == '':
+            self._key = ''
+        else:
+            m = TR.lang_header.match(self.header)
+            if m:
+                self._key = m.group('lang')
+            else:
+                if self.silent:
+                    self._key = self.header
+                else:
+                    raise Exception(f'Wrong first header: "{self.header}" '
+                                    f'in "{self.title}"')

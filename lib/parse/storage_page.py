@@ -5,10 +5,10 @@ from lib.parse.sections.page import Page
 class StoragePage(Page):
     storage = MainStorage()
 
-    def __init__(self, title):
+    def __init__(self, title, silent=False):
         content = self.storage.get(title, 'content')
         # todo: process `is_redirect`
-        super().__init__(title, content)
+        super().__init__(title, content, silent)
 
 
 if __name__ == '__main__':

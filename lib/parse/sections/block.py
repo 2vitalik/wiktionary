@@ -11,6 +11,6 @@ class BlockSection(SubBlocksGroupersMixin, DeepIterator, BaseSection):
     parse_pattern = R.forth_header
     child_section_type = SubBlockSection
 
-    def __init__(self, base, full_header, header, content):
-        super().__init__(base, full_header, header, content)
+    def __init__(self, base, full_header, header, content, silent):
+        super().__init__(base, full_header, header, content, silent)
         self._key = H.get_key(header)

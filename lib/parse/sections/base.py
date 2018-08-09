@@ -11,7 +11,7 @@ class BaseSection(BaseSectionsGrouper):
     parse_pattern = None
     child_section_type = None
 
-    def __init__(self, base, full_header, header, content):
+    def __init__(self, base, full_header, header, content, silent):
         super().__init__(base)
 
         if not self.is_leaf:
@@ -26,6 +26,7 @@ class BaseSection(BaseSectionsGrouper):
         self.full_header = full_header
         self.header = header
         self.content = content
+        self.silent = silent
 
         self.is_parsing = False
         self.parsed = False
@@ -110,19 +111,21 @@ class BaseSection(BaseSectionsGrouper):
         parts = self.parse_pattern.split(self.content)
         if len(parts) == 1:
             self._sub_sections = {
-                '': self.child_section_type(self, '', '', parts[0]),
+                '': self.child_section_type(self, '', '', parts[0],
+                                            self.silent),
             }
             return
         self._top = parts.pop(0)
         self._sub_sections = dict()
         for full_header, header, content in chunks(parts, 3):
-            if header in self._sub_sections:
+            if header in self._sub_sections and not self.silent:
                 raise Exception(f'Duplicated section `{header}` on the page '
                                 f'"{self.title}"')
             child_section = \
-                self.child_section_type(self, full_header, header, content)
+                self.child_section_type(self, full_header, header, content,
+                                        self.silent)
             key = child_section.key
-            if key in self._sub_sections:
+            if key in self._sub_sections and not self.silent:
                 raise Exception(f'Duplicated header key `{key}` on the page '
                                 f'"{self.title}"')
             self._sub_sections[key] = child_section

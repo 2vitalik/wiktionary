@@ -31,9 +31,9 @@ class MainStorage(Storage):
     def latest_edited(self, value):
         write(self.latest_edited_filename, dt(value, utc=True))
 
-    def iterate_pages(self):
+    def iterate_pages(self, silent=False):
         for title, content in self.iterate('content'):
-            yield title, Page(title, content)
+            yield title, Page(title, content, silent=silent)
 
 
 if __name__ == '__main__':
