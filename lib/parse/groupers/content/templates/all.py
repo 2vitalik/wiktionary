@@ -10,7 +10,7 @@ class TemplatesGrouper(BaseTemplatesGrouper):
             yield path, Template(tpl_name, tpl_content)
 
     def __call__(self, *args, **kwargs):
-        return FilteredTemplatesGrouper(self.base, args)
+        return FilteredTemplatesGrouper(self.base, args, **kwargs)
 
     def __getattr__(self, item):
         return FilteredTemplatesGrouper(self.base, [item])
