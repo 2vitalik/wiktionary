@@ -8,6 +8,14 @@ class BaseGrouper:
         self.base = base
         self._cache = {}
 
+    def __len__(self):
+        if not self.base:
+            return 0
+        return len(self.base)
+
+    def __getitem__(self, item):
+        return self.base[item]
+
     @property
     def keys(self):
         return self.base.keys
@@ -28,3 +36,6 @@ class BaseGrouper:
             indexes = [self.fields.index(arg) for arg in args]
             self._cache[cache_key] = group(self, indexes, like_items, unique)
         return self._cache[cache_key]
+
+    def __getattr__(self, item):
+        pass  # todo
