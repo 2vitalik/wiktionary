@@ -122,6 +122,7 @@ class Reply(ShortReply):
         self.lang_key = lang_key
         self.homonym_index = int(homonym_index)
 
+        self.title_stressed = self.active_title
         self.lang_keys = []
         self.homonyms_count = 0
         self.text = self._reply_text()
@@ -135,13 +136,14 @@ class Reply(ShortReply):
 
     @property
     def _reply_title(self):
-        reply_title = f'▪<b>{self.title}</b>'
         if self.title_redirected:
-            reply_title += f' → <b>{self.title_redirected}</b>'
+            result = f'▪<b>{self.title}</b> → <b>{self.title_stressed}</b>'
+        else:
+            result = f'▪<b>{self.title_stressed}</b>'
         lang_text = self.languages.get(self.lang_key, self.lang_key)
         if lang_text:
-            reply_title += f'  ({lang_text})'
-        return reply_title
+            result += f'  ({lang_text})'
+        return result
 
     @property
     def _reply_body(self):
@@ -165,6 +167,16 @@ class Reply(ShortReply):
             return f'⛔ <b>{self.homonym_index+1}-й</b> омоним не найден'
 
         homonym_obj = lang_obj.homonyms[self.homonym_index]
+
+        # stresses = set()  # todo: several stresses feature
+        for tpl in homonym_obj.templates('по-слогам', 'по слогам').values():
+            value = tpl.params.replace('|', '').replace('.', '')
+            if not value:
+                continue
+            if value.replace('́', '') != self.active_title:
+                continue
+            # stresses.add(value.index('́'))  # todo: several stresses feature
+            self.title_stressed = value
 
         if 'semantic' not in homonym_obj.keys:  # todo: fix to be able to check by header "Семантические свойства"
             return '🔻 Секция «Семантические свойства» не найдена'
@@ -213,7 +225,8 @@ class Reply(ShortReply):
 
     def _reply_text(self):
         link = get_link(self.title, 'Викисловарь')
-        return f'{self._reply_title}\n\n{self._reply_body.strip()}\n\n🔎 {link}'
+        body = self._reply_body.strip()
+        return f'{self._reply_title}\n\n{body}\n\n🔎 {link}'
 
     def _reply_buttons(self):
         buttons = []
