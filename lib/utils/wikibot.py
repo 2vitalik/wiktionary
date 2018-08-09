@@ -28,13 +28,13 @@ def load_page_with_redirect(title):
 
 
 def save_page(title, content, desc, minor=True, check_changes=True):
-    page = get_page(title)
     if check_changes:
         try:
-            old_content = load_page(page)
+            old_content = load_page(title)
             if old_content.strip() == content.strip():
-                # todo: print or log something?
+                print("Page content hasn't changed")  # todo: log something?
                 return
         except pywikibot.NoPage:
             pass
+    page = get_page(title)
     page.put(content, desc, minor=minor)
