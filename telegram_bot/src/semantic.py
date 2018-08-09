@@ -86,31 +86,176 @@ def load_languages():  # todo: move this to some `lib`
     return languages
 
 
-languages = load_languages()
+class ShortReply:
+    def __init__(self, title):
+        self.title = title
+        self.title_redirected = None
+        self.content = None
+        self.fetch_content()
+
+    def load_page_with_redirect(self, title):
+        try:
+            self.content, self.title_redirected = load_page_with_redirect(title)
+            return True
+        except NoPage:
+            return False
+
+    def fetch_content(self):
+        if self.load_page_with_redirect(self.title):
+            return
+        # пытаемся трансформировать регистр:
+        titles_transformed = [self.title.lower(), self.title.upper(),
+                              self.title.capitalize()]
+        for title_transformed in titles_transformed:
+            if self.title != title_transformed:
+                if self.load_page_with_redirect(title_transformed):
+                    self.title = title_transformed
+                    return
 
 
-def get_content(title):
-    try:
-        content, title_redirect = load_page_with_redirect(title)
-        return title, content, title_redirect
-    except NoPage:
-        # try lower case (if originally typed via mobile phone)
-        lower_title = title.lower()
-        if lower_title == title:  # title was already in a lower case
-            return title, None, None
-        lower_title, content, title_redirect = get_content(lower_title)
-        if not content:
-            return title, None, None
-        return lower_title, content, title_redirect
-        # todo: capitalize and upper cases?
+class Reply(ShortReply):
+    languages = load_languages()
+
+    def __init__(self, title, lang_key='', homonym_index=0):
+        super().__init__(title)
+
+        self.lang_key = lang_key
+        self.homonym_index = int(homonym_index)
+
+        self.lang_keys = []
+        self.homonyms_count = 0
+        self.text = self._reply_text()
+        self.buttons = self._reply_buttons()
+
+    @property
+    def active_title(self):
+        if self.title_redirected:
+            return self.title_redirected
+        return self.title
+
+    @property
+    def _reply_title(self):
+        reply_title = f'▪<b>{self.title}</b>'
+        if self.title_redirected:
+            reply_title += f' → <b>{self.title_redirected}</b>'
+        lang_text = self.languages.get(self.lang_key, self.lang_key)
+        if lang_text:
+            reply_title += f'  ({lang_text})'
+        return reply_title
+
+    @property
+    def _reply_body(self):
+        if not self.content:
+            self.lang_key = ''
+            return '❌ Слово не найдено'
+
+        page = OnlinePage(self.active_title, silent=True)
+        self.lang_keys = page.languages.keys
+        if not self.lang_key:
+            self.lang_key = self.lang_keys[0]
+
+        if self.lang_key not in self.lang_keys:
+            return f'⛔ Язык "<b>{self.lang_key}</b>" не найден'
+
+        lang_obj = page.languages[self.lang_key]
+        homonyms_keys = lang_obj.homonyms.keys
+        self.homonyms_count = len(homonyms_keys)
+
+        if self.homonym_index >= self.homonyms_count:
+            return f'⛔ <b>{self.homonym_index+1}-й</b> омоним не найден'
+
+        homonym_obj = lang_obj.homonyms[self.homonym_index]
+
+        if 'semantic' not in homonym_obj.keys:  # todo: fix to be able to check by header "Семантические свойства"
+            return '🔻 Секция «Семантические свойства» не найдена'
+
+        block_obj = homonym_obj.blocks['Семантические свойства']
+        if 'definition' in block_obj.keys:  # todo: fix to be able to check by header "Значение"
+            definitions = \
+                clear_definitions(block_obj['Значение'].content).split('\n')
+            definitions = map(str.strip, definitions)
+            definitions = filter(lambda x: x != '#', definitions)
+
+            if not definitions:
+                return '🔺 Значение отсутствует'
+
+            reply = ''
+            for definition in definitions:
+                if definition.startswith('#'):
+                    definition = definition[1:].strip()
+                    reply += f'🔹{definition}\n'
+                else:
+                    reply += f'🔻{definition}\n'
+            return reply
+        else:
+            p = re.compile(
+                '# *{{значение.*?\| *определение *= *(.*?)\s*\| *пометы *= *(.*?)\|',
+                flags=re.UNICODE | re.DOTALL)
+            definition_parts = p.findall(block_obj.content)
+            if not definition_parts:
+                return '🔻 Секция «Значение» не найдена'
+
+            definitions = list()
+            for parts in definition_parts:
+                definition = clear_definitions(parts[0])
+                labels = clear_definitions(parts[1])
+                if labels:
+                    definition = (labels + ' ' + definition).strip()
+                if definition:
+                    definitions.append(definition)
+            if not definitions:
+                return '🔺 Значение отсутствует'
+
+            reply = ''
+            for definition in definitions:
+                reply += '🔹%s\n' % definition.strip()
+            return reply
+
+    def _reply_text(self):
+        link = get_link(self.title, 'Викисловарь')
+        return f'{self._reply_title}\n\n{self._reply_body.strip()}\n\n🔎 {link}'
+
+    def _reply_buttons(self):
+        buttons = []
+        if len(self.lang_keys) > 1:
+            values = [
+                (f'{value}' if value != self.lang_key else f'• {value}',
+                 f'{self.title}|{value}|0')
+                for value in self.lang_keys
+            ]
+            for chunk in chunks(values, 4):
+                buttons.append([
+                    telegram.InlineKeyboardButton(text, callback_data=data)
+                    for text, data in chunk
+                ])
+        if self.homonyms_count > 1:
+            values = [
+                (f'{i+1}' if i != self.homonym_index else f'• {i+1}',
+                 f'{self.title}|{self.lang_key}|{i}')
+                for i in range(self.homonyms_count)
+            ]
+            for chunk in chunks(values, 6):
+                buttons.append([
+                    telegram.InlineKeyboardButton(text, callback_data=data)
+                    for text, data in chunk
+                ])
+        return telegram.InlineKeyboardMarkup(buttons)
+
+
+def save_log(message, title):  # todo: move it to some `utils`
+    user = message.from_user
+    name = f'{user.first_name} {user.last_name}'.strip()
+    path = join(ROOT_PATH, 'telegram_bot', 'logs', 'titles.txt')
+    append(path, f'[{message.date}] @{user.username} ({name}) #{user.id}\n'
+                 f'{title}\n')
 
 
 def get_homonym(title):
-    homonym = 1
+    homonym = 0
     p = re.compile(r'\s+[\\/](?P<homonym>\d+)')
     m = p.search(title)
     if m:
-        homonym = int(m.group('homonym'))
+        homonym = int(m.group('homonym')) - 1
         title = p.sub('', title)
     return homonym, title
 
@@ -125,136 +270,16 @@ def get_lang(title):
     return lang, title
 
 
-def get_link(title, redirect=False):
-    title_encoded = quote(title)
+def get_link(title, text=None, redirect=False):
+    # todo: и сюда ударение?
+    if not text:
+        text = title
     if not redirect:
-        href = f'https://ru.wiktionary.org/wiki/{title_encoded}'
+        href = f'https://ru.wiktionary.org/wiki/{quote(title)}'
     else:
-        href = f'https://ru.wiktionary.org/w/index.php?title={title_encoded}' \
+        href = f'https://ru.wiktionary.org/w/index.php?title={quote(title)}' \
                f'&redirect=no'
-    return f'<a href="{href}">{title}</a>'
-
-
-def get_response_data(title, title_redirect, lang, homonym_index, content):
-    if not content:
-        return f'▪<b>{title}</b>\n\n' \
-               f'❌ Слово не найдено\n', [], 0, ''
-
-    page = OnlinePage(title, silent=True)
-    reply_text = f'▪<b>{title}</b>'
-
-    if title_redirect:
-        reply_text += f' → <b>{title_redirect}</b>'
-
-    if not lang:
-        lang = page.languages.keys[0]
-    lang_text = languages.get(lang, lang)
-    reply_text += f'  ({lang_text})\n\n'
-
-    other_langs = page.languages.keys if len(page.languages) > 1 else []
-    if lang not in page.languages.keys:
-        reply_text += f'⛔ Язык "<b>{lang}</b>" не найден\n'
-        return reply_text, other_langs, 0, ''
-
-    lang_obj = page.languages[lang]
-    homonyms = lang_obj.homonyms.keys
-    other_homonyms = len(homonyms) if len(homonyms) > 1 else 0
-
-    if homonym_index != 1 and homonym_index - 1 >= len(homonyms):  # "-1" т.к. нумеруем с 1
-        reply_text += f'⛔ <b>{homonym_index}-й</b> омоним не найден\n'
-        return reply_text, other_langs, other_homonyms, lang
-
-    homonym_obj = lang_obj.homonyms[homonym_index - 1]
-    if 'semantic' not in homonym_obj.keys:  # todo: fix to be able to check by header "Семантические свойства"
-        reply_text += '🔻 Секция «Семантические свойства» не найдена\n'
-        return reply_text, other_langs, other_homonyms, lang
-
-    block_obj = homonym_obj.blocks['Семантические свойства']
-    if 'definition' in block_obj.keys:  # todo: fix to be able to check by header "Значение"
-        sub_block_content = block_obj['Значение'].content
-        definitions = clear_definitions(sub_block_content).split('\n')
-        definitions = map(str.strip, definitions)
-        definitions = filter(lambda x: x != '#', definitions)
-
-        if not definitions:
-            reply_text += '🔺 Значение отсутствует\n'
-            return reply_text, other_langs, other_homonyms, lang
-
-        for definition in definitions:
-            if definition.startswith('#'):
-                definition = definition[1:].strip()
-                reply_text += f'🔹{definition}\n'
-            else:
-                reply_text += f'🔻{definition}\n'
-        return reply_text, other_langs, other_homonyms, lang
-    else:
-        p = re.compile(
-            '# *{{значение.*?\| *определение *= *(.*?)\s*\| *пометы *= *(.*?)\|',
-            flags=re.UNICODE | re.DOTALL)
-        definition_parts = p.findall(block_obj.content)
-        if not definition_parts:
-            reply_text += '🔻 Секция «Значение» не найдена\n'
-            return reply_text, other_langs, other_homonyms, lang
-
-        definitions = list()
-        for parts in definition_parts:
-            definition = clear_definitions(parts[0])
-            labels = clear_definitions(parts[1])
-            if labels:
-                definition = (labels + ' ' + definition).strip()
-            if definition:
-                definitions.append(definition)
-        if not definitions:
-            reply_text += '🔺 Значение отсутствует\n'
-            return reply_text, other_langs, other_homonyms, lang
-
-        for definition in definitions:
-            reply_text += '🔹%s\n' % definition.strip()
-        return reply_text, other_langs, other_homonyms, lang
-
-
-def get_response(title, lang, homonym):
-    homonym = int(homonym)
-    title, content, title_redirect = get_content(title)
-
-    reply_text, other_langs, other_homonyms, lang = \
-        get_response_data(title, title_redirect, lang, homonym, content)
-    reply_text += '\n🔎 <a href="https://ru.wiktionary.org/wiki/{0}">' \
-                  'Викисловарь</a>'.format(quote(title))
-
-    buttons = []
-    if other_langs:
-        values = [
-            (f'{value}' if value != lang else f'• {value}',
-             f'{title}|{value}|1')
-            for value in other_langs
-        ]
-        for chunk in chunks(values, 4):
-            buttons.append([
-                telegram.InlineKeyboardButton(text, callback_data=data)
-                for text, data in chunk
-            ])
-    if other_homonyms:
-        values = [
-            (f'{i}' if i != homonym else f'• {i}',
-             f'{title}|{lang}|{i}')
-            for i in range(1, other_homonyms + 1)
-        ]
-        for chunk in chunks(values, 6):
-            buttons.append([
-                telegram.InlineKeyboardButton(text, callback_data=data)
-                for text, data in chunk
-            ])
-    reply_markup = telegram.InlineKeyboardMarkup(buttons)
-    return reply_text, reply_markup
-
-
-def save_log(message, title):  # todo: move it to some `utils`
-    user = message.from_user
-    name = f'{user.first_name} {user.last_name}'.strip()
-    path = join(ROOT_PATH, 'telegram_bot', 'logs', 'titles.txt')
-    append(path, f'[{message.date}] @{user.username} ({name}) #{user.id}\n'
-                 f'{title}\n')
+    return f'<a href="{href}">{text}</a>'
 
 
 def process_message(bot, update):
@@ -280,28 +305,28 @@ def process_message(bot, update):
     save_log(update.message, title)
 
     if skip_content:
-        title, content, title_redirect = get_content(title)
-        icon = '✅' if content else '❌'
-        if not title_redirect:
-            url_title = get_link(title)
-            response = f'{icon} {url_title}'
+        reply = ShortReply(title)
+        icon = '✅' if reply.content else '❌'
+        if not reply.title_redirected:
+            url_title = get_link(reply.title)
+            reply_text = f'{icon} {url_title}'
         else:
-            url_title = get_link(title, redirect=True)
-            url_title_redirect = get_link(title_redirect)
-            response = f'{icon} {url_title} → {url_title_redirect}'
-        send(bot, chat_id, response)
+            url_title = get_link(reply.title, redirect=True)
+            url_title_redirect = get_link(reply.title_redirected)
+            reply_text = f'{icon} {url_title} → {url_title_redirect}'
+        send(bot, chat_id, reply_text)
         return
 
-    response, reply_markup = get_response(title, lang, homonym)
-    send(bot, chat_id, response, reply_markup)
+    reply = Reply(title, lang, homonym)
+    send(bot, chat_id, reply.text, reply.buttons)
 
 
 def process_callback(bot, update):
     callback_query = update.callback_query
     query_data = callback_query.data
     title, lang, homonym = query_data.split('|')
-    response, reply_markup = get_response(title, lang, homonym)
-    callback_query.edit_message_text(response, reply_markup=reply_markup,
+    reply = Reply(title, lang, homonym)
+    callback_query.edit_message_text(reply.text, reply_markup=reply.buttons,
                                      parse_mode=telegram.ParseMode.HTML,
                                      disable_web_page_preview=True)
 
