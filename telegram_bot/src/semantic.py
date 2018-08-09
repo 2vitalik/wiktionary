@@ -135,43 +135,43 @@ def get_link(title, redirect=False):
     return f'<a href="{href}">{title}</a>'
 
 
-def get_response_data(title, title_redirect, lang, homonym, content):
+def get_response_data(title, title_redirect, lang, homonym_index, content):
     if not content:
         return f'▪<b>{title}</b>\n\n' \
                f'❌ Слово не найдено\n', [], 0, ''
 
-    page = OnlinePage(title)
+    page = OnlinePage(title, silent=True)
     reply_text = f'▪<b>{title}</b>'
 
     if title_redirect:
         reply_text += f' → <b>{title_redirect}</b>'
 
     if not lang:
-        lang = page.langs_order[0]
+        lang = page.languages.keys[0]
     lang_text = languages.get(lang, lang)
     reply_text += f'  ({lang_text})\n\n'
 
-    other_langs = page.langs_order if len(page.langs) > 1 else []
-    if lang not in page.langs:
+    other_langs = page.languages.keys if len(page.languages) > 1 else []
+    if lang not in page.languages.keys:
         reply_text += f'⛔ Язык "<b>{lang}</b>" не найден\n'
         return reply_text, other_langs, 0, ''
 
-    lang_obj = page.langs[lang]
-    homonyms = lang_obj.homonyms_order
+    lang_obj = page.languages[lang]
+    homonyms = lang_obj.homonyms.keys
     other_homonyms = len(homonyms) if len(homonyms) > 1 else 0
 
-    if homonym != 1 and homonym - 1 >= len(homonyms):
-        reply_text += f'⛔ <b>{homonym}-й</b> омоним не найден\n'
+    if homonym_index != 1 and homonym_index - 1 >= len(homonyms):  # "-1" т.к. нумеруем с 1
+        reply_text += f'⛔ <b>{homonym_index}-й</b> омоним не найден\n'
         return reply_text, other_langs, other_homonyms, lang
 
-    homonym_obj = lang_obj.homonyms[homonyms[homonym - 1]]
-    if 'Семантические свойства' not in homonym_obj.blocks:
+    homonym_obj = lang_obj.homonyms[homonym_index - 1]
+    if 'semantic' not in homonym_obj.keys:  # todo: fix to be able to check by header "Семантические свойства"
         reply_text += '🔻 Секция «Семантические свойства» не найдена\n'
         return reply_text, other_langs, other_homonyms, lang
 
-    section_obj = homonym_obj.blocks['Семантические свойства']
-    if 'Значение' in section_obj.sub_blocks:
-        sub_block_content = section_obj.sub_blocks['Значение'].content
+    block_obj = homonym_obj.blocks['Семантические свойства']
+    if 'definition' in block_obj.keys:  # todo: fix to be able to check by header "Значение"
+        sub_block_content = block_obj['Значение'].content
         definitions = clear_definitions(sub_block_content).split('\n')
         definitions = map(str.strip, definitions)
         definitions = filter(lambda x: x != '#', definitions)
@@ -191,7 +191,7 @@ def get_response_data(title, title_redirect, lang, homonym, content):
         p = re.compile(
             '# *{{значение.*?\| *определение *= *(.*?)\s*\| *пометы *= *(.*?)\|',
             flags=re.UNICODE | re.DOTALL)
-        definition_parts = p.findall(content)
+        definition_parts = p.findall(block_obj.content)
         if not definition_parts:
             reply_text += '🔻 Секция «Значение» не найдена\n'
             return reply_text, other_langs, other_homonyms, lang
