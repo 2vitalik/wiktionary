@@ -1,6 +1,6 @@
 import re
 from os.path import join
-from urllib.parse import quote_plus
+from urllib.parse import quote
 
 import telegram
 from pywikibot.exceptions import NoPage
@@ -126,7 +126,7 @@ def get_lang(title):
 
 
 def get_link(title, redirect=False):
-    title_encoded = quote_plus(title)
+    title_encoded = quote(title)
     if not redirect:
         href = f'https://ru.wiktionary.org/wiki/{title_encoded}'
     else:
@@ -220,7 +220,7 @@ def get_response(title, lang, homonym):
     reply_text, other_langs, other_homonyms, lang = \
         get_response_data(title, title_redirect, lang, homonym, content)
     reply_text += '\n🔎 <a href="https://ru.wiktionary.org/wiki/{0}">' \
-                  'Викисловарь</a>'.format(quote_plus(title))
+                  'Викисловарь</a>'.format(quote(title))
 
     buttons = []
     if other_langs:
