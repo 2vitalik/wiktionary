@@ -57,6 +57,9 @@ def group(data, indexes, like_items, unique):
     if like_items:
         indexes += (-1, )  # additional layer that will be a dict with rest keys
 
+    if len(indexes) == 0:  # fixme: написать для чего `len(indexes) == 0`
+        result = []
+
     for path, value in data:
         curr = result
         for i, index in enumerate(indexes):
@@ -86,7 +89,7 @@ def group(data, indexes, like_items, unique):
                                         "duplicated inside a grouped block")
                     curr[key] = value  # write single unique value here
 
-        if not unique:
+        if not unique or len(indexes) == 0:  # fixme: написать для чего `len(indexes) == 0`
             # let's fill list() on the last layer
             curr.append(value)
 
