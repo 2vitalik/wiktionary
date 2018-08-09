@@ -31,9 +31,14 @@ class MainStorage(Storage):
     def latest_edited(self, value):
         write(self.latest_edited_filename, dt(value, utc=True))
 
-    def iterate_pages(self, silent=False):
+    def iterate_pages(self, limit=None, silent=False):
+        # todo: cyrilic= latin=...
+        count = 0
         for title, content in self.iterate('content'):
             yield title, Page(title, content, silent=silent)
+            count += 1
+            if limit and count >= limit:
+                break
 
 
 if __name__ == '__main__':
