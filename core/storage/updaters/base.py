@@ -1,8 +1,8 @@
 from pywikibot import NoPage
 
 from core.storage.main import MainStorage
-from lib.utils.dt import dt, t
-from lib.utils.log import log_day, log_hour
+from libs.utils.dt import dt, t
+from libs.utils.log import log_day, log_hour
 
 
 class BaseStorageUpdater:

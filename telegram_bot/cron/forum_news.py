@@ -5,7 +5,7 @@ from os.path import exists, join
 
 import telegram
 
-from lib.utils.wikibot import load_page
+from libs.utils.wikibot import load_page
 from telegram_bot.config import TELEGRAM_BOT_TOKEN, ROOT_PATH, \
     MAIN_GROUP_CHAT_ID
 from telegram_bot.src.utils import send

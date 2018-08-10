@@ -2,7 +2,7 @@ from pywikibot import Timestamp
 from pywikibot.pagegenerators import RecentChangesPageGenerator
 
 from core.storage.updaters.base import BaseStorageUpdater
-from lib.utils.dt import dt
+from libs.utils.dt import dt
 
 
 def reduce_seconds(dt):

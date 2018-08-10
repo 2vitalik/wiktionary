@@ -14,9 +14,9 @@ import re
 from datetime import datetime
 
 from core.storage.main import MainStorage
-from lib.utils.collection import chunks
-from lib.utils.io import write, read
-from lib.utils.wikibot import save_page
+from libs.utils.collection import chunks
+from libs.utils.io import write, read
+from libs.utils.wikibot import save_page
 
 storage = MainStorage()
 

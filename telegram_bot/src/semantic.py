@@ -6,10 +6,10 @@ import telegram
 from pywikibot.exceptions import NoPage
 
 from core.conf.conf import ROOT_PATH
-from lib.parse.online_page import OnlinePage
-from lib.utils.collection import chunks
-from lib.utils.io import read, append
-from lib.utils.wikibot import load_page_with_redirect
+from libs.parse.online_page import OnlinePage
+from libs.utils.collection import chunks
+from libs.utils.io import read, append
+from libs.utils.wikibot import load_page_with_redirect
 from telegram_bot.src.utils import send
 
 

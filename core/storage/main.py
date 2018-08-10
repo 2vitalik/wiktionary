@@ -1,10 +1,10 @@
 from os.path import join, exists
 
 from core.conf import conf
-from lib.parse.sections.page import Page
-from lib.storage.storage import Storage
-from lib.utils.dt import dtp, dt
-from lib.utils.io import read, write
+from libs.parse.sections.page import Page
+from libs.storage.storage import Storage
+from libs.utils.dt import dtp, dt
+from libs.utils.io import read, write
 
 
 class MainStorage(Storage):
