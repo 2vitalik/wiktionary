@@ -23,6 +23,9 @@ class ContentsBlockHandler(BaseBlockHandler):
         except ValueError:
             self.index = None
 
+    def default_empty(self, prefix):
+        return f"Prefix: {prefix}"
+
     def get(self):
         if self.index is None:
             raise StorageError(f"Block doesn't contain title: '{self.title}'")

@@ -12,6 +12,9 @@ class BaseBlockHandler:
         self.handler = handler
         self.path = self.block_path(title)
 
+    def default_empty(self, prefix):
+        raise NotImplementedError()
+
     def get(self):
         raise NotImplementedError()
 
@@ -38,7 +41,7 @@ class BaseBlockHandler:
 
         for prefix, candidate in candidates:
             if not exists(candidate):
-                write(candidate, f"Prefix: {prefix}")
+                write(candidate, self.default_empty(prefix))
                 return candidate
             if isfile(candidate):
                 return candidate

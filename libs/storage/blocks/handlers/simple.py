@@ -22,6 +22,9 @@ class SimpleBlockHandler(BaseBlockHandler):
         except ValueError:
             self.index = None
 
+    def default_empty(self, prefix):
+        return ''
+
     def get(self):
         if self.index is None:
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
