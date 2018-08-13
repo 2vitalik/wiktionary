@@ -41,26 +41,4 @@ class MainStorage(Storage):
                 break
 
 
-if __name__ == '__main__':
-    # content = MainStorage().get('привет', 'content')
-    # print(content)
-    # print('=' * 100)
-    #
-    # content = content.replace('{{длина слова', '{{ДЛИНА СЛОВА!!')
-    # MainStorage().update('привет', content=content)
-    #
-    # content = MainStorage().get('привет', 'content')
-    # print(content)
-    #
-    # MainStorage().update('выпив', content='Вот так вот :)')
-    # MainStorage().delete('выпив')
-
-    # info = MainStorage().get('привет', 'info')
-    # print(info)
-
-    # MainStorage().update('привет', info='test!! :)')
-
-    info = MainStorage().get('привет', 'info')
-    print(info)
-
-    # MainStorage().delete('привет')
+storage = MainStorage()
