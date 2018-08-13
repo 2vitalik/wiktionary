@@ -25,6 +25,7 @@ class Storage:
             max_count = int(read(join(table_path, '_sys', 'max_count')))
             self.handlers[table] = self.handler_types[handler_type](table_path,
                                                                     max_count)
+        self._titles = None
 
     def __del__(self):
         if self.locked and exists(self.lock_filename):
@@ -57,6 +58,12 @@ class Storage:
 
     def load_titles(self):
         return read(self.titles_filename).split('\n')
+
+    @property
+    def titles(self):
+        if self._titles is None:
+            self._titles = self.load_titles()
+        return self._titles
 
     @property
     def logs_path(self):
