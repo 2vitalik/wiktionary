@@ -35,7 +35,7 @@ class BaseStorageBuilder:
                 key = f'{code} - {hex(code)}'
             new_path = join(path, key)
             if type(sub_structure) == dict:
-                print(' ' * level, prefix)
+                # print(' ' * level, prefix)
                 self.create_dir(new_path, sub_structure, level + 1)
             else:
                 if exists(new_path) and not self.splitting:
