@@ -35,7 +35,7 @@ class BaseStorageUpdater:
         except NoPage:
             self.storage.delete(title)
             print('- deleted')
-            log_day('deleted.txt', title, path=self.storage.logs_path)
+            log_day('deleted', title, path=self.storage.logs_path)
             return None
 
         edited_str = dt(edited, utc=True)
