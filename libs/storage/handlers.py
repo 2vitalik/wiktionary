@@ -5,6 +5,7 @@ from libs.storage.blocks.handlers.content import ContentsBlockHandler
 from libs.storage.blocks.handlers.simple import SimpleBlockHandler
 from libs.storage.blocks.iterators.content import ContentsBlockIterator
 from libs.storage.blocks.iterators.simple import SimpleBlockIterator
+from libs.utils.classes import required
 
 
 class BaseStorageHandler:
@@ -15,13 +16,8 @@ class BaseStorageHandler:
         self.path = path
         self.max_count = max_count
 
+    @required('block_iterator_class', 'block_handler_class')
     def block(self, title):
-        if not self.block_iterator_class:
-            raise NotImplementedError('You need to set `block_iterator_class` '
-                                      'attribute')
-        if not self.block_handler_class:
-            raise NotImplementedError('You need to set `block_handler_class` '
-                                      'attribute')
         return self.block_handler_class(title, self)
 
     def get(self, title):
