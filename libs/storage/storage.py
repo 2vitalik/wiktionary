@@ -49,6 +49,16 @@ class Storage:
         self.locked = False
 
     @property
+    def titles_filename(self):
+        return join(self.path, 'sys', 'titles.txt')
+
+    def save_titles(self, titles):
+        write(self.titles_filename, '\n'.join(titles))
+
+    def load_titles(self):
+        return read(self.titles_filename).split('\n')
+
+    @property
     def logs_path(self):
         return join(self.path, 'logs')
 

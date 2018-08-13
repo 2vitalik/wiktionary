@@ -19,6 +19,7 @@ class BaseStorageUpdater:
         """
         self.storage = MainStorage(lock=True)
         self.run(*args, **kwargs)
+        self.save_titles()
         self.storage.unlock()
 
     def run(self, *args, **kwargs):
@@ -44,6 +45,12 @@ class BaseStorageUpdater:
         print('- updated:', edited_str)
         self.log_hour('changed', f'<{info}> - {title}')
         return edited
+
+    def save_titles(self):
+        titles = []
+        for title, info in self.storage.iterate('info'):
+            titles.append(title)
+        self.storage.save_titles(titles)
 
     def log_day(self, slug, value):
         log_day(slug, value, path=self.storage.logs_path)
