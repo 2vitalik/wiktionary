@@ -1,6 +1,6 @@
 
 
-class BaseReportBuilder:
+class BaseChecker:
     def check(self, page):
         raise NotImplementedError()
 

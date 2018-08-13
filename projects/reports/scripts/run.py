@@ -1,8 +1,9 @@
+from datetime import datetime
 from pprint import pprint
 
 from core.storage.main import MainStorage
 from libs.utils.wikibot import save_page
-from projects.reports.lib.report_page import ReportPage
+from projects.reports.lib.reports.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
 
 
@@ -17,7 +18,9 @@ class RunAllReports:
         'Отчёты': {},
     }
 
-    def __init__(self):
+    def __init__(self, debug=False):
+        print(datetime.now())
+        self.debug = debug
         self.storage = MainStorage()
         self._check_pages()
         self._build_tree()
@@ -55,15 +58,16 @@ class RunAllReports:
                 self._save_report(value)
 
     def _save_node(self, node: dict, key: str, prefix: str):
+        title = f'{self.root}{prefix}'
+
         content = ''
         if key:
             content = f"Раздел: '''{key}'''\n\n"
         content += f"Подразделы:\n"
-        content += self._get_node_content(node)
-        # print('=' * 100)
-        # print(f'{self.root}{prefix}')
-        # print(content)
-        save_page(f'{self.root}{prefix}', content, '/Тестовое/ Обновление дерева отчётов')
+        content += self._get_node_content(node) or "* ''пусто''"
+
+        desc = 'Обновление дерева отчётов'
+        self._save_page(title, content, desc)
 
     def _get_node_content(self, node: dict, indent=1, prefix='/'):
         content = ''
@@ -85,13 +89,19 @@ class RunAllReports:
                 content += f"{asterisks} '''{link}''' ({styled_count})\n"
         return content
 
-    def _save_report(self, report: ReportPage):
-        # print('=' * 100)
-        # print(f'{self.root}/{report.path}')
-        # print(report.content)
-        save_page(f'{self.root}/{report.path}', report.content,
-                  f'/Тестовое/ Обновление отчёта: {report.count}')
+    def _save_report(self, report: BaseReportPage):
+        title = f'{self.root}/{report.path}'
+        content = report.page_content
+        desc = f'Обновление отчёта: {report.count}'
+        self._save_page(title, content, desc)
+
+    def _save_page(self, title, content, desc):
+        # todo: save to `sync`
+        if self.debug:
+            print(f'{"=" * 100}\n{title}\n{content.strip()}\n')
+        else:
+            save_page(title, content, desc)
 
 
 if __name__ == '__main__':
-    RunAllReports()
+    RunAllReports(debug=False)
