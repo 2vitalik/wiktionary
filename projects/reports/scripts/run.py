@@ -45,7 +45,6 @@ class RunAllReports:
                 if key in curr:
                     raise Exception(f'Duplicated report: {report_page.path}')
                 curr[key] = report_page
-        pprint(self.tree)
 
     def _save_reports(self, node: dict, key='', prefix=''):
         self._save_node(node, key, prefix)
