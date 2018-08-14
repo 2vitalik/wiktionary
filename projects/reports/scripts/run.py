@@ -2,6 +2,7 @@ from datetime import datetime
 from pprint import pprint
 
 from core.storage.main import MainStorage
+from libs.sync.saver import sync_save
 from libs.utils.wikibot import save_page
 from projects.reports.lib.reports.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
@@ -96,7 +97,7 @@ class RunAllReports:
         self._save_page(title, content, desc)
 
     def _save_page(self, title, content, desc):
-        # todo: save to `sync`
+        sync_save(title, content)
         if self.debug:
             print(f'{"=" * 100}\n{title}\n{content.strip()}\n')
         else:
