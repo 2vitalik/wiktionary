@@ -7,7 +7,3 @@ class OnlinePage(Page):
         content = load_page(title)
         # todo: process `is_redirect`
         super().__init__(title, content, silent)
-
-
-if __name__ == '__main__':
-    page = OnlinePage('тест')
