@@ -15,6 +15,10 @@ class MainStorage(Storage):
             'info': 'simple',
         }
         kwargs['lock'] = lock
+        self._articles = None
+        self._articles_set = None
+        self._redirects = None
+        self._redirects_set = None
         super().__init__(**kwargs)
 
     @property
@@ -30,6 +34,50 @@ class MainStorage(Storage):
     @latest_edited.setter
     def latest_edited(self, value):
         write(self.latest_edited_filename, dt(value, utc=True))
+        
+    @property
+    def articles_filename(self):
+        return join(self.path, 'sys', 'articles.txt')
+
+    def save_articles(self, articles):
+        write(self.articles_filename, '\n'.join(articles))
+
+    def load_articles(self):
+        return read(self.articles_filename).split('\n')
+
+    @property
+    def articles(self):
+        if self._articles is None:
+            self._articles = self.load_articles()
+        return self._articles
+
+    @property
+    def articles_set(self):
+        if self._articles_set is None:
+            self._articles_set = set(self.articles)
+        return self._articles_set
+
+    @property
+    def redirects_filename(self):
+        return join(self.path, 'sys', 'redirects.txt')
+
+    def save_redirects(self, redirects):
+        write(self.redirects_filename, '\n'.join(redirects))
+
+    def load_redirects(self):
+        return read(self.redirects_filename).split('\n')
+
+    @property
+    def redirects(self):
+        if self._redirects is None:
+            self._redirects = self.load_redirects()
+        return self._redirects
+    
+    @property
+    def redirects_set(self):
+        if self._redirects_set is None:
+            self._redirects_set = set(self.redirects)
+        return self._redirects_set
 
     def iterate_pages(self, limit=None, silent=False):
         # todo: cyrilic= latin=...

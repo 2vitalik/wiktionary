@@ -2,6 +2,7 @@ from pywikibot import NoPage
 
 from core.storage.main import MainStorage
 from libs.utils.dt import dt, t
+from libs.utils.exceptions import ImpossibleError
 from libs.utils.log import log_day, log_hour
 
 
@@ -48,9 +49,19 @@ class BaseStorageUpdater:
 
     def save_titles(self):
         titles = []
+        articles = []
+        redirects = []
         for title, info in self.storage.iterate('info'):
             titles.append(title)
+            if info.endswith('A'):
+                articles.append(title)
+            elif info.endswith('R'):
+                redirects.append(title)
+            else:
+                raise ImpossibleError()
         self.storage.save_titles(titles)
+        self.storage.save_articles(articles)
+        self.storage.save_redirects(redirects)
 
     def log_day(self, slug, value):
         log_day(slug, value, path=self.storage.logs_path)
