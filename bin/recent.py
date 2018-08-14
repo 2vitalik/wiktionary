@@ -1,4 +1,4 @@
-import bin.up
+import up
 from core.storage.updaters.recent import RecentStorageUpdater
 
 
