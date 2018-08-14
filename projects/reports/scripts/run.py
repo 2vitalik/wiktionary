@@ -9,7 +9,7 @@ from projects.reports.reports.bucket import Bucket
 
 
 class RunAllReports:
-    root = 'Участник:Vitalik/Отчёты/v3'
+    root = 'Викисловарь:Отчёты/v3'
     tree = {
         'Ошибки': {
             'Важные': {},
