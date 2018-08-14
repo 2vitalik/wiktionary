@@ -27,3 +27,21 @@ def ensure_dir(path):
 
 def ensure_parent_dir(filename):
     ensure_dir(dirname(filename))
+
+
+def fix_path(path):
+    return '/'.join(fix_filename(name) for name in path.split('/'))
+
+
+def fix_filename(filename):
+    if filename.lower() in ['con', 'nul']:
+        filename += '{}'
+    return filename.\
+        replace('?', '{question}').\
+        replace(':', '{colon}').\
+        replace('/', '{slash}').\
+        replace('"', '{quot}').\
+        replace('|', '{pipe}').\
+        replace('*', '{asterisk}').\
+        replace('<', '{lt}').\
+        replace('>', '{gt}')

@@ -168,7 +168,7 @@ class Reply(ShortReply):
 
         homonym_obj = lang_obj.homonyms[self.homonym_index]
 
-        # stresses = set()  # todo: several stresses feature
+        stresses = set()  # todo: several stresses feature
         for tpl in homonym_obj.templates('по-слогам', 'по слогам').values():
             value = tpl.params.replace('|', '').replace('.', '')
             if not value:
@@ -196,7 +196,7 @@ class Reply(ShortReply):
                 if definition.startswith('#'):
                     definition = definition[1:].strip()
                     reply += f'🔹{definition}\n'
-                else:
+                elif definition:
                     reply += f'🔻{definition}\n'
             return reply
         else:
