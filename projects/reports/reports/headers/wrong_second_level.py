@@ -24,8 +24,8 @@ class WrongSecondLevel(Colon, KeyTitle, ValueCode, DictOfListsReport):
             if not header:
                 continue
             if not TR.homonym_header.match(header):
-                print(page.title)
-                print(header)
+                # print(page.title)
+                # print(header)
                 # return True
                 values.append(header)
         return values

@@ -25,7 +25,7 @@ class WrongFirstLevel(Colon, KeyTitle, ValueCode, DictOfListsReport):
             if not header:  # возможно, редирект
                 continue
             if not TR.lang_header.match(header):
-                print(page.title)
-                print(header)
+                # print(page.title)
+                # print(header)
                 values.append(header)
         return values
