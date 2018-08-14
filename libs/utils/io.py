@@ -4,7 +4,6 @@ from os.path import dirname, exists
 
 def encoded(func):
     def wrapped(*args, **kwargs):
-        print(args)
         if type(args[0]) == str:
             args = (args[0].encode(), *args[1:])
         return func(*args, **kwargs)
