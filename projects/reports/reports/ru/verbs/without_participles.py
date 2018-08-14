@@ -24,10 +24,6 @@ class VerbsWithoutParticiples(SeveralListReports):
         '-ять', # '-яться',
     ]
 
-    def __init__(self):  # todo: move this in somewhere common place for all reports
-        super().__init__()
-        self.titles = set(storage.titles)
-
     def description(self, report_key):
         return f'''
             Глаголы на "{bold(report_key)}" без созданных статей-деепричастий, 
@@ -43,7 +39,7 @@ class VerbsWithoutParticiples(SeveralListReports):
                 stem = page.title[:-2]
                 partitives = [f'{stem}в', f'{stem}вши']
                 for partitive in partitives:
-                    if partitive not in self.titles:
+                    if partitive not in storage.titles_set:
                         self.add(report_key, page.title, partitive)
 
 
