@@ -26,6 +26,7 @@ class Storage:
             self.handlers[table] = self.handler_types[handler_type](table_path,
                                                                     max_count)
         self._titles = None
+        self._titles_set = None
 
     def __del__(self):
         if self.locked and exists(self.lock_filename):
@@ -64,6 +65,12 @@ class Storage:
         if self._titles is None:
             self._titles = self.load_titles()
         return self._titles
+
+    @property
+    def titles_set(self):
+        if self._titles_set is None:
+            self._titles_set = set(self.titles)
+        return self._titles_set
 
     @property
     def logs_path(self):
