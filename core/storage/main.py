@@ -9,7 +9,7 @@ from libs.utils.io import read, write
 
 class MainStorage(Storage):
     def __init__(self, lock=False, **kwargs):
-        kwargs['path'] = conf.STORAGE_PATH
+        kwargs['path'] = conf.MAIN_STORAGE_PATH
         kwargs['tables'] = {
             'content': 'content',
             'info': 'simple',
