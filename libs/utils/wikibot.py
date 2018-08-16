@@ -1,6 +1,14 @@
 import re
 
 import pywikibot
+from pywikibot.site import Namespace as  BaseNamespace
+
+
+class Namespace:
+    ARTICLES = BaseNamespace.MAIN
+    TEMPLATE = BaseNamespace.TEMPLATE
+    WIKTIONARY = BaseNamespace.PROJECT
+    MODULE = 828
 
 
 def get_page(title):

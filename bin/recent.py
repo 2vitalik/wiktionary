@@ -1,5 +1,6 @@
 import up
-from core.storage.updaters.recent import RecentStorageUpdater
+from core.storage.updaters.updaters import recent_articles
+
 
 if __name__ == '__main__':
-    RecentStorageUpdater()
+    recent_articles()
