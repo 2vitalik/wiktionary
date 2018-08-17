@@ -27,6 +27,7 @@ def write(filename, content):
 
 @encoded_filename
 def append(filename, line):
+    ensure_parent_dir(filename)
     with open(filename, 'a', encoding='utf-8') as f:
         f.write(f'{line}\n')
 
