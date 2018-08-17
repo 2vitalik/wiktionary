@@ -19,6 +19,11 @@ def read(filename):
 
 
 @encoded_filename
+def read_lines(filename):
+    return read(filename).split('\n')
+
+
+@encoded_filename
 def write(filename, content):
     ensure_parent_dir(filename)
     with open(filename, 'w', encoding='utf-8') as f:
