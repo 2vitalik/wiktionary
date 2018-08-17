@@ -1,3 +1,4 @@
+import json
 import os
 from os.path import dirname, exists
 
@@ -41,6 +42,18 @@ def ensure_dir(path):
 @encoded_filename
 def ensure_parent_dir(filename):
     ensure_dir(dirname(filename))
+
+
+@encoded_filename
+def json_dump(filename, data):
+    with open(filename, 'w', encoding='utf-8') as f:
+        json.dump(data, f, indent=4)
+
+
+@encoded_filename
+def json_load(filename):
+    with open(filename, encoding='utf-8') as f:
+        return json.load(f)
 
 
 def fix_path(path):
