@@ -1,13 +1,11 @@
 from libs.parse.patterns import TR
-from projects.reports.lib.checkers.single.dict_of_lists import DictOfListsReport
-from projects.reports.lib.reports.dict_report.dict_of_lists.colon import Colon
-from projects.reports.lib.reports.dict_report.dict_of_lists.mixins.key_title import \
-    KeyTitle
-from projects.reports.lib.reports.dict_report.dict_of_lists.mixins.value_code import \
+from projects.reports.lib.details_sublist.colon import Colon
+from projects.reports.lib.mixins.key_title import KeyTitle
+from projects.reports.lib.mixins.value_code import \
     ValueCode
 
 
-class WrongFirstLevel(Colon, KeyTitle, ValueCode, DictOfListsReport):
+class WrongFirstLevel(KeyTitle, ValueCode, Colon):
     path = 'Ошибки/Важные/Заголовки/Первый уровень/Неправильный'
     description = '''
         Случаи неправильного использования заголовка первого уровня для статей.
@@ -18,7 +16,7 @@ class WrongFirstLevel(Colon, KeyTitle, ValueCode, DictOfListsReport):
         который не содержит лишние невидимые символы.
     '''
 
-    def check_list(self, page) -> list:
+    def check_page(self, page) -> list:
         values = []
         for language_obj in page.languages.values():
             header = language_obj.header

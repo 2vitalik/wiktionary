@@ -1,14 +1,14 @@
 from datetime import datetime
-from pprint import pprint
 
 from core.storage.main import MainStorage
 from libs.sync.saver import sync_save
 from libs.utils.wikibot import save_page
-from projects.reports.lib.reports.base import BaseReportPage
+from projects.reports.lib.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
 
 
 class RunAllReports:
+    # root = 'Участник:Vitalik/Отчёты/v3'
     root = 'Викисловарь:Отчёты/v3'
     tree = {
         'Ошибки': {
@@ -30,11 +30,11 @@ class RunAllReports:
     def _check_pages(self):
         for title, page in self.storage.iterate_pages(silent=True):
             for report in Bucket.reports.values():
-                report.check(page)
+                report.process_page(page)
 
     def _build_tree(self):
         for report in Bucket.reports.values():
-            for report_page in report.build():
+            for report_page in report.report_pages():
                 keys = report_page.path.split('/')
                 curr = self.tree
                 for key in keys[:-1]:

@@ -1,23 +1,22 @@
-from core.storage.main import MainStorage, storage
+from core.storage.main import storage
 from libs.utils.classes import derive
 from libs.utils.wikicode import bold
-from projects.reports.lib.checkers.several.list_reports import \
-    SeveralListReports
-from projects.reports.lib.reports.dict_report.dict_of_lists.brackets import \
+from projects.reports.lib.complex_report.base import BaseComplexReport
+from projects.reports.lib.details_sublist.brackets import \
     Brackets
-from projects.reports.lib.reports.dict_report.dict_of_lists.mixins.key_title import \
-    KeyTitle
-from projects.reports.lib.reports.dict_report.dict_of_lists.mixins.value_title import \
+from projects.reports.lib.mixins.key_title import KeyTitle
+from projects.reports.lib.mixins.value_title import \
     ValueTitle
 
 
-class VerbsWithoutParticiples(SeveralListReports):
+class VerbsWithoutParticiples(BaseComplexReport):
     base_path = 'Отчёты/ru/Глаголы/Без созданных деепричастий'
     base_class = derive(KeyTitle, ValueTitle, Brackets)
 
     report_keys = [
         '-ать', # '-аться',
         # '-еть', # '-еться',
+        '-ить', # '-иться',
         '-оть', # '-оться',
         '-уть', # '-уться',
         '-ыть', # '-ыться',
@@ -31,16 +30,18 @@ class VerbsWithoutParticiples(SeveralListReports):
             содержимое.
         '''
 
-    def check(self, page):
+    def process_page(self, page):
         for report_key in self.report_keys:
             if page.title.endswith(report_key[1:]):
                 if '{{гл ru' not in page.ru.content:
                     continue
                 stem = page.title[:-2]
                 partitives = [f'{stem}в', f'{stem}вши']
+                values = []
                 for partitive in partitives:
                     if partitive not in storage.titles_set:
-                        self.add(report_key, page.title, partitive)
+                        values.append(partitive)
+                self.set(report_key, page.title, values)
 
 
 # todo: дополнительно проверять (возможно, для других подотчётов):

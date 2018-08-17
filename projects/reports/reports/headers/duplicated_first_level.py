@@ -1,21 +1,19 @@
 from libs.parse.patterns import TR
 from libs.utils.collection import chunks
-from projects.reports.lib.checkers.single.dict_of_lists import DictOfListsReport
-from projects.reports.lib.reports.dict_report.dict_of_lists.brackets import \
+from projects.reports.lib.details_sublist.brackets import \
     Brackets
-from projects.reports.lib.reports.dict_report.dict_of_lists.mixins.key_title import \
-    KeyTitle
-from projects.reports.lib.reports.dict_report.dict_of_lists.mixins.value_code import \
+from projects.reports.lib.mixins.key_title import KeyTitle
+from projects.reports.lib.mixins.value_code import \
     ValueCode
 
 
-class DuplicatedFirstLevel(Brackets, KeyTitle, ValueCode, DictOfListsReport):
+class DuplicatedFirstLevel(KeyTitle, ValueCode, Brackets):
     path = 'Ошибки/Важные/Заголовки/Первый уровень/Дублирование'
     description = '''
         Дубли заголовков первого уровня
     '''
 
-    def check_list(self, page) -> list:
+    def check_page(self, page) -> list:
         values = []
         parts = TR.lang_header.split(self.content)
         headers = set()
