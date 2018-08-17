@@ -10,6 +10,7 @@ MAIN_STORAGE_PATH = join(STORAGE_PATH, 'main')
 REPORTS_PATH = join(STORAGE_PATH, 'reports')
 SYNC_PATH = join(STORAGE_PATH, 'sync')
 
+LOGS_PATH = join(ROOT_PATH, 'logs')
 
 try:
     from .local_conf import *

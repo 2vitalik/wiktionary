@@ -1,5 +1,7 @@
+import traceback
 from os.path import join
 
+from core.conf.conf import LOGS_PATH
 from libs.utils.dt import dtf, dt
 from libs.utils.io import ensure_parent_dir, append
 
@@ -17,3 +19,16 @@ def log_day(slug, value, path=None):
 
 def log_hour(slug, value, path=None):
     log(f"{slug}/{dtf('Ym/dh')}.txt", value, path=path)
+
+
+def log_exception(slug):
+    def decorator(func):
+        def wrapped(*args, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as e:
+                log(f"exceptions/{slug}/{dtf('Ym/Ymd')}.txt",
+                    traceback.format_exc(), path=LOGS_PATH)
+                raise
+        return wrapped
+    return decorator
