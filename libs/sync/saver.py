@@ -1,3 +1,4 @@
+import os
 from os.path import join
 
 from core.conf.conf import SYNC_PATH
@@ -11,7 +12,7 @@ prefixes = {
 }
 
 
-def sync_save(title, content):
+def sync_path(title):
     for prefix in prefixes:
         if title.startswith(prefix):
             new_prefix = prefixes[prefix]
@@ -21,4 +22,18 @@ def sync_save(title, content):
     else:
         title = f'article/{title}'
     path = join(SYNC_PATH, fix_path(title))
-    write(f"{path}.txt", content)
+    return f'{path}.txt'
+
+
+def sync_save(title, content):
+    path = sync_path(title)
+    write(path, content)
+
+
+def sync_delete(title):
+    path = sync_path(title)
+    os.remove(path)
+
+
+def sync_titles(namespace):
+    return []  # todo
