@@ -12,8 +12,8 @@ def log(filename, line, path=None):
 
 
 def log_day(slug, value, path=None):
-    log(f"{slug}/{dtf('Ym')}/{dtf('Ymd')}.txt", value, path=path)
+    log(f"{slug}/{dtf('Ym/Ymd')}.txt", value, path=path)
 
 
 def log_hour(slug, value, path=None):
-    log(f"{slug}/{dtf('Ym')}/{dtf('dh')}.txt", value, path=path)
+    log(f"{slug}/{dtf('Ym/dh')}.txt", value, path=path)

@@ -10,6 +10,8 @@ formats = {
     '[hms]': '[%H:%M:%S]',
     'Ym': '%Y-%m',
     'dh': '%dd-%Hh',
+    'Ym/Ymd': '%Y-%m/%Y-%m-%d',
+    'Ym/dh': '%Y-%m/%dd-%Hh',
 }
 
 
