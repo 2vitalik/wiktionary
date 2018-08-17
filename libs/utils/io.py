@@ -2,34 +2,35 @@ import os
 from os.path import dirname, exists
 
 
-def encoded(func):
+def encoded_filename(func):
     def wrapped(*args, **kwargs):
-        if type(args[0]) == str:
-            args = (args[0].encode(), *args[1:])
+        filename = args[0]
+        if type(filename) == str:
+            args = (filename.encode(), *args[1:])
         return func(*args, **kwargs)
     return wrapped
 
 
-@encoded
+@encoded_filename
 def read(filename):
     with open(filename, encoding='utf-8') as f:
         return f.read()
 
 
-@encoded
+@encoded_filename
 def write(filename, content):
     ensure_parent_dir(filename)
     with open(filename, 'w', encoding='utf-8') as f:
         f.write(content)
 
 
-@encoded
+@encoded_filename
 def append(filename, line):
     with open(filename, 'a', encoding='utf-8') as f:
         f.write(f'{line}\n')
 
 
-@encoded
+@encoded_filename
 def ensure_dir(path):
     if not path:
         return
@@ -37,7 +38,7 @@ def ensure_dir(path):
         os.makedirs(path)
 
 
-@encoded
+@encoded_filename
 def ensure_parent_dir(filename):
     ensure_dir(dirname(filename))
 
