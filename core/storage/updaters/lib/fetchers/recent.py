@@ -5,17 +5,18 @@ from core.storage.updaters.lib.fetchers.base import BaseFetcher
 from libs.utils.dt import dt
 
 
-def reduce_seconds(dt):
-    if not dt:
+def reduce_seconds(value):
+    if not value:
         return None
-    return Timestamp(dt.year, dt.month, dt.day, dt.hour, dt.minute)
+    return Timestamp(value.year, value.month, value.day,
+                     value.hour, value.minute)
 
 
 class RecentFetcher(BaseFetcher):
     slug = 'recent'
 
-    def __init__(self, processor, namespaces, start=None, end=None):
-        super().__init__(processor)
+    def __init__(self, processor_class, namespaces, start=None, end=None):
+        super().__init__(processor_class)
         self.namespaces = namespaces
         self.run(start, end)
 
@@ -30,7 +31,7 @@ class RecentFetcher(BaseFetcher):
                                                namespaces=self.namespaces)
         latest_edited = None
         for page in generator:
-            edited = self.processor.process_page(page)
+            title, edited = self.processor.process_page(page)
             if not edited:
                 continue
             latest_edited = latest_edited or reduce_seconds(edited)

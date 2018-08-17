@@ -5,8 +5,8 @@ from libs.utils.log import log_day, log_hour
 
 
 class BaseProcessor:
-    def __init__(self):
-        self.slug = None  # should be set later
+    def __init__(self, slug):
+        self.slug = slug
 
     def process_page(self, page):
         title = page.title()  # todo: except InvalidTitle ?
@@ -18,10 +18,10 @@ class BaseProcessor:
         except NoPage:
             self.process_delete(title)
             self.log_day('deleted', title)
-            return None
+            return title, None
 
         self.process_update(title, content, edited, redirect)
-        return edited
+        return title, edited
 
     def process_delete(self, title):
         raise NotImplementedError()

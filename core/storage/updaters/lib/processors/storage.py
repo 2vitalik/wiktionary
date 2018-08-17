@@ -9,8 +9,8 @@ class MainStorageProcessor(BaseProcessor):
     """
     Обновление информации в главном хранилище.
     """
-    def __init__(self):
-        super().__init__()
+    def __init__(self, slug):
+        super().__init__(slug)
         self.storage = MainStorage(lock=True)
 
     def process_delete(self, title):
@@ -25,6 +25,10 @@ class MainStorageProcessor(BaseProcessor):
     @property
     def latest_edited(self):
         return self.storage.latest_edited
+
+    @latest_edited.setter
+    def latest_edited(self, value):
+        self.storage.latest_edited = value
 
     def close(self, *args, **kwargs):
         self.save_titles()

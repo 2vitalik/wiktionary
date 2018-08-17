@@ -1,6 +1,6 @@
 import up
-from core.storage.updaters.updaters import recent_articles
+from core.storage.updaters.shortcuts import update_recent_articles
 
 
 if __name__ == '__main__':
-    recent_articles()
+    update_recent_articles()
