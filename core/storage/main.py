@@ -1,11 +1,14 @@
+import re
+from datetime import datetime, timedelta
 from os.path import join, exists
 
 from core.conf import conf
 from core.storage.updaters.mixins import UpdatersValuesMixin
 from libs.parse.sections.page import Page
 from libs.storage.storage import Storage
-from libs.utils.dt import dtp, dt
-from libs.utils.io import read, write
+from libs.utils.dt import dtp, dtf
+from libs.utils.exceptions import ImpossibleError
+from libs.utils.io import read, write, read_lines
 
 
 class MainStorage(UpdatersValuesMixin, Storage):
@@ -81,6 +84,41 @@ class MainStorage(UpdatersValuesMixin, Storage):
             count += 1
             if limit and count >= limit:
                 break
+
+    def iterate_daily_logs(self, slug, start_from):
+        logs_path = join(self.logs_path, slug)
+        curr_date = start_from.date() - timedelta(days=1)
+        while curr_date <= datetime.now().date():
+            curr_date += timedelta(days=1)
+            path = f"{logs_path}/{dtf('Ym/Ymd', curr_date)}.txt"
+            if not exists(path):
+                # todo: log something?
+                continue
+            lines = read_lines(path)
+            for line in lines:
+                if not line:
+                    continue
+                if not re.match('\d{4}-\d\d-\d\d \d\d:\d\d:\d\d: ', line):
+                    raise ImpossibleError('Wrong log format')
+                log_dt = dtp(line[:19])
+                if log_dt < start_from:
+                    continue
+                yield log_dt, line[21:]
+
+    def iterate_recent_titles(self, start_from):
+        deleted_iterator = self.iterate_daily_logs('recent/deleted', start_from)
+        titles_iterator = self.iterate_daily_logs('recent/titles', start_from)
+        deleted = {title for log_dt, title in deleted_iterator}
+        for log_dt, title in titles_iterator:
+            if title in deleted:
+                continue
+            yield log_dt, title
+
+    def iterate_recent_pages(self, start_from, silent=False):
+        from libs.parse.storage_page import StoragePage
+
+        for log_dt, title in self.iterate_recent_titles(start_from):
+            yield log_dt, title, StoragePage(title, silent=silent)
 
 
 storage = MainStorage()
