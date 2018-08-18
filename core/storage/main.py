@@ -1,13 +1,14 @@
 from os.path import join, exists
 
 from core.conf import conf
+from core.storage.updaters.mixins import UpdatersValuesMixin
 from libs.parse.sections.page import Page
 from libs.storage.storage import Storage
 from libs.utils.dt import dtp, dt
 from libs.utils.io import read, write
 
 
-class MainStorage(Storage):
+class MainStorage(UpdatersValuesMixin, Storage):
     def __init__(self, lock=False, **kwargs):
         kwargs['path'] = conf.MAIN_STORAGE_PATH
         kwargs['tables'] = {
@@ -21,20 +22,6 @@ class MainStorage(Storage):
         self._redirects_set = None
         super().__init__(**kwargs)
 
-    @property
-    def latest_edited_filename(self):
-        return join(self.path, 'sys', 'latest_edited')
-
-    @property
-    def latest_edited(self):
-        if not exists(self.latest_edited_filename):
-            return None
-        return dtp(read(self.latest_edited_filename))
-
-    @latest_edited.setter
-    def latest_edited(self, value):
-        write(self.latest_edited_filename, dt(value, utc=True))
-        
     @property
     def articles_filename(self):
         return join(self.path, 'sys', 'articles.txt')

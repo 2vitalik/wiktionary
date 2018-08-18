@@ -42,6 +42,14 @@ class BaseProcessor:
         self.storage.latest_edited = value
 
     @property
+    def all_pages_start_from(self):
+        return self.storage.all_pages_start_from
+
+    @all_pages_start_from.setter
+    def all_pages_start_from(self, value):
+        self.storage.all_pages_start_from = value
+
+    @property
     def logs_path(self):
         return self.storage.logs_path
 
