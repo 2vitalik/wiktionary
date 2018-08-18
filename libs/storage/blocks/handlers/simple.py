@@ -25,8 +25,10 @@ class SimpleBlockHandler(BaseBlockHandler):
     def default_empty(self, prefix):
         return ''
 
-    def get(self):
+    def get(self, silent=False):
         if self.index is None:
+            if silent:
+                return ''
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
         return self.contents[self.index].split('\t', maxsplit=1)[1]
 

@@ -26,11 +26,11 @@ class MainStorage(UpdatersValuesMixin, Storage):
         self._redirects_set = None
         super().__init__(**kwargs)
 
-    def get(self, title, table=None):
+    def get(self, title, table=None, silent=False):
         if table:
-            return super().get(title, table)
-        info = self.get(title, 'info')
-        content = self.get(title, 'content')
+            return super().get(title, table, silent)
+        info = self.get(title, 'info', silent)
+        content = self.get(title, 'content', silent)
         return content, info
 
     @property

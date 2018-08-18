@@ -34,7 +34,7 @@ class BaseBlockHandler:
     def default_empty(self, prefix):
         raise NotImplementedError()
 
-    def get(self):
+    def get(self, silent=False):
         raise NotImplementedError()
 
     def delete(self):

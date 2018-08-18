@@ -85,8 +85,8 @@ class Storage:
     def logs_path(self):
         return join(self.path, 'logs')
 
-    def get(self, title, table):
-        return self.handlers[table].get(title)
+    def get(self, title, table, silent=False):
+        return self.handlers[table].get(title, silent)
 
     def block_path(self, title, table):
         return self.handlers[table].block_path(title)

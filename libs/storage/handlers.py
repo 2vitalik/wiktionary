@@ -23,8 +23,8 @@ class BaseStorageHandler:
     def block_path(self, title):
         return self.block(title).path
 
-    def get(self, title):
-        return self.block(title).get()
+    def get(self, title, silent=False):
+        return self.block(title).get(silent)
 
     def update(self, title, value):
         self.block(title, lock=True).update(value)

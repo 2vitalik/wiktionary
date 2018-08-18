@@ -7,7 +7,7 @@ class LazyMainStorageProcessor(MainStorageProcessor):
     Обновление информации в главном хранилище *только* при необходимости.
     """
     def process_update(self, title, content, edited, redirect):
-        old_content, old_info = self.storage.get(title)
+        old_content, old_info = self.storage.get(title, silent=True)
 
         edited_str = dt(edited, utc=True)
         info = f"{edited_str}, {'R' if redirect else 'A'}"
