@@ -30,7 +30,7 @@ class SimpleBlockHandler(BaseBlockHandler):
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
         return self.contents[self.index].split('\t', maxsplit=1)[1]
 
-    def delete(self):
+    def do_delete(self):
         if self.index is None:
             # todo: log('Уже удалён')
             return
@@ -39,7 +39,7 @@ class SimpleBlockHandler(BaseBlockHandler):
         del self.contents[self.index]
         self.save()
 
-    def update(self, value):
+    def do_update(self, value):
         new_value = f"{self.title}\t{value}"
         if self.index is None:  # info: случай добавления нового элемента
             self.index = bisect_left(self.titles, self.title)

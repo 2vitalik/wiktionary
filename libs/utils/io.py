@@ -3,6 +3,9 @@ import json
 import os
 from os.path import dirname, exists
 
+from libs.utils.dt import dt
+from libs.utils.exceptions import LockError, UnlockError
+
 
 def md5(value):
     return hashlib.md5(value.encode()).hexdigest()
@@ -12,7 +15,7 @@ def encoded_filename(func):
     def wrapped(*args, **kwargs):
         filename = args[0]
         if type(filename) == str:
-            args = (filename.encode(), *args[1:])
+            args = (filename.encode(), *args[1:])  # need for Cyrl in Linux etc.
         return func(*args, **kwargs)
     return wrapped
 
@@ -70,6 +73,25 @@ def json_dump(filename, data):
 def json_load(filename):
     with open(filename, encoding='utf-8') as f:
         return json.load(f)
+
+
+@encoded_filename
+def is_locked(filename):
+    return exists(filename + b'.lock')
+
+
+@encoded_filename
+def lock_file(filename):  # todo: возможно попробовать сделать context manager `with locked(...):`
+    if is_locked(filename):
+        raise LockError(filename)
+    write(filename + b'.lock', dt())
+
+
+@encoded_filename
+def unlock_file(filename):
+    if not is_locked(filename):
+        raise UnlockError(filename)
+    os.remove(filename + b'.lock')
 
 
 def fix_path(path):

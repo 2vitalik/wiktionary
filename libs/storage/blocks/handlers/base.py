@@ -2,15 +2,34 @@ from os.path import join, exists, isfile
 
 from libs.storage.const import MAX_DEPTH
 from libs.storage.error import StorageError
-from libs.utils.io import write
+from libs.utils.exceptions import LockedError
+from libs.utils.io import write, is_locked, lock_file, unlock_file
 from libs.utils.unicode import char_info
 
 
 class BaseBlockHandler:
-    def __init__(self, title, handler):
+    """
+    ...
+    Комментарий по поводу `lock` механизма:
+    - в наследниках нужно делать self.unlock() после `delete()` или `update()`
+    """
+    def __init__(self, title, handler, lock=False):
         self.title = title
         self.handler = handler
         self.path = self.block_path(title)
+        if is_locked(self.path):
+            raise LockedError(self.path)  # todo: several attempts
+        self.locked = lock
+        if lock:
+            self.lock()
+
+    def lock(self):
+        lock_file(self.path)
+
+    def unlock(self):
+        if self.locked:
+            unlock_file(self.path)
+        self.locked = False
 
     def default_empty(self, prefix):
         raise NotImplementedError()
@@ -19,9 +38,17 @@ class BaseBlockHandler:
         raise NotImplementedError()
 
     def delete(self):
-        raise NotImplementedError()
+        self.do_delete()
+        self.unlock()
 
     def update(self, value):
+        self.do_update(value)
+        self.unlock()
+
+    def do_delete(self):
+        raise NotImplementedError()
+
+    def do_update(self, value):
         raise NotImplementedError()
 
     def block_path(self, title):
@@ -43,6 +70,8 @@ class BaseBlockHandler:
             if not exists(candidate):
                 write(candidate, self.default_empty(prefix))
                 return candidate
+            if is_locked(candidate):
+                raise LockedError(candidate)  # todo: several attempts
             if isfile(candidate):
                 return candidate
 

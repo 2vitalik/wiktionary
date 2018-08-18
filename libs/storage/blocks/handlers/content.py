@@ -31,7 +31,7 @@ class ContentsBlockHandler(BaseBlockHandler):
             raise StorageError(f"Block doesn't contain title: '{self.title}'")
         return self.contents[self.index]
 
-    def delete(self):
+    def do_delete(self):
         if self.index is None:
             # todo: log('Уже удалён')
             return
@@ -42,7 +42,7 @@ class ContentsBlockHandler(BaseBlockHandler):
         self.save()
         # todo: log('Удалён')
 
-    def update(self, value):
+    def do_update(self, value):
         if self.index is None:  # info: случай добавления нового элемента
             self.index = bisect_left(self.titles[1:], self.title) + 1
             self.titles.insert(self.index, self.title)

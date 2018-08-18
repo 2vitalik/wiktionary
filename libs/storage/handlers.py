@@ -17,17 +17,17 @@ class BaseStorageHandler:
         self.max_count = max_count
 
     @required('block_iterator_class', 'block_handler_class')
-    def block(self, title):
-        return self.block_handler_class(title, self)
+    def block(self, title, lock=False):
+        return self.block_handler_class(title, self, lock)
 
     def get(self, title):
         return self.block(title).get()
 
     def update(self, title, value):
-        self.block(title).update(value)
+        self.block(title, lock=True).update(value)
 
     def delete(self, title):
-        self.block(title).delete()
+        self.block(title, lock=True).delete()
 
     def iterate(self, path):
         for name in os.listdir(path):
