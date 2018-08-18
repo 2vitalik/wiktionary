@@ -2,6 +2,7 @@ from datetime import datetime
 
 from core.storage.main import MainStorage
 from libs.sync.saver import sync_save
+from libs.utils.log import log_exception
 from libs.utils.wikibot import save_page
 from projects.reports.lib.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
@@ -103,5 +104,10 @@ class RunAllReports:
             save_page(title, content, desc)
 
 
-if __name__ == '__main__':
+@log_exception('reports')
+def reports():
     RunAllReports(debug=False)
+
+
+if __name__ == '__main__':
+    reports()
