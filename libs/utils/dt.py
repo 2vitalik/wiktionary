@@ -12,6 +12,7 @@ formats = {
     'dh': '%dd-%Hh',
     'Ym/Ymd': '%Y-%m/%Y-%m-%d',
     'Ym/dh': '%Y-%m/%dd-%Hh',
+    'Ym/dts': '%Y-%m/%Y-%m-%d__%H-%M-%S',
 }
 
 
