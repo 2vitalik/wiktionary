@@ -9,6 +9,7 @@ from libs.storage.storage import Storage
 from libs.utils.dt import dtp, dtf
 from libs.utils.exceptions import ImpossibleError
 from libs.utils.io import read, write, read_lines
+from libs.utils.wikibot import get_page
 
 
 class MainStorage(UpdatersValuesMixin, Storage):
@@ -75,6 +76,10 @@ class MainStorage(UpdatersValuesMixin, Storage):
         if self._redirects_set is None:
             self._redirects_set = set(self.redirects)
         return self._redirects_set
+
+    def iterate_wiki_pages(self):
+        for title in self.titles:
+            yield title, get_page(title)
 
     def iterate_pages(self, limit=None, silent=False):
         # todo: cyrilic= latin=...
