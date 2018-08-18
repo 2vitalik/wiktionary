@@ -4,8 +4,8 @@ from os.path import join, exists
 from libs.storage.error import StorageError
 from libs.storage.handlers import ContentStorageHandler, \
     SimpleStorageHandler
-from libs.utils.dt import dt
-from libs.utils.io import write, read
+from libs.utils.dt import dt, dtf
+from libs.utils.io import write, read, write_lines, read_lines
 
 
 class Storage:
@@ -62,10 +62,12 @@ class Storage:
         return join(self.path, 'sys', 'titles.txt')
 
     def save_titles(self, titles):
-        write(self.titles_filename, '\n'.join(titles))
+        write_lines(self.titles_filename, titles)
+        path = join(self.logs_path, 'titles', f"{dtf('Ym/dts')}.txt")
+        write_lines(path, titles)
 
     def load_titles(self):
-        return read(self.titles_filename).split('\n')
+        return read_lines(self.titles_filename)
 
     @property
     def titles(self):
