@@ -20,6 +20,9 @@ class BaseStorageHandler:
     def block(self, title, lock=False):
         return self.block_handler_class(title, self, lock)
 
+    def block_path(self, title):
+        return self.block(title).path
+
     def get(self, title):
         return self.block(title).get()
 

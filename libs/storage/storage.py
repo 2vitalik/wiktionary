@@ -86,6 +86,9 @@ class Storage:
     def get(self, title, table):
         return self.handlers[table].get(title)
 
+    def block_path(self, title, table):
+        return self.handlers[table].block_path(title)
+
     def update(self, title, **kwargs):
         for table, value in kwargs.items():
             self.handlers[table].update(title, value)
