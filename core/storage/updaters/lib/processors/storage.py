@@ -22,14 +22,6 @@ class MainStorageProcessor(BaseProcessor):
         self.storage.update(title, content=content, info=info)
         self.log_hour('changed', f'<{info}> - {title}')
 
-    @property
-    def latest_edited(self):
-        return self.storage.latest_edited
-
-    @latest_edited.setter
-    def latest_edited(self, value):
-        self.storage.latest_edited = value
-
     def close(self, *args, **kwargs):
         self.save_titles()
         self.storage.unlock()
@@ -49,7 +41,3 @@ class MainStorageProcessor(BaseProcessor):
         self.storage.save_titles(titles)
         self.storage.save_articles(articles)
         self.storage.save_redirects(redirects)
-
-    @property
-    def logs_path(self):
-        return self.storage.logs_path

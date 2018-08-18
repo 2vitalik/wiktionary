@@ -7,6 +7,7 @@ from libs.utils.log import log_day, log_hour
 class BaseProcessor:
     def __init__(self, slug):
         self.slug = slug
+        self.storage = None  # should be set in inheritor
 
     def process_page(self, page):
         title = page.title()  # todo: except InvalidTitle ?
@@ -29,16 +30,20 @@ class BaseProcessor:
     def process_update(self, title, content, edited, redirect):
         raise NotImplementedError()
 
-    @property
-    def latest_edited(self):
-        raise NotImplementedError()
-
     def close(self, *args, **kwargs):
         pass
 
     @property
+    def latest_edited(self):
+        return self.storage.latest_edited
+
+    @latest_edited.setter
+    def latest_edited(self, value):
+        self.storage.latest_edited = value
+
+    @property
     def logs_path(self):
-        raise NotImplementedError()
+        return self.storage.logs_path
 
     @required('slug')
     def log_day(self, sub_slug, value):
