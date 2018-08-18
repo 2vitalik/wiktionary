@@ -11,7 +11,7 @@ class MainStorageProcessor(BaseProcessor):
     """
     def __init__(self, slug):
         super().__init__(slug)
-        self.storage = MainStorage(lock=True)
+        self.storage = MainStorage(lock_slug=slug)
 
     def process_delete(self, title):
         self.storage.delete(title)
@@ -24,7 +24,7 @@ class MainStorageProcessor(BaseProcessor):
 
     def close(self, *args, **kwargs):
         self.save_titles()
-        self.storage.unlock()
+        self.storage.unlock(self.slug)
 
     def save_titles(self):
         titles = []

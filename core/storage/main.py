@@ -9,13 +9,13 @@ from libs.utils.io import read, write
 
 
 class MainStorage(UpdatersValuesMixin, Storage):
-    def __init__(self, lock=False, **kwargs):
+    def __init__(self, lock_slug='', **kwargs):
         kwargs['path'] = conf.MAIN_STORAGE_PATH
         kwargs['tables'] = {
             'content': 'content',
             'info': 'simple',
         }
-        kwargs['lock'] = lock
+        kwargs['lock_slug'] = lock_slug
         self._articles = None
         self._articles_set = None
         self._redirects = None

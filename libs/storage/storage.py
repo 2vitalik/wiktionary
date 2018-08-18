@@ -14,11 +14,15 @@ class Storage:
         'simple': SimpleStorageHandler,
     }
 
-    def __init__(self, path, tables, lock=False):
+    def __init__(self, path, tables, lock_slug=''):
+        """
+        Если lock_slug == '', то хранилище не блокируется
+        """
         self.path = path
+        self.lock_slug = lock_slug
         self.locked = False
-        if lock:
-            self.lock()
+        if lock_slug:
+            self.lock(lock_slug)
         self.handlers = {}
         for table, handler_type in tables.items():
             table_path = join(path, table)
@@ -29,25 +33,28 @@ class Storage:
         self._titles_set = None
 
     def __del__(self):
-        if self.locked and exists(self.lock_filename):
-            os.remove(self.lock_filename)
+        if self.locked and self.lock_slug:
+            lock_filename = self.lock_filename(self.lock_slug)
+            if exists(lock_filename):
+                os.remove(lock_filename)
 
-    @property
-    def lock_filename(self):
-        return join(self.path, 'sys', 'lock')
+    def lock_filename(self, lock_slug):
+        return join(self.path, 'sys', f'lock_{lock_slug}')
 
-    def lock(self):
-        if exists(self.lock_filename):
+    def lock(self, lock_slug):
+        lock_filename = self.lock_filename(lock_slug)
+        if exists(lock_filename):
             raise StorageError(f"Can't lock: Storage is already locked: "
-                               f'"{self.lock_filename}"')
-        write(self.lock_filename, dt())
+                               f'"{lock_filename}"')
+        write(lock_filename, dt())
         self.locked = True
 
-    def unlock(self):
-        if not exists(self.lock_filename):
+    def unlock(self, lock_slug):
+        lock_filename = self.lock_filename(lock_slug)
+        if not exists(lock_filename):
             raise StorageError(f"Can't unlock: Storage wan't locked: "
-                               f'"{self.lock_filename}"')
-        os.remove(self.lock_filename)
+                               f'"{lock_filename}"')
+        os.remove(lock_filename)
         self.locked = False
 
     @property
