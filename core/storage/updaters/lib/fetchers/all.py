@@ -25,7 +25,6 @@ class AllPagesFetcher(BaseFetcher):
         latest_title = None
         for count, page in enumerate(generator):
             title, edited = self.processor.process_page(page)
-            print(title)
             if not edited:
                 continue
             latest_title = latest_title or title
