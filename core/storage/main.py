@@ -22,6 +22,13 @@ class MainStorage(UpdatersValuesMixin, Storage):
         self._redirects_set = None
         super().__init__(**kwargs)
 
+    def get(self, title, table=None):
+        if table:
+            return super().get(title, table)
+        info = self.get(title, 'info')
+        content = self.get(title, 'content')
+        return content, info
+
     @property
     def articles_filename(self):
         return join(self.path, 'sys', 'articles.txt')
