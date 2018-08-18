@@ -1,6 +1,11 @@
+import hashlib
 import json
 import os
 from os.path import dirname, exists
+
+
+def md5(value):
+    return hashlib.md5(value.encode()).hexdigest()
 
 
 def encoded_filename(func):
