@@ -19,6 +19,7 @@ class RecentFetcher(BaseFetcher):
         super().__init__(processor_class)
         self.namespaces = namespaces
         self.run(start, end)
+        self.processor.close()
 
     def run(self, start, end):
         start = reduce_seconds(start)
