@@ -15,7 +15,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
 
     report_keys = [
         '-ать', # '-аться',
-        # '-еть', # '-еться',
+        '-еть', # '-еться',
         '-ить', # '-иться',
         '-оть', # '-оться',
         '-уть', # '-уться',
