@@ -34,5 +34,9 @@ class BaseComplexReport:
     def entries(self):
         return ...  # todo
 
+    def convert_entries(self):
+        for report in self.reports.values():
+            report.convert_entries()
+
     def import_entries(self):
         pass  # todo

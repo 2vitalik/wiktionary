@@ -32,6 +32,8 @@ class RunAllReports:
         for title, page in self.storage.iterate_pages(silent=True):
             for report in Bucket.reports.values():
                 report.process_page(page)
+        for report in Bucket.reports.values():
+            report.convert_entries()
 
     def _build_tree(self):
         for report in Bucket.reports.values():

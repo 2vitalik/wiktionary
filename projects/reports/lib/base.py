@@ -79,6 +79,9 @@ class BaseIterableReport(BaseReportPage):
     def convert_details(cls, details):
         return details
 
+    def convert_entries(self):
+        pass  # can be implemented in inheritor
+
     @property
     def entries_filename(self):
         name = self.__class__.__name__
