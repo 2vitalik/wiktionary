@@ -17,7 +17,9 @@ class CustomDetails:
         aspect, stress, participles = details  # unpack
         participles_text = ''
         if participles and participles != '?':
-            participles_text = ' → ' + ', '.join(participles)
+            participles_text = \
+                ' → ' + ', '.join([f'[[{participle}]]'
+                                   for participle in participles])
         return f'({aspect}) {stress}{participles_text}'
 
 
