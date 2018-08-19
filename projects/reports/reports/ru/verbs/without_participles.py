@@ -4,9 +4,9 @@ from core.storage.main import storage
 from libs.utils.classes import derive
 from libs.utils.wikibot import load_page
 from libs.utils.wikicode import bold
-from projects.reports.lib.base import BaseIterableReport
 from projects.reports.lib.complex_report.base import BaseComplexReport
 from projects.reports.lib.mixins.key_title import KeyTitle
+from projects.reports.lib.mixins.reversed_index import ReversedIndex
 
 
 class CustomDetails:
@@ -23,7 +23,7 @@ class CustomDetails:
 
 class VerbsWithoutParticiples(BaseComplexReport):
     base_path = 'Отчёты/ru/Глаголы/Без созданных деепричастий'
-    base_class = derive(KeyTitle, CustomDetails, BaseIterableReport)
+    base_class = derive(KeyTitle, CustomDetails, ReversedIndex)
 
     report_keys = [
         '-ать', '-аться',
