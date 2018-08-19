@@ -38,21 +38,17 @@ class BaseIterableReport(BaseReportPage):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self._entries = {}
-
-    @property
-    def entries(self):
-        return self._entries
+        self.entries = {}
 
     def set(self, key, details):
         if details:
-            self._entries[key] = details
+            self.entries[key] = details
         else:
             if key in self.entries:
                 self.remove(key)
 
     def remove(self, key):
-        del self._entries[key]
+        del self.entries[key]
 
     def process_page(self, page):
         details = self.check_page(page)
@@ -68,10 +64,10 @@ class BaseIterableReport(BaseReportPage):
 
     @property
     def content(self):
-        return ''.join(self.entry_content(key) for key in self._entries)
+        return ''.join(self.entry_content(key) for key in self.entries)
 
     def entry_content(self, key):
-        details = self.convert_details(self._entries[key])
+        details = self.convert_details(self.entries[key])
         key = self.convert_key(key)
         return f'{self.list_type} {key}{self.separator}{details}\n'
 
@@ -92,7 +88,7 @@ class BaseIterableReport(BaseReportPage):
         json_dump(self.entries_filename, self.entries)
 
     def import_entries(self):
-        self._entries = json_load(self.entries_filename)
+        self.entries = json_load(self.entries_filename)
 
     def report_pages(self) -> list:
         return [self]  # return itself
