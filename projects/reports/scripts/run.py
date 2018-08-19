@@ -20,16 +20,19 @@ class RunAllReports:
         'Отчёты': {},
     }
 
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, limit=None):
         print(datetime.now())
         self.debug = debug
+        self.limit = limit
         self.storage = MainStorage()
         self._check_pages()
         self._build_tree()
         self._save_reports(self.tree)
 
     def _check_pages(self):
-        for title, page in self.storage.iterate_pages(silent=True):
+        pages_iterator = \
+            self.storage.iterate_pages(silent=True, limit=self.limit)
+        for title, page in pages_iterator:
             for report in Bucket.reports.values():
                 report.process_page(page)
         for report in Bucket.reports.values():
@@ -109,6 +112,7 @@ class RunAllReports:
 @log_exception('reports')
 def reports():
     RunAllReports(debug=False)
+    # RunAllReports(debug=True, limit=40000)
 
 
 if __name__ == '__main__':
