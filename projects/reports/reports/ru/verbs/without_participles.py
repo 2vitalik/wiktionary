@@ -173,7 +173,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
             if vowel_count == 1 and 'ё' not in value:
                 value = re.sub('([аеиоуыэюя])', '\\1́', value)
             stress.add(value)
-        return ', '.join(stress)
+        return ', '.join(sorted(stress))
 
 
 # todo: дополнительно проверять (возможно, для других подотчётов):
