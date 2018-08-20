@@ -125,7 +125,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
         if participles_candidates:
             participles = []
             for participle in participles_candidates:
-                if participle not in storage.titles_set:
+                if participle not in storage.articles_set:
                     participles.append(participle)
             if not participles:
                 return
