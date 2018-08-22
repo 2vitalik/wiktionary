@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from core.storage.main import MainStorage
+from core.conf.conf import REPORTS_PATH
+from core.storage.main import storage
+from core.storage.updaters.mixins import PostponedValuesMixin
 from libs.sync.saver import sync_save
 from libs.utils.log import log_exception
 from libs.utils.wikibot import save_page
@@ -8,7 +10,9 @@ from projects.reports.lib.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
 
 
-class RunAllReports:
+class RunAllReports(PostponedValuesMixin):
+    path = join(REPORTS_PATH)
+
     # root = 'Участник:Vitalik/Отчёты/v3'
     root = 'Викисловарь:Отчёты/v3'
     tree = {

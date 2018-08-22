@@ -32,3 +32,19 @@ class UpdatersValuesMixin:
     @all_pages_start_from.setter
     def all_pages_start_from(self, value):
         write(self.all_pages_start_from_filename, value)
+
+
+class PostponedValuesMixin:
+    @property
+    def latest_updated_filename(self):
+        return join(self.path, 'sys', 'latest_updated')
+
+    @property
+    def latest_updated(self):
+        if not exists(self.latest_updated_filename):
+            return None
+        return dtp(read(self.latest_updated_filename))
+
+    @latest_updated.setter
+    def latest_updated(self, value):
+        write(self.latest_updated_filename, dt(value, utc=True))
