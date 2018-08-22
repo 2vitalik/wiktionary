@@ -66,7 +66,6 @@ class RunAllReports(PostponedValuesMixin):
         for row in pages_iterator:
             if recent:
                 log_dt, title, page = row
-                print(log_dt, title)
                 self.new_latest_updated = log_dt
             else:
                 title, page = row
