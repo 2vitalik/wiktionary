@@ -1,3 +1,4 @@
+import os
 import re
 from datetime import datetime, timedelta
 from os.path import join, exists
@@ -109,6 +110,15 @@ class MainStorage(UpdatersValuesMixin, Storage):
                 if log_dt < start_from:
                     continue
                 yield log_dt, line[21:]
+
+    def latest_daily_log(self, slug):  # todo: implement also time!
+        logs_path = join(self.logs_path, slug)
+        latest_month = max(os.listdir(logs_path))
+        latest_date = max(os.listdir(join(logs_path, latest_month)))
+        return dtp(latest_date[:-4], 'Ymd')
+
+    def latest_recent_date(self):
+        return self.latest_daily_log('recent/titles')
 
     def iterate_recent_titles(self, start_from):
         deleted_iterator = self.iterate_daily_logs('recent/deleted', start_from)
