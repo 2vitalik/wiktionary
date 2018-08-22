@@ -1,4 +1,5 @@
 from datetime import datetime
+from os.path import join
 
 from core.conf.conf import REPORTS_PATH
 from core.storage.main import storage
@@ -24,19 +25,51 @@ class RunAllReports(PostponedValuesMixin):
         'Отчёты': {},
     }
 
-    def __init__(self, debug=False, limit=None):
+    def __init__(self, debug=False, root=None):
         print(datetime.now())
         self.debug = debug
-        self.limit = limit
-        self.storage = MainStorage()
-        self._check_pages()
+        if root:
+            self.root = root
+
+    def import_entries(self, suffix=''):
+        for report in Bucket.reports.values():
+            report.import_entries(suffix)
+        return self
+
+    def check_all(self, limit=None):
+        pages_iterator = storage.iterate_pages(silent=True, limit=limit)
+        self._check_pages(pages_iterator, recent=False)
+        return self
+
+    def check_recent(self):
+        if not self.latest_updated:
+            self.check_all()
+            self.latest_updated = storage.latest_recent_date()
+            return self
+
+        pages_iterator = storage.iterate_recent_pages(self.latest_updated,
+                                                      silent=True)
+        self._check_pages(pages_iterator, recent=True)
+        self.latest_updated = self.new_latest_updated
+        return self
+
+    def export_entries(self, suffix=''):
+        for report in Bucket.reports.values():
+            report.export_entries(suffix)
+        return self
+
+    def save(self):
         self._build_tree()
         self._save_reports(self.tree)
 
-    def _check_pages(self):
-        pages_iterator = \
-            self.storage.iterate_pages(silent=True, limit=self.limit)
-        for title, page in pages_iterator:
+    def _check_pages(self, pages_iterator, recent=True):
+        for row in pages_iterator:
+            if recent:
+                log_dt, title, page = row
+                print(log_dt, title)
+                self.new_latest_updated = log_dt
+            else:
+                title, page = row
             for report in Bucket.reports.values():
                 report.process_page(page)
         for report in Bucket.reports.values():
@@ -114,10 +147,31 @@ class RunAllReports(PostponedValuesMixin):
 
 
 @log_exception('reports')
-def reports():
-    RunAllReports(debug=False)
-    # RunAllReports(debug=True, limit=40000)
+def reports_all(limit=None):  # todo: backup them hourly?
+    runner = RunAllReports(debug=False)
+    runner.check_all(limit=limit)
+    runner.export_entries('.all')
+    runner.save()
+
+
+@log_exception('reports')
+def reports_recent(initiate=False):  # todo: backup them hourly?
+    runner = RunAllReports(debug=False, root='Участник:Vitalik/Отчёты/v3')
+    if not initiate:
+        runner.import_entries('.recent')
+    runner.check_recent()
+    runner.export_entries('.recent')
+    runner.save()
+
+
+@log_exception('reports')
+def reports_debug(limit=None):
+    runner = RunAllReports(debug=True)
+    runner.check_all(limit=limit)
+    runner.export_entries('.debug2')
+    runner.save()
 
 
 if __name__ == '__main__':
-    reports()
+    reports_debug(30000)
+    # reports_recent()

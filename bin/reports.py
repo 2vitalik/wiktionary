@@ -1,6 +1,7 @@
 import up
-from projects.reports.scripts.run import reports
+from projects.reports.scripts.run import reports_all, reports_recent
 
 
 if __name__ == '__main__':
-    reports()
+    reports_all()
+    reports_recent()
