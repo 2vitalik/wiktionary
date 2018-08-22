@@ -13,27 +13,7 @@ from libs.utils.io import read, write, read_lines
 from libs.utils.wikibot import get_page
 
 
-class MainStorage(UpdatersValuesMixin, Storage):
-    def __init__(self, lock_slug='', **kwargs):
-        kwargs['path'] = conf.MAIN_STORAGE_PATH
-        kwargs['tables'] = {
-            'content': 'content',
-            'info': 'simple',
-        }
-        kwargs['lock_slug'] = lock_slug
-        self._articles = None
-        self._articles_set = None
-        self._redirects = None
-        self._redirects_set = None
-        super().__init__(**kwargs)
-
-    def get(self, title, table=None, silent=False):
-        if table:
-            return super().get(title, table, silent)
-        info = self.get(title, 'info', silent)
-        content = self.get(title, 'content', silent)
-        return content, info
-
+class ArticlesRedirectsLists:
     @property
     def articles_filename(self):
         return join(self.path, 'sys', 'articles.txt')
@@ -71,26 +51,15 @@ class MainStorage(UpdatersValuesMixin, Storage):
         if self._redirects is None:
             self._redirects = self.load_redirects()
         return self._redirects
-    
+
     @property
     def redirects_set(self):
         if self._redirects_set is None:
             self._redirects_set = set(self.redirects)
         return self._redirects_set
 
-    def iterate_wiki_pages(self):
-        for title in self.titles:
-            yield title, get_page(title)
 
-    def iterate_pages(self, limit=None, silent=False):
-        # todo: cyrilic= latin=...
-        count = 0
-        for title, content in self.iterate('content'):
-            yield title, Page(title, content, silent=silent)
-            count += 1
-            if limit and count >= limit:
-                break
-
+class LogsIterator:
     def iterate_daily_logs(self, slug, start_from):
         logs_path = join(self.logs_path, slug)
         curr_date = start_from.date() - timedelta(days=1)
@@ -134,6 +103,42 @@ class MainStorage(UpdatersValuesMixin, Storage):
 
         for log_dt, title in self.iterate_recent_titles(start_from):
             yield log_dt, title, StoragePage(title, silent=silent)
+
+
+class MainStorage(UpdatersValuesMixin, ArticlesRedirectsLists, LogsIterator,
+                  Storage):
+    def __init__(self, lock_slug='', **kwargs):
+        kwargs['path'] = conf.MAIN_STORAGE_PATH
+        kwargs['tables'] = {
+            'content': 'content',
+            'info': 'simple',
+        }
+        kwargs['lock_slug'] = lock_slug
+        self._articles = None
+        self._articles_set = None
+        self._redirects = None
+        self._redirects_set = None
+        super().__init__(**kwargs)
+
+    def get(self, title, table=None, silent=False):
+        if table:
+            return super().get(title, table, silent)
+        info = self.get(title, 'info', silent)
+        content = self.get(title, 'content', silent)
+        return content, info
+
+    def iterate_wiki_pages(self):
+        for title in self.titles:
+            yield title, get_page(title)
+
+    def iterate_pages(self, limit=None, silent=False):
+        # todo: cyrilic= latin=...
+        count = 0
+        for title, content in self.iterate('content'):
+            yield title, Page(title, content, silent=silent)
+            count += 1
+            if limit and count >= limit:
+                break
 
 
 storage = MainStorage()
