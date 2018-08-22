@@ -107,20 +107,20 @@ class VerbsWithoutParticiples(BaseComplexReport):
             participles_candidates = [f'{stem}вшись']
 
         elif page.title.endswith('йти'):
-            stem = page.title[:-2]
-            participles_candidates = [f'{stem}дя']
+            stem = page.title[:-3]
+            participles_candidates = [f'{stem}йдя', f'{stem}шедши']
 
         elif page.title.endswith('йтись'):
-            stem = page.title[:-4]
-            participles_candidates = [f'{stem}дясь']
+            stem = page.title[:-5]
+            participles_candidates = [f'{stem}йдясь']
 
         elif page.title.endswith('честь'):
-            stem = page.title[:-4]
-            participles_candidates = [f'{stem}тя']
+            stem = page.title[:-5]
+            participles_candidates = [f'{stem}чтя', f'{stem}чётши']
 
         elif page.title.endswith('честься'):
-            stem = page.title[:-6]
-            participles_candidates = [f'{stem}тясь']
+            stem = page.title[:-7]
+            participles_candidates = [f'{stem}чтясь', '???']
 
         if participles_candidates:
             participles = []
