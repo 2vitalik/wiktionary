@@ -8,4 +8,4 @@ class StoragePage(Page):
     def __init__(self, title, silent=False):
         content = self.storage.get(title, 'content')
         # todo: process `is_redirect`
-        super().__init__(title, content, silent)
+        super().__init__(title, content, silent=silent)

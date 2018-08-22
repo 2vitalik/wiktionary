@@ -1,7 +1,7 @@
 import re
 
 import pywikibot
-from pywikibot.site import Namespace as  BaseNamespace
+from pywikibot.site import Namespace as BaseNamespace
 
 
 class Namespace:

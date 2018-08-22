@@ -6,4 +6,4 @@ class OnlinePage(Page):
     def __init__(self, title, silent=False):
         content = load_page(title)
         # todo: process `is_redirect`
-        super().__init__(title, content, silent)
+        super().__init__(title, content, silent=silent)
