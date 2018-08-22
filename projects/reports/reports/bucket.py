@@ -1,3 +1,4 @@
+from projects.reports.reports.debug.divisible_length import DebugDivisibleLength
 from projects.reports.reports.headers.duplicated_first_level import \
     DuplicatedFirstLevel
 from projects.reports.reports.headers.duplicated_second_level import \
@@ -26,4 +27,5 @@ Bucket.add(
     DuplicatedFirstLevel,
     DuplicatedSecondLevel,
     VerbsWithoutParticiples,
+    DebugDivisibleLength,
 )
