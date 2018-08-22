@@ -1,5 +1,5 @@
 import up
-from projects.reports.scripts.run import reports_all, reports_recent
+from core.reports.scripts.run import reports_all, reports_recent
 
 
 if __name__ == '__main__':

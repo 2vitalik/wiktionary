@@ -4,9 +4,9 @@ from core.storage.main import storage
 from libs.utils.classes import derive
 from libs.utils.wikibot import load_page
 from libs.utils.wikicode import bold
-from projects.reports.lib.complex_report.base import BaseComplexReport
-from projects.reports.lib.mixins.key_title import KeyTitle
-from projects.reports.lib.mixins.reversed_index import ReversedIndex
+from core.reports.lib.complex_report.base import BaseComplexReport
+from core.reports.lib.mixins.key_title import KeyTitle
+from core.reports.lib.mixins.reversed_index import ReversedIndex
 
 
 class CustomDetails:

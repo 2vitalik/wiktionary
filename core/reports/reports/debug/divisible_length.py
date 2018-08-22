@@ -1,4 +1,4 @@
-from projects.reports.lib.shortcuts import TitlesReport
+from core.reports.lib.shortcuts import TitlesReport
 
 
 class DebugDivisibleLength(TitlesReport):

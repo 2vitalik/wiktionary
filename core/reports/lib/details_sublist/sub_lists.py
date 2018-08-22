@@ -1,5 +1,4 @@
-from projects.reports.lib.details_sublist.base import \
-    BaseListDetails
+from core.reports.lib.details_sublist.base import BaseListDetails
 
 
 class SubLists(BaseListDetails):

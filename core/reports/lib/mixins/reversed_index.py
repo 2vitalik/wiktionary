@@ -1,4 +1,4 @@
-from projects.reports.lib.base import BaseIterableReport
+from core.reports.lib.base import BaseIterableReport
 
 
 class ReversedIndex(BaseIterableReport):

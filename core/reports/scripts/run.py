@@ -7,8 +7,8 @@ from core.storage.postponed.mixins import PostponedUpdaterMixin
 from libs.sync.saver import sync_save
 from libs.utils.log import log_exception
 from libs.utils.wikibot import save_page
-from projects.reports.lib.base import BaseReportPage
-from projects.reports.reports.bucket import Bucket
+from core.reports.lib.base import BaseReportPage
+from core.reports.reports.bucket import Bucket
 
 
 class ReportsUpdater(PostponedUpdaterMixin):  # todo: перенести в `core`

@@ -1,11 +1,11 @@
-from projects.reports.reports.debug.divisible_length import DebugDivisibleLength
-from projects.reports.reports.headers.duplicated_first_level import \
+from core.reports.reports.debug.divisible_length import DebugDivisibleLength
+from core.reports.reports.headers.duplicated_first_level import \
     DuplicatedFirstLevel
-from projects.reports.reports.headers.duplicated_second_level import \
+from core.reports.reports.headers.duplicated_second_level import \
     DuplicatedSecondLevel
-from projects.reports.reports.headers.wrong_first_level import WrongFirstLevel
-from projects.reports.reports.headers.wrong_second_level import WrongSecondLevel
-from projects.reports.reports.ru.verbs.without_participles import \
+from core.reports.reports.headers.wrong_first_level import WrongFirstLevel
+from core.reports.reports.headers.wrong_second_level import WrongSecondLevel
+from core.reports.reports.ru.verbs.without_participles import \
     VerbsWithoutParticiples
 
 

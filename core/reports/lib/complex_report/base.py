@@ -1,4 +1,4 @@
-from projects.reports.lib.base import ImportExportMixin
+from core.reports.lib.base import ImportExportMixin
 
 
 class BaseComplexReport(ImportExportMixin):

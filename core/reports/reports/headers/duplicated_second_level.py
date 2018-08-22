@@ -1,10 +1,8 @@
 from libs.parse.patterns import R
 from libs.utils.collection import chunks
-from projects.reports.lib.details_sublist.brackets import \
-    Brackets
-from projects.reports.lib.mixins.key_title import KeyTitle
-from projects.reports.lib.mixins.value_lang_and_code import \
-    ValueLangAndCode
+from core.reports.lib.details_sublist.brackets import Brackets
+from core.reports.lib.mixins.key_title import KeyTitle
+from core.reports.lib.mixins.value_lang_and_code import ValueLangAndCode
 
 
 class DuplicatedSecondLevel(KeyTitle, ValueLangAndCode, Brackets):

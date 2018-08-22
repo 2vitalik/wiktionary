@@ -1,8 +1,7 @@
 from libs.parse.patterns import TR
-from projects.reports.lib.details_sublist.colon import Colon
-from projects.reports.lib.mixins.key_title import KeyTitle
-from projects.reports.lib.mixins.value_code import \
-    ValueCode
+from core.reports.lib.details_sublist.colon import Colon
+from core.reports.lib.mixins.key_title import KeyTitle
+from core.reports.lib.mixins.value_code import ValueCode
 
 
 class WrongSecondLevel(KeyTitle, ValueCode, Colon):
