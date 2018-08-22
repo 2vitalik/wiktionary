@@ -128,6 +128,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
                 if participle not in storage.articles_set:
                     participles.append(participle)
             if not participles:
+                self.set(report_key, page.title, None)
                 return
         else:
             participles = '?'
