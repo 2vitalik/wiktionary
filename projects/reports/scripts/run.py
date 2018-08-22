@@ -11,40 +11,30 @@ from projects.reports.lib.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
 
 
-class RunAllReports(PostponedUpdaterMixin):  # todo: перенести в `core`
+class ReportsUpdater(PostponedUpdaterMixin):  # todo: перенести в `core`
     path = join(REPORTS_PATH)
 
-    # root = 'Участник:Vitalik/Отчёты/v3'
-    root = 'Викисловарь:Отчёты/v3'
-
-    def __init__(self, debug=False, root=None):
-        super().__init__()
+    def __init__(self):
         print(datetime.now())
-        self.debug = debug
-        if root:
-            self.root = root
-        self.tree = {
-            'Ошибки': {
-                'Важные': {},
-                'Средние': {},
-                'Лёгкие': {},
-            },
-            'Отчёты': {},
-        }
+        super().__init__()
 
-    def process_all(self, limit=None):
+    def all(self, limit=None):
         for title, page in storage.iterate_pages(silent=True, limit=limit):
             self.process_page(page)
         self.convert_entries()
+        self.export_entries('.all')
 
-    def process_recent(self):
+    def recent(self):
         if not self.latest_updated:
-            self.process_all()
+            self.all()
             self.latest_updated = storage.latest_recent_date()
+            self.export_entries('.recent')
             return
 
+        self.import_entries('.recent')
         self.process_recent_pages()
         self.convert_entries()
+        self.export_entries('.recent')
 
     def process_page(self, page):
         for report in Bucket.reports.values():
@@ -65,7 +55,26 @@ class RunAllReports(PostponedUpdaterMixin):  # todo: перенести в `core
         for report in Bucket.reports.values():
             report.convert_entries()
 
-    def save(self):  # todo: Вынести Saver в отдельный класс
+
+class ReportsSaver:
+    def __init__(self):
+        self.debug = False
+        self.root = 'Викисловарь:Отчёты/v3'
+        # self.root = 'Участник:Vitalik/Отчёты/v3'
+        self.tree = {
+            'Ошибки': {
+                'Важные': {},
+                'Средние': {},
+                'Лёгкие': {},
+            },
+            'Отчёты': {},
+        }
+
+    def save(self, debug=False, root=None):
+        if debug:
+            self.debug = debug
+        if root:
+            self.root = root
         self._build_tree()
         self._save_reports(self.tree)
 
@@ -142,28 +151,20 @@ class RunAllReports(PostponedUpdaterMixin):  # todo: перенести в `core
 
 @log_exception('reports')
 def reports_all(limit=None):
-    runner = RunAllReports(debug=False)
-    runner.process_all(limit=limit)
-    runner.export_entries('.all')
-    runner.save()
+    ReportsUpdater().all(limit=limit)
+    ReportsSaver().save()
 
 
 @log_exception('reports')
-def reports_recent(initiate=False):
-    runner = RunAllReports(debug=False, root='Участник:Vitalik/Отчёты/v3')
-    if not initiate:
-        runner.import_entries('.recent')
-    runner.process_recent()
-    runner.export_entries('.recent')
-    runner.save()
+def reports_recent():
+    ReportsUpdater().recent()
+    ReportsSaver().save(root='Участник:Vitalik/Отчёты/v3')
 
 
 @log_exception('reports')
 def reports_debug(limit=None):
-    runner = RunAllReports(debug=True)
-    runner.process_all(limit=limit)
-    runner.export_entries('.debug2')
-    runner.save()
+    ReportsUpdater().all(limit=limit)
+    ReportsSaver().save(debug=True)
 
 
 if __name__ == '__main__':
