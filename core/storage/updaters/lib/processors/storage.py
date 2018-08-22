@@ -21,6 +21,7 @@ class MainStorageProcessor(BaseProcessor):
         info = f"{edited_str}, {'R' if redirect else 'A'}"
         self.storage.update(title, content=content, info=info)
         self.log_hour('changed', f'<{info}> - {title}')
+        self.log_day('titles_changed', title)
 
     def close(self, *args, **kwargs):
         self.save_titles()
