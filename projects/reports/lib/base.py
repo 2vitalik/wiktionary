@@ -32,7 +32,19 @@ class BaseReportPage:
                f"{content}".replace('\u200e', '�')
 
 
-class BaseIterableReport(BaseReportPage):
+class ImportExportMixin:
+    def entries_filename(self, suffix=''):
+        name = self.__class__.__name__
+        return join(REPORTS_PATH, f'entries{suffix}', f'{name}.json')
+
+    def export_entries(self, suffix=''):
+        json_dump(self.entries_filename(suffix), self.entries)
+
+    def import_entries(self, suffix=''):
+        self.entries = json_load(self.entries_filename(suffix))
+
+
+class BaseIterableReport(ImportExportMixin, BaseReportPage):
     list_type = '#'
     separator = ''
 
@@ -81,17 +93,6 @@ class BaseIterableReport(BaseReportPage):
 
     def convert_entries(self):
         pass  # can be implemented in inheritor
-
-    @property
-    def entries_filename(self):
-        name = self.__class__.__name__
-        return join(REPORTS_PATH, 'entries', f'{name}.json')
-
-    def export_entries(self):
-        json_dump(self.entries_filename, self.entries)
-
-    def import_entries(self):
-        self.entries = json_load(self.entries_filename)
 
     def report_pages(self) -> list:
         return [self]  # return itself

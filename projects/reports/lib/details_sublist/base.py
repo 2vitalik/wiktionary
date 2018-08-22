@@ -15,7 +15,8 @@ class BaseListDetails(BaseIterableReport):
     def append(self, key, value):
         self.entries[key].append(value)
 
-    def import_entries(self):
-        self.entries = defaultdict(list)
-        data = super().import_entries()
-        self.entries.update(data)
+    def import_entries(self, suffix=''):
+        super().import_entries(suffix)
+        new_entries = defaultdict(list)
+        new_entries.update(self.entries)
+        self.entries = new_entries
