@@ -16,20 +16,20 @@ class RunAllReports(PostponedValuesMixin):
 
     # root = 'Участник:Vitalik/Отчёты/v3'
     root = 'Викисловарь:Отчёты/v3'
-    tree = {
-        'Ошибки': {
-            'Важные': {},
-            'Средние': {},
-            'Лёгкие': {},
-        },
-        'Отчёты': {},
-    }
 
     def __init__(self, debug=False, root=None):
         print(datetime.now())
         self.debug = debug
         if root:
             self.root = root
+        self.tree = {
+            'Ошибки': {
+                'Важные': {},
+                'Средние': {},
+                'Лёгкие': {},
+            },
+            'Отчёты': {},
+        }
 
     def import_entries(self, suffix=''):
         for report in Bucket.reports.values():
