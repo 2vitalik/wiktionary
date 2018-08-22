@@ -3,7 +3,7 @@ from os.path import join
 
 from core.conf.conf import REPORTS_PATH
 from core.storage.main import storage
-from core.storage.updaters.mixins import PostponedValuesMixin
+from core.storage.postponed.mixins import PostponedUpdaterMixin
 from libs.sync.saver import sync_save
 from libs.utils.log import log_exception
 from libs.utils.wikibot import save_page
@@ -11,13 +11,14 @@ from projects.reports.lib.base import BaseReportPage
 from projects.reports.reports.bucket import Bucket
 
 
-class RunAllReports(PostponedValuesMixin):
+class RunAllReports(PostponedUpdaterMixin):  # todo: перенести в `core`
     path = join(REPORTS_PATH)
 
     # root = 'Участник:Vitalik/Отчёты/v3'
     root = 'Викисловарь:Отчёты/v3'
 
     def __init__(self, debug=False, root=None):
+        super().__init__()
         print(datetime.now())
         self.debug = debug
         if root:
@@ -31,48 +32,42 @@ class RunAllReports(PostponedValuesMixin):
             'Отчёты': {},
         }
 
-    def import_entries(self, suffix=''):
+    def process_all(self, limit=None):
+        for title, page in storage.iterate_pages(silent=True, limit=limit):
+            self.process_page(page)
+        self.convert_entries()
+
+    def process_recent(self):
+        if not self.latest_updated:
+            self.process_all()
+            self.latest_updated = storage.latest_recent_date()
+            return
+
+        self.process_recent_pages()
+        self.convert_entries()
+
+    def process_page(self, page):
+        for report in Bucket.reports.values():
+            report.process_page(page)
+
+    @classmethod
+    def import_entries(cls, suffix=''):
         for report in Bucket.reports.values():
             report.import_entries(suffix)
-        return self
 
-    def check_all(self, limit=None):
-        pages_iterator = storage.iterate_pages(silent=True, limit=limit)
-        self._check_pages(pages_iterator, recent=False)
-        return self
-
-    def check_recent(self):
-        if not self.latest_updated:
-            self.check_all()
-            self.latest_updated = storage.latest_recent_date()
-            return self
-
-        pages_iterator = storage.iterate_recent_pages(self.latest_updated,
-                                                      silent=True)
-        self._check_pages(pages_iterator, recent=True)
-        self.latest_updated = self.new_latest_updated
-        return self
-
-    def export_entries(self, suffix=''):
+    @classmethod
+    def export_entries(cls, suffix=''):
         for report in Bucket.reports.values():
             report.export_entries(suffix)
-        return self
 
-    def save(self):
-        self._build_tree()
-        self._save_reports(self.tree)
-
-    def _check_pages(self, pages_iterator, recent=True):
-        for row in pages_iterator:
-            if recent:
-                log_dt, title, page = row
-                self.new_latest_updated = log_dt
-            else:
-                title, page = row
-            for report in Bucket.reports.values():
-                report.process_page(page)
+    @classmethod
+    def convert_entries(cls):
         for report in Bucket.reports.values():
             report.convert_entries()
+
+    def save(self):  # todo: Вынести Saver в отдельный класс
+        self._build_tree()
+        self._save_reports(self.tree)
 
     def _build_tree(self):
         for report in Bucket.reports.values():
@@ -146,19 +141,19 @@ class RunAllReports(PostponedValuesMixin):
 
 
 @log_exception('reports')
-def reports_all(limit=None):  # todo: backup them hourly?
+def reports_all(limit=None):
     runner = RunAllReports(debug=False)
-    runner.check_all(limit=limit)
+    runner.process_all(limit=limit)
     runner.export_entries('.all')
     runner.save()
 
 
 @log_exception('reports')
-def reports_recent(initiate=False):  # todo: backup them hourly?
+def reports_recent(initiate=False):
     runner = RunAllReports(debug=False, root='Участник:Vitalik/Отчёты/v3')
     if not initiate:
         runner.import_entries('.recent')
-    runner.check_recent()
+    runner.process_recent()
     runner.export_entries('.recent')
     runner.save()
 
@@ -166,7 +161,7 @@ def reports_recent(initiate=False):  # todo: backup them hourly?
 @log_exception('reports')
 def reports_debug(limit=None):
     runner = RunAllReports(debug=True)
-    runner.check_all(limit=limit)
+    runner.process_all(limit=limit)
     runner.export_entries('.debug2')
     runner.save()
 
