@@ -11,7 +11,7 @@ from core.reports.lib.base import BaseReportPage
 from core.reports.reports.bucket import Bucket
 
 
-class ReportsUpdater(PostponedUpdaterMixin):  # todo: перенести в `core`
+class ReportsUpdater(PostponedUpdaterMixin):
     path = join(REPORTS_PATH)
 
     def __init__(self):
@@ -39,6 +39,10 @@ class ReportsUpdater(PostponedUpdaterMixin):  # todo: перенести в `cor
     def process_page(self, page):
         for report in Bucket.reports.values():
             report.process_page(page)
+
+    def remove_page(self, title):
+        for report in Bucket.reports.values():
+            report.remove_page(title)
 
     @classmethod
     def import_entries(cls, suffix=''):

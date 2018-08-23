@@ -14,12 +14,17 @@ class PostponedUpdaterMixin:
     def process_recent_pages(self):
         iterator = \
             storage.iterate_changed_pages(self.latest_updated, silent=True)
+        for title in storage.deleted_titles(self.latest_updated):
+            self.remove_page(title)
         for log_dt, title, page in iterator:
             self.process_page(page)
             self.new_latest_updated = log_dt
         self.latest_updated = self.new_latest_updated
 
     def process_page(self, page):
+        raise NotImplementedError()
+
+    def remove_page(self, title):
         raise NotImplementedError()
 
     @property

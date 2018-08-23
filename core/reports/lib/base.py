@@ -66,6 +66,9 @@ class BaseIterableReport(ImportExportMixin, BaseReportPage):
         details = self.check_page(page)
         self.set(page.title, details)
 
+    def remove_page(self, title):
+        self.remove(title)
+
     @classmethod
     def check_page(cls, page):
         return ...  # should be implemented in inheritors
