@@ -22,7 +22,7 @@ from web.main.views import PageView, LogsFileView, LogsFolderView
 urlpatterns = [
     path('admin/', admin.site.urls),
     
-    path('page/<str:title>/', PageView.as_view(),
+    path('page/<str:title>', PageView.as_view(),
          name='page'),
 
     path('logs/<str:root>/', LogsFolderView.as_view(),
