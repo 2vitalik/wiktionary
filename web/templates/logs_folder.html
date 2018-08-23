@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        {% for name, folder in folders.items %}
+            <li><a href="{% url 'logs_folder' root folder %}">{{ name }}/</a></li>
+        {% endfor %}
+    </ul>
+    <ul>
+        {% for name, file in files.items %}
+            <li><a href="{% url 'logs_file' root file %}">{{ name }}</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
