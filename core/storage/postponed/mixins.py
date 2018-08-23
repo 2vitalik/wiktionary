@@ -12,11 +12,9 @@ class PostponedUpdaterMixin:
         self.new_latest_updated = self.latest_updated
 
     def process_recent_pages(self):
-        pages_iterator = \
-            storage.iterate_recent_pages(self.latest_updated, silent=True)
-        # todo: iterate also through changed `all_pages`?..
-        # todo: iterate also through `deleted` on both: `all_pages` & `recent`
-        for log_dt, title, page in pages_iterator:
+        iterator = \
+            storage.iterate_changed_pages(self.latest_updated, silent=True)
+        for log_dt, title, page in iterator:
             self.process_page(page)
             self.new_latest_updated = log_dt
         self.latest_updated = self.new_latest_updated

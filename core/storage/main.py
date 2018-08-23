@@ -89,19 +89,24 @@ class LogsIterator:
     def latest_recent_date(self):
         return self.latest_daily_log('recent/titles')
 
-    def iterate_recent_titles(self, start_from):
-        deleted_iterator = self.iterate_daily_logs('recent/deleted', start_from)
-        titles_iterator = self.iterate_daily_logs('recent/titles', start_from)
-        deleted = {title for log_dt, title in deleted_iterator}
-        for log_dt, title in titles_iterator:
-            if title in deleted:
-                continue
-            yield log_dt, title
+    def deleted_titles(self, start_from):
+        iterator = self.iterate_daily_logs('recent/deleted', start_from)
+        return {title for log_dt, title in iterator}
 
-    def iterate_recent_pages(self, start_from, silent=False):
+    def iterate_changed_titles(self, start_from):
+        deleted_titles = self.deleted_titles(start_from)
+        for slug in ('all_pages', 'recent'):
+            iterator = \
+                self.iterate_daily_logs(f'{slug}/titles_changed', start_from)
+            for log_dt, title in iterator:
+                if title in deleted_titles:
+                    continue
+                yield log_dt, title
+
+    def iterate_changed_pages(self, start_from, silent=False):
         from libs.parse.storage_page import StoragePage
 
-        for log_dt, title in self.iterate_recent_titles(start_from):
+        for log_dt, title in self.iterate_changed_titles(start_from):
             yield log_dt, title, StoragePage(title, silent=silent)
 
 
