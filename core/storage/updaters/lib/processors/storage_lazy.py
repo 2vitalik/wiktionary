@@ -15,3 +15,4 @@ class LazyMainStorageProcessor(MainStorageProcessor):
         if content != old_content or info != old_info:
             self.storage.update(title, content=content, info=info)
             self.log_hour('changed', f'<{info}> - {title}')
+            self.log_day('titles_changed', title)
