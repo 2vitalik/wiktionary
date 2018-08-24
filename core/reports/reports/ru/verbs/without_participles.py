@@ -1,6 +1,7 @@
 import re
 
 from core.storage.main import storage
+from libs.parse.storage_page import StoragePage
 from libs.utils.classes import derive
 from libs.utils.wikibot import load_page
 from libs.utils.wikicode import bold
@@ -79,6 +80,10 @@ class VerbsWithoutParticiples(BaseComplexReport):
         '''
 
     def process_page(self, page):
+        verb_candidate = self.try_source_verb(page.title)  # todo: skip this if not via `recent`?
+        if verb_candidate:
+            self.process_page(StoragePage(verb_candidate, silent=True))
+            return
         if '{{гл ru' not in page.ru.content:
             return
         for report_key in self.report_keys:
@@ -88,40 +93,59 @@ class VerbsWithoutParticiples(BaseComplexReport):
         else:
             self.process_verb(page, '-???')
 
+    @classmethod
+    def try_source_verb(cls, title):
+        replaces = {
+            'в': 'ть',
+            'вши': 'ть',
+            'вшись': 'ться',
+            'йдя': 'йти',
+            'шедши': 'йти',
+            'йдясь': 'йтись',
+            'чтя': 'честь',
+            'чётши': 'честь',
+            'чтясь': 'честься',
+        }
+        for ends, replace in replaces.items():
+            if title.endswith(ends):
+                stem = title[:-len(ends)]
+                return f'{stem}{replace}'
+
+    @classmethod
+    def process_candidates(cls, title):
+        if re.search('[аеиоуыя]ть$', title):
+            stem = title[:-2]
+            return [f'{stem}в', f'{stem}вши']
+        if re.search('[аеиоуыя]ться$', title):
+            stem = title[:-4]
+            return [f'{stem}вшись']
+        if title.endswith('йти'):
+            stem = title[:-3]
+            return [f'{stem}йдя', f'{stem}шедши']
+        if title.endswith('йтись'):
+            stem = title[:-5]
+            return [f'{stem}йдясь']
+        if title.endswith('честь'):
+            stem = title[:-5]
+            return [f'{stem}чтя', f'{stem}чётши']
+        if title.endswith('честься'):
+            stem = title[:-7]
+            return [f'{stem}чтясь', '???']
+        return []
+
     def process_verb(self, page, report_key):
         aspect = self.get_aspect(page)
         stresses = self.get_stress(page)
-        participles_candidates = []
 
         if re.search('[аеиоуыя]ть$', page.title):
             if aspect == '???':
                 aspect = self.aspects.get(page.title, '???')
-            stem = page.title[:-2]
-            participles_candidates = [f'{stem}в', f'{stem}вши']
-
         elif re.search('[аеиоуыя]ться$', page.title):
             if aspect == '???':
                 base_verb = page.title[:-2]
                 aspect = self.aspects.get(base_verb, '???')
-            stem = page.title[:-4]
-            participles_candidates = [f'{stem}вшись']
 
-        elif page.title.endswith('йти'):
-            stem = page.title[:-3]
-            participles_candidates = [f'{stem}йдя', f'{stem}шедши']
-
-        elif page.title.endswith('йтись'):
-            stem = page.title[:-5]
-            participles_candidates = [f'{stem}йдясь']
-
-        elif page.title.endswith('честь'):
-            stem = page.title[:-5]
-            participles_candidates = [f'{stem}чтя', f'{stem}чётши']
-
-        elif page.title.endswith('честься'):
-            stem = page.title[:-7]
-            participles_candidates = [f'{stem}чтясь', '???']
-
+        participles_candidates = self.process_candidates(page.title)
         if participles_candidates:
             participles = []
             for participle in participles_candidates:
