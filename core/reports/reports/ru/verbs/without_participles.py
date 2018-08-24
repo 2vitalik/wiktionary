@@ -79,10 +79,16 @@ class VerbsWithoutParticiples(BaseComplexReport):
             содержимое.
         '''
 
-    def process_page(self, page):
-        verb_candidate = self.try_source_verb(page.title)  # todo: skip this if not via `recent`?
-        if verb_candidate:
-            self.process_page(StoragePage(verb_candidate, silent=True))
+    def try_process_source_verb(self, title):
+        verb_candidate = self.try_source_verb(title)
+        if not verb_candidate:
+            return False
+        self.process_page(StoragePage(verb_candidate, silent=True),
+                          via_recent=False)
+        return True
+
+    def process_page(self, page, via_recent):
+        if via_recent and self.try_process_source_verb(page.title):
             return
         if '{{гл ru' not in page.ru.content:
             return
@@ -92,6 +98,11 @@ class VerbsWithoutParticiples(BaseComplexReport):
                 break
         else:
             self.process_verb(page, '-???')
+
+    def remove_page(self, title, via_recent):
+        super().remove_page(title, via_recent)
+        if via_recent:
+            self.try_process_source_verb(title)
 
     @classmethod
     def try_source_verb(cls, title):

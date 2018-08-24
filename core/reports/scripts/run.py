@@ -20,7 +20,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
 
     def all(self, limit=None):
         for title, page in storage.iterate_pages(silent=True, limit=limit):
-            self.process_page(page)
+            self.process_page(page, via_recent=False)
         self.convert_entries()
         self.export_entries('.all')
 
@@ -36,13 +36,13 @@ class ReportsUpdater(PostponedUpdaterMixin):
         self.convert_entries()
         self.export_entries('.recent')
 
-    def process_page(self, page):
+    def process_page(self, page, via_recent):
         for report in Bucket.reports.values():
-            report.process_page(page)
+            report.process_page(page, via_recent)
 
-    def remove_page(self, title):
+    def remove_page(self, title, via_recent):
         for report in Bucket.reports.values():
-            report.remove_page(title)
+            report.remove_page(title, via_recent)
 
     @classmethod
     def import_entries(cls, suffix=''):

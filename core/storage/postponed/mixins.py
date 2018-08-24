@@ -15,16 +15,16 @@ class PostponedUpdaterMixin:
         iterator = \
             storage.iterate_changed_pages(self.latest_updated, silent=True)
         for title in storage.deleted_titles(self.latest_updated):
-            self.remove_page(title)
+            self.remove_page(title, via_recent=True)
         for log_dt, title, page in iterator:
-            self.process_page(page)
+            self.process_page(page, via_recent=True)
             self.new_latest_updated = log_dt
         self.latest_updated = self.new_latest_updated
 
-    def process_page(self, page):
+    def process_page(self, page, via_recent):
         raise NotImplementedError()
 
-    def remove_page(self, title):
+    def remove_page(self, title, via_recent):
         raise NotImplementedError()
 
     @property
