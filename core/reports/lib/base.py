@@ -66,7 +66,7 @@ class BaseIterableReport(ImportExportMixin, BaseReportPage):
         details = self.check_page(page)
         self.set(page.title, details)
 
-    def remove_page(self, title):
+    def remove_page(self, title, via_recent):
         self.remove(title)
 
     @classmethod
