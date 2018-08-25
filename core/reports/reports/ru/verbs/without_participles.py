@@ -160,7 +160,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
         if participles_candidates:
             participles = []
             for participle in participles_candidates:
-                if participle not in storage.articles_set:
+                if participle not in storage.titles_set:  # todo: отдельный отчёт для articles_set (т.е. когда редирект)
                     participles.append(participle)
             if not participles:
                 self.set(report_key, page.title, None)
