@@ -6,6 +6,6 @@ class StoragePage(Page):
     storage = MainStorage()
 
     def __init__(self, title, silent=False):
-        content = self.storage.get(title, 'content')
+        content = self.storage.get(title, 'content', silent=silent)  # todo: another `silent`?
         # todo: process `is_redirect`
         super().__init__(title, content, silent=silent)
