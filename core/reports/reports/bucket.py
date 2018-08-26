@@ -27,5 +27,5 @@ Bucket.add(
     DuplicatedFirstLevel,
     DuplicatedSecondLevel,
     VerbsWithoutParticiples,
-    DebugDivisibleLength,
+    # DebugDivisibleLength,
 )
