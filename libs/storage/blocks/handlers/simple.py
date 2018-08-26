@@ -1,5 +1,6 @@
 import os
 from bisect import bisect_left
+from os.path import exists
 from shutil import copy
 
 from libs.storage.blocks.handlers.base import BaseBlockHandler
@@ -14,8 +15,12 @@ class SimpleBlockHandler(BaseBlockHandler):
 
         block_content = read(self.path)
         if not block_content:
-            raise StorageError(f'Block is empty: "{self.path}"')
-        self.contents = block_content.split('\n')
+            if exists(f'{self.path}.bak'):
+                raise StorageError(f'Block is empty: "{self.path}"')
+        if block_content:
+            self.contents = block_content.split('\n')
+        else:
+            self.contents = []
         self.titles = [line.split('\t')[0] for line in self.contents]
         try:
             self.index = self.titles.index(self.title)
