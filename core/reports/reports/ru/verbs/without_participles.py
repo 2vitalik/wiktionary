@@ -153,6 +153,36 @@ class VerbsWithoutParticiples(BaseComplexReport):
         if title.endswith('честься'):
             stem = title[:-7]
             return [f'{stem}чтясь', '???']
+        if title.endswith('ячься'):
+            stem = title[:-5]
+            return [f'{stem}ягшись']
+        if title.endswith('ичься'):
+            stem = title[:-5]
+            return [f'{stem}игшись']
+        if title.endswith('мочься'):
+            stem = title[:-6]
+            return [f'{stem}могшись']
+        if title.endswith('очься'):
+            stem = title[:-6]
+            return [f'{stem}окшись']
+        if title.endswith('ечься'):
+            vowel = 'е' if title.startswith('вы') else 'ё'
+            cases = {
+                'жечься': f'ж{vowel}гшись',
+                'блечься': f'бл{vowel}кшись',
+                'влечься': f'вл{vowel}кшись',
+                'лечься': f'л{vowel}гшись',
+                'печься': f'п{vowel}кшись',
+                'еречься': f'ер{vowel}гшись',
+                'речься': f'р{vowel}кшись',
+                'сечься': f'с{vowel}кшись',
+                'течься': f'т{vowel}кшись',
+            }
+            for end, replace in cases.items():
+                if title.endswith(end):
+                    stem = title[:-len(end)]
+                    return [f'{stem}{replace}']
+            return ['???']
         return []
 
     def process_verb(self, page, report_key, skip_candidates=False):
