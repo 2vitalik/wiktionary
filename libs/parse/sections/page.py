@@ -1,3 +1,4 @@
+from libs.parse.data.page import PageData
 from libs.parse.sections.base import BaseSection
 from libs.parse.sections.grouper_mixins.languages import LanguagesGrouperMixin
 from libs.parse.patterns import R
@@ -18,6 +19,7 @@ class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
         self.is_redirect = is_redirect  # todo: implement in inheritors
         self.is_category = title.startswith(u'Категория:')
         self.is_template = title.startswith(u'Шаблон:')
+        self.data = PageData(self)
 
     def upload_changes(self, desc, minor=True):
         server_content = load_page(self.title)
