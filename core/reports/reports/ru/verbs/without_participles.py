@@ -46,6 +46,8 @@ class VerbsWithoutParticiples(BaseComplexReport):
         '-зть', '-зться',
         '-йти', '-йтись',
         '-???',
+        '(безличные)',
+        '(через дефис)',
     ]
 
     def __init__(self):
@@ -92,8 +94,17 @@ class VerbsWithoutParticiples(BaseComplexReport):
             return
         if '{{гл ru' not in page.ru.content:
             return
+        if page.data.ru.is_impersonal_verb_only():
+            self.remove_page(page.title, via_recent=False)
+            self.process_verb(page, '(безличные)', skip_candidates=True)
+            return
+        if '-' in page.title:
+            self.remove_page(page.title, via_recent=False)
+            self.process_verb(page, '(через дефис)', skip_candidates=True)
+            return
         for report_key in self.report_keys:
-            if page.title.endswith(report_key[1:]):
+            if report_key.startswith('-') \
+                    and page.title.endswith(report_key[1:]):
                 self.process_verb(page, report_key)
                 break
         else:
@@ -144,7 +155,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
             return [f'{stem}чтясь', '???']
         return []
 
-    def process_verb(self, page, report_key):
+    def process_verb(self, page, report_key, skip_candidates=False):
         aspect = self.get_aspect(page)
         stresses = self.get_stress(page)
 
@@ -157,7 +168,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
                 aspect = self.aspects.get(base_verb, '???')
 
         participles_candidates = self.process_candidates(page.title)
-        if participles_candidates:
+        if participles_candidates and not skip_candidates:
             participles = []
             for participle in participles_candidates:
                 if participle not in storage.titles_set:  # todo: отдельный отчёт для articles_set (т.е. когда редирект)
