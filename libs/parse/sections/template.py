@@ -80,7 +80,9 @@ class Template:
             if '=' in part:
                 key, value = restored.split('=', maxsplit=1)
                 if key in self._kwargs:
-                    raise Exception('Duplicated key in template.')
+                    msg = f'Duplicated key "{key}" in template "{self.name}"' \
+                          f'in page "{self.base.title}".'
+                    raise Exception()
                 self._kwargs[key] = value
             else:
                 self._args.append(restored)
