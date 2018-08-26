@@ -13,12 +13,17 @@ def tpl_unpack(value):
 
 
 class Template:
-    def __init__(self, name, content, base=None):
+    def __init__(self, name, content, base=None, silent=None):
         self.name = name
         self.content = content
         self.base = base
-        if base:
-            self.title = base.title
+        self.page_title = None
+        self.silent = False
+        if base is not None:
+            self.page_title = base.title  # todo: Проверить, что `page_title` работает правильно...
+            self.silent = base.silent
+        if silent is not None:
+            self.silent = silent
 
         self.is_parsing = False
         self.parsed = False
@@ -79,10 +84,17 @@ class Template:
             restored = tpl_unpack(part)
             if '=' in part:
                 key, value = restored.split('=', maxsplit=1)
-                if key in self._kwargs:
-                    msg = f'Duplicated key "{key}" in template "{self.name}"' \
-                          f'in page "{self.base.title}".'
-                    raise Exception()
+                if key in self._kwargs and not self.silent:
+                    raise TemplateKeyDuplicatedError(self, key)
                 self._kwargs[key] = value
             else:
                 self._args.append(restored)
+
+
+class TemplateKeyDuplicatedError(Exception):
+    def __init__(self, template, key):
+        message = f'Duplicated key "{key}" in template "{template.name}" ' \
+                  f'in page "{template.page_title}"'  # todo: Проверить, что `page_title` работает
+        super().__init__(message)
+        self.template = template
+        self.key = key

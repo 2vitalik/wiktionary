@@ -7,7 +7,7 @@ from libs.parse.sections.template import Template
 class TemplatesGrouper(BaseTemplatesGrouper):
     def __iter__(self):
         for path, (tpl_name, tpl_content) in self.iter_templates():
-            yield path, Template(tpl_name, tpl_content)
+            yield path, Template(tpl_name, tpl_content, base=self.base)
 
     def __call__(self, *args, **kwargs):
         return FilteredTemplatesGrouper(self.base, args, **kwargs)

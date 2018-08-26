@@ -22,4 +22,4 @@ class FilteredTemplatesGrouper(BaseTemplatesGrouper):
                     if re.match(pattern, tpl_name):
                         iter_re = True
             if iter_all or iter_names or iter_re:
-                yield path, Template(tpl_name, tpl_content)
+                yield path, Template(tpl_name, tpl_content, base=self.base)
