@@ -163,7 +163,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
             stem = title[:-6]
             return [f'{stem}могшись']
         if title.endswith('очься'):
-            stem = title[:-6]
+            stem = title[:-5]
             return [f'{stem}окшись']
         if title.endswith('ечься'):
             vowel = 'е' if title.startswith('вы') else 'ё'
