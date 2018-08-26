@@ -63,8 +63,8 @@ class Storage:
 
     def save_titles(self, titles):
         write_lines(self.titles_filename, titles)
-        path = join(self.logs_path, 'titles', f"{dtf('Ym/dts')}.txt")
-        write_lines(path, titles)
+        # path = join(self.logs_path, 'titles', f"{dtf('Ym/dts')}.txt")
+        # write_lines(path, titles)
 
     def load_titles(self):
         return read_lines(self.titles_filename)
