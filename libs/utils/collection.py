@@ -43,13 +43,13 @@ def group(data, indexes, like_items, unique):
         - `values` is like 1, 2, 3, ...
         - `indexes` is (0, )  # group by first part of the `key`
     Example results:
-        - like_items=True, unique=False:  # .items()
+        - like_items=True, unique=False:  # .as_dict()
             {'A': {'a': [1, 2, 3], 'b': [4]}, 'B': ...}
-        - like_items=True, unique=True:  # .items()
+        - like_items=True, unique=True:  # .as_dict()
             {'A': {'a': 1, 'b': 4}, 'B': ...}
-        - like_items=False, unique=False:  # .values()
+        - like_items=False, unique=False:  # .as_list()
             {'A': [1, 2, 3, 4]}, 'B': ...}
-        - like_items=False, unique=True:  # .values()
+        - like_items=False, unique=True:  # .as_list()
             {'A': 1, 'B': ...}
     """
     result = {}

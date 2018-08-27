@@ -18,7 +18,7 @@ class MorphologyData(BaseBlockData):
         word_type = self.parse_word_type()
         self._sub_data = {
             'word_type': word_type,
-            'syllables': self.base.templates('по-слогам', 'по-слогам').values(),
+            'syllables': self.base.templates('по-слогам', 'по-слогам').as_list(),
         }
         if word_type == 'verb':
             self._sub_data['verb'] = VerbData(self.base)

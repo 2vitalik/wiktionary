@@ -20,10 +20,10 @@ class BaseGrouper:
     def keys(self):
         return self.base.keys
 
-    def values(self, *args, unique=False):
+    def as_list(self, *args, unique=False):
         return self.grouped(*args, like_items=False, unique=unique)
 
-    def items(self, *args, unique=False):
+    def as_dict(self, *args, unique=False):
         return self.grouped(*args, like_items=True, unique=unique)
 
     def grouped(self, *args, like_items, unique):

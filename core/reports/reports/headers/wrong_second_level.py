@@ -16,7 +16,7 @@ class WrongSecondLevel(KeyTitle, ValueCode, Colon):
 
     def check_page(self, page) -> list:
         values = []
-        for homonym_obj in page.homonyms.values():
+        for homonym_obj in page.homonyms.as_list():
             header = homonym_obj.header
             if not header:
                 continue

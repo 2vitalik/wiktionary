@@ -30,7 +30,7 @@ class VerbData(BaseDetailedData):
         indexes = []
         is_impersonal = None
         has_impersonal = None
-        for template in self.base.templates(re='гл*').values():
+        for template in self.base.templates(re='гл*').as_list():
             index = self.get_index(template)
 
             impersonal = self.get_impersonal(template)

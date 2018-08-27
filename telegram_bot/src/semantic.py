@@ -169,7 +169,7 @@ class Reply(ShortReply):
         homonym_obj = lang_obj.homonyms[self.homonym_index]
 
         stresses = set()  # todo: several stresses feature
-        for tpl in homonym_obj.templates('по-слогам', 'по слогам').values():
+        for tpl in homonym_obj.templates('по-слогам', 'по слогам').as_list():
             value = tpl.params.replace('|', '').replace('.', '')
             if not value:
                 continue

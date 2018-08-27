@@ -217,7 +217,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
         unknown = False
         perfective = False
         imperfective = False
-        for tpl in page.ru.templates(re='гл ru').values():
+        for tpl in page.ru.templates(re='гл ru').as_list():
             if tpl.name == 'гл ru':
                 unknown = True
                 continue
@@ -241,7 +241,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
     def get_stress(cls, page):
         # ударение из шаблона {{по-слогам}}
         stress = set()
-        for tpl in page.ru.templates('по-слогам', 'по слогам').values():
+        for tpl in page.ru.templates('по-слогам', 'по слогам').as_list():
             value = tpl.params.replace('|', '').replace('.', '')
             if not value:
                 continue
