@@ -81,26 +81,16 @@ class VerbsWithoutParticiples(BaseComplexReport):
             содержимое.
         '''
 
-    def try_process_source_verb(self, title):
-        verb_candidate = self.try_source_verb(title)
-        if not verb_candidate:
-            return False
-        self.process_page(StoragePage(verb_candidate, silent=True),
-                          via_recent=False)
-        return True
-
-    def process_page(self, page, via_recent):
-        if via_recent and self.try_process_source_verb(page.title):
-            return
+    def process_page(self, page):
         if '{{гл ru' not in page.ru.content:
             return
         if page.data.ru.is_impersonal_verb_only():
-            self.remove_page(page.title, via_recent=False)
-            self.process_verb(page, '(безличные)', skip_candidates=True)
+            self.remove_page(page.title)
+            self.process_verb(page, '(безличные)', skip_candidates=True)  # todo: move inside `process_verb, чтобы как-то показывать кандидатов всегда?
             return
         if '-' in page.title:
-            self.remove_page(page.title, via_recent=False)
-            self.process_verb(page, '(через дефис)', skip_candidates=True)
+            self.remove_page(page.title)
+            self.process_verb(page, '(через дефис)', skip_candidates=True)  # todo: move inside `process_verb, но кандидатов не показывать по проверке на дефис
             return
         for report_key in self.report_keys:
             if report_key.startswith('-') \
@@ -109,29 +99,6 @@ class VerbsWithoutParticiples(BaseComplexReport):
                 break
         else:
             self.process_verb(page, '-???')
-
-    def remove_page(self, title, via_recent):
-        super().remove_page(title, via_recent)
-        if via_recent:
-            self.try_process_source_verb(title)
-
-    @classmethod
-    def try_source_verb(cls, title):
-        replaces = {
-            'в': 'ть',
-            'вши': 'ть',
-            'вшись': 'ться',
-            'йдя': 'йти',
-            'шедши': 'йти',
-            'йдясь': 'йтись',
-            'чтя': 'честь',
-            'чётши': 'честь',
-            'чтясь': 'честься',
-        }
-        for ends, replace in replaces.items():
-            if title.endswith(ends):
-                stem = title[:-len(ends)]
-                return f'{stem}{replace}'
 
     @classmethod
     def process_candidates(cls, title):

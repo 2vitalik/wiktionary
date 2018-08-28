@@ -15,10 +15,10 @@ class BaseComplexReport(ImportExportMixin):
     def description(self, report_key):
         raise NotImplementedError()
 
-    def process_page(self, page, via_recent):
+    def process_page(self, page):
         raise NotImplementedError()
 
-    def remove_page(self, title, via_recent):
+    def remove_page(self, title):
         for report_key in self.report_keys:
             self.reports[report_key].remove(title)
 
