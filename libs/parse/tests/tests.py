@@ -14,29 +14,29 @@ class TestMockupPage(unittest.TestCase):
 
     def test_languages_grouper(self):
         for obj in [self.page, self.page.languages]:
-            mocked = list(self.page.lang_sections.as_list())
+            mocked = list(self.page.lang_sections.last_list())
             '''
             [
                 LanguageSection(ru),
                 LanguageSection(en),
             ]
             '''
-            self.assertEqual(mocked, obj.as_list())
-            self.assertEqual(mocked, obj.as_list(unique=True))
+            self.assertEqual(mocked, obj.last_list())
+            self.assertEqual(mocked, obj.last_list(unique=True))
 
             mocked = {key: [value]
-                      for key, value in self.page.lang_sections.as_dict()}
+                      for key, value in self.page.lang_sections.last_dict()}
             '''
             {
                 'ru': [ LanguageSection(ru) ],
                 'en': [ LanguageSection(en) ],
             }
             '''
-            self.assertEqual(mocked, obj.as_dict())
-            self.assertEqual(mocked, obj.as_dict('lang'))
-            self.assertEqual(mocked, obj.as_dict('*'))
-            self.assertEqual(mocked, obj.as_list('lang'))
-            self.assertEqual(mocked, obj.as_list('*'))
+            self.assertEqual(mocked, obj.last_dict())
+            self.assertEqual(mocked, obj.last_dict('lang'))
+            self.assertEqual(mocked, obj.last_dict('*'))
+            self.assertEqual(mocked, obj.last_list('lang'))
+            self.assertEqual(mocked, obj.last_list('*'))
 
             mocked = self.page.lang_sections
             '''
@@ -45,11 +45,11 @@ class TestMockupPage(unittest.TestCase):
                 'en': LanguageSection(en),
             }
             '''
-            self.assertEqual(mocked, obj.as_dict(unique=True))
-            self.assertEqual(mocked, obj.as_dict('lang', unique=True))
-            self.assertEqual(mocked, obj.as_dict('*', unique=True))
-            self.assertEqual(mocked, obj.as_list('lang', unique=True))
-            self.assertEqual(mocked, obj.as_list('*', unique=True))
+            self.assertEqual(mocked, obj.last_dict(unique=True))
+            self.assertEqual(mocked, obj.last_dict('lang', unique=True))
+            self.assertEqual(mocked, obj.last_dict('*', unique=True))
+            self.assertEqual(mocked, obj.last_list('lang', unique=True))
+            self.assertEqual(mocked, obj.last_list('*', unique=True))
 
     def test_language_indexer(self):
         mocked = self.page.lang_sections['ru']
@@ -102,7 +102,7 @@ class TestMockupPage(unittest.TestCase):
             },
         }
         '''
-        self.assertEqual(mocked, self.page.homonyms.as_dict('*', unique=True))
+        self.assertEqual(mocked, self.page.homonyms.last_dict('*', unique=True))
 
         # todo: ...
 

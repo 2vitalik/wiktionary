@@ -20,4 +20,4 @@ class HomonymsGrouper(BaseSectionsGrouper):
             yield path, homonym
 
     def all(self):
-        return self.grouped(like_items=True, unique=True)
+        return self.grouped(last_dict=True, unique=True)

@@ -28,14 +28,14 @@ def rest_path(path, indexes):
     return result
 
 
-def group(data, indexes, like_items, unique):
+def group(data, indexes, last_dict, unique):
     """
     Group `data` in a hierarchical dictionary.
 
     Arguments:
     - `data`: iterable, each entry is (`key`, `value`), `key` is tuple of keys
     - `indexes`: indexes of parts of `key` used as keys of hierarchical dicts
-    - `like_items`: if True: last layer will be a dict, otherwise -- list
+    - `last_dict`: if True: last layer will be a dict, otherwise -- list
     - `unique`: if False: last layer will be a list, otherwise -- single value
 
     Example input:
@@ -43,18 +43,18 @@ def group(data, indexes, like_items, unique):
         - `values` is like 1, 2, 3, ...
         - `indexes` is (0, )  # group by first part of the `key`
     Example results:
-        - like_items=True, unique=False:  # .as_dict()
+        - last_dict=True, unique=False:  # .last_dict()
             {'A': {'a': [1, 2, 3], 'b': [4]}, 'B': ...}
-        - like_items=True, unique=True:  # .as_dict()
+        - last_dict=True, unique=True:  # .last_dict()
             {'A': {'a': 1, 'b': 4}, 'B': ...}
-        - like_items=False, unique=False:  # .as_list()
+        - last_dict=False, unique=False:  # .last_list()
             {'A': [1, 2, 3, 4]}, 'B': ...}
-        - like_items=False, unique=True:  # .as_list()
+        - last_dict=False, unique=True:  # .last_list()
             {'A': 1, 'B': ...}
     """
     result = {}
 
-    if like_items:
+    if last_dict:
         indexes += (-1, )  # additional layer that will be a dict with rest keys
 
     if len(indexes) == 0:  # fixme: написать для чего `len(indexes) == 0`
@@ -65,9 +65,9 @@ def group(data, indexes, like_items, unique):
         for i, index in enumerate(indexes):
             # prepare current key to use in dicts:
             if index == -1:
-                if not like_items:
+                if not last_dict:
                     raise Exception("Index '-1' should be used only when "
-                                    "`like_items=True`")
+                                    "`last_dict=True`")
                 key = rest_path(path, indexes)  # latest key for `items`
             else:
                 key = path[index]  # next key to go deeper

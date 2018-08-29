@@ -67,7 +67,7 @@ def generate_lists():
             unknown = False
             perfective = False
             imperfective = False
-            for tpl in page.ru.templates(re='гл ru').as_list():
+            for tpl in page.ru.templates(re='гл ru').last_list():
                 if tpl.name == 'гл ru':
                     unknown = True
                     continue
@@ -86,7 +86,7 @@ def generate_lists():
 
             # ударение из шаблона {{по-слогам}}
             stress = set()
-            for tpl in page.ru.templates('по-слогам', 'по слогам').as_list():
+            for tpl in page.ru.templates('по-слогам', 'по слогам').last_list():
                 value = tpl.params.replace('|', '').replace('.', '')
                 if not value:
                     continue

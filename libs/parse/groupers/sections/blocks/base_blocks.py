@@ -31,4 +31,4 @@ class BaseBlocksGrouper(BaseSectionsGrouper):
             self.fields = self.fields[:-1]  # because last entry always the same
 
     def all(self):
-        return self.grouped(like_items=True, unique=True)
+        return self.grouped(last_dict=True, unique=True)

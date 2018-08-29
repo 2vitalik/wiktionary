@@ -20,21 +20,25 @@ class BaseGrouper:
     def keys(self):
         return self.base.keys
 
-    def as_list(self, *args, unique=False):
-        return self.grouped(*args, like_items=False, unique=unique)
+    # todo: add `as_list` as last_list()  # with no args
 
-    def as_dict(self, *args, unique=False):
-        return self.grouped(*args, like_items=True, unique=unique)
+    def last_list(self, *args, unique=False):
+        return self.grouped(*args, last_dict=False, unique=unique)
 
-    def grouped(self, *args, like_items, unique):
+    def last_dict(self, *args, unique=False):
+        return self.grouped(*args, last_dict=True, unique=unique)
+
+    # todo: add `last_items` as `last_dict(...).items()`
+
+    def grouped(self, *args, last_dict, unique):
         if args == ('*', ):
             args = self.fields
-        if like_items and len(args) == len(self.fields):
+        if last_dict and len(args) == len(self.fields):
             args = args[:-1]  # because last layer will be redundant
-        cache_key = (args, like_items, unique)
+        cache_key = (args, last_dict, unique)
         if self._cache.get(cache_key) is None:
             indexes = [self.fields.index(arg) for arg in args]
-            self._cache[cache_key] = group(self, indexes, like_items, unique)
+            self._cache[cache_key] = group(self, indexes, last_dict, unique)
         return self._cache[cache_key]
 
     def __getattr__(self, item):

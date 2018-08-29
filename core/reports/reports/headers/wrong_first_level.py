@@ -17,7 +17,7 @@ class WrongFirstLevel(KeyTitle, ValueCode, Colon):
 
     def check_page(self, page) -> list:
         values = []
-        for language_obj in page.languages.as_list():
+        for language_obj in page.languages.last_list():
             header = language_obj.header
             if not header:  # возможно, редирект
                 continue

@@ -10,4 +10,4 @@ class LanguagesGrouper(BaseSectionsGrouper):
             yield path, lang_section
 
     def all(self):
-        return self.grouped(like_items=True, unique=True)
+        return self.grouped(last_dict=True, unique=True)

@@ -13,7 +13,7 @@ class DuplicatedSecondLevel(KeyTitle, ValueLangAndCode, Brackets):
 
     def check_page(self, page) -> list:
         values = []
-        for lang, language_obj in page.languages.as_dict(unique=True).items():
+        for lang, language_obj in page.languages.last_dict(unique=True).items():
             # print(page.title, lang, language_obj)
             parts = R.second_header.split(language_obj.content)
             if len(parts) == 1:
