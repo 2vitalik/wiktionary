@@ -7,6 +7,7 @@ from core.reports.reports.headers.wrong_first_level import WrongFirstLevel
 from core.reports.reports.headers.wrong_second_level import WrongSecondLevel
 from core.reports.reports.ru.verbs.without_participles import \
     VerbsWithoutParticiples
+from core.reports.reports.templates.key_duplicated import TemplateKeyDuplicated
 
 
 class Bucket:
