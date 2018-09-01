@@ -1,5 +1,5 @@
 import re
-from os.path import join
+from os.path import join, exists
 
 from core.conf.conf import REPORTS_PATH
 from libs.utils.io import json_dump, json_load
@@ -41,7 +41,11 @@ class ImportExportMixin:
         json_dump(self.entries_filename(suffix), self.entries)
 
     def import_entries(self, suffix=''):
-        self.entries = json_load(self.entries_filename(suffix))
+        filename = self.entries_filename(suffix)
+        if not exists(filename):
+            print(f'ImportEntriesError: File not found: "{filename}"')
+            return
+        self.entries = json_load(filename)
 
 
 class BaseIterableReport(ImportExportMixin, BaseReportPage):
