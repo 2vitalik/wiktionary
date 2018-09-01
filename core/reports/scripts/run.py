@@ -172,7 +172,7 @@ def reports_all(limit=None):
 @log_exception('reports')
 def reports_recent():
     ReportsUpdater(only_recent=True).run()
-    ReportsSaver().save(root='Участник:Vitalik/Отчёты/v3')
+    ReportsSaver().save()
 
 
 @log_exception('reports')
