@@ -9,10 +9,11 @@
     Отчёты/списки
 """
 import json
-import re
 
 from datetime import datetime
 
+from core.reports.reports.ru.verbs.without_participles import get_aspect, \
+    get_stress
 from core.storage.main import MainStorage
 from libs.utils.collection import chunks
 from libs.utils.io import write, read
@@ -64,40 +65,12 @@ def generate_lists():
             print(title)
 
             # вид: совершенный, несовершенный, неизвестный
-            unknown = False
-            perfective = False
-            imperfective = False
-            for tpl in page.ru.templates(re='гл ru').last_list():
-                if tpl.name == 'гл ru':
-                    unknown = True
-                    continue
-                if 'СВ' in tpl.name:
-                    perfective = True
-                else:
-                    imperfective = True
-            aspect = []
-            if perfective:
-                aspect.append('сов.')
-            if imperfective:
-                aspect.append('нес.')
-            if unknown:
-                aspect.append('??')
-            aspect = ', '.join(aspect)
+            aspect = get_aspect(page)
 
             # ударение из шаблона {{по-слогам}}
-            stress = set()
-            for tpl in page.ru.templates('по-слогам', 'по слогам').last_list():
-                value = tpl.params.replace('|', '').replace('.', '')
-                if not value:
-                    continue
-                vowel_count = len(re.findall('[аеёиоуыэюя]', value,
-                                             re.IGNORECASE))
-                if vowel_count == 1 and 'ё' not in value:
-                    value = re.sub('([аеиоуыэюя])', '\\1́', value)
-                stress.add(value)
-            stress = ', '.join(stress)
+            stress = get_stress(page)
 
-            # группировка по ударениям
+            # группировка по окончаниям
             value = f"# [[{title}]] ({aspect}) {stress}\n"
             added = False
             for ending in endings:

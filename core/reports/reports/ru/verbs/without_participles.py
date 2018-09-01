@@ -10,6 +10,158 @@ from core.reports.lib.mixins.key_title import KeyTitle
 from core.reports.lib.mixins.reversed_index import ReversedIndex
 
 
+def get_aspect(page):
+    # вид: совершенный, несовершенный, неизвестный
+    # unknown = False
+    perfective = False
+    imperfective = False
+    for tpl in page.ru.templates(re='гл ru').last_list():
+        if tpl.name == 'гл ru':
+            # unknown = True
+            continue
+        if 'НСВ' in tpl.name:
+            imperfective = True
+        elif 'СВ' in tpl.name:
+            perfective = True
+        else:
+            imperfective = True
+    # aspect = []
+    if perfective:
+        # aspect.append('сов.')
+        return 'сов'
+    if imperfective:
+        # aspect.append('нес.')
+        return 'несов'
+    # if unknown:
+    #     aspect.append('??')
+    # aspect = ', '.join(aspect)
+    return '???'
+
+
+def get_stress(page):
+    # ударение из шаблона {{по-слогам}}
+    stress = set()
+    for tpl in page.ru.templates('по-слогам', 'по слогам').last_list():
+        value = tpl.params.replace('|', '').replace('.', '')
+        if not value:
+            continue
+        vowel_count = len(re.findall('[аеёиоуыэюя]', value,
+                                     re.IGNORECASE))
+        if vowel_count == 1 and 'ё' not in value:
+            value = re.sub('([аеиоуыэюя])', '\\1́', value)
+        stress.add(value)
+    return ', '.join(sorted(stress))
+
+
+def case_ch(title):  # -чь
+    if title.endswith(('ячь', 'я́чь')):
+        stem = title[:-2]
+        return [f'{stem}гши']
+    if title.endswith(('ичь', 'и́чь')):
+        stem = title[:-2]
+        return [f'{stem}гши']
+    if title.endswith(('мочь', 'мо́чь')):
+        stem = title[:-2]
+        return [f'{stem}гши']
+    if title.endswith(('очь', 'о́чь')):
+        stem = title[:-2]
+        return [f'{stem}кши']
+    if title.endswith(('ечь', 'е́чь')):
+        vowel = 'е' if title.startswith('вы') else 'ё'
+        cases = {
+            'жечь': f'ж{vowel}гши',
+            'блечь': f'бл{vowel}кши',
+            'влечь': f'вл{vowel}кши',
+            'лечь': f'л{vowel}гши',
+            'печь': f'п{vowel}кши',
+            'еречь': f'ер{vowel}гши',
+            'речь': f'р{vowel}кши',
+            'сечь': f'с{vowel}кши',
+            'течь': f'т{vowel}кши',
+        }
+        for end, replace in cases.items():
+            if title.endswith(end):
+                stem = title[:-len(end)]
+                return [f'{stem}{replace}']
+            end_stressed = end.replace('ечь', 'е́чь')
+            if title.endswith(end_stressed):
+                if vowel != 'ё':
+                    raise Exception('Never should happen? Or process with it?')
+                stem = title[:-len(end_stressed)]
+                return [f'{stem}{replace}']
+        return ['???']
+    return ['???']
+
+
+def case_zti(title, aspect='???'):  # -зти
+    if title.endswith('лзти'):
+        stem = title[:-4]
+        return [f'{stem}лзши']
+    if title.endswith('езти'):
+        stem = title[:-4]
+        if aspect == 'несов':
+            return [f'{stem}ёзши']
+        if aspect == 'сов':
+            if title.startswith(('вы', 'повы')):
+                return [f'{stem}езя', f'{stem}езши']
+            else:
+                return [f'{stem}езя́', f'{stem}ёзши']
+        return ['???']
+    return ['???']
+
+
+def get_participles(title, aspect='???'):
+    if re.search('[аеиоуыя]ть$', title):
+        stem = title[:-2]
+        return [f'{stem}в', f'{stem}вши']
+    if re.search('[аеиоуыя]ться$', title):
+        stem = title[:-4]
+        return [f'{stem}вшись']
+
+    if re.search('зть$', title):
+        stem = title[:-3]
+        return [f'{stem}зши']
+    if re.search('зться$', title):
+        stem = title[:-5]
+        return [f'{stem}зшись']
+
+    # if title.endswith('йти'):
+    #     stem = title[:-3]
+    #     return [f'{stem}йдя', f'{stem}шедши']
+    # if title.endswith('йтись'):
+    #     stem = title[:-5]
+    #     return [f'{stem}йдясь']
+
+    # if title.endswith('честь'):
+    #     stem = title[:-5]
+    #     return [f'{stem}чтя', f'{stem}чётши']
+    # if title.endswith('честься'):
+    #     stem = title[:-7]
+    #     return [f'{stem}чтясь', '???']
+
+    if title.endswith('чь'):
+        return case_ch(title)
+
+    if title.endswith('чься'):
+        entries = case_ch(title[:-2])
+        for i, entry in enumerate(entries):
+            if entry != '???':
+                entries[i] += 'сь'
+        return entries
+
+    if title.endswith('зти'):
+        return case_zti(title, aspect)
+
+    if title.endswith('зтись'):
+        entries = case_zti(title[:-2], aspect)
+        for i, entry in enumerate(entries):
+            if entry != '???':
+                entries[i] += 'сь'
+        return entries
+
+    return []
+
+
 class CustomDetails:
     separator = ' '
 
@@ -100,61 +252,9 @@ class VerbsWithoutParticiples(BaseComplexReport):
         else:
             self.process_verb(page, '-???')
 
-    @classmethod
-    def process_candidates(cls, title):
-        if re.search('[аеиоуыя]ть$', title):
-            stem = title[:-2]
-            return [f'{stem}в', f'{stem}вши']
-        if re.search('[аеиоуыя]ться$', title):
-            stem = title[:-4]
-            return [f'{stem}вшись']
-        if title.endswith('йти'):
-            stem = title[:-3]
-            return [f'{stem}йдя', f'{stem}шедши']
-        if title.endswith('йтись'):
-            stem = title[:-5]
-            return [f'{stem}йдясь']
-        if title.endswith('честь'):
-            stem = title[:-5]
-            return [f'{stem}чтя', f'{stem}чётши']
-        if title.endswith('честься'):
-            stem = title[:-7]
-            return [f'{stem}чтясь', '???']
-        if title.endswith('ячься'):
-            stem = title[:-5]
-            return [f'{stem}ягшись']
-        if title.endswith('ичься'):
-            stem = title[:-5]
-            return [f'{stem}игшись']
-        if title.endswith('мочься'):
-            stem = title[:-6]
-            return [f'{stem}могшись']
-        if title.endswith('очься'):
-            stem = title[:-5]
-            return [f'{stem}окшись']
-        if title.endswith('ечься'):
-            vowel = 'е' if title.startswith('вы') else 'ё'
-            cases = {
-                'жечься': f'ж{vowel}гшись',
-                'блечься': f'бл{vowel}кшись',
-                'влечься': f'вл{vowel}кшись',
-                'лечься': f'л{vowel}гшись',
-                'печься': f'п{vowel}кшись',
-                'еречься': f'ер{vowel}гшись',
-                'речься': f'р{vowel}кшись',
-                'сечься': f'с{vowel}кшись',
-                'течься': f'т{vowel}кшись',
-            }
-            for end, replace in cases.items():
-                if title.endswith(end):
-                    stem = title[:-len(end)]
-                    return [f'{stem}{replace}']
-            return ['???']
-        return []
-
     def process_verb(self, page, report_key, skip_candidates=False):
-        aspect = self.get_aspect(page)
-        stresses = self.get_stress(page)
+        aspect = get_aspect(page)
+        stresses = get_stress(page)
 
         if re.search('[аеиоуыя]ть$', page.title):
             if aspect == '???':
@@ -164,7 +264,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
                 base_verb = page.title[:-2]
                 aspect = self.aspects.get(base_verb, '???')
 
-        participles_candidates = self.process_candidates(page.title)
+        participles_candidates = get_participles(page.title, aspect)
         if participles_candidates and not skip_candidates:
             participles = []
             for participle in participles_candidates:
@@ -177,47 +277,6 @@ class VerbsWithoutParticiples(BaseComplexReport):
             participles = '?'
 
         self.set(report_key, page.title, (aspect, stresses, participles))
-
-    @classmethod
-    def get_aspect(cls, page):
-        # вид: совершенный, несовершенный, неизвестный
-        unknown = False
-        perfective = False
-        imperfective = False
-        for tpl in page.ru.templates(re='гл ru').last_list():
-            if tpl.name == 'гл ru':
-                unknown = True
-                continue
-            if 'СВ' in tpl.name:
-                perfective = True
-            else:
-                imperfective = True
-        # aspect = []
-        if perfective:
-            # aspect.append('сов.')
-            return 'сов'
-        if imperfective:
-            # aspect.append('нес.')
-            return 'несов'
-        # if unknown:
-        #     aspect.append('??')
-        # aspect = ', '.join(aspect)
-        return '???'
-
-    @classmethod
-    def get_stress(cls, page):
-        # ударение из шаблона {{по-слогам}}
-        stress = set()
-        for tpl in page.ru.templates('по-слогам', 'по слогам').last_list():
-            value = tpl.params.replace('|', '').replace('.', '')
-            if not value:
-                continue
-            vowel_count = len(re.findall('[аеёиоуыэюя]', value,
-                                         re.IGNORECASE))
-            if vowel_count == 1 and 'ё' not in value:
-                value = re.sub('([аеиоуыэюя])', '\\1́', value)
-            stress.add(value)
-        return ', '.join(sorted(stress))
 
 
 # todo: дополнительно проверять (возможно, для других подотчётов):
