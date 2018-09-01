@@ -2,6 +2,7 @@ import re
 
 from pywikibot import NoPage
 
+from core.reports.reports.ru.verbs.without_participles import get_participles
 from libs.utils.wikibot import load_page, save_page
 
 
@@ -44,7 +45,7 @@ def parse_lines(title, candidate=None):
         if aspect == 'нес.':
             aspect = 'несов'
         if aspect == '???':
-            print(line)
+            print('aspect??:', line)
             raise Exception(f'Unknown `aspect`: {line}')
 
         if verb != remove_stress(verb_stressed).strip() \
@@ -58,28 +59,21 @@ def parse_lines(title, candidate=None):
         yield verb, aspect, verb_stressed, participle_candidate
 
 
-def save_participle(title, content):
+def save_new_page(title, content, desc='Заливка деепричастий'):
     try:
         load_page(title)
         return
     except NoPage:
-        desc = 'Заливка деепричастий'
         save_page(title, content, desc)
 
 
-def save_normal_participle(verb, aspect, participle, participle_stressed,
-                           synonym):
-    content = '{{подст:Участник:Cinemantique/дее|' + \
-              f'{verb}||{participle_stressed}|{aspect}|{synonym}' + \
+def save_participle(verb, aspect, participle, participle_stressed, synonym,
+                    is_reflexive):
+    tpl = 'дееся' if is_reflexive else 'дее'
+    content = '{{подст:Участник:Cinemantique/' + tpl + \
+              f'|{verb}||{participle_stressed}|{aspect}|{synonym}' + \
               '}}'
-    save_participle(participle, content)
-
-
-def save_reflexive_participle(verb, aspect, participle, participle_stressed):
-    content = '{{подст:Участник:Cinemantique/дееся|' + \
-              f'{verb}||{participle_stressed}|{aspect}' + \
-              '}}'
-    save_participle(participle, content)
+    save_new_page(participle, content)
 
 
 def process_standard_normal_verb(verb, verb_stressed, aspect):
@@ -91,8 +85,8 @@ def process_standard_normal_verb(verb, verb_stressed, aspect):
     for participle_stressed, synonym_stressed in cases:
         participle = remove_stress(participle_stressed)
         synonym = remove_stress(synonym_stressed)
-        save_normal_participle(verb, aspect, participle, participle_stressed,
-                               synonym)
+        save_participle(verb, aspect, participle, participle_stressed, synonym,
+                        is_reflexive=False)
 
 
 def process_standard_reflexive_verb(verb, verb_stressed, aspect,
@@ -103,7 +97,21 @@ def process_standard_reflexive_verb(verb, verb_stressed, aspect,
     if participle != participle_candidate:
         print(f'"{participle}" != "{participle_candidate}"')
         raise Exception("Ошибка в данных (2).")
-    save_reflexive_participle(verb, aspect, participle, participle_stressed)
+        # return
+    save_participle(verb, aspect, participle, participle_stressed, '',
+                    is_reflexive=True)
+
+
+def process_special_verb(verb, verb_stressed, aspect, participle_candidate,
+                         is_reflexive):
+    participle_stressed = get_participles(verb_stressed, aspect)[0]
+    participle = remove_stress(participle_stressed)
+    if participle != participle_candidate:
+        print(f'"{participle}" != "{participle_candidate}"')
+        raise Exception("Ошибка в данных (2).")
+        # return
+    save_participle(verb, aspect, participle, participle_stressed, '',
+                    is_reflexive)
 
 
 def main(nums, candidate, mode):
@@ -113,17 +121,24 @@ def main(nums, candidate, mode):
             verb, aspect, verb_stressed, participle_candidate = entry
 
             if verb == '...': skip = False
-            if skip: continue
+            # if skip: continue
 
             if mode == 'std_norm':
                 process_standard_normal_verb(verb, verb_stressed, aspect)
             elif mode == 'std_refl':
                 process_standard_reflexive_verb(verb, verb_stressed, aspect,
                                                 participle_candidate)
+            elif mode == 'special_norm':
+                process_special_verb(verb, verb_stressed, aspect,
+                                     participle_candidate, is_reflexive=False)
+            elif mode == 'special_refl':
+                process_special_verb(verb, verb_stressed, aspect,
+                                     participle_candidate, is_reflexive=True)
             else:
-                pass
-                # raise Exception('Unknown mode.')
+                raise Exception('Unknown mode.')
 
 
 if __name__ == '__main__':
-    main([17], 'single', '')
+    # main([17], 'single', 'special_refl')
+    # main([18], 'single', 'special_norm')
+    pass
