@@ -47,4 +47,5 @@ class BaseComplexReport(ImportExportMixin):
     def import_entries(self, suffix=''):
         super().import_entries(suffix)
         for report_key, report in self.reports.items():
-            report.entries = self.entries[report_key]
+            if report_key in self.entries:
+                report.entries = self.entries[report_key]
