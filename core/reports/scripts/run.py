@@ -90,8 +90,14 @@ class ReportsSaver:
             self.debug = debug
         if root:
             self.root = root
+        self._import_entries('.current')
         self._build_tree()
         self._save_reports(self.tree)
+
+    @classmethod
+    def _import_entries(cls, suffix=''):
+        for report in Bucket.get_reports():
+            report.import_entries(suffix)
 
     def _build_tree(self):
         for report in Bucket.get_reports():
