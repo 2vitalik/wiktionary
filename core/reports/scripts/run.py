@@ -34,6 +34,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
 
     def _recent(self):
         if not self.latest_updated:
+            self.only_recent = False
             self._all()
             self.latest_updated = storage.latest_recent_date()
             self.export_entries('.current')
