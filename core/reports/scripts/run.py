@@ -14,49 +14,59 @@ from core.reports.reports.bucket import Bucket
 class ReportsUpdater(PostponedUpdaterMixin):
     path = join(REPORTS_PATH)
 
-    def __init__(self):
-        print(datetime.now())
+    def __init__(self, report_classes=None, only_recent=False):
+        print(datetime.now(), 'started')
         super().__init__()
+        self.only_recent = only_recent
+        self.report_classes = report_classes
 
-    def all(self, limit=None):
+    def run(self, limit=None):
+        if self.only_recent:
+            self._recent()
+        else:
+            self._all(limit)
+
+    def _all(self, limit=None):
         for title, page in storage.iterate_pages(silent=True, limit=limit):
             self.process_page(page)
         self.convert_entries()
-        self.export_entries('.all')
+        self.export_entries('.current')
 
-    def recent(self):
+    def _recent(self):
         if not self.latest_updated:
-            self.all()
+            self._all()
             self.latest_updated = storage.latest_recent_date()
-            self.export_entries('.recent')
+            self.export_entries('.current')
             return
 
-        self.import_entries('.recent')
+        self.import_entries('.current')
         self.process_recent_pages()
         self.convert_entries()
-        self.export_entries('.recent')
+        self.export_entries('.current')
 
     def process_page(self, page):
-        for report in Bucket.reports.values():
+        for report in self.get_reports():
             report.process_page(page)
 
     def remove_page(self, title):
-        for report in Bucket.reports.values():
+        for report in self.get_reports():
             report.remove_page(title)
 
-    @classmethod
-    def import_entries(cls, suffix=''):
-        for report in Bucket.reports.values():
+    def get_reports(self):
+        if self.report_classes:
+            return Bucket.create_reports(self.report_classes)
+        return Bucket.get_reports(self.only_recent)
+
+    def import_entries(self, suffix=''):
+        for report in self.get_reports():
             report.import_entries(suffix)
 
-    @classmethod
-    def export_entries(cls, suffix=''):
-        for report in Bucket.reports.values():
+    def export_entries(self, suffix=''):
+        for report in self.get_reports():
             report.export_entries(suffix)
 
-    @classmethod
-    def convert_entries(cls):
-        for report in Bucket.reports.values():
+    def convert_entries(self):
+        for report in self.get_reports():
             report.convert_entries()
 
 
@@ -83,7 +93,7 @@ class ReportsSaver:
         self._save_reports(self.tree)
 
     def _build_tree(self):
-        for report in Bucket.reports.values():
+        for report in Bucket.get_reports():
             for report_page in report.report_pages():
                 keys = report_page.path.split('/')
                 curr = self.tree
@@ -155,19 +165,19 @@ class ReportsSaver:
 
 @log_exception('reports')
 def reports_all(limit=None):
-    ReportsUpdater().all(limit=limit)
+    ReportsUpdater().run(limit=limit)
     ReportsSaver().save()
 
 
 @log_exception('reports')
 def reports_recent():
-    ReportsUpdater().recent()
+    ReportsUpdater(only_recent=True).run()
     ReportsSaver().save(root='Участник:Vitalik/Отчёты/v3')
 
 
 @log_exception('reports')
 def reports_debug(limit=None):
-    ReportsUpdater().all(limit=limit)
+    ReportsUpdater().run(limit=limit)
     ReportsSaver().save(debug=True)
 
 
