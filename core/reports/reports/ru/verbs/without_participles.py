@@ -10,6 +10,11 @@ from core.reports.lib.mixins.key_title import KeyTitle
 from core.reports.lib.mixins.reversed_index import ReversedIndex
 
 
+def remove_stress(value):
+    return value.replace('́', '').replace('̀', '').replace('ѐ', 'е'). \
+        replace('ѝ', 'и')
+
+
 def get_aspect(page):
     # вид: совершенный, несовершенный, неизвестный
     # unknown = False
@@ -128,9 +133,9 @@ def get_participles(title, aspect='???'):
     # if title.endswith('йти'):
     #     stem = title[:-3]
     #     return [f'{stem}йдя', f'{stem}шедши']
-    # if title.endswith('йтись'):
-    #     stem = title[:-5]
-    #     return [f'{stem}йдясь']
+    if title.endswith('йтись'):
+        stem = title[:-5]
+        return [f'{stem}йдясь']
 
     # if title.endswith('честь'):
     #     stem = title[:-5]
@@ -268,6 +273,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
         if participles_candidates and not skip_candidates:
             participles = []
             for participle in participles_candidates:
+                participle = remove_stress(participle)
                 if participle not in storage.titles_set:  # todo: отдельный отчёт для articles_set (т.е. когда редирект)
                     participles.append(participle)
             if not participles:

@@ -2,13 +2,9 @@ import re
 
 from pywikibot import NoPage
 
-from core.reports.reports.ru.verbs.without_participles import get_participles
+from core.reports.reports.ru.verbs.without_participles import get_participles, \
+    remove_stress
 from libs.utils.wikibot import load_page, save_page
-
-
-def remove_stress(value):
-    return value.replace('́', '').replace('̀', '').replace('ѐ', 'е').\
-        replace('ѝ', 'и')
 
 
 def read_lines(title):
@@ -141,4 +137,6 @@ def main(nums, candidate, mode):
 if __name__ == '__main__':
     # main([17], 'single', 'special_refl')
     # main([18], 'single', 'special_norm')
+    # main([19], 'any', 'std_norm')
+    # main([20], 'single', 'std_refl')
     pass
