@@ -130,8 +130,11 @@ class ShortReply:
     def _regexp_text(self):
         text = f'🌀 <b>{self.regexp}</b>  (регулярка)\n\n' \
                f'Статьи в Викисловаре:\n'
-        text += '\n'.join([f'▫️ ' + get_link(title)
-                           for title in self.titles])
+        if self.titles:
+            text += '\n'.join([f'▫️ ' + get_link(title)
+                               for title in self.titles])
+        else:
+            text += '❌ Ничего не найдено'
         return text
 
     def load_page_with_redirect(self, title):
