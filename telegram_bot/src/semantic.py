@@ -355,7 +355,7 @@ def process_message(bot, update):
         return
 
     if update.message.chat_id < 0:  # if we are in a group chat
-        if not title.endswith(('=', '~')):
+        if not title.endswith(('=', '~', ' ?')):
             return
 
     # bot is typing:
