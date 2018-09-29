@@ -6,6 +6,7 @@ import telegram
 from pywikibot.exceptions import NoPage
 
 from core.conf.conf import ROOT_PATH
+from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
 from libs.utils.collection import chunks
 from libs.utils.io import read, append
@@ -91,7 +92,47 @@ class ShortReply:
         self.title = title
         self.title_redirected = None
         self.content = None
-        self.fetch_content()
+        self.buttons = None
+        if self.is_regexp():
+            self.regexp = self.title
+            self.titles = self.filter_titles()
+            if len(self.titles) == 1:
+                self.title = self.titles[0]
+            else:
+                self.title = None
+        if self.title:
+            self.fetch_content()
+            self.text = self._short_reply_text()
+        elif self.regexp:
+            self.text = self._regexp_text()
+        else:
+            # todo: log something
+            raise Exception('Never should happen')
+
+    def is_regexp(self):
+        if self.title.endswith('~'):
+            self.title = self.title[:-1].strip()
+            return True
+        if self.title.endswith(' ?'):
+            self.title = self.title[:-2].strip()
+            return True
+        return '[' in self.title or '?' in self.title or '*' in self.title
+
+    def filter_titles(self):
+        titles = []
+        for title in storage.titles:
+            if re.match(f'{self.regexp}$', title):
+                titles.append(title)
+                if len(title) > 100:
+                    break
+        return titles
+
+    def _regexp_text(self):
+        text = f'🌀 <b>{self.regexp}</b>  (регулярка)\n\n' \
+               f'Статьи в Викисловаре:\n'
+        text += '\n'.join([f'▫️ ' + get_link(title)
+                           for title in self.titles])
+        return text
 
     def load_page_with_redirect(self, title):
         try:
@@ -112,6 +153,16 @@ class ShortReply:
                     self.title = title_transformed
                     return
 
+    def _short_reply_text(self):
+        icon = '✅' if self.content else '❌'
+        if not self.title_redirected:
+            url_title = get_link(self.title)
+            return f'{icon} {url_title}'
+        else:
+            url_title = get_link(self.title, redirect=True)
+            url_title_redirect = get_link(self.title_redirected)
+            return f'{icon} {url_title} → {url_title_redirect}'
+
 
 class Reply(ShortReply):
     languages = load_languages()
@@ -119,14 +170,15 @@ class Reply(ShortReply):
     def __init__(self, title, lang_key='', homonym_index=0):
         super().__init__(title)
 
-        self.lang_key = lang_key
-        self.homonym_index = int(homonym_index)
+        if self.title:
+            self.lang_key = lang_key
+            self.homonym_index = int(homonym_index)
 
-        self.title_stressed = self.active_title
-        self.lang_keys = []
-        self.homonyms_count = 0
-        self.text = self._reply_text()
-        self.buttons = self._reply_buttons()
+            self.title_stressed = self.active_title
+            self.lang_keys = []
+            self.homonyms_count = 0
+            self.text = self._reply_text()
+            self.buttons = self._reply_buttons()
 
     @property
     def active_title(self):
@@ -137,9 +189,9 @@ class Reply(ShortReply):
     @property
     def _reply_title(self):
         if self.title_redirected:
-            result = f'▪<b>{self.title}</b> → <b>{self.title_stressed}</b>'
+            result = f'▪ <b>{self.title}</b> → <b>{self.title_stressed}</b>'
         else:
-            result = f'▪<b>{self.title_stressed}</b>'
+            result = f'▪ <b>{self.title_stressed}</b>'
         lang_text = self.languages.get(self.lang_key, self.lang_key)
         if lang_text:
             result += f'  ({lang_text})'
@@ -195,9 +247,9 @@ class Reply(ShortReply):
             for definition in definitions:
                 if definition.startswith('#'):
                     definition = definition[1:].strip()
-                    reply += f'🔹{definition}\n'
+                    reply += f'🔹 {definition}\n'
                 elif definition:
-                    reply += f'🔻{definition}\n'
+                    reply += f'🔻 {definition}\n'
             return reply
         else:
             p = re.compile(
@@ -224,7 +276,7 @@ class Reply(ShortReply):
             return reply
 
     def _reply_text(self):
-        link = get_link(self.title, 'Викисловарь')
+        link = get_link(self.title, f'{self.title} в Викисловаре')
         body = self._reply_body.strip()
         return f'{self._reply_title}\n\n{body}\n\n🔎 {link}'
 
@@ -303,7 +355,7 @@ def process_message(bot, update):
         return
 
     if update.message.chat_id < 0:  # if we are in a group chat
-        if not title.endswith('='):
+        if not title.endswith(('=', '~')):
             return
 
     # bot is typing:
@@ -319,18 +371,9 @@ def process_message(bot, update):
 
     if skip_content:
         reply = ShortReply(title)
-        icon = '✅' if reply.content else '❌'
-        if not reply.title_redirected:
-            url_title = get_link(reply.title)
-            reply_text = f'{icon} {url_title}'
-        else:
-            url_title = get_link(reply.title, redirect=True)
-            url_title_redirect = get_link(reply.title_redirected)
-            reply_text = f'{icon} {url_title} → {url_title_redirect}'
-        send(bot, chat_id, reply_text)
-        return
+    else:
+        reply = Reply(title, lang, homonym)
 
-    reply = Reply(title, lang, homonym)
     send(bot, chat_id, reply.text, reply.buttons)
 
 
