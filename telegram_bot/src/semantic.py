@@ -128,9 +128,9 @@ class ShortReply:
         return titles
 
     def _regexp_text(self):
-        text = f'🌀 <b>{self.regexp}</b>  (регулярка)\n\n' \
-               f'Статьи в Викисловаре:\n'
+        text = f'🌀 <b>{self.regexp}</b>  (регулярка)\n\n'
         if self.titles:
+            text += f'Статьи в Викисловаре:\n'
             text += '\n'.join([f'▫️ ' + get_link(title)
                                for title in self.titles])
         else:
