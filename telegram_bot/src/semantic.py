@@ -11,7 +11,7 @@ from libs.parse.online_page import OnlinePage
 from libs.utils.collection import chunks
 from libs.utils.io import read, append
 from libs.utils.wikibot import load_page_with_redirect
-from telegram_bot.src.utils import send
+from telegram_bot.src.utils import send, edit
 
 
 def clear_definitions(text):  # todo: move this to some `lib`
@@ -362,7 +362,7 @@ def process_message(bot, update):
             return
 
     # bot is typing:
-    bot.sendChatAction(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+    bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING)
 
     skip_content = title.endswith('==')
 
@@ -372,12 +372,14 @@ def process_message(bot, update):
     title = title.strip()
     save_log(update.message, title)
 
+    msg = send(bot, chat_id, '🔎 <i>Делаю запрос в Викисловарь...</i>')
+
     if skip_content:
         reply = ShortReply(title)
     else:
         reply = Reply(title, lang, homonym)
 
-    send(bot, chat_id, reply.text, reply.buttons)
+    edit(bot, chat_id, msg.message_id, reply.text, reply.buttons)
 
 
 def process_callback(bot, update):
