@@ -5,7 +5,7 @@ from urllib.parse import quote
 import telegram
 from pywikibot.exceptions import NoPage
 
-from core.conf.conf import ROOT_PATH
+from core.conf.conf import ROOT_PATH, SYNC_PATH
 from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
 from libs.utils.collection import chunks
@@ -62,7 +62,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
 
 
 def load_languages():  # todo: move this to some `lib`
-    path = join(ROOT_PATH, 'storage', 'sync', 'data', 'language-data.lua')
+    path = join(SYNC_PATH, 'data', 'language-data.lua')
     content = read(path)
     languages = dict()
     """
