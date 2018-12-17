@@ -132,7 +132,7 @@ class ShortReply:
         if self.titles:
             text += f'Статьи в Викисловаре:\n'
             text += '\n'.join([f'▫️ ' + get_link(title)
-                               for title in self.titles])
+                               for title in sorted(self.titles)])
         else:
             text += '❌ Ничего не найдено'
         return text
@@ -197,7 +197,7 @@ class Reply(ShortReply):
             result = f'▪ <b>{self.title_stressed}</b>'
         lang_text = self.languages.get(self.lang_key, self.lang_key)
         if lang_text:
-            result += f'  ({lang_text})'
+            result += f'  <i>// {lang_text}</i>'
         return result
 
     @property
