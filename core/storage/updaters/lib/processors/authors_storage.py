@@ -23,11 +23,11 @@ class AuthorsStorageProcessor(PostponedUpdaterMixin):
         if self.process_all:
             iterator = storage.iterate_pages(silent=True, limit=limit)
             for i, (title, page) in enumerate(iterator):
-                print(dt(), i, title, ' -- ', end='')
+                # print(dt(), i, title, ' -- ', end='')
                 self.process_page(page)
                 if not i % 100:
                     self.save_titles()
-                    print(dt(), '## Titles saved!')
+                    # print(dt(), '## Titles saved!')
         else:
             self.process_recent_pages()
         self.close()
@@ -39,7 +39,7 @@ class AuthorsStorageProcessor(PostponedUpdaterMixin):
         title = page.title
         if title in self.storage.titles_set:
             # Информация об авторе этой статьи уже сохранена
-            print('skipped.')
+            # print('skipped.')
             return
 
         # get oldest revision
@@ -51,7 +51,7 @@ class AuthorsStorageProcessor(PostponedUpdaterMixin):
         created_author = oldest.user
 
         created = f"{created_at}, {created_lang}, {created_author}"
-        print(created)
+        # print(created)
 
         self.storage.update(title, created=created)
         self.log_hour('saved', f'<{created}> - {title}')
