@@ -17,6 +17,7 @@ from telegram_bot.src.utils import send, edit
 def clear_definitions(text):  # todo: move this to some `lib`
     # удаление лишнего:
     text = text.replace('{µ(Q)}', '')
+    text = re.sub('<!--(.+?)-->', '', text)
     text = re.sub('<math>[^<>]+</math>', '', text)
     text = re.sub('{{пример({{[^}]+\}\}|[^\}])*\}\}', '', text)
     text = re.sub('{{семантика({{[^}]+\}\}|[^\}])+\}\}', '', text)
@@ -197,7 +198,7 @@ class Reply(ShortReply):
             result = f'▪ <b>{self.title_stressed}</b>'
         lang_text = self.languages.get(self.lang_key, self.lang_key)
         if lang_text:
-            result += f'  <i>// {lang_text}</i>'
+            result += f'   <i>// {lang_text}</i>'
         return result
 
     @property
