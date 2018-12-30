@@ -71,8 +71,11 @@ def case_ch(title):  # -чь
     if title.endswith(('очь', 'о́чь')):
         stem = title[:-2]
         return [f'{stem}кши']
+    if title.endswith(('бечь', 'бе́чь')):
+        stem = title[:-3] if title.endswith('ечь') else title[:-4]
+        return [f'{stem}ёгши']
     if title.endswith(('ечь', 'е́чь')):
-        vowel = 'е' if title.startswith('вы') else 'ё'
+        vowel = 'е' if title.startswith(('вы', 'повы')) else 'ё'
         cases = {
             'жечь': f'ж{vowel}гши',
             'блечь': f'бл{vowel}кши',
@@ -99,6 +102,8 @@ def case_ch(title):  # -чь
 
 
 def case_zti(title, aspect='???'):  # -зти
+    if title.endswith('́'):
+        title = title[:-1]
     if title.endswith('лзти'):
         stem = title[:-4]
         return [f'{stem}лзши']
@@ -154,7 +159,7 @@ def get_participles(title, aspect='???'):
                 entries[i] += 'сь'
         return entries
 
-    if title.endswith('зти'):
+    if title.endswith(('зти', 'зти́')):
         return case_zti(title, aspect)
 
     if title.endswith('зтись'):
