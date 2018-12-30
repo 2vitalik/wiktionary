@@ -1,4 +1,4 @@
-from core.storage.updaters.lib.processors.storage import MainStorageProcessor
+from core.storage.updaters.lib.processors.main import MainStorageProcessor
 from libs.utils.dt import dt
 
 

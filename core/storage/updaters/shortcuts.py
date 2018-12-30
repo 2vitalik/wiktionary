@@ -1,6 +1,6 @@
 from core.storage.updaters.lib.fetchers.all import AllPagesFetcher
 from core.storage.updaters.lib.fetchers.recent import RecentFetcher
-from core.storage.updaters.lib.processors.storage_lazy import \
+from core.storage.updaters.lib.processors.main_lazy import \
     LazyMainStorageProcessor
 from libs.utils.log import log_exception
 from libs.utils.wikibot import Namespace
