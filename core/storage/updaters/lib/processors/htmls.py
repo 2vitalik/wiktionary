@@ -25,11 +25,11 @@ class HtmlStorageProcessor(PostponedUpdaterMixin):
         if self.process_all:
             iterator = storage.iterate_pages(silent=True, limit=limit)
             for i, (title, page) in enumerate(iterator):
-                print(dt(), i, title, ' -- ', end='')
+                # print(dt(), i, title, ' -- ', end='')
                 if self.process_page(page):
                     if not i % 100:
                         self.save_titles()
-                        print(dt(), '## Titles saved!')
+                        # print(dt(), '## Titles saved!')
         else:
             self.process_recent_pages()
         self.close()
@@ -41,7 +41,7 @@ class HtmlStorageProcessor(PostponedUpdaterMixin):
         title = page.title
 
         if title in self.storage.titles_set:
-            print('skipped.')
+            # print('skipped.')
             return False
 
         # TODO: check changes?
@@ -58,7 +58,7 @@ class HtmlStorageProcessor(PostponedUpdaterMixin):
         self.storage.update(title, html=html)
         self.log_hour('hourly_saved', title)
         self.log_day('daily_saved', title)
-        print('saved.')
+        # print('saved.')
         return True
 
     @property
