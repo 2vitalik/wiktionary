@@ -6,6 +6,8 @@ from django.http import HttpResponse
 from django.views import View
 
 from core.conf import conf
+from core.storage.authors import authors_storage
+from core.storage.htmls import htmls_storage
 from core.storage.main import storage
 from libs.parse.storage_page import StoragePage
 from libs.utils.io import read
@@ -21,6 +23,8 @@ class LogsPathMixin:
     def get_path(self, kwargs):
         roots = {
             'storage': storage.logs_path,
+            'authors': authors_storage.logs_path,
+            'htmls': htmls_storage.logs_path,
             # 'reports': conf.MAIN_STORAGE_PATH,
             'errors': join(conf.LOGS_PATH, 'exceptions'),
         }
