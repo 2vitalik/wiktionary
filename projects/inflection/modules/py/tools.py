@@ -1,4 +1,4 @@
-from projects.inflection.modules.python import mw
+from projects.inflection.modules.py import mw
 
 
 def trim_stress(str):

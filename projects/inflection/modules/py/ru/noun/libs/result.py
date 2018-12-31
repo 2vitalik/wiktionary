@@ -1,6 +1,6 @@
-from projects.inflection.modules.python import additional
-from projects.inflection.modules.python import mw
-from projects.inflection.modules.python import tools as _
+from projects.inflection.modules.py import additional
+from projects.inflection.modules.py import mw
+from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
