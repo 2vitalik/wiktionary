@@ -46,3 +46,4 @@ def save_page(title, content, desc, minor=True, check_changes=True):
             pass
     page = get_page(title)
     page.put(content, desc, minor=minor)
+    return True
