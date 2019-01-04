@@ -1,4 +1,6 @@
 Django
 python-telegram-bot
+pyuca
 pywikibot
 regex
+natsort

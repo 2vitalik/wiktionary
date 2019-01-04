@@ -1,5 +1,7 @@
 import unicodedata
 
+from pyuca import Collator
+
 
 def char_info(char):
     category = unicodedata.category(char)
@@ -8,3 +10,11 @@ def char_info(char):
     except ValueError:
         name = 'UNKNOWN'
     return category, name
+
+
+def unicode_sorted(iterable):
+    return sorted(iterable, key=Collator().sort_key)
+
+
+if __name__ == '__main__':
+    print(unicode_sorted(['Arcis', 'Ārčis', 'Ārcīš', 'Ardī', 'Arcz']))
