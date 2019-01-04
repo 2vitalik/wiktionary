@@ -46,6 +46,9 @@ class BaseSection(BaseSectionsGrouper):
         return self.full_header == other.full_header and \
             self.header == other.header and self.content == other.content
 
+    def __bool__(self):
+        return True  # т.к. этот элемент всегда "есть"
+
     @property
     def key(self):
         if self._key is not None:
