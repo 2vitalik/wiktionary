@@ -101,7 +101,7 @@ class BaseSection(BaseSectionsGrouper):
             return self.sub_sections[attr]
         if attr in H.headers:
             return AnyBlocksGrouper(self, attr)
-        return EmptyBaseSectionsGrouper()
+        return EmptyBaseSectionsGrouper(self)
 
     @parsed
     def __iter__(self):
