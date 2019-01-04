@@ -13,7 +13,20 @@ class FilteredTemplatesGrouper(BaseTemplatesGrouper):
     def __iter__(self):
         for path, (tpl_name, tpl_content) in self.iter_templates():
             iter_all = not self.names and not self.patterns
-            iter_names = self.names and tpl_name in self.names
+            iter_names = False
+            if self.names:
+                for name in self.names:
+                    if type(name) == list:
+                        if tpl_name in name:
+                            iter_names = True
+                            break
+                    elif type(name) == str:
+                        if tpl_name == name:
+                            iter_names = True
+                            break
+                    else:
+                        raise Exception('Unknown argument for filtering '
+                                        'templates')
             iter_re = False
             if self.patterns:
                 if type(self.patterns) == str:
