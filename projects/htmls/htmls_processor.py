@@ -3,11 +3,10 @@ import re
 import requests
 import time
 
-from core.storage.htmls import HtmlStorage
+from projects.htmls.htmls_storage import HtmlStorage
 from core.storage.main import storage
 from core.storage.postponed.mixins import PostponedUpdaterMixin
 
-from libs.utils.dt import dt
 from libs.utils.log import log_day, log_hour, log_exception
 
 

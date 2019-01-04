@@ -1,6 +1,6 @@
 import re
 
-from core.storage.authors import AuthorsStorage
+from projects.authors.authors_storage import AuthorsStorage
 from core.storage.main import storage
 from core.storage.postponed.mixins import PostponedUpdaterMixin
 
