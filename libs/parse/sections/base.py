@@ -37,7 +37,7 @@ class BaseSection(BaseSectionsGrouper):
 
     def __str__(self):
         name = type(self).__name__
-        return f'{name}({self.key})'
+        return f"{name}('{self.key}')"
 
     def __repr__(self):
         return str(self)
@@ -50,7 +50,9 @@ class BaseSection(BaseSectionsGrouper):
     def key(self):
         if self._key is not None:
             return self._key
-        return self.header
+        if self.header is not None:
+            return self.header
+        return self.title
 
     @property
     @parsed

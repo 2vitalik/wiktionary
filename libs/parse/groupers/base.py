@@ -8,6 +8,11 @@ class BaseGrouper:
         self.base = base
         self._cache = {}
 
+    def __str__(self):
+        name = type(self).__name__
+        base_name = type(self.base).__name__ if self.base else None
+        return f"{name}({base_name})"
+
     def __len__(self):
         if not self.base:
             return 0
