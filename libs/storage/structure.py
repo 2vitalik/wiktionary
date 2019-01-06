@@ -40,7 +40,7 @@ class StructureBuilder:
     @timing
     def build_structure(self):
         for category, count in self.categories.items():
-            if count > self.max_count:
+            if count > self.max_count or category in ['Ll', 'Lo', 'Lu', 'Pd']:
                 self.structure[category] = {}
 
         for (category, name), count in self.names.items():
