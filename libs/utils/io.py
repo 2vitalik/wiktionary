@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import sys
 from os.path import dirname, exists
 
 from libs.utils.dt import dt
@@ -27,7 +28,11 @@ def read(filename):
 
 
 @encoded_filename
-def read_lines(filename):
+def read_lines(filename, ignore_absent=False):
+    if ignore_absent and not exists(filename):
+        # todo: также писать куда-нибудь в логи?
+        print(f"[read_lines] File doesn't exist: {filename}", file=sys.stderr)
+        return []
     return read(filename).split('\n')
 
 
