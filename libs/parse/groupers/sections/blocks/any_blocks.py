@@ -1,8 +1,10 @@
 from libs.parse.groupers.sections.blocks.base_blocks import BaseBlocksGrouper
+from libs.utils.debug import debug
 
 
 class AnyBlocksGrouper(BaseBlocksGrouper):
     def __iter__(self):
+        self._debug_iter()
         for path, block in self.base.deep(self.level):
             # `path` is (lang, homonym_header, header) here
             if self.header:  # если мы что-то ищем:
@@ -24,3 +26,7 @@ class AnyBlocksGrouper(BaseBlocksGrouper):
                         return_path = path + (sub_header, )
                         # (lang, homonym_header, header, sub_header)
                         yield return_path, sub_block
+
+    @debug
+    def _debug_iter(self):
+        print('- Iterating through AnyBlocksGrouper()')

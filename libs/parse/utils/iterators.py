@@ -1,6 +1,9 @@
+from libs.utils.debug import debug
+
 
 class DeepIterator:
     def deep(self, levels=1):
+        self._debug(levels)
         if levels == 1:
             yield from self.deep_iterate_1()
         elif levels == 2:
@@ -31,3 +34,9 @@ class DeepIterator:
                 for key3, value3 in value2:
                     for key4, value4 in value3:
                         yield (key1, key2, key3, key4), value4
+
+    @debug
+    def _debug(self, levels):
+        class_name = type(self).__name__
+        print(f'- Started DeepIterator.deep() for {class_name}'
+              f' with levels={levels}')
