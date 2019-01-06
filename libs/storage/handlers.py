@@ -1,6 +1,8 @@
 import os
 from os.path import isdir, isfile, join
 
+from natsort import natsorted
+
 from libs.storage.blocks.handlers.content import ContentsBlockHandler
 from libs.storage.blocks.handlers.simple import SimpleBlockHandler
 from libs.storage.blocks.iterators.content import ContentsBlockIterator
@@ -33,7 +35,7 @@ class BaseStorageHandler:
         self.block(title, lock=True).delete()
 
     def iterate(self, path):
-        for name in os.listdir(path):
+        for name in natsorted(os.listdir(path)):
             if '.' in name:
                 continue  # ignore `.bak`, `.old`, `.new`, etc.
             if name in ['_sys']:
