@@ -1,9 +1,8 @@
 from core.conf import conf
-from core.storage.postponed.mixins import PostponedUpdaterMixin
 from libs.storage.storage import Storage
 
 
-class HtmlStorage(PostponedUpdaterMixin, Storage):
+class HtmlStorage(Storage):
     def __init__(self, lock_slug='', **kwargs):
         kwargs['path'] = conf.HTMLS_STORAGE_PATH
         kwargs['tables'] = {

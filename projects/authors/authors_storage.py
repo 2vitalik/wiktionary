@@ -1,9 +1,8 @@
 from core.conf import conf
-from core.storage.postponed.mixins import PostponedUpdaterMixin
 from libs.storage.storage import Storage
 
 
-class AuthorsStorage(PostponedUpdaterMixin, Storage):
+class AuthorsStorage(Storage):
     def __init__(self, lock_slug='', **kwargs):
         kwargs['path'] = conf.AUTHORS_STORAGE_PATH
         kwargs['tables'] = {

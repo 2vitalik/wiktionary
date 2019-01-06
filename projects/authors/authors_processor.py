@@ -1,61 +1,39 @@
 import re
 
-from projects.authors.authors_storage import AuthorsStorage
-from core.storage.main import storage
-from core.storage.postponed.mixins import PostponedUpdaterMixin
-
+from core.storage.postponed.storage_updater import StoragePostponedUpdaterMixin
 from libs.utils.dt import dt
-from libs.utils.log import log_day, log_hour, log_exception
+from libs.utils.log import log_exception
 from libs.utils.wikibot import get_page
+from projects.authors.authors_storage import AuthorsStorage
 
 
-class AuthorsStorageProcessor(PostponedUpdaterMixin):
+class AuthorsStorageProcessor(StoragePostponedUpdaterMixin):
     """
     Обновление информации в хранилище `authors`.
     """
-    def __init__(self, process_all=False):
-        self.process_all = process_all
-        self.storage = AuthorsStorage(lock_slug=self.slug())
-        self.path = self.storage.path
-        super().__init__()
+    storage_class = AuthorsStorage
 
-    def run(self, limit=None):
-        if self.process_all:
-            iterator = storage.iterate_pages(silent=True, limit=limit)
-            for i, (title, page) in enumerate(iterator):
-                # print(dt(), i, title, ' -- ', end='')
-                self.process_page(page)
-                if not i % 100:
-                    self.save_titles()
-                    # print(dt(), '## Titles saved!')
-        else:
-            self.process_recent_pages()
-        self.close()
-
-    def remove_page(self, title):
-        self.storage.delete(title)
-
-    def process_page(self, page):
+    def process_page(self, page):  # todo: rename to `update_page`
         title = page.title
         if title in self.storage.titles_set:
             # Информация об авторе этой статьи уже сохранена
-            # print('skipped.')
-            return
+            self._debug_skipped()
+            return False
 
         # get oldest revision
         oldest = next(get_page(title).revisions(reverseOrder=True, total=1,
                                                 content=True))
-
         created_at = dt(oldest.timestamp, utc=True)
         created_lang = self.get_created_lang(title, oldest.text)
         created_author = oldest.user
-
         created = f"{created_at}, {created_lang}, {created_author}"
-        # print(created)
+        self._debug_info(created)
 
         self.storage.update(title, created=created)
         self.log_hour('saved', f'<{created}> - {title}')
         self.log_day('titles_saved', title)
+        self._debug_processed()
+        return True
 
     def get_created_lang(self, title, text):
         if text is None:
@@ -109,38 +87,16 @@ class AuthorsStorageProcessor(PostponedUpdaterMixin):
         self.log_day('unknown_lang', title)  # todo: save text?
         return '?'
 
-    @property
-    def logs_path(self):
-        return self.storage.logs_path
-
-    def slug(self):
-        return 'all' if self.process_all else 'recent'
-
-    def log_day(self, sub_slug, value):
-        log_day(f"{self.slug()}/{sub_slug}", value, path=self.logs_path)
-
-    def log_hour(self, sub_slug, value):
-        log_hour(f"{self.slug()}/{sub_slug}", value, path=self.logs_path)
-
-    def close(self, *args, **kwargs):
-        self.save_titles()
-        self.storage.unlock(self.slug())
-
-    def save_titles(self):
-        titles = []
-        for title, info in self.storage.iterate('created'):
-            titles.append(title)
-        self.storage.save_titles(titles)
-
 
 @log_exception('authors')
 def update_recent_authors():
     AuthorsStorageProcessor().run()
 
 
+@log_exception('authors')
+def update_all_authors():
+    AuthorsStorageProcessor(process_all=True).run()
+
+
 if __name__ == '__main__':
     update_recent_authors()
-
-    # AuthorsStorageProcessor().run()
-    # AuthorsStorageProcessor().close()
-    # AuthorsStorageProcessor(process_all=True).run()
