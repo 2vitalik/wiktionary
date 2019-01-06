@@ -50,6 +50,10 @@ def append(filename, line):
         f.write(f'{line}\n')
 
 
+def compare(filename1, filename2):
+    return read(filename1) == read(filename2)
+
+
 @encoded_filename
 def ensure_dir(path):
     if not path:
