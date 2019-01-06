@@ -2,21 +2,23 @@ from genericpath import exists
 from os.path import join
 
 from core.storage.main import storage
+from core.storage.postponed.debug.debug import DebugMixin
 from libs.utils.dt import dtp, dt
 from libs.utils.io import read, write
 
 
-class PostponedUpdaterMixin:
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.new_latest_updated = self.latest_updated
+class PostponedUpdaterMixin(DebugMixin):
+    path = None  # should be set in inheritor
 
     def process_recent_pages(self):
-        iterator = \
-            storage.iterate_changed_pages(self.latest_updated, silent=True)
         for title in storage.deleted_titles(self.latest_updated):
             self.remove_page(title)
-        for log_dt, title, page in iterator:
+
+        self.new_latest_updated = self.latest_updated
+        iterator = storage.iterate_changed_pages(self.latest_updated,
+                                                 silent=True)
+        for i, (log_dt, title, page) in enumerate(iterator):
+            self._debug_title(i, title)
             self.process_page(page)
             self.new_latest_updated = log_dt
         self.latest_updated = self.new_latest_updated

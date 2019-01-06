@@ -3,7 +3,7 @@ from os.path import join
 
 from core.conf.conf import REPORTS_PATH
 from core.storage.main import storage
-from core.storage.postponed.mixins import PostponedUpdaterMixin
+from core.storage.postponed.base_updater import PostponedUpdaterMixin
 from libs.sync.saver import sync_save
 from libs.utils.log import log_exception
 from libs.utils.wikibot import save_page
@@ -16,7 +16,6 @@ class ReportsUpdater(PostponedUpdaterMixin):
 
     def __init__(self, report_classes=None, only_recent=False):
         print(datetime.now(), 'started')
-        super().__init__()
         self.only_recent = only_recent
         self.report_classes = report_classes
 
@@ -27,7 +26,9 @@ class ReportsUpdater(PostponedUpdaterMixin):
             self._all(limit)
 
     def _all(self, limit=None):
-        for title, page in storage.iterate_pages(silent=True, limit=limit):
+        iterator = storage.iterate_pages(silent=True, limit=limit)
+        for i, (title, page) in enumerate(iterator):
+            self._debug_title(i, title)
             self.process_page(page)
         self.convert_entries()
         self.export_entries('.current')
@@ -48,6 +49,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
     def process_page(self, page):
         for report in self.get_reports():
             report.process_page(page)
+        self._debug_processed()
 
     def remove_page(self, title):
         for report in self.get_reports():
