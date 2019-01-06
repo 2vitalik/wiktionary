@@ -1,10 +1,9 @@
 from pywikibot import NoPage
 
-from libs.utils.classes import required
-from libs.utils.log import log_day, log_hour
+from core.logs.mixins import StorageLogsMixin
 
 
-class BaseProcessor:
+class BaseProcessor(StorageLogsMixin):
     def __init__(self, slug):
         self.slug = slug
         self.storage = None  # should be set in inheritor
@@ -48,15 +47,3 @@ class BaseProcessor:
     @all_pages_start_from.setter
     def all_pages_start_from(self, value):
         self.storage.all_pages_start_from = value
-
-    @property
-    def logs_path(self):
-        return self.storage.logs_path
-
-    @required('slug')
-    def log_day(self, sub_slug, value):
-        log_day(f"{self.slug}/{sub_slug}", value, path=self.logs_path)
-
-    @required('slug')
-    def log_hour(self, sub_slug, value):
-        log_hour(f"{self.slug}/{sub_slug}", value, path=self.logs_path)
