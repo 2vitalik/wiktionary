@@ -1,6 +1,6 @@
 import up  # don't remove this
-from projects.htmls.htmls_processor import update_all_htmls
+from core.storage.postponed.shortcuts import update_all
 
 
 if __name__ == '__main__':
-    update_all_htmls()
+    update_all('htmls')

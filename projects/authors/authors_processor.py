@@ -1,8 +1,8 @@
 import re
 
+from core.storage.postponed.shortcuts import update_recent
 from core.storage.postponed.storage_updater import StoragePostponedUpdaterMixin
 from libs.utils.dt import dt
-from libs.utils.log import log_exception
 from libs.utils.wikibot import get_page
 from projects.authors.authors_storage import AuthorsStorage
 
@@ -88,15 +88,5 @@ class AuthorsStorageProcessor(StoragePostponedUpdaterMixin):
         return '?'
 
 
-@log_exception('authors')
-def update_recent_authors():
-    AuthorsStorageProcessor().run()
-
-
-@log_exception('authors')
-def update_all_authors():
-    AuthorsStorageProcessor(process_all=True).run()
-
-
 if __name__ == '__main__':
-    update_recent_authors()
+    update_recent('authors')

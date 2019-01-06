@@ -3,8 +3,8 @@ import re
 import requests
 import time
 
+from core.storage.postponed.shortcuts import update_all
 from core.storage.postponed.storage_updater import StoragePostponedUpdaterMixin
-from libs.utils.log import log_exception
 from projects.htmls.htmls_storage import HtmlStorage
 
 
@@ -38,15 +38,5 @@ class HtmlStorageProcessor(StoragePostponedUpdaterMixin):
         return True
 
 
-@log_exception('htmls')
-def update_recent_htmls():  # todo: common mechanism for such functions, e.g.: update_recent('htmls')
-    HtmlStorageProcessor().run()
-
-
-@log_exception('htmls')
-def update_all_htmls():
-    HtmlStorageProcessor(process_all=True).run()
-
-
 if __name__ == '__main__':
-    update_all_htmls()
+    update_all('htmls')
