@@ -5,7 +5,7 @@ from shutil import copy
 from libs.storage.blocks.handlers.base import BaseBlockHandler
 from libs.storage.builder import ContentsStorageBuilder
 from libs.storage.const import SEPARATOR
-from libs.storage.error import StorageError
+from libs.storage.error import StorageError, PageNotFound
 from libs.utils.io import read, write
 
 
@@ -30,7 +30,7 @@ class ContentsBlockHandler(BaseBlockHandler):
         if self.index is None:
             if silent:
                 return ''
-            raise StorageError(f"Block doesn't contain title: '{self.title}'")
+            raise PageNotFound(f"Block doesn't contain title: '{self.title}'")
         return self.contents[self.index]
 
     def do_delete(self):
