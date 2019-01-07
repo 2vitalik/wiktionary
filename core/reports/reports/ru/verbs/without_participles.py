@@ -243,7 +243,7 @@ class VerbsWithoutParticiples(BaseComplexReport):
             содержимое.
         '''
 
-    def process_page(self, page):
+    def update_page(self, page):
         if '{{гл ru' not in page.ru.content:
             return
         if page.data.ru.is_impersonal_verb_only():

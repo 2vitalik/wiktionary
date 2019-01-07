@@ -8,13 +8,13 @@ from core.storage.postponed.storage_updater import StoragePostponedUpdaterMixin
 from projects.htmls.htmls_storage import HtmlStorage
 
 
-class HtmlStorageProcessor(StoragePostponedUpdaterMixin):
+class HtmlStorageUpdater(StoragePostponedUpdaterMixin):
     """
     Обновление информации в хранилище `htmls`.
     """
     storage_class = HtmlStorage
 
-    def process_page(self, page):
+    def update_page(self, page):
         title = page.title
         if title in self.storage.titles_set:
             self._debug_skipped()

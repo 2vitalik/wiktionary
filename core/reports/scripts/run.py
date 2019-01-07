@@ -29,7 +29,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
         iterator = storage.iterate_pages(silent=True, limit=limit)
         for i, (title, page) in enumerate(iterator):
             self._debug_title(i, title)
-            self.process_page(page)
+            self.update_page(page)
         self.convert_entries()
         self.export_entries('.current')
 
@@ -46,9 +46,9 @@ class ReportsUpdater(PostponedUpdaterMixin):
         self.convert_entries()
         self.export_entries('.current')
 
-    def process_page(self, page):
+    def update_page(self, page):
         for report in self.get_reports():
-            report.process_page(page)
+            report.update_page(page)
         self._debug_processed()
 
     def remove_page(self, title):

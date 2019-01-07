@@ -2,13 +2,13 @@ from libs.utils.log import log_exception
 
 
 def get_class(key):
-    from projects.authors.authors_processor import AuthorsStorageProcessor
-    from projects.htmls.htmls_processor import HtmlStorageProcessor
+    from projects.authors.authors_updater import AuthorsStorageUpdater
+    from projects.htmls.htmls_updater import HtmlStorageUpdater
 
     if type(key) == str:
         classes = {
-            'authors': AuthorsStorageProcessor,
-            'htmls': HtmlStorageProcessor,
+            'authors': AuthorsStorageUpdater,
+            'htmls': HtmlStorageUpdater,
         }
         return classes[key]
 

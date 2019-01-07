@@ -1,11 +1,11 @@
 from core.storage.main import MainStorage
 
-from core.storage.updaters.lib.processors.base import BaseProcessor
-from libs.utils.dt import dt, t
+from core.storage.updaters.lib.updaters.base import BaseUpdater
+from libs.utils.dt import dt
 from libs.utils.exceptions import ImpossibleError
 
 
-class MainStorageProcessor(BaseProcessor):
+class MainStorageUpdater(BaseUpdater):
     """
     Обновление информации в главном хранилище.
     """
@@ -13,15 +13,15 @@ class MainStorageProcessor(BaseProcessor):
         super().__init__(slug)
         self.storage = MainStorage(lock_slug=slug)
 
-    def process_delete(self, title):
-        self.storage.delete(title)
-
-    def process_update(self, title, content, edited, redirect):
+    def update_page(self, title, content, edited, redirect):
         edited_str = dt(edited, utc=True)
         info = f"{edited_str}, {'R' if redirect else 'A'}"
         self.storage.update(title, content=content, info=info)
         self.log_hour('changed', f'<{info}> - {title}')
         self.log_day('titles_changed', title)
+
+    def remove_page(self, title):
+        self.storage.delete(title)
 
     def close(self, *args, **kwargs):
         self.save_titles()

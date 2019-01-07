@@ -26,10 +26,10 @@ class StoragePostponedUpdaterMixin(PostponedUpdaterMixin, StorageLogsMixin):
         iterator = storage.iterate_pages(silent=True, limit=limit)
         for i, (title, page) in enumerate(iterator):
             self._debug_title(i, title)
-            if self.process_page(page) and not i % 100:
+            if self.update_page(page) and not i % 100:
                 self.save_titles()
 
-    def process_page(self, page):
+    def update_page(self, page):
         raise NotImplementedError()
 
     def remove_page(self, title):

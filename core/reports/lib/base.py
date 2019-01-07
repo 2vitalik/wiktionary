@@ -66,7 +66,7 @@ class BaseIterableReport(ImportExportMixin, BaseReportPage):
         if key in self.entries:
             del self.entries[key]
 
-    def process_page(self, page):
+    def update_page(self, page):
         details = self.check_page(page)
         self.set(page.title, details)
 

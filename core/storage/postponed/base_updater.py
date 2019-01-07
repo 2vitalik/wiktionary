@@ -19,11 +19,11 @@ class PostponedUpdaterMixin(DebugMixin):
                                                  silent=True)
         for i, (log_dt, title, page) in enumerate(iterator):
             self._debug_title(i, title)
-            self.process_page(page)
+            self.update_page(page)
             self.new_latest_updated = log_dt
         self.latest_updated = self.new_latest_updated
 
-    def process_page(self, page):
+    def update_page(self, page):
         raise NotImplementedError()
 
     def remove_page(self, title):

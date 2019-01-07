@@ -1,12 +1,12 @@
-from core.storage.updaters.lib.processors.main import MainStorageProcessor
+from core.storage.updaters.lib.updaters.main import MainStorageUpdater
 from libs.utils.dt import dt
 
 
-class LazyMainStorageProcessor(MainStorageProcessor):
+class LazyMainStorageUpdater(MainStorageUpdater):
     """
     Обновление информации в главном хранилище *только* при необходимости.
     """
-    def process_update(self, title, content, edited, redirect):
+    def update_page(self, title, content, edited, redirect):
         old_content, old_info = self.storage.get(title, silent=True)
 
         edited_str = dt(edited, utc=True)

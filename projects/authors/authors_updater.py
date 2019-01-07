@@ -7,13 +7,13 @@ from libs.utils.wikibot import get_page
 from projects.authors.authors_storage import AuthorsStorage
 
 
-class AuthorsStorageProcessor(StoragePostponedUpdaterMixin):
+class AuthorsStorageUpdater(StoragePostponedUpdaterMixin):
     """
     Обновление информации в хранилище `authors`.
     """
     storage_class = AuthorsStorage
 
-    def process_page(self, page):  # todo: rename to `update_page`
+    def update_page(self, page):  # todo: rename to `update_page`
         title = page.title
         if title in self.storage.titles_set:
             # Информация об авторе этой статьи уже сохранена
