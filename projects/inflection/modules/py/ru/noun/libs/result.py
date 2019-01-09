@@ -97,7 +97,9 @@ def forward_args(forms, args):
 
 def additional_arguments(forms, data):
     # RU (склонение)
-    if data.adj:
+    if _.contains(data.rest_index, '0'):
+        forms['скл'] = 'не'
+    elif data.adj:
         forms['скл'] = 'а'
     elif data.pronoun:
         forms['скл'] = 'мс'

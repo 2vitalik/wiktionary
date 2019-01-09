@@ -97,7 +97,9 @@ end
 
 local function additional_arguments(forms, data)
 	-- RU (склонение)
-	if data.adj then
+	if _.contains(data.rest_index, '0') then
+		forms['скл'] = 'не'
+	elseif data.adj then
 		forms['скл'] = 'а'
 	elseif data.pronoun then
 		forms['скл'] = 'мс'

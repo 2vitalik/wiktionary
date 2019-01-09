@@ -8,7 +8,7 @@ files = [
     'libs[.out]/result',
     'libs[.out]/stem_type',
     'libs[.out]/stress',
-    'libs[.out]/testcases',
+    # 'libs[.out]/testcases',
 ]
 
 
