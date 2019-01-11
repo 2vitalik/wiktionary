@@ -26,7 +26,7 @@ local function replace_underscore_with_hyphen(forms)
 end
 
 
--- Фформирование параметров рода и одушевлённости для подстановки в шаблон
+-- Формирование параметров рода и одушевлённости для подстановки в шаблон
 local function forward_gender_animacy(forms, data)
 	local genders, animacies
 

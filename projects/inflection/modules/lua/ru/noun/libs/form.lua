@@ -46,11 +46,6 @@ local function fix_stress(forms)
 	for key, value in pairs(forms) do
 --		INFO Удаляем ударение, если только один слог:
 		forms[key] = remove_stress_if_one_syllable(value)
-
-		-- replace 'ё' with 'е' when unstressed
-		if _.contains_once(value, 'ё') and _.contains(value, '́ ') then
-			forms[key] = _.replaced(value, 'ё', 'е')
-		end
 	end
 end
 
@@ -138,6 +133,13 @@ function export.generate_forms(data)
 	forms = init_forms(data.stems, data.endings)
 
 	fix_stress(forms)
+
+	for key, value in pairs(forms) do
+		-- replace 'ё' with 'е' when unstressed
+		if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then
+			forms[key] = _.replaced(value, 'ё', 'е')
+		end
+	end
 
 	apply_obelus(forms, data.rest_index, data.frame)
 
