@@ -52,8 +52,8 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 if __name__ == '__main__':
     #dev = False
     dev = True
-    ru_noun_version = '3.4.7'
+    ru_noun_version = '3.4.6'
     inflection_version = '2.2.3'
-    desc = 'дальнейшие попытки исправить обработку пометы ё'
+    desc = 'откат к версии 3.4.6'
 
     upload(dev, ru_noun_version, inflection_version, desc)
