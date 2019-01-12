@@ -50,10 +50,10 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 
 
 if __name__ == '__main__':
-    # dev = False
-    dev = True
-    ru_noun_version = '3.4.5'
+    dev = False
+    #dev = True
+    ru_noun_version = '3.4.6'
     inflection_version = '2.2.3'
-    desc = 'b'
+    desc = 'исправлена обработка пометы ё, и другие исправления'
 
     upload(dev, ru_noun_version, inflection_version, desc)
