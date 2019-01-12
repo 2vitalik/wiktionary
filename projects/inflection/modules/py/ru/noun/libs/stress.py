@@ -154,7 +154,7 @@ def apply_stress_type(data):  # export
 
     # If we have "ё" specific
     mw.log('? data.stem_type: ' + data.stem_type)
-    if _.contains(data.rest_index, 'ё') and data.stem_type != 'n-3rd':  # Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
+    if _.contains(data.rest_index, 'ё'):
         data.stem_stressed = _.replaced(data.stem_stressed, 'е́([^е]*)$', 'ё%1')
     # end
 
