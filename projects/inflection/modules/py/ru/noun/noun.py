@@ -144,6 +144,12 @@ def main_algorithm(data):
         # end
     # end
 
+    # Специфика по "ё"
+    if _.contains(data.rest_index, 'ё') and not _.contains(data.endings['gen_pl'], '{vowel+ё}') and not _.contains(data.stems['gen_pl'], 'ё'):
+        data.stems['gen_pl'] = _.replaced(data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
+        data.rest_index = data.rest_index + 'ё'  # ???
+    # end
+
     forms = form.generate_forms(data)  # TODO: Rename to `out_args` ?
 
     forms['зализняк1'] = index.get_zaliznyak(data.stem_type, data.stress_type, data.rest_index)
