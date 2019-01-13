@@ -10,6 +10,8 @@ debug = False
 def download_module(title, path):
     print(f'- {title}', end='')
     content = load_page(title) + '\n'
+    content = content.replace("\n-- dev_prefix = 'User:Vitalik/'",
+                              "\ndev_prefix = 'User:Vitalik/'")
     outs = ['', '.out'] if not debug else ['', ]
     for out in outs:
         write(path.replace('[.out]', out), content)
