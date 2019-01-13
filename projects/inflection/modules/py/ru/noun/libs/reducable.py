@@ -8,12 +8,12 @@ dev_prefix = 'User:Vitalik/'  # comment this on active version
 def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy, stress_type, rest_index, data):  # export
     # If degree sign °
 
-    if _.endswith(word, '[ая]нин') and animacy == 'an' and word != 'семьянин':
+    if _.contains(rest_index, '°') and _.endswith(word, '[ая]нин'):
         _.replace(stems, 'all_pl', '([ая])ни́ н$', '%1́ н')
         _.replace(stems, 'all_pl', '([ая]́ ?н)ин$', '%1')
         endings['nom_pl'] = 'е'
         endings['gen_pl'] = ''
-        return rest_index + '°'
+        return rest_index
     # end
 
     if _.contains(rest_index, '°') and _.endswith(word, 'ин'):
@@ -24,7 +24,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy
         endings['gen_pl'] = ''
     # end
 
-    if _.endswith(word, ['ёнок', 'онок']):
+    if _.contains(rest_index, '°') and _.endswith(word, ['ёнок', 'онок']):
         _.replace(stems, 'all_pl', 'ёнок$', 'я́т')
         _.replace(stems, 'all_pl', 'о́нок$', 'а́т')
 
@@ -32,11 +32,11 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy
         endings['nom_pl'] = 'а'
         endings['gen_pl'] = ''
 
-        export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data)
-        return rest_index + '°'
+        export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)
+        return rest_index
     # end
 
-    if _.endswith(word, ['ёночек', 'оночек']):
+    if _.contains(rest_index, '°') and _.endswith(word, ['ёночек', 'оночек']):
 
         _.replace(stems, 'all_pl', 'ёночек$', 'я́тк')
         _.replace(stems, 'all_pl', 'о́ночек$', 'а́тк')
@@ -49,7 +49,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy
 
         endings['gen_pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
 
-        return rest_index + '°'
+        return rest_index
     # end
 
     if _.contains(rest_index, '°') and gender == 'n' and _.endswith(word, 'мя'):
@@ -69,7 +69,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy
 
 
 # Сложный алгоритм обработки всех случаев чередования
-def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data):  # export
+def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data, only_sg):  # export
     # local reduced, reduced_letter, f_3rd, prev
     # local case_2_a, case_2_b, case_2_c, case_3_a, case_3_b
     # local skip_b_1, skip_b_2, skip_b_3, force_b
@@ -106,7 +106,9 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
 #                    stem_gen_pl = stems['gen_pl']
 #                # end
 
-                _.replace(stems, 'all_pl', '(.)о́ ?([^о]+)$', '%1%2')
+                if not only_sg:
+                    _.replace(stems, 'all_pl', '(.)о́ ?([^о]+)$', '%1%2')
+                # end
 
 #                if stem_gen_pl:  # ботинок, глазок
 #                    stems['gen_pl'] = stem_gen_pl
@@ -118,7 +120,9 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
 
             elif reduced_letter == 'и':  # бывает только в подтипе мс 6*
                 _.replace(stems, 'all_sg', '(.)и́ ?([^и]+)$', '%1ь%2')
-                _.replace(stems, 'all_pl', '(.)и́ ?([^и]+)$', '%1ь%2')
+                if not only_sg:
+                    _.replace(stems, 'all_pl', '(.)и́ ?([^и]+)$', '%1ь%2')
+                # end
 
             elif _.In(reduced_letter, ['е', 'ё']):
                 prev = _.extract(word, '(.)[её][^её]+$')
@@ -133,7 +137,9 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                     if not f_3rd:
                         _.replace(stems, 'ins_sg', '[её]́ ?([^её]+)$', 'й%1')
                     # end
-                    _.replace(stems, 'all_pl', '[её]́ ?([^её]+)$', 'й%1')
+                    if not only_sg:
+                        _.replace(stems, 'all_pl', '[её]́ ?([^её]+)$', 'й%1')
+                    # end
 
                 elif case_2_a or case_2_b or case_2_c:  # 2).
 
@@ -142,7 +148,9 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                     if not f_3rd:
                         _.replace(stems, 'ins_sg', '[её]́ ?([^её]*)$', 'ь%1')
                     # end
-                    _.replace(stems, 'all_pl', '[её]́ ?([^её]*)$', 'ь%1')
+                    if not only_sg:
+                        _.replace(stems, 'all_pl', '[её]́ ?([^её]*)$', 'ь%1')
+                    # end
 
                 else:  # 3).
                     mw.log('  > Подслучай A.3).')
@@ -150,10 +158,16 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                     if not f_3rd:
                         _.replace(stems, 'ins_sg', '[её]́ ?([^её]*)$', '%1')
                     # end
-                    _.replace(stems, 'all_pl', '[её]́ ?([^её]*)$', '%1')
+                    if not only_sg:
+                        _.replace(stems, 'all_pl', '[её]́ ?([^её]*)$', '%1')
+                    # end
                 # end
             # end
         # end  # reduced A
+
+        if only_sg:
+            return  # ниже всё равно обрабатывается только множественное число уже
+        # end
 
         # we should ignore asterix for 2*b and 2*f (so to process it just like 2b or 2f)
         skip_b_1 = stem_type == 'soft' and _.In(stress_type, ['b', 'f'])
