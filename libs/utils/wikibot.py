@@ -16,9 +16,14 @@ def get_page(title):
     return pywikibot.Page(site, title)
 
 
-def load_page(title, get_redirect=True):
-    page = get_page(title)
-    return page.get(get_redirect=get_redirect)
+def load_page(title, get_redirect=True, skip_absent=False):
+    try:
+        page = get_page(title)
+        return page.get(get_redirect=get_redirect)
+    except pywikibot.NoPage:
+        if skip_absent:
+            return ''
+        raise
 
 
 def load_page_with_redirect(title):
