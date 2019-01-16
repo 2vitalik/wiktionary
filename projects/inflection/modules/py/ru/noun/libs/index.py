@@ -24,8 +24,7 @@ def get_zaliznyak(stem_type, stress_type, rest_index):  # export
         'f-3rd-sibilant': '8',
         'n-3rd': '8',
     }
-    index = ''
-    index = index  + stem_types[stem_type]
+    index = stem_types[stem_type]
     if _.contains(rest_index, '°'):
         index = index + '°'
     elif _.contains(rest_index, '%*'):

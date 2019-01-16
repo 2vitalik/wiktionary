@@ -24,8 +24,7 @@ function export.get_zaliznyak(stem_type, stress_type, rest_index)
 		['f-3rd-sibilant'] = '8',
 		['n-3rd'] = '8',
 	}
-	index = ''
-	index = index  .. stem_types[stem_type]
+	index = stem_types[stem_type]
 	if _.contains(rest_index, '°') then
 		index = index .. '°'
 	elseif _.contains(rest_index, '%*') then
