@@ -5,7 +5,7 @@ class AttrDict(dict):
         self.__dict__ = self
 
     def __getattr__(self, item):
-        print(f"Error: AttrDict doesn't have attribute: \"{item}\"")
+        # print(f"Error: AttrDict doesn't have attribute: \"{item}\"")
         return
 
 
