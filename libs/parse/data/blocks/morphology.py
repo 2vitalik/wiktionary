@@ -1,9 +1,12 @@
 from libs.parse.data.blocks.base import BaseBlockData
 from libs.parse.data.blocks.detailed.verb import VerbData
-from libs.parse.utils.decorators import parsing
+from libs.parse.utils.decorators import parsing, parsed
 
 
 class MorphologyData(BaseBlockData):
+    @parsed
+    def is_verb(self):
+        return self.word_type == 'verb'
 
     def parse_word_type(self):
         word_type = 'unknown'

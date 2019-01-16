@@ -18,6 +18,17 @@ class VerbData(BaseDetailedData):
         return False
 
     @classmethod
+    def check_index(cls, template):
+        return template.name not in [
+            'гл ru',
+            'гл ru СВ',
+            'гл ru НСВ',
+            'гл ru НВ',
+            'гл ru -ся',
+            'гл ru -сяСВ',
+        ]
+
+    @classmethod
     def get_index(cls, template):
         index = template.name
         if index.startswith('гл ru '):
@@ -30,8 +41,12 @@ class VerbData(BaseDetailedData):
         indexes = []
         is_impersonal = None
         has_impersonal = None
+        has_index = None
         for template in self.base.templates(re='гл*').last_list():
-            index = self.get_index(template)
+            index = self.get_index(template)  # todo: skip -ся, -сяСВ и т.п.
+
+            if self.check_index(template):
+                has_index = True
 
             impersonal = self.get_impersonal(template)
             if impersonal:
@@ -43,5 +58,6 @@ class VerbData(BaseDetailedData):
 
             indexes.append(index)
         self._sub_data['indexes'] = indexes
+        self._sub_data['has_index'] = has_index
         self._sub_data['is_impersonal'] = is_impersonal
         self._sub_data['has_impersonal'] = has_impersonal
