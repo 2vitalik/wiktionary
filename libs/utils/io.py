@@ -76,7 +76,7 @@ def ensure_parent_dir(filename):
 def json_dump(filename, data):
     ensure_parent_dir(filename)
     with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=4)
+        json.dump(data, f, indent=4, ensure_ascii=False)
 
 
 @encoded_filename
