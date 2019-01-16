@@ -37,15 +37,15 @@ def replace(dict, key, pattern, replace_to):
     if key == 'all_sg':
         keys = ['gen_sg', 'dat_sg', 'prp_sg']  # without 'nom_sg', 'acc_sg' and 'ins_sg'
         for key in keys:
-            dict[key] = replace(dict[key], pattern, replace_to)
+            dict[key] = replaced(dict[key], pattern, replace_to)
 
     elif key == 'all_pl':
         keys = ['nom_pl', 'gen_pl', 'dat_pl', 'ins_pl', 'prp_pl']  # without 'acc_pl'
         for key in keys:
-            dict[key] = replace(dict[key], pattern, replace_to)
+            dict[key] = replaced(dict[key], pattern, replace_to)
 
     else:
-        dict[key] = replace(dict[key], pattern, replace_to)
+        dict[key] = replaced(dict[key], pattern, replace_to)
 
 
 def extract(str, pattern):
