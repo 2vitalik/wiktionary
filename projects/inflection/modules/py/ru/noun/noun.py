@@ -95,7 +95,7 @@ def main_algorithm(data):
 
     _.log_info('Определение типа основы')
 
-    data.stem_type, data.base_stem_type = stem_type.get_stem_type(data.stem, data.word, data.gender, data.adj)
+    data.stem_type, data.base_stem_type = stem_type.get_stem_type(data.stem, data.word, data.gender, data.adj, data.rest_index)
 
     _.log_value(data.stem_type, 'data.stem_type')
     _.log_value(data.base_stem_type, 'data.base_stem_type')

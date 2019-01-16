@@ -71,8 +71,12 @@ def get_stem_type(stem, word, gender, adj, rest_index):  # export  # INFO: Оп�
         elif gender == 'f':
             if _.endswith(word, 'а') or _.endswith(word, 'ы'):
                 stem_type = 'hard'
-            elif _.endswith(word, 'я') or _.endswith(word, 'и'):
+            elif _.endswith(word, 'я'):
                 stem_type = 'soft'
+            elif _.endswith(word, 'и') and _.contains(rest_index, '2'):  # todo: а что если нет индекса??
+                stem_type = 'soft'
+            elif _.endswith(word, 'и') and _.contains(rest_index, '8'):
+                stem_type = 'f-3rd'
             elif _.endswith(word, 'ь'):  # conflict in pl
                 stem_type = 'f-3rd'
             # end
