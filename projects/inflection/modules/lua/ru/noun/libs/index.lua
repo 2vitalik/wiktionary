@@ -7,6 +7,8 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 -- Получение индекса Зализняка
 function export.get_zaliznyak(stem_type, stress_type, rest_index)
+	_.log_func('index', 'get_zaliznyak')
+
 	local stem_types, index
 
 	-- TODO: process <...> cases properly

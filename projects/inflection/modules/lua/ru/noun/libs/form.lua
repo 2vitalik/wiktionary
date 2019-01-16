@@ -6,6 +6,8 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local function init_forms(stems, endings)  -- Генерация словоформ
+	_.log_func('forms', 'init_forms')
+
 	return {
 		nom_sg = stems['nom_sg'] .. endings['nom_sg'],
 		gen_sg = stems['gen_sg'] .. endings['gen_sg'],
@@ -25,6 +27,8 @@ end
 
 
 local function remove_stress_if_one_syllable(value)
+	-- _.log_func('forms', 'remove_stress_if_one_syllable')
+
 	if _.contains_once(value, '{vowel+ё}') then
 		return _.replaced(value, '́ ', '')
 	end
@@ -33,6 +37,7 @@ end
 
 
 local function fix_stress(forms)
+	_.log_func('forms', 'fix_stress')
 
 	-- Add stress if there is no one
 	if _.contains_several(forms['nom_sg'], '{vowel}') and not _.contains(forms['nom_sg'], '[́ ё]') then
@@ -51,6 +56,8 @@ end
 
 
 local function apply_obelus(forms, rest_index, frame)
+	_.log_func('forms', 'apply_obelus')
+
 	if _.contains(rest_index, '÷') then
 		if frame then
 			forms['gen_pl'] = frame:expandTemplate{title='incorrect', args={forms['gen_pl']} }
@@ -64,6 +71,8 @@ end
 
 -- Выбор винительного падежа
 local function choose_accusative_forms(forms, data)
+	_.log_func('forms', 'choose_accusative_forms')
+
 	forms['acc_sg_in'] = ''
 	forms['acc_sg_an'] = ''
 	forms['acc_pl_in'] = ''
@@ -100,6 +109,8 @@ end
 
 
 local function second_ins_case(forms, gender)
+	_.log_func('forms', 'second_ins_case')
+
 	local ins_sg2
 
 	-- Второй творительный
@@ -113,6 +124,8 @@ end
 
 
 local function apply_specific_3(forms, gender, rest_index)
+	_.log_func('forms', 'apply_specific_3')
+
 	-- Специфика по (3)
 	if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③') then
 		if _.endswith(forms['prp_sg'], 'и') then
@@ -126,9 +139,9 @@ end
 
 
 function export.generate_forms(data)
-	local forms, keys
+	_.log_func('forms', 'generate_forms')
 
-	mw.log('> Запуск `generate_forms`')
+	local forms, keys
 
 	forms = init_forms(data.stems, data.endings)
 
@@ -169,6 +182,8 @@ end
 
 
 local function prt_case(forms, args, index)  -- Разделительный падеж
+	_.log_func('forms', 'prt_case')
+
 	if _.contains(index, 'Р2') or _.contains(index, 'Р₂') then
 		forms['prt_sg'] = forms['dat_sg']
 	end
@@ -179,6 +194,8 @@ end
 
 
 local function loc_case(forms, args, index)  -- Местный падеж
+	_.log_func('forms', 'loc_case')
+
 	local loc, loc_prep
 
 	if _.contains(index, 'П2') or _.contains(index, 'П₂') then
@@ -208,6 +225,8 @@ end
 
 
 local function voc_case(forms, args, index, word)  -- Звательный падеж
+	_.log_func('forms', 'voc_case')
+
 	if _.has_value(args['З']) then
 		forms['voc_sg'] = args['З']
 	elseif _.contains(index, 'З') then
@@ -221,6 +240,8 @@ end
 
 
 function export.special_cases(forms, args, index, word)
+	_.log_func('forms', 'special_cases')
+
 	prt_case(forms, args, index)
 	loc_case(forms, args, index)
 	voc_case(forms, args, index, word)
@@ -231,6 +252,8 @@ end
 
 
 function export.join_forms(forms1, forms2)
+	_.log_func('forms', 'join_forms')
+
 	local keys, forms, delim
 
 	keys = {
@@ -264,6 +287,8 @@ end
 
 
 function export.plus_forms(sub_forms)
+	_.log_func('forms', 'plus_forms')
+
 	local keys, forms, delim
 
 	keys = {

@@ -6,6 +6,8 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local function get_cyrl_animacy(index, gender)
+	_.log_func('parse_args', 'get_cyrl_animacy')
+
 	if _.extract(index, '^' .. gender .. 'о//' .. gender) then
 		return 'an//in'
 	elseif _.extract(index, '^' .. gender .. '//' .. gender .. 'о') then
@@ -19,6 +21,8 @@ end
 
 
 local function extract_gender_animacy(data)
+	_.log_func('parse_args', 'extract_gender_animacy')
+
 	local convert_animacy, orig_index, rest_index
 
 	-- мо-жо - mf a
@@ -79,7 +83,7 @@ local function extract_gender_animacy(data)
 
 	-- Удаляем теперь соответствующий кусок индекса
 	if data.gender and data.animacy and not data.adj and not data.pronoun then
-		mw.log('@ data.index = "' .. tostring(data.index) .. '"')
+		_.log_value(data.index, 'data.index')
 		orig_index = mw.text.trim(data.index)
 
 --		local test1 = _.replaced(data.index, '^mf a ?', '')
@@ -107,40 +111,40 @@ local function extract_gender_animacy(data)
 		rest_index = _.replaced(data.index, '^mf a ?', '')
 		if rest_index ~= orig_index then
 			data.rest_index = mw.text.trim(rest_index)
-			mw.log('@1 data.rest_index = ' .. tostring(data.rest_index))
+			_.log_value(data.rest_index, 'data.rest_index (1)')
 			return
 		end
 		rest_index = _.replaced(data.index, '^[mnf]+ [a-z/]+ ?', '')
 		if rest_index ~= orig_index then
 			data.rest_index = mw.text.trim(rest_index)
-			mw.log('@2 data.rest_index = ' .. tostring(data.rest_index))
+			_.log_value(data.rest_index, 'data.rest_index (2)')
 			return
 		end
 		rest_index = _.replaced(data.index, '^[-мжсо/]+%,? ?', '')
 		if rest_index ~= orig_index then
 			data.rest_index = mw.text.trim(rest_index)
-			mw.log('@3 data.rest_index = ' .. tostring(data.rest_index))
+			_.log_value(data.rest_index, 'data.rest_index (3)')
 			return
 		end
 		return {error = 'TODO'}  -- dict -- TODO: process such errors
 	elseif data.adj then
-		mw.log('@п data.index = "' .. tostring(data.index) .. '"')
+		_.log_value(data.index, 'data.index (п)')
 		orig_index = mw.text.trim(data.index)
 
 		rest_index = _.replaced(data.index, '^п ?', '')
 		if rest_index ~= orig_index then
 			data.rest_index = mw.text.trim(rest_index)
-			mw.log('@п data.rest_index = ' .. tostring(data.rest_index))
+			_.log_value(data.rest_index, 'data.rest_index (п)')
 			return
 		end
 	elseif data.pronoun then
-		mw.log('@мс data.index = "' .. tostring(data.index) .. '"')
+		_.log_value(data.index, 'data.index (мс)')
 		orig_index = mw.text.trim(data.index)
 
 		rest_index = _.replaced(data.index, '^мс ?', '')
 		if rest_index ~= orig_index then
 			data.rest_index = mw.text.trim(rest_index)
-			mw.log('@мс data.rest_index = ' .. tostring(data.rest_index))
+			_.log_value(data.rest_index, 'data.rest_index (мс)')
 			return
 		end
 	end
@@ -148,6 +152,8 @@ end
 
 
 local function init(data)
+	_.log_func('parse_args', 'init')
+
 	local several_vovwels, has_stress
 
 --	INFO: Исходное слово без ударения:
@@ -168,9 +174,9 @@ local function init(data)
 		data.stem_stressed = _.replaced(data.word_stressed, '[аеёийоьыя]́ ?$', '')
 	end
 
-	mw.log('@ data.word = ' .. tostring(data.word))
-	mw.log('@ data.stem = ' .. tostring(data.stem))
-	mw.log('@ data.stem_stressed = ' .. tostring(data.stem_stressed))
+	_.log_value(data.word, 'data.word')
+	_.log_value(data.stem, 'data.stem')
+	_.log_value(data.stem_stressed, 'data.stem_stressed')
 
 --  INFO: Случай, когда не указано ударение у слова:
 	several_vovwels = _.contains_several(data.word_stressed, '{vowel+ё}')
@@ -185,6 +191,8 @@ end
 
 
 local function angle_brackets(data)
+	_.log_func('parse_args', 'angle_brackets')
+
 	local another_index, pt, error
 
 	another_index = _.extract(data.rest_index, '%<([^>]+)%>')
@@ -200,7 +208,7 @@ local function angle_brackets(data)
 		data.pt = pt
 		if error then return error end
 
-		mw.log('@ data.adj = ' .. tostring(data.adj))
+		_.log_value(data.adj, 'data.adj')
 		if data.adj then  -- Для прилагательных надо по-особенному
 			error = init(data)
 			if error then return data, error end
@@ -210,6 +218,8 @@ end
 
 
 function export.parse(args)
+	_.log_func('parse_args', 'parse')
+
 	local data, error, parts, n_parts, data1, data2
 	local index_parts, words_parts, n_sub_parts, data_copy
 
@@ -219,22 +229,29 @@ function export.parse(args)
 	data.index = mw.text.trim(args['индекс'])
 	data.word_stressed = mw.text.trim(args['слово'])
 
-	mw.log('')
-	mw.log('==================================================')
-	mw.log('args: ' .. tostring(data.index) .. ' | ' .. tostring(data.word_stressed))
-	mw.log('--------------------------------------------------')
+	_.log_value(data.index, 'data.index')
+	_.log_value(data.word_stressed, 'data.word_stressed')
 
---	INFO: Получение информации о роде и одушевлённости:
+	-- mw.log('')
+	-- mw.log('==================================================')
+	-- mw.log('args: ' .. tostring(data.index) .. ' | ' .. tostring(data.word_stressed))
+	-- mw.log('--------------------------------------------------')
+
+	-- -------------------------------------------------------------------------
+
+	_.log_info('Получение информации о роде и одушевлённости')
+
 	error = extract_gender_animacy(data)
+
 	if error then return data, error end
 
-	mw.log('@ data.gender = ' .. tostring(data.gender))
-	mw.log('@ data.animacy = ' .. tostring(data.animacy))
-	mw.log('@ data.common_gender = ' .. tostring(data.common_gender))
-	mw.log('@ data.adj = ' .. tostring(data.adj))
-	mw.log('@ data.pronoun = ' .. tostring(data.pronoun))
-	mw.log('@ data.pt = ' .. tostring(data.pt))
-	mw.log('@ data.rest_index = ' .. tostring(data.rest_index))
+	_.log_value(data.gender, 'data.gender')
+	_.log_value(data.animacy, 'data.animacy')
+	_.log_value(data.common_gender, 'data.common_gender')
+	_.log_value(data.adj, 'data.adj')
+	_.log_value(data.pronoun, 'data.pronoun')
+	_.log_value(data.pt, 'data.pt')
+	_.log_value(data.rest_index, 'data.rest_index')
 
 --	INFO: stem, stem_stressed, etc.
 	error = init(data)
@@ -266,7 +283,8 @@ function export.parse(args)
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
 
---		INFO: Случай с "+" (несколько составных частей слова через дефис)
+		_.log_info('Случай с "+" (несколько составных частей слова через дефис)')
+
 		index_parts = mw.text.split(data.rest_index, '%+')
 		words_parts = mw.text.split(data.word_stressed, '-')
 		n_sub_parts = table.getn(index_parts)
@@ -313,7 +331,7 @@ function export.parse(args)
 		end
 
 	elseif n_parts == 2 then  -- INFO: Вариации "//" для ударения (и прочего индекса)
-		mw.log('> Случай с вариациями //')
+		_.log_info('> Случай с вариациями //')
 
 		if _.contains(data.animacy, '//') then
 --			INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения

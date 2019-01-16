@@ -7,6 +7,8 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 -- Использование дефисов вместо подчёркивания
 local function replace_underscore_with_hyphen(forms)
+	_.log_func('result', 'replace_underscore_with_hyphen')
+
 	local keys, old_key
 
 	keys = {
@@ -28,6 +30,8 @@ end
 
 -- Формирование параметров рода и одушевлённости для подстановки в шаблон
 local function forward_gender_animacy(forms, data)
+	_.log_func('result', 'forward_gender_animacy')
+
 	local genders, animacies
 
 	-- Род:
@@ -55,6 +59,8 @@ end
 
 
 local function forward_args(forms, args)
+	_.log_func('result', 'forward_args')
+
 	local keys
 
 	keys = {
@@ -96,6 +102,8 @@ end
 
 
 local function additional_arguments(forms, data)
+	_.log_func('result', 'additional_arguments')
+
 	-- RU (склонение)
 	if _.contains(data.rest_index, '0') then
 		forms['скл'] = 'не'
@@ -139,6 +147,8 @@ end
 
 
 function export.forward_things(forms, args, data)
+	_.log_func('result', 'forward_things')
+
 	forms['stem_type'] = data.stem_type  -- for testcases
 	forms['stress_type'] = data.stress_type  -- for categories   -- is really used?
 	forms['dev'] = dev_prefix
@@ -154,6 +164,8 @@ end
 
 
 function export.default(data, additional)
+	_.log_func('result', 'default')
+
 	local forms
 
 	forms = additional

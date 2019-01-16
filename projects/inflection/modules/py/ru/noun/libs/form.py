@@ -6,6 +6,8 @@ dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
 def init_forms(stems, endings):  # Генерация словоформ
+    _.log_func('forms', 'init_forms')
+
     return dict(
         nom_sg = stems['nom_sg'] + endings['nom_sg'],
         gen_sg = stems['gen_sg'] + endings['gen_sg'],
@@ -25,6 +27,8 @@ def init_forms(stems, endings):  # Генерация словоформ
 
 
 def remove_stress_if_one_syllable(value):
+    # _.log_func('forms', 'remove_stress_if_one_syllable')
+
     if _.contains_once(value, '{vowel+ё}'):
         return _.replaced(value, '́ ', '')
     # end
@@ -33,6 +37,7 @@ def remove_stress_if_one_syllable(value):
 
 
 def fix_stress(forms):
+    _.log_func('forms', 'fix_stress')
 
     # Add stress if there is no one
     if _.contains_several(forms['nom_sg'], '{vowel}') and not _.contains(forms['nom_sg'], '[́ ё]'):
@@ -51,6 +56,8 @@ def fix_stress(forms):
 
 
 def apply_obelus(forms, rest_index, frame):
+    _.log_func('forms', 'apply_obelus')
+
     if _.contains(rest_index, '÷'):
         if frame:
             forms['gen_pl'] = "{{expandTemplate}}"
@@ -64,6 +71,8 @@ def apply_obelus(forms, rest_index, frame):
 
 # Выбор винительного падежа
 def choose_accusative_forms(forms, data):
+    _.log_func('forms', 'choose_accusative_forms')
+
     forms['acc_sg_in'] = ''
     forms['acc_sg_an'] = ''
     forms['acc_pl_in'] = ''
@@ -100,6 +109,8 @@ def choose_accusative_forms(forms, data):
 
 
 def second_ins_case(forms, gender):
+    _.log_func('forms', 'second_ins_case')
+
     # local ins_sg2
 
     # Второй творительный
@@ -113,6 +124,8 @@ def second_ins_case(forms, gender):
 
 
 def apply_specific_3(forms, gender, rest_index):
+    _.log_func('forms', 'apply_specific_3')
+
     # Специфика по (3)
     if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③'):
         if _.endswith(forms['prp_sg'], 'и'):
@@ -126,9 +139,9 @@ def apply_specific_3(forms, gender, rest_index):
 
 
 def generate_forms(data):  # export
-    # local forms, keys
+    _.log_func('forms', 'generate_forms')
 
-    mw.log('> Запуск `generate_forms`')
+    # local forms, keys
 
     forms = init_forms(data.stems, data.endings)
 
@@ -169,6 +182,8 @@ def generate_forms(data):  # export
 
 
 def prt_case(forms, args, index):  # Разделительный падеж
+    _.log_func('forms', 'prt_case')
+
     if _.contains(index, 'Р2') or _.contains(index, 'Р₂'):
         forms['prt_sg'] = forms['dat_sg']
     # end
@@ -179,6 +194,8 @@ def prt_case(forms, args, index):  # Разделительный падеж
 
 
 def loc_case(forms, args, index):  # Местный падеж
+    _.log_func('forms', 'loc_case')
+
     # local loc, loc_prep
 
     if _.contains(index, 'П2') or _.contains(index, 'П₂'):
@@ -208,6 +225,8 @@ def loc_case(forms, args, index):  # Местный падеж
 
 
 def voc_case(forms, args, index, word):  # Звательный падеж
+    _.log_func('forms', 'voc_case')
+
     if _.has_value(args, 'З'):
         forms['voc_sg'] = args['З']
     elif _.contains(index, 'З'):
@@ -221,6 +240,8 @@ def voc_case(forms, args, index, word):  # Звательный падеж
 
 
 def special_cases(forms, args, index, word):  # export
+    _.log_func('forms', 'special_cases')
+
     prt_case(forms, args, index)
     loc_case(forms, args, index)
     voc_case(forms, args, index, word)
@@ -231,6 +252,8 @@ def special_cases(forms, args, index, word):  # export
 
 
 def join_forms(forms1, forms2):  # export
+    _.log_func('forms', 'join_forms')
+
     # local keys, forms, delim
 
     keys = [
@@ -264,6 +287,8 @@ def join_forms(forms1, forms2):  # export
 
 
 def plus_forms(sub_forms):  # export
+    _.log_func('forms', 'plus_forms')
+
     # local keys, forms, delim
 
     keys = [

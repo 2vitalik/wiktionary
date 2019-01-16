@@ -7,6 +7,8 @@ dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 # Получение индекса Зализняка
 def get_zaliznyak(stem_type, stress_type, rest_index):  # export
+    _.log_func('index', 'get_zaliznyak')
+
     # local stem_types, index
 
     # TODO: process <...> cases properly

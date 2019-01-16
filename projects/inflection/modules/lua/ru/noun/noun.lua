@@ -32,15 +32,21 @@ end
 
 
 local function main_algorithm(data)
-	local error, keys, forms, orig_stem, for_category
+	_.log_func('noun', 'main_algorithm')
 
-	mw.log('@ data.rest_index: ' .. tostring(data.rest_index))
+	local error, keys, forms, orig_stem, for_category, old_value
 
---	INFO: Извлечение информации об ударении:
+	_.log_value(data.rest_index, 'data.rest_index')
+
+	-- -------------------------------------------------------------------------
+
+	_.log_info('Извлечение информации об ударении')
+
 	data.stress_type, error = stress.extract_stress_type(data.rest_index)
+
 	if error then return result.default(data, error) end
 
-	mw.log('@ data.stress_type = ' .. tostring(data.stress_type))
+	_.log_value(data.stress_type, 'data.stress_type')
 
 --	INFO: Если ударение не указано:
 	if not data.stress_type then
@@ -82,18 +88,28 @@ local function main_algorithm(data)
 			data.stem_stressed = _.replaced(data.stem_stressed, '({vowel})({consonant}*)$', '%1́ %2')
 		end
 	end
-	mw.log('@ data.stem_stressed: ' .. tostring(data.stem_stressed))
 
---	INFO: Определение типа основы:
+	_.log_value(data.stem_stressed, 'data.stem_stressed')
+
+	-- -------------------------------------------------------------------------
+
+	_.log_info('Определение типа основы')
+
 	data.stem_type, data.base_stem_type = stem_type.get_stem_type(data.stem, data.word, data.gender, data.adj)
-	mw.log('@ data.stem_type: ' .. tostring(data.stem_type))
-	mw.log('@ data.base_stem_type: ' .. tostring(data.base_stem_type))
+
+	_.log_value(data.stem_type, 'data.stem_type')
+	_.log_value(data.base_stem_type, 'data.base_stem_type')
+
 	if not data.stem_type then
 		return result.default(data, {error='Неизвестный тип основы'})  -- b-dict
 	end
 
---	INFO: Вычисление схемы ударения:
+	-- -------------------------------------------------------------------------
+
+	_.log_info('Вычисление схемы ударения')
+
 	data.stress_schema = stress.get_noun_stress_schema(data.stress_type)
+
 	_.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
 	_.log_table(data.stress_schema['ending'], "data.stress_schema['ending']")
 
@@ -117,7 +133,7 @@ local function main_algorithm(data)
 	reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, false)
 
 	if not _.equals(data.stress_type, {"f", "f'"}) and _.contains(data.rest_index, '%*') then
-		mw.log('> Обработка случая на препоследний слог основы при чередовании')
+		mw.log('# Обработка случая на препоследний слог основы при чередовании')
 		orig_stem = data.stem
 		if data.forced_stem then
 			orig_stem = data.forced_stem
@@ -129,7 +145,8 @@ local function main_algorithm(data)
 			if not _.contains(stem, '[́ ё]') and data.stress_schema['stem'][key] then
 				-- *** случай с расстановкой ударения  (см. выше)
 				-- "Дополнительные правила об ударении", стр. 34
-				mw.log('> ' .. key .. ' (old): ' .. tostring(data.stems[key]))
+				old_value = data.stems[key]
+				-- mw.log('> ' .. key .. ' (old): ' .. tostring(old_value))
 				if data.stems[key] ~= orig_stem then  -- попытка обработать наличие беглой гласной (не знаю, сработает ли всегда)
 					data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)({vowel})({consonant}*)$', '%1́ %2%3%4')
 					if not _.contains(data.stems[key], '[́ ё]') then -- если предпоследнего слога попросту нет
@@ -139,7 +156,8 @@ local function main_algorithm(data)
 				else
 					data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)$', '%1́ %2')
 				end
-				mw.log('> ' .. key .. ' (new): ' .. tostring(data.stems[key]))
+				-- mw.log('> ' .. key .. ' (new): ' .. tostring(data.stems[key]))
+				mw.log('  - [' .. key .. '] = "' .. tostring(old_value) .. '" -> "' .. tostring(data.stems[key]) .. '"')
 			end
 		end
 	end
@@ -165,6 +183,9 @@ end
 
 
 function export.forms(base, args, frame)
+	mw.log('==================================================')
+	_.log_func('noun', 'forms')
+
 	local data, error, forms
 	local data1, data2, forms1, forms2, sub_forms
 
@@ -185,21 +206,21 @@ function export.forms(base, args, frame)
 --	INFO: Запуск основного алгоритма и получение результирующих словоформ:
 	forms = {}  -- dict
 	if data.sub_cases then
---		INFO: Случай с вариациями '//':
+		_.log_info("Случай с вариациями '//'")
 		data1 = data.sub_cases[1]
 		data2 = data.sub_cases[2]
 		forms1 = main_algorithm(data1)
 		forms2 = main_algorithm(data2)
 		forms = form.join_forms(forms1, forms2)
 	elseif data.sub_parts then
---		INFO: Случай с '+':
+		_.log_info("Случай с '+'")
 		sub_forms = {}  -- list
 		for i, sub_part in pairs(data.sub_parts) do
 			table.insert(sub_forms, main_algorithm(sub_part))
 		end
 		forms = form.plus_forms(sub_forms)
 	else
---		INFO: Стандартный случай без вариаций:
+		_.log_info('Стандартный случай без вариаций')
 		forms = main_algorithm(data)
 	end
 

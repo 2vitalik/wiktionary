@@ -6,7 +6,9 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 function export.extract_stress_type(rest_index)
---	OLD: Старая версия кода:
+	_.log_func('stress', 'extract_stress_type')
+
+	--    OLD: Старая версия кода:
 --	local stress_regexp = "([abcdef][′']?[′']?)"
 --	local stress_regexp2 = '(' .. stress_regexp .. '.*//.*' .. stress_regexp .. ')'
 --	stress_regexp = '(' .. stress_regexp .. '(% ?.*))'
@@ -37,6 +39,8 @@ end
 
 -- Данные: ударность основы и окончания в зависимости от схемы ударения
 function export.get_noun_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
+	_.log_func('stress', 'get_noun_stress_schema')
+
 	local stress_schema, types, sg_value, pl_value
 
 	-- общий подход следующий:
@@ -79,6 +83,7 @@ end
 
 -- Данные: ударность основы и окончания в зависимости от схемы ударения
 function export.get_adj_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
+	_.log_func('stress', 'get_adj_stress_schema')
 
 	-- TODO: Пока не используется
 
@@ -106,6 +111,7 @@ end
 
 
 function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
+	_.log_func('stress', 'get_pronoun_stress_schema')
 
 	-- TODO: Пока не используется
 
@@ -127,6 +133,8 @@ end
 
 
 function export.get_stress_schema(stress_type, adj, pronoun)  -- Пока не используется
+	_.log_func('stress', 'get_stress_schema')
+
 	if adj then
 		return export.get_adj_stress_schema(stress_type)
 	elseif pronoun then
@@ -139,11 +147,14 @@ end
 
 -- TODO: вместо "endings" может передавать просто data
 local function add_stress(endings, case)
+	_.log_func('stress', 'add_stress')
+
 	endings[case] = _.replaced(endings[case], '^({vowel})', '%1́ ')
 end
 
 
 function export.apply_stress_type(data)
+	_.log_func('stress', 'apply_stress_type')
 
 	-- If we have "ё" specific
 	if _.contains(data.rest_index, 'ё') and not data.stem_type == 'n-3rd' then
@@ -158,7 +169,7 @@ function export.apply_stress_type(data)
 	end
 
 	-- If we have "ё" specific
-	mw.log('? data.stem_type: ' .. data.stem_type)
+	_.log_value(data.stem_type, 'data.stem_type')
 	if _.contains(data.rest_index, 'ё') and data.stem_type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
 		data.stem_stressed = _.replaced(data.stem_stressed, 'е́?([^е]*)$', 'ё%1')
 	end

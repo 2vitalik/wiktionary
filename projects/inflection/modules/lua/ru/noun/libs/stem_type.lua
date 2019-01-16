@@ -6,6 +6,8 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local function get_base_stem_type(stem_type)
+	_.log_func('stem_type', 'get_base_stem_type')
+
 	local change_stem_type
 
 --	INFO: Выбор подходящего из двух типов
@@ -30,7 +32,9 @@ local function get_base_stem_type(stem_type)
 end
 
 
-function export.get_stem_type(stem, word, gender, adj)  -- INFO: Определение типа основы
+function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: Определение типа основы
+	_.log_func('stem_type', 'get_stem_type')
+
 	local stem_type
 
 	if _.endswith(stem, '[гкх]') then

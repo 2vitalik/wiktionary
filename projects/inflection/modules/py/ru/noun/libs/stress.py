@@ -6,7 +6,9 @@ dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
 def extract_stress_type(rest_index):  # export
-#    OLD: Старая версия кода:
+    _.log_func('stress', 'extract_stress_type')
+
+    #    OLD: Старая версия кода:
 #    # local stress_regexp = "([abcdef][′']?[′']?)"
 #    # local stress_regexp2 = '(' + stress_regexp + '.*//.*' + stress_regexp + ')'
 #    stress_regexp = '(' + stress_regexp + '(% ?.*))'
@@ -37,6 +39,8 @@ def extract_stress_type(rest_index):  # export
 
 # Данные: ударность основы и окончания в зависимости от схемы ударения
 def get_noun_stress_schema(stress_type):  # export  # INFO: Вычисление схемы ударения
+    _.log_func('stress', 'get_noun_stress_schema')
+
     # local stress_schema, types, sg_value, pl_value
 
     # общий подход следующий:
@@ -79,6 +83,7 @@ def get_noun_stress_schema(stress_type):  # export  # INFO: Вычисление
 
 # Данные: ударность основы и окончания в зависимости от схемы ударения
 def get_adj_stress_schema(stress_type):  # export  # INFO: Вычисление схемы ударения
+    _.log_func('stress', 'get_adj_stress_schema')
 
     # TODO: Пока не используется
 
@@ -106,6 +111,7 @@ def get_adj_stress_schema(stress_type):  # export  # INFO: Вычисление 
 
 
 def get_pronoun_stress_schema(stress_type):  # export  # INFO: Вычисление схемы ударения
+    _.log_func('stress', 'get_pronoun_stress_schema')
 
     # TODO: Пока не используется
 
@@ -127,6 +133,8 @@ def get_pronoun_stress_schema(stress_type):  # export  # INFO: Вычислен�
 
 
 def get_stress_schema(stress_type, adj, pronoun):  # export  # Пока не используется
+    _.log_func('stress', 'get_stress_schema')
+
     if adj:
         return export.get_adj_stress_schema(stress_type)
     elif pronoun:
@@ -139,11 +147,14 @@ def get_stress_schema(stress_type, adj, pronoun):  # export  # Пока не и�
 
 # TODO: вместо "endings" может передавать просто data
 def add_stress(endings, case):
+    _.log_func('stress', 'add_stress')
+
     endings[case] = _.replaced(endings[case], '^({vowel})', '%1́ ')
 # end
 
 
 def apply_stress_type(data):  # export
+    _.log_func('stress', 'apply_stress_type')
 
     # If we have "ё" specific
     if _.contains(data.rest_index, 'ё') and not data.stem_type == 'n-3rd':
@@ -158,7 +169,7 @@ def apply_stress_type(data):  # export
     # end
 
     # If we have "ё" specific
-    mw.log('? data.stem_type: ' + data.stem_type)
+    _.log_value(data.stem_type, 'data.stem_type')
     if _.contains(data.rest_index, 'ё') and data.stem_type != 'n-3rd':  # Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
         data.stem_stressed = _.replaced(data.stem_stressed, 'е́?([^е]*)$', 'ё%1')
     # end

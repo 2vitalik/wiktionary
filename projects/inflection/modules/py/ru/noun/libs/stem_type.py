@@ -6,6 +6,8 @@ dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
 def get_base_stem_type(stem_type):
+    _.log_func('stem_type', 'get_base_stem_type')
+
     # local change_stem_type
 
     # INFO: Выбор подходящего из двух типов
@@ -30,7 +32,9 @@ def get_base_stem_type(stem_type):
 # end
 
 
-def get_stem_type(stem, word, gender, adj):  # export  # INFO: Определение типа основы
+def get_stem_type(stem, word, gender, adj, rest_index):  # export  # INFO: Определение типа основы
+    _.log_func('stem_type', 'get_stem_type')
+
     # local stem_type
 
     if _.endswith(stem, '[гкх]'):

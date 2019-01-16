@@ -13,6 +13,8 @@ stressed = 1
 
 # Данные: все стандартные окончания для двух типов основ
 def get_standard_noun_endings():
+    _.log_func('endings', 'get_standard_noun_endings')
+
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
     return dict(
         m = dict(  # стандартные окончания мужского рода
@@ -92,6 +94,8 @@ def get_standard_noun_endings():
 
 # Данные: все стандартные окончания для двух типов основ
 def get_standard_adj_endings():
+    _.log_func('endings', 'get_standard_adj_endings')
+
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
     return dict(
         m = dict(
@@ -174,6 +178,7 @@ def get_standard_adj_endings():
 
 
 def get_standard_pronoun_endings():
+    _.log_func('endings', 'get_standard_pronoun_endings')
 
     # TODO: Пока что не используется
 
@@ -250,6 +255,8 @@ def get_standard_pronoun_endings():
 # end
 
 def get_standard_pronoun_noun_endings():
+    _.log_func('endings', 'get_standard_pronoun_noun_endings')
+
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
     return dict(
         m = dict(
@@ -324,6 +331,8 @@ def get_standard_pronoun_noun_endings():
 
 # Схлопывание: Выбор окончаний в зависимости от рода и типа основы
 def get_base_endings(gender, base_stem_type, adj, pronoun):
+    _.log_func('endings', 'get_base_endings')
+
     # local standard_endings, keys
 
     # INFO: Получение списка всех стандартных окончаний
@@ -355,6 +364,7 @@ def get_base_endings(gender, base_stem_type, adj, pronoun):
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 def fix_noun_endendings(endings, gender, stem_type, stress_schema):
+    _.log_func('endings', 'fix_noun_endendings')
 
     # INFO: Replace "ы" to "и"
     if _.equals(stem_type, ['velar', 'sibilant']):
@@ -431,6 +441,7 @@ def fix_noun_endendings(endings, gender, stem_type, stress_schema):
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun):
+    _.log_func('endings', 'fix_adj_pronoun_endings')
 
     # INFO: Replace "ы" to "и"
     if _.equals(stem_type, ['velar', 'sibilant']):
@@ -503,6 +514,7 @@ def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pron
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 def fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema):
+    _.log_func('endings', 'fix_pronoun_noun_endings')
 
     # INFO: Replace "ы" to "и"
     if _.equals(stem_type, {'sibilant'}):
@@ -546,6 +558,7 @@ def fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema):
 
 # Изменение окончаний для случаев (1), (2), (3)
 def apply_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index, adj, pronoun):
+    _.log_func('endings', 'apply_specific_1_2')
 
     if adj or pronoun:
         pass # TODO
@@ -603,6 +616,8 @@ def apply_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index, a
 
 # Схлопывание: Выбор окончания среди двух вариантов в зависимости от схемы ударения
 def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun):
+    _.log_func('endings', 'choose_endings_stress')
+
     # local stress
 
     if adj:
@@ -650,6 +665,8 @@ def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, p
 
 
 def get_endings(data):  # export
+    _.log_func('endings', 'get_endings')
+
     # INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
     # local endings
 

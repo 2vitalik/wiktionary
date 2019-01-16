@@ -111,10 +111,22 @@ end
 --	end
 --end
 
+function export.log_info(info)
+    mw.log('# ' .. info)
+end
+
+function export.log_func(module, name)
+    mw.log('> {' .. module .. '} ' .. name .. ':')
+end
+
+function export.log_value(value, name)
+    mw.log('  - ' .. name .. ' = "' .. tostring(value) .. '"')
+end
+
 function export.log_table(t, name)
-	mw.log('@ `' .. name .. '` values:')
+	mw.log('  - ' .. name .. ':')
 	for key, value in pairs(t) do
-		mw.log(' - ["' .. tostring(key) .. '"] = "' .. tostring(value) .. '"')
+		mw.log('    - ["' .. tostring(key) .. '"] = "' .. tostring(value) .. '"')
 	end
 end
 

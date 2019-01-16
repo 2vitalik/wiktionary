@@ -106,10 +106,22 @@ def contains_several(str, values):
     return check(str, values, 'contains_several')
 
 
+def log_info(info):
+    mw.log('# ' + info)
+
+
+def log_func(module, name):
+    mw.log('> {' + module + '} ' + name + ':')
+
+
+def log_value(value, name):
+    mw.log('  - ' + name + ' = "' + str(value) + '"')
+
+
 def log_table(t, name):
-    mw.log('@ `' + name + '` values:')
+    mw.log('  - ' + name + ':')
     for key, value in t.items():
-        mw.log(' - ["' + str(key) + '"] = "' + str(value) + '"')
+        mw.log('    ["' + str(key) + '"] = "' + str(value) + '"')
 
 
 def has_key(value, key=None):

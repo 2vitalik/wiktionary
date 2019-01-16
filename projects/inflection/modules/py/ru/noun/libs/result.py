@@ -7,6 +7,8 @@ dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 # Использование дефисов вместо подчёркивания
 def replace_underscore_with_hyphen(forms):
+    _.log_func('result', 'replace_underscore_with_hyphen')
+
     # local keys, old_key
 
     keys = [
@@ -28,6 +30,8 @@ def replace_underscore_with_hyphen(forms):
 
 # Формирование параметров рода и одушевлённости для подстановки в шаблон
 def forward_gender_animacy(forms, data):
+    _.log_func('result', 'forward_gender_animacy')
+
     # local genders, animacies
 
     # Род:
@@ -55,6 +59,8 @@ def forward_gender_animacy(forms, data):
 
 
 def forward_args(forms, args):
+    _.log_func('result', 'forward_args')
+
     # local keys
 
     keys = [
@@ -96,6 +102,8 @@ def forward_args(forms, args):
 
 
 def additional_arguments(forms, data):
+    _.log_func('result', 'additional_arguments')
+
     # RU (склонение)
     if _.contains(data.rest_index, '0'):
         forms['скл'] = 'не'
@@ -139,6 +147,8 @@ def additional_arguments(forms, data):
 
 
 def forward_things(forms, args, data):  # export
+    _.log_func('result', 'forward_things')
+
     forms['stem_type'] = data.stem_type  # for testcases
     forms['stress_type'] = data.stress_type  # for categories   -- is really used?
     forms['dev'] = dev_prefix
@@ -154,6 +164,8 @@ def forward_things(forms, args, data):  # export
 
 
 def default(data, additional):  # export
+    _.log_func('result', 'default')
+
     # local forms
 
     forms = additional
