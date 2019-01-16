@@ -13,9 +13,7 @@ class ValueCustom:
 
 class TemplateKeyDuplicated(KeyTitle, ValueCustom, SubLists):
     path = 'Ошибки/Важные/Шаблоны/Разное/Дублирование параметров'
-    description = '''
-        Случаи дублирования параметра в шаблонах.
-    '''
+    short_title = 'Дублирование параметров в шаблонах'
 
     def check_page(self, page) -> list:
         values = []
