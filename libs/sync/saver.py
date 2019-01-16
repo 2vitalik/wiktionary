@@ -3,6 +3,7 @@ from os.path import join
 
 from core.conf.conf import SYNC_PATH
 from libs.utils.io import write, fix_path
+from libs.utils.wikibot import save_page
 
 prefixes = {
     'Викисловарь:': 'wiktionary',
@@ -28,6 +29,14 @@ def sync_path(title):
 def sync_save(title, content):
     path = sync_path(title)
     write(path, content)
+
+
+def sync_save_page(title, content, desc, debug=False):
+    sync_save(title, content)
+    if debug:
+        print(f'{"=" * 100}\n{title}\n{content.strip()}\n')
+    else:
+        save_page(title, content, desc)
 
 
 def sync_delete(title):
