@@ -12,3 +12,8 @@ def strip(text):
     if not text:  # для случая None
         return ''
     return text.strip()
+
+
+def remove_stress(value):
+    return value.replace('́', '').replace('̀', '').replace('ѐ', 'е'). \
+        replace('ѝ', 'и')
