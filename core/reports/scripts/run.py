@@ -4,10 +4,8 @@ from os.path import join
 from core.conf.conf import REPORTS_PATH
 from core.storage.main import storage
 from core.storage.postponed.base_updater import PostponedUpdaterMixin
-from libs.sync.saver import sync_save
+from libs.sync.saver import sync_save_page
 from libs.utils.log import log_exception
-from libs.utils.wikibot import save_page
-from core.reports.lib.base import BaseReportPage
 from core.reports.reports.bucket import Bucket
 
 
@@ -15,7 +13,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
     path = join(REPORTS_PATH)
 
     def __init__(self, report_classes=None, only_recent=False):
-        print(datetime.now(), 'started')
+        print(datetime.now(), 'started reports updater')
         self.only_recent = only_recent
         self.report_classes = report_classes
 
@@ -75,6 +73,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
 
 class ReportsSaver:
     def __init__(self):
+        print(datetime.now(), 'started reports saver')
         self.debug = False
         self.root = 'Викисловарь:Отчёты/v3'
         # self.root = 'Участник:Vitalik/Отчёты/v3'
@@ -119,12 +118,12 @@ class ReportsSaver:
         self._save_node(node, key, prefix)
         for key, value in node.items():
             if type(value) == dict:
-                # value -- это секция
+                sub_node = value  # здесь value -- это секция (node: dict)
                 new_prefix = f'{prefix}/{key}'
-                self._save_reports(value, key, new_prefix)  # рекурсивно
+                self._save_reports(sub_node, key, new_prefix)  # рекурсивно
             else:
-                # value -- это отчёт
-                self._save_report(value)
+                report = value  # здесь value -- это отчёт (Report)
+                report.save(self.root, self.debug)
 
     def _save_node(self, node: dict, key: str, prefix: str):
         title = f'{self.root}{prefix}'
@@ -136,7 +135,7 @@ class ReportsSaver:
         content += self._get_node_content(node) or "* ''пусто''"
 
         desc = 'Обновление дерева отчётов'
-        self._save_page(title, content, desc)
+        sync_save_page(title, content, desc, self.debug)
 
     def _get_node_content(self, node: dict, indent=1, prefix='/'):
         content = ''
@@ -157,19 +156,6 @@ class ReportsSaver:
                     styled_count = f"<span style='color: silver'>0</span>"
                 content += f"{asterisks} '''{link}''' ({styled_count})\n"
         return content
-
-    def _save_report(self, report: BaseReportPage):
-        title = f'{self.root}/{report.path}'
-        content = report.page_content
-        desc = f'Обновление отчёта: {report.count}'
-        self._save_page(title, content, desc)
-
-    def _save_page(self, title, content, desc):
-        sync_save(title, content)
-        if self.debug:
-            print(f'{"=" * 100}\n{title}\n{content.strip()}\n')
-        else:
-            save_page(title, content, desc)
 
 
 @log_exception('reports')
@@ -193,3 +179,5 @@ def reports_debug(limit=None):
 if __name__ == '__main__':
     reports_debug(30000)
     # reports_recent()
+    # reports_all()
+    # ReportsSaver().save()

@@ -2,14 +2,18 @@ import re
 from os.path import join, exists
 
 from core.conf.conf import REPORTS_PATH
+from libs.sync.saver import sync_save_page
 from libs.utils.io import json_dump, json_load
 
 
 class BaseReportPage:
     path = None
     description = None
+    short_title = None
 
-    def __init__(self, path: str = None, description: str = None):
+    def __init__(self,
+                 path: str = None,
+                 description: str = None):
         if path:
             self.path = path
         if description:
@@ -19,17 +23,39 @@ class BaseReportPage:
     def content(self):
         raise NotImplementedError()
 
+    @staticmethod
+    def get_page_content(content, short_title=None, description=None):
+        content = content or "* ''пусто''"
+        short_title = short_title or 'Содержимое отчёта'
+
+        description_block = ''
+        if description:
+            description = re.sub('^ +', '', description.strip(),
+                                 flags=re.MULTILINE)
+            description_block = \
+                f'== Описание отчёта ==\n' \
+                f'{description}\n' \
+                f'\n'
+
+        return f'{description_block}' \
+               f"== {short_title} ==\n" \
+               f"{content}".replace('\u200e', '�')
+
     @property
     def page_content(self):
-        description = re.sub('^ +', '', self.description.strip(),
-                             flags=re.MULTILINE)
-        content = self.content or "* ''пусто''"
+        return self.get_page_content(self.content, self.short_title,
+                                     self.description)
 
-        return f'== Описание отчёта ==\n' \
-               f'{description}\n' \
-               f'\n' \
-               f"== Содержимое отчёта ==\n" \
-               f"{content}".replace('\u200e', '�')
+    def save(self,
+             root_prefix: str,
+             debug: bool = False):
+        """
+        Сохранение содержимого отчёта в ВС
+        """
+        title = f'{root_prefix}/{self.path}'
+        content = self.page_content
+        desc = f'Обновление отчёта: {self.count}'
+        sync_save_page(title, content, desc, debug)
 
 
 class ImportExportMixin:
