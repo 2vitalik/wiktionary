@@ -42,9 +42,9 @@ function export.get_stem_type(stem, word, gender, adj)  -- INFO: Определ�
 		stem_type = 'letter-и'
 	else
 		if adj then
-			if _.endswith(word, {'ый', 'ой', 'ая', 'ое'}) then
+			if _.endswith(word, {'ый', 'ой', 'ая', 'ое', 'ые'}) then
 				stem_type = 'hard'
-			elseif _.endswith(word, {'ий', 'яя', 'ее'}) then
+			elseif _.endswith(word, {'ий', 'яя', 'ее', 'ие'}) then
 				stem_type = 'soft'
 			end
 		elseif gender == 'm' then

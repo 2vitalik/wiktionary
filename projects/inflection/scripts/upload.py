@@ -50,10 +50,10 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 
 
 if __name__ == '__main__':
-    #dev = False
-    dev = True
-    ru_noun_version = '3.4.6'
+    dev = False
+    #dev = True
+    ru_noun_version = '3.4.8'
     inflection_version = '2.2.3'
-    desc = 'откат к версии 3.4.6'
+    desc = 'исправлена ошибка в обработке адъективного склонения pluralia tantum'
 
     upload(dev, ru_noun_version, inflection_version, desc)
