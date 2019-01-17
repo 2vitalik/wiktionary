@@ -40,8 +40,10 @@ local function forward_gender_animacy(forms, data)
 		forms['род'] = 'общ'
 	elseif data.output_gender then
 		forms['род'] = genders[data.output_gender]
-	else
+	elseif data.gender then
 		forms['род'] = genders[data.gender]
+	else
+		-- pass
 	end
 
 	-- Одушевлённость:

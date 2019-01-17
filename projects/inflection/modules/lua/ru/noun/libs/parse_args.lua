@@ -283,7 +283,7 @@ function export.parse(args)
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
 
-		_.log_info('Случай с "+" (несколько составных частей слова через дефис)')
+		-- _.log_info('Случай с "+" (несколько составных частей слова через дефис)')
 
 		index_parts = mw.text.split(data.rest_index, '%+')
 		words_parts = mw.text.split(data.word_stressed, '-')
