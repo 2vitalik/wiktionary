@@ -82,7 +82,7 @@ def extract_gender_animacy(data):
     # end
 
     # Удаляем теперь соответствующий кусок индекса
-    if data.gender and data.animacy and not data.adj and not data.pronoun:
+    if (data.gender or data.gender == '') and data.animacy and not data.adj and not data.pronoun:
         _.log_value(data.index, 'data.index')
         orig_index = mw.text.trim(data.index)
 
@@ -111,19 +111,29 @@ def extract_gender_animacy(data):
         rest_index = _.replaced(data.index, '^mf a ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
-            _.log_value(data.rest_index, 'data.rest_index (1)')
+            mw.log('  # Удаление "mf a" из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
         rest_index = _.replaced(data.index, '^[mnf]+ [a-z/]+ ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
-            _.log_value(data.rest_index, 'data.rest_index (2)')
+            mw.log('  # Удаление "[mnf] [in/an]" из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
+            return
+        # end
+        rest_index = _.replaced(data.index, '^мн%.?( неод%.)? ?', '')
+        if rest_index != orig_index:
+            data.rest_index = mw.text.trim(rest_index)
+            mw.log('  # Удаление "мн. (неод.)" из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
         rest_index = _.replaced(data.index, '^[-мжсо/]+%,? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
-            _.log_value(data.rest_index, 'data.rest_index (3)')
+            mw.log('  # Удаление "м/ж/с/мо/жо/со/..." из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
         return dict(error = 'TODO')  # dict # TODO: process such errors
@@ -134,7 +144,8 @@ def extract_gender_animacy(data):
         rest_index = _.replaced(data.index, '^п ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
-            _.log_value(data.rest_index, 'data.rest_index (п)')
+            mw.log('  # Удаление "п" из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
     elif data.pronoun:
@@ -144,7 +155,8 @@ def extract_gender_animacy(data):
         rest_index = _.replaced(data.index, '^мс ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
-            _.log_value(data.rest_index, 'data.rest_index (мс)')
+            mw.log('  # Удаление "мс" из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
     # end

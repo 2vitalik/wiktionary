@@ -52,7 +52,7 @@ local function main_algorithm(data)
 	if not data.stress_type then
 
 --		INFO: Может быть это просто несклоняемая схема:
-		if _.contains(data.rest_index, '^0') or _.contains(data.rest_index, '^мн%. неод%. 0') then
+		if _.contains(data.rest_index, '^0') then
 			keys = {
 				'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
 				'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
