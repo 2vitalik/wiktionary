@@ -106,7 +106,7 @@ def extract_gender_animacy(data):
 #        # local test7 = mw.text.trim(test6)
 #        mw.log('test7 = ' + test7)
 
-        # TODO: Simplify things a bit here:
+        # TODO: Simplify things a bit here (сделать циклом!):
 
         rest_index = _.replaced(data.index, '^mf a ?', '')
         if rest_index != orig_index:
@@ -122,10 +122,17 @@ def extract_gender_animacy(data):
             _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
-        rest_index = _.replaced(data.index, '^мн%.?( неод%.)? ?', '')
+        rest_index = _.replaced(data.index, '^мн%.? неод%.? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "мн. (неод.)" из индекса')
+            mw.log('  # Удаление "мн. неод." из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
+            return
+        # end
+        rest_index = _.replaced(data.index, '^мн%.? ?', '')
+        if rest_index != orig_index:
+            data.rest_index = mw.text.trim(rest_index)
+            mw.log('  # Удаление "мн." из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
