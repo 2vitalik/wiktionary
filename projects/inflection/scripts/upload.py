@@ -48,12 +48,18 @@ def upload(dev, ru_noun_version, inflection_version, desc):
                      f'v{ru_noun_version}: {desc}'):
             print('OK')
 
+    dev_prefix = 'User:Vitalik/' if dev else ''
+    title = f'Module:{dev_prefix}inflection/tools'
+    path = get_path('lua', noun=False)
+    save_page(title, read_file(dev, f'{path}/tools.lua'),
+              f'v{inflection_version}: {desc}')
+
 
 if __name__ == '__main__':
-    dev = False
-    #dev = True
-    ru_noun_version = '3.4.8'
-    inflection_version = '2.2.3'
-    desc = 'исправлена ошибка в обработке адъективного склонения pluralia tantum'
+    # dev = False
+    dev = True
+    ru_noun_version = '3.5'
+    inflection_version = '2.3'
+    desc = 'Исправление для Любови и Вали (исп. число индекса) + обновление системы логирования'
 
     upload(dev, ru_noun_version, inflection_version, desc)
