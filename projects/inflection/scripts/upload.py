@@ -56,10 +56,10 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 
 
 if __name__ == '__main__':
-    # dev = False
+    #dev = False
     dev = True
     ru_noun_version = '3.5.3'
     inflection_version = '2.3'
-    desc = 'Возможно ошибка в частичной поддержке регулярок в Lua, проверяем...'
+    desc = 'Обновление системы логирования и исправления для Любови/Вали и бэгги'
 
     upload(dev, ru_noun_version, inflection_version, desc)
