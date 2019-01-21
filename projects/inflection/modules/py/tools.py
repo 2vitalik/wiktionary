@@ -1,4 +1,5 @@
 from projects.inflection.modules.py import mw
+from projects.inflection.modules.py import utils as u
 
 
 def trim_stress(str):
@@ -10,6 +11,7 @@ stash = {}
 
 
 def clear_stash():
+    global stash
     stash = {}
 
 
@@ -17,13 +19,9 @@ def add_stash(name, value):
     stash[name] = value
 
 
-def escape(name):
-    return name  # todo: implement from `utils.lua`
-
-
 def apply_stash(str):
     for name, value in stash.items():
-        str = mw.ustring.gsub(str, escape(name), value)
+        str = mw.ustring.gsub(str, u.escape(name), value)
 
     return str
 
