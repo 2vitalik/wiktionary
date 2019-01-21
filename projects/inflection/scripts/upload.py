@@ -1,5 +1,6 @@
 from libs.utils.io import read, append
 from libs.utils.wikibot import save_page
+from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.modules import files, get_module_title
 from projects.inflection.scripts.lib.paths import get_path
 
@@ -34,6 +35,10 @@ def read_file(dev, filename):
 
 
 def upload(dev, ru_noun_version, inflection_version, desc):
+    if not compare_dir('lua'):
+        print('Ошибка: папки `lua` не синхронизированы.')
+        return
+
     desc = process_desc(desc)
 
     path = get_path('lua')
