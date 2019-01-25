@@ -26,6 +26,7 @@ class VerbData(BaseDetailedData):
             'гл ru НВ',
             'гл ru -ся',
             'гл ru -сяСВ',
+            'гл ru -сяНСВ',
         ]
 
     @classmethod
