@@ -63,8 +63,8 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 if __name__ == '__main__':
     #dev = False
     dev = True
-    ru_noun_version = '3.5.4'
+    ru_noun_version = '3.5.5'
     inflection_version = '2.3'
-    desc = 'Категория-ошибка, если слово не совпадает с заголовком статьи; плюс рефакторинг для `result.finalize`'
+    desc = 'Категория-ошибка, если слово не совпадает с заголовком статьи; плюс рефакторинг'
 
     upload(dev, ru_noun_version, inflection_version, desc)
