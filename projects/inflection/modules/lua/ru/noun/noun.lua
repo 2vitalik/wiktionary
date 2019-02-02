@@ -44,7 +44,7 @@ local function main_algorithm(data)
 
 	data.stress_type, error = stress.extract_stress_type(data.rest_index)
 
-	if error then return result.default(data, error) end
+	if error then return result.finalize(data, error) end
 
 	_.log_value(data.stress_type, 'data.stress_type')
 
@@ -63,15 +63,15 @@ local function main_algorithm(data)
 			for i, key in pairs(keys) do  -- list
 				forms[key] = data.word_stressed
 			end
-			return result.default(data, forms)
+			return result.finalize(data, forms)
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
 		elseif _.has_value(data.rest_index) then
-			return result.default(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- b-dict
+			return result.finalize(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- b-dict
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:
 		else
-			return result.default(data, {})  -- b-dict
+			return result.finalize(data, {})  -- b-dict
 		end
 	end
 
@@ -101,7 +101,7 @@ local function main_algorithm(data)
 	_.log_value(data.base_stem_type, 'data.base_stem_type')
 
 	if not data.stem_type then
-		return result.default(data, {error='Неизвестный тип основы'})  -- b-dict
+		return result.finalize(data, {error='Неизвестный тип основы'})  -- b-dict
 	end
 
 	-- -------------------------------------------------------------------------
@@ -199,7 +199,7 @@ function export.forms(base, args, frame)
 
 --	INFO: Достаём всю информацию из аргументов (args): основа, род, одушевлённость и т.п.
 	data, error = parse_args.parse(args)
-	if error then return result.default(data, error) end
+	if error then return result.finalize(data, error) end
 
 	data.frame = frame
 
@@ -226,7 +226,8 @@ function export.forms(base, args, frame)
 
 	form.special_cases(forms, args, data.index, data.word)
 
-	result.forward_things(forms, args, data)
+	result.finalize(data, forms)
+
 	_.log_table(forms, "forms")
 	return forms
 end

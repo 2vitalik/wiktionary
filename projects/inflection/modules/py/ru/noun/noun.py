@@ -44,7 +44,7 @@ def main_algorithm(data):
 
     data.stress_type, error = stress.extract_stress_type(data.rest_index)
 
-    if error: return result.default(data, error) # end
+    if error: return result.finalize(data, error) # end
 
     _.log_value(data.stress_type, 'data.stress_type')
 
@@ -63,15 +63,15 @@ def main_algorithm(data):
             for i, key in enumerate(keys):
                 forms[key] = data.word_stressed
             # end
-            return result.default(data, forms)
+            return result.finalize(data, forms)
 
         # INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
         elif _.has_value(data.rest_index):
-            return result.default(data, dict(error='Нераспознанная часть индекса: ' + data.rest_index))  # b-dict
+            return result.finalize(data, dict(error='Нераспознанная часть индекса: ' + data.rest_index))  # b-dict
 
         # INFO: Если индекса вообще нет, то и формы просто не известны:
         else:
-            return result.default(data, dict())  # b-dict
+            return result.finalize(data, dict())  # b-dict
         # end
     # end
 
@@ -101,7 +101,7 @@ def main_algorithm(data):
     _.log_value(data.base_stem_type, 'data.base_stem_type')
 
     if not data.stem_type:
-        return result.default(data, dict(error='Неизвестный тип основы'))  # b-dict
+        return result.finalize(data, dict(error='Неизвестный тип основы'))  # b-dict
     # end
 
     # -------------------------------------------------------------------------
@@ -199,7 +199,7 @@ def forms(base, args, frame):  # export
 
     # INFO: Достаём всю информацию из аргументов (args): основа, род, одушевлённость и т.п.
     data, error = parse_args.parse(args)
-    if error: return result.default(data, error) # end
+    if error: return result.finalize(data, error) # end
 
     data.frame = frame
 
@@ -226,7 +226,8 @@ def forms(base, args, frame):  # export
 
     form.special_cases(forms, args, data.index, data.word)
 
-    result.forward_things(forms, args, data)
+    result.finalize(data, forms)
+
     _.log_table(forms, "forms")
     return forms
 # end

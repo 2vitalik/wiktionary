@@ -148,35 +148,23 @@ end
 --------------------------------------------------------------------------------
 
 
-function export.forward_things(forms, args, data)
-	_.log_func('result', 'forward_things')
+function export.finalize(data, forms)
+	_.log_func('result', 'finalize')
 
 	forms['stem_type'] = data.stem_type  -- for testcases
 	forms['stress_type'] = data.stress_type  -- for categories   -- is really used?
 	forms['dev'] = dev_prefix
 
 	additional_arguments(forms, data)
-
-	-- TODO: Убедиться, что кастомные формы идут как дополнение, а не замена? Или таки замена7 Хм..
-
 	replace_underscore_with_hyphen(forms)
-	forward_gender_animacy(forms, data)
-	forward_args(forms, args)
-end
 
-
-function export.default(data, additional)
-	_.log_func('result', 'default')
-
-	local forms
-
-	forms = additional
-	forms['stem_type'] = data.stem_type  -- for testcases
 	forward_gender_animacy(forms, data)
 	forward_args(forms, data.args)
+
 	if not _.has_key(forms['зализняк']) then
 		forms['зализняк'] = '??'
 	end
+
 	return forms
 end
 
