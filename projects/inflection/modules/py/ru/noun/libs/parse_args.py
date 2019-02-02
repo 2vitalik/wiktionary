@@ -236,7 +236,7 @@ def angle_brackets(data):
 # end
 
 
-def parse(args):  # export
+def parse(base, args):  # export
     _.log_func('parse_args', 'parse')
 
     # local data, error, parts, n_parts, data1, data2
@@ -244,6 +244,7 @@ def parse(args):  # export
 
     # INFO: Достаём значения из параметров:
     data = additional.AttrDict()  # AttrDict
+    data.base = base
     data.args = args
     data.index = mw.text.trim(args['индекс'])
     data.word_stressed = mw.text.trim(args['слово'])

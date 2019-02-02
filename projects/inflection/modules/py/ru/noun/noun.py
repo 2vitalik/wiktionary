@@ -198,8 +198,12 @@ def forms(base, args, frame):  # export
     prepare_stash()
 
     # INFO: Достаём всю информацию из аргументов (args): основа, род, одушевлённость и т.п.
-    data, error = parse_args.parse(args)
-    if error: return result.finalize(data, error) # end
+    data, error = parse_args.parse(base, args)
+    if error:
+        forms = result.finalize(data, error)
+        _.log_table(forms, "forms")
+        return forms
+    # end
 
     data.frame = frame
 

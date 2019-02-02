@@ -165,6 +165,10 @@ def finalize(data, forms):  # export
         forms['зализняк'] = '??'
     # end
 
+    if not _.has_key(forms, 'error_category') and data.word != data.base:
+        forms['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
+    # end
+
     return forms
 # end
 
