@@ -25,6 +25,7 @@ string = '''('[^']*'|"[^"]*")'''
 
 regexps_MULTILINE = {
     'py': [
+        ('from projects.inflection.modules.py.additional import syllables', 'local syllables = require("Модуль:слоги")'),
         (r'from .libs import (\w+)', "local \\1 = require(parent_prefix .. '/\\1')"),
         # (r"\bmw\.text\.", 'mw.'),
         (r'"\{\{expandTemplate\}\}"', r"frame:expandTemplate{title='incorrect', args={forms['gen_pl']} }", ),  # fixme: don't hardcode this!
@@ -80,6 +81,7 @@ regexps_MULTILINE = {
         (r'^(--)?' + '    ' * 1, '\\1' + '\t' * 1),
     ],
     'lua': [
+        ('local syllables = require\("Модуль:слоги"\)', 'from projects.inflection.modules.py.additional import syllables'),
         (r"^local (\w+) = require\(parent_prefix \.\. '/(\w+)'\)", 'from .libs import \\1'),
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),

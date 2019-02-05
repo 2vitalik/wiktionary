@@ -5,6 +5,8 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local syllables = require("Модуль:слоги")
+
 -- Использование дефисов вместо подчёркивания
 local function replace_underscore_with_hyphen(forms)
 	_.log_func('result', 'replace_underscore_with_hyphen')
@@ -60,11 +62,12 @@ local function forward_gender_animacy(forms, data)
 end
 
 
-local function forward_args(forms, args)
+local function forward_args(forms, data)
 	_.log_func('result', 'forward_args')
 
-	local keys
+	local keys, args
 
+	args = data.args
 	keys = {
 		'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
 		'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
@@ -92,6 +95,12 @@ local function forward_args(forms, args)
 		if _.has_value(args[key]) then
 			forms[key] = args[key]
 		end
+	end
+
+	if _.has_key(forms['слоги']) then
+		forms['слоги'] = syllables.get_syllables(forms['слоги'])
+	else
+		forms['слоги'] = data.word
 	end
 
 	if _.has_key(args['коммент']) then
@@ -159,7 +168,7 @@ function export.finalize(data, forms)
 	replace_underscore_with_hyphen(forms)
 
 	forward_gender_animacy(forms, data)
-	forward_args(forms, data.args)
+	forward_args(forms, data)
 
 	if not _.has_key(forms['зализняк']) then
 		forms['зализняк'] = '??'

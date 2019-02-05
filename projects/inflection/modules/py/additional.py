@@ -29,3 +29,9 @@ class AttrDict(dict):
 
 def table_len(table):
     return len(table)
+
+
+class syllables:
+    @staticmethod
+    def get_syllables(self, value):
+        return value  # todo?

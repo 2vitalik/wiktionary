@@ -5,6 +5,8 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
+from projects.inflection.modules.py.additional import syllables
+
 # Использование дефисов вместо подчёркивания
 def replace_underscore_with_hyphen(forms):
     _.log_func('result', 'replace_underscore_with_hyphen')
@@ -60,11 +62,12 @@ def forward_gender_animacy(forms, data):
 # end
 
 
-def forward_args(forms, args):
+def forward_args(forms, data):
     _.log_func('result', 'forward_args')
 
-    # local keys
+    # local keys, args
 
+    args = data.args
     keys = [
         'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
         'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
@@ -92,6 +95,12 @@ def forward_args(forms, args):
         if _.has_value(args, key):
             forms[key] = args[key]
         # end
+    # end
+
+    if _.has_key(forms, 'слоги'):
+        forms['слоги'] = syllables.get_syllables(forms['слоги'])
+    else:
+        forms['слоги'] = data.word
     # end
 
     if _.has_key(args, 'коммент'):
@@ -159,7 +168,7 @@ def finalize(data, forms):  # export
     replace_underscore_with_hyphen(forms)
 
     forward_gender_animacy(forms, data)
-    forward_args(forms, data.args)
+    forward_args(forms, data)
 
     if not _.has_key(forms, 'зализняк'):
         forms['зализняк'] = '??'
