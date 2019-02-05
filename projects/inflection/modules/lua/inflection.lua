@@ -37,6 +37,8 @@ local function fix_args(base, args)
 	if not args['индекс'] then
 		args['индекс'] = ''
 	end
+	args['слово'] = mw.text.trim(args['слово'])
+	args['индекс'] = mw.text.trim(args['индекс'])
 	if remove_stress(args['индекс']) == base then
 		local tmp = args['индекс']
 		args['индекс'] = args['слово']
