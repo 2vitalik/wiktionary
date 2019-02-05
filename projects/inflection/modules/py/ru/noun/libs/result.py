@@ -98,7 +98,9 @@ def forward_args(forms, data):
     # end
 
     if _.has_key(forms, 'слоги'):
-        forms['слоги'] = syllables.get_syllables(forms['слоги'])
+        if not _.contains(forms['слоги'], '%<'):
+            forms['слоги'] = syllables.get_syllables(forms['слоги'])
+        # end
     else:
         forms['слоги'] = data.word
     # end

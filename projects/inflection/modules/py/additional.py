@@ -33,5 +33,5 @@ def table_len(table):
 
 class syllables:
     @staticmethod
-    def get_syllables(self, value):
+    def get_syllables(value):
         return value  # todo?
