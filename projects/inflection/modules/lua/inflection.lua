@@ -15,20 +15,32 @@ local function load_unit(unit_name)
 	return require("Module:" .. dev_prefix .. "inflection/" .. unit_name);
 end
 
-local function fix_args(args)
-	-- RU new feature
-	-- TODO: make for here
+local function remove_stress(value)
+	value = mw.ustring.gsub(value, '́', '')
+	value = mw.ustring.gsub(value, '̀', '')
+	value = mw.ustring.gsub(value, 'ѐ', 'е')
+	value = mw.ustring.gsub(value, 'ѝ', 'и')
+	return value
+end
+
+local function fix_args(base, args)
+	-- TODO: make `for` here
 	if args[1] then
-		args['индекс'] = args[1]
+		args['слово'] = args[1]
+	end
+	if not args['слово'] then
+		args['слово'] = ''
+	end
+	if args[2] then
+		args['индекс'] = args[2]
 	end
 	if not args['индекс'] then
 		args['индекс'] = ''
 	end
-	if args[2] then
-		args['слово'] = args[2]
-	end
-	if not args['слово'] then
-		args['слово'] = ''
+	if remove_stress(args['индекс']) == base then
+		local tmp = args['индекс']
+		args['индекс'] = args['слово']
+		args['слово'] = tmp
 	end
 end
 
@@ -54,7 +66,7 @@ function export.get(frame)
 		return 'Error: Name of unit is absent'
 	end
 
-	fix_args(args)
+	fix_args(base, args)
 
     local forms = unit.forms(base, args, frame)
     local template = unit.template(base, args)
@@ -69,10 +81,10 @@ function export.get(frame)
 --	end
 --	output = output .. '}}'
 
-    if _.has_value(forms['error']) then
+    if _.set(forms['error']) then
          output = output .. '\n' .. wu.div_red(forms['error'])
     end
-    if _.has_value(forms['error_category']) then
+    if _.set(forms['error_category']) then
          output = output .. '[[Категория:' .. forms['error_category'] .. ']]'
     end
 
