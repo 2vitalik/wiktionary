@@ -178,6 +178,9 @@ local function init(data)
 --	INFO: Исходное слово без ударения:
 	data.word = _.replaced(data.word_stressed, '́ ', '')
 
+--	INFO: Исходное слово вообще без ударений (в т.ч. без грависа):
+	data.word_cleared = _.replaced(_.replaced(_.replaced(data.word, '̀', ''), 'ѐ', 'е'), 'ѝ', 'и')
+
 	if data.adj then
 		if _.endswith(data.word_stressed, 'ся') then
 			data.postfix = true

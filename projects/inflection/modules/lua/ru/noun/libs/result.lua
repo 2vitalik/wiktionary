@@ -165,7 +165,7 @@ function export.finalize(data, forms)
 		forms['зализняк'] = '??'
 	end
 
-	if not _.has_key(forms['error_category']) and data.word ~= data.base then
+	if not _.has_key(forms['error_category']) and data.word_cleared ~= data.base then
 		forms['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
 	end
 

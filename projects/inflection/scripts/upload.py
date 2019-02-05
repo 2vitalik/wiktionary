@@ -61,10 +61,10 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 
 
 if __name__ == '__main__':
-    #dev = False
-    dev = True
-    ru_noun_version = '3.5.5'
+    dev = False
+    # dev = True
+    ru_noun_version = '3.5.6'
     inflection_version = '2.3'
-    desc = 'Категория-ошибка, если слово не совпадает с заголовком статьи; плюс рефакторинг'
+    desc = 'Исправление определения несовпадения слова с заголовком статьи (доп.: `word_cleared`)'
 
     upload(dev, ru_noun_version, inflection_version, desc)
