@@ -206,7 +206,7 @@ def init(data):
     if several_vovwels and not has_stress:
         return dict(
             error='Ошибка: Не указано ударение в слове',
-            error_category='Не указано ударение в слове в шаблоне "сущ ru+"',
+            error_category='Ошибка в шаблоне "сущ-ru" (не указано ударение в слове)',
         )  # dict
     # end
 # end
