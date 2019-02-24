@@ -356,7 +356,7 @@ def process_message(bot, update):
     chat_id = update.message.chat_id
     title = update.message.text.strip()
 
-    if '\n' in title:
+    if '\n' in title or 'https://' in title or 'http://' in title:
         return
 
     if update.message.chat_id < 0:  # if we are in a group chat
