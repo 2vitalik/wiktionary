@@ -55,6 +55,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
 
     # пометы курсивом:
     text = re.sub('{([\w-]+\.)\},?', '<i>\\1</i> ', text)
+    text = re.sub("''([^']+?)''", '<i>\\1</i> ', text)
 
     # замены шаблонов:
     text = text.replace('{as ru}', '<i>(аналогично русскому слову)</i>')
