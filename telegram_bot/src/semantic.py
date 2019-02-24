@@ -371,6 +371,7 @@ def process_message(bot, update):
     title = re.sub(r'\s*=+$', '', title)
     homonym, title = get_homonym(title)
     lang, title = get_lang(title)
+    title = re.sub(r'#(\w+)', '', title)
     title = title.strip()
     save_log(update.message, title)
 
