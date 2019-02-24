@@ -122,7 +122,7 @@ class ShortReply:
 
     def filter_titles(self):
         titles = []
-        for title in storage.titles:
+        for title in storage.load_titles():
             if re.match(f'{self.regexp}$', title):
                 titles.append(title)
                 if len(title) > 100:
