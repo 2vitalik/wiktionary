@@ -135,7 +135,6 @@ class BaseSection(BaseSectionsGrouper):
                                 f'"{self.title}"')
             self._sub_sections[key] = child_section
 
-    @property
     def sub_sections_content(self):
         if self._sub_sections is None:
             return
@@ -146,7 +145,7 @@ class BaseSection(BaseSectionsGrouper):
 
     @property
     def new_content(self):
-        sub_sections_content = self.sub_sections_content
+        sub_sections_content = self.sub_sections_content()
         sub_sections_changed = \
             sub_sections_content and sub_sections_content != self._old_content
         field_content_changed = self.content != self._old_content
