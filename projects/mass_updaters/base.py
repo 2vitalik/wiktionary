@@ -15,7 +15,6 @@ class MassUpdaterReport:
         self.lines = ''
 
     def error(self, title, value):
-        print(title, '--', value)
         line = self.process_line(f'[[{title}]]: ошибка, {value}', 'maroon')
         self.append('report/errors', line,
                     f'Ошибка в [[{title}]]: {value}')
