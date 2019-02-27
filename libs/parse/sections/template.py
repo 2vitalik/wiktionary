@@ -31,9 +31,9 @@ class Template:
         self.parsed = False
 
         self._full_name = None
+        self._params = None
         self._args = None
         self._kwargs = None
-        self._params = None
 
     def __str__(self):
         class_name = type(self).__name__
@@ -52,13 +52,13 @@ class Template:
 
     @property
     @parsed
-    def args(self):
-        return self._args
+    def params(self):
+        return self._params
 
     @property
     @parsed
-    def params(self):
-        return self._params
+    def args(self):
+        return self._args
 
     @property
     @parsed
