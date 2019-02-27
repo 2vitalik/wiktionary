@@ -34,6 +34,7 @@ class Template:
         self._params = None
         self._args = None
         self._kwargs = None
+        self._all_args_order = None
 
     def __str__(self):
         class_name = type(self).__name__
@@ -73,6 +74,100 @@ class Template:
     def kwargs(self):
         return self._kwargs
 
+    @property
+    @parsed
+    def all_args_order(self):
+        return self._all_args_order
+
+    @parsed
+    def find_key(self, item):
+        for key in self.kwargs:
+            if key.strip() == item.strip():
+                return key
+        return None
+
+    @parsed
+    def __getitem__(self, item):
+        if type(item) == int:
+            try:
+                return self.args[item]
+            except IndexError:
+                return None
+        else:
+            key = self.find_key(item)
+            return self.kwargs[key] if key else None
+
+    @parsed
+    def __setitem__(self, key, new_value):
+
+        def get_bounds(value):
+            if not value.strip():  # пустое значение
+                if not value:
+                    return '', ''
+                if len(value) == 1:
+                    return '', value
+                else:
+                    return value[0], value[1:]
+            else:
+                left = re.search('^\s*', value).group(0)
+                right = re.search('\s*$', value).group(0)
+                return left, right
+
+        old_value = self[key]
+        last_key_left, last_key_right = '', ''
+        if old_value is None:
+            # добавление *нового* ключа (старого значения нет)
+            if self.all_args_order:
+                # пробуем взять отступы значения *последнего* ключа
+                last_key = self.all_args_order[-1]
+                old_left, old_right = get_bounds(self[last_key])
+                last_key_left, last_key_right = get_bounds(last_key)
+            else:
+                # шаблон пока совсем пуст, берём отступы по умолчанию
+                old_left, old_right = '', ''
+        else:
+            # изменение текущего ключа, берём его отступы
+            old_left, old_right = get_bounds(old_value)
+
+        # отступы у нового значения
+        new_left, new_right = get_bounds(new_value)
+
+        # добавляем отступы к значению, если нужно
+        if not new_left:
+            new_value = f'{old_left}{new_value}'
+        if not new_right:
+            new_value = f'{new_value}{old_right}'
+
+        if old_value is None:
+            # добавление нового ключа:
+            if type(key) == int:
+                for _ in range(key - len(self.args)):
+                    # добавляем промежуточные пустые значения:
+                    self.append_arg(f"{old_left}{old_right}")
+                self.append_arg(new_value)
+            else:
+                # добавляем отступы к ключу, если нужно:
+                new_key_left, new_key_right = get_bounds(key)
+                if not new_key_left:
+                    key = f'{last_key_left}{key}'
+                if not new_key_right:
+                    key = f'{key}{last_key_right}'
+
+                self.all_args_order.append(key)
+                self.kwargs[key] = new_value
+        else:
+            # изменение существующего ключа:
+            if type(key) == int:
+                self.args[key] = new_value
+            else:
+                key = self.find_key(key)
+                self.kwargs[key] = new_value
+
+    @parsed
+    def append_arg(self, value):
+        self.all_args_order.append(len(self.args))
+        self.args.append(value)
+
     @parsing
     def _parse(self):
         if self.content[:2] != '{{' or self.content[-2:] != '}}':
@@ -80,6 +175,7 @@ class Template:
 
         self._args = []
         self._kwargs = {}
+        self._all_args_order = []
         content = self.content[2:-2]
 
         for link_content in re.findall('\[\[[^]]+\]\]', content):
@@ -97,7 +193,9 @@ class Template:
                 if key in self._kwargs and not self.silent:
                     raise TemplateKeyDuplicatedError(self, key)
                 self._kwargs[key] = value
+                self._all_args_order.append(key)
             else:
+                self._all_args_order.append(len(self._args))
                 self._args.append(restored)
 
 
