@@ -13,8 +13,10 @@ def tpl_unpack(value):
 
 
 class Template:
-    def __init__(self, name, content, base=None, silent=None):
+    def __init__(self, name, content=None, base=None, silent=None):
         self.name = name
+        if not content:
+            content = '{{' + name + '}}'
         self.content = content
         self.base = base
         self.page_title = None
