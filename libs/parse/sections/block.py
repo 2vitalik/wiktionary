@@ -10,6 +10,7 @@ class BlockSection(SubBlocksGroupersMixin, DeepIterator, BaseSection):
 
     parse_pattern = R.forth_header
     child_section_type = SubBlockSection
+    copy_top_to_sub_sections = True
 
     def __init__(self, base, full_header, header, content, silent):
         super().__init__(base, full_header, header, content, silent)
