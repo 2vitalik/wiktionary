@@ -35,6 +35,7 @@ class Template:
         self._args = None
         self._kwargs = None
         self._all_args_order = None
+        self._old_content = content
 
     def __str__(self):
         class_name = type(self).__name__
@@ -197,6 +198,32 @@ class Template:
             else:
                 self._all_args_order.append(len(self._args))
                 self._args.append(restored)
+
+    def constructed_content(self):
+        content = '{{' + self.full_name
+        for key in self.all_args_order:
+            if type(key) == int:
+                content += '|' + self.args[key]
+            else:
+                content += f'|{key}=' + self.kwargs[key]
+        content += '}}'
+        return content
+
+    @property
+    def new_content(self):
+        constructed_content = self.constructed_content()
+        constructed_changed = \
+            constructed_content and constructed_content != self._old_content
+        field_content_changed = self.content != self._old_content
+        if constructed_changed and field_content_changed:
+            raise Exception('Both contents types was changed, ambiguity.')
+        if field_content_changed:
+            content = self.content
+        elif constructed_changed:
+            content = constructed_content
+        else:
+            content = self._old_content
+        return content
 
 
 class TemplateKeyDuplicatedError(Exception):
