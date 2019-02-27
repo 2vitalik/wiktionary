@@ -14,6 +14,13 @@ class LanguageData(BaseData):
     def is_verb(self):
         raise NotImplementedError()  # todo
 
+    def has_noun(self):
+        for homonym in self:
+            m = homonym.morphology
+            if m and m.word_type == 'noun':
+                return True
+        return False
+
     def has_verb(self):
         for homonym in self:
             m = homonym.morphology
@@ -36,6 +43,13 @@ class LanguageData(BaseData):
         for homonym in self:
             m = homonym.morphology
             if m and m.is_verb() and m.verb.has_impersonal:
+                return True
+        return False
+
+    def has_indexed_noun(self):
+        for homonym in self:
+            m = homonym.morphology
+            if m and m.is_noun() and m.noun.has_index:
                 return True
         return False
 
