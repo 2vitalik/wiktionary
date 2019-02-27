@@ -81,7 +81,7 @@ class BaseMassUpdater:
             print(f'Bot `{self.data_page}` is offline.')
             return
 
-        entries = load_page(self.data_page).strip().split('\n\n')
+        entries = load_page(self.data_page).strip()
         if not entries:
             print(f'Page `{self.data_page}` is empty.')
             return
@@ -89,7 +89,7 @@ class BaseMassUpdater:
         self.report.status('Бот запущен')
 
         processed = []
-        for i, entry in enumerate(entries):
+        for i, entry in enumerate(entries.split('\n\n')):
             title, *values = entry.split('\n ')
             if not values:
                 continue
