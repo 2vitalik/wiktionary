@@ -22,10 +22,17 @@ class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
         self.is_template = title.startswith(u'Шаблон:')
         self.data = PageData(self)
 
-    def upload_changes(self, desc, minor=True):
+    def upload_changes(self, desc, minor=True, debug=False):
         server_content = load_page(self.title)
         if server_content != self._old_content:
             raise Exception('Content on the server was suddenly changed.')
         new_content = self.new_content
         if new_content != self._old_content:
+            if debug:
+                print('=' * 10)
+                print(self.title)
+                print('-' * 10)
+                print(new_content)
+                print('-' * 10)
+                return
             save_page(self.title, new_content, desc, minor, check_changes=False)
