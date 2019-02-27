@@ -128,7 +128,6 @@ class BaseMassUpdater:
                 raise
 
             self.report.success(title)
-            break
 
         self.report.status('Бот завершён')
 
