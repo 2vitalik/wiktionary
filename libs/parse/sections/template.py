@@ -50,6 +50,14 @@ class Template:
     def full_name(self):
         return self._full_name
 
+    @full_name.setter
+    @parsed
+    def full_name(self, value):
+        # todo: full mechanism of left and right bounds
+        if self._full_name.endswith('\n') and not value.endswith('\n'):
+            value += '\n'
+        self._full_name = value
+
     @property
     @parsed
     def params(self):
