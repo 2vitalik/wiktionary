@@ -481,6 +481,7 @@ def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pron
                 endings['prp_sg'] = 'ем'
             # end
             if gender == 'n':
+                endings['nom_sg'] = 'ее'
                 endings['gen_sg'] = 'его'
                 endings['dat_sg'] = 'ему'
                 endings['prp_sg'] = 'ем'
