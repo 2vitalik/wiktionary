@@ -65,8 +65,8 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 if __name__ == '__main__':
     dev = False
     #dev = True
-    ru_noun_version = '3.5.8'
+    ru_noun_version = '3.5.9'
     inflection_version = '2.3'
-    desc = 'Исправлено название категории-ошибки'
+    desc = 'Вариации рода'
 
     upload(dev, ru_noun_version, inflection_version, desc)

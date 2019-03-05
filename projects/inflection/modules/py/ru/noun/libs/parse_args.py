@@ -33,6 +33,24 @@ def extract_gender_animacy(data):
 
     if _.startswith(data.index, 'п'):
         data.adj = True
+    elif _.extract(data.index, '^м//ж') or _.extract(data.index, '^m//f'):
+        data.gender = 'mf'
+        data.animacy = 'in'
+    elif _.extract(data.index, '^м//с') or _.extract(data.index, '^m//n'):
+        data.gender = 'mn'
+        data.animacy = 'in'
+    elif _.extract(data.index, '^ж//м') or _.extract(data.index, '^f//m'):
+        data.gender = 'fm'
+        data.animacy = 'in'
+    elif _.extract(data.index, '^ж//с') or _.extract(data.index, '^f//n'):
+        data.gender = 'fn'
+        data.animacy = 'in'
+    elif _.extract(data.index, '^с//м') or _.extract(data.index, '^n//m'):
+        data.gender = 'nm'
+        data.animacy = 'in'
+    elif _.extract(data.index, '^с//ж') or _.extract(data.index, '^n//m'):
+        data.gender = 'nm'
+        data.animacy = 'in'
     elif _.extract(data.index, '^мо%-жо') or _.extract(data.index, '^mf a'):
         data.gender = 'f'
         data.animacy = 'an'

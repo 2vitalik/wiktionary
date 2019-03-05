@@ -37,7 +37,7 @@ def forward_gender_animacy(forms, data):
     # local genders, animacies
 
     # Род:
-    genders = dict(m='муж', f='жен', n='ср' )  # dict
+    genders = dict(m='муж', f='жен', n='ср', mf='мж', mn='мс', fm='жм', fn='жс', nm='см', nf='сж' )  # dict
     if data.common_gender:
         forms['род'] = 'общ'
     elif data.output_gender:
