@@ -115,6 +115,7 @@ class BaseMassUpdater:
                 continue
             if len(page.ru.homonyms.all()) > 1:
                 self.report.error(title, 'омонимы в статье')
+                continue
 
             if not self.process_page(page, title, values):
                 continue
