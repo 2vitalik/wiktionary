@@ -3,4 +3,5 @@ python-telegram-bot
 pyuca
 pywikibot
 regex
+requests
 natsort
