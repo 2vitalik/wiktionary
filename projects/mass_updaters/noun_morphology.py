@@ -2,6 +2,7 @@ import re
 
 from libs.parse.data.blocks.detailed.noun import NounData
 from libs.parse.sections.template import Template
+from libs.utils.lock import locked_repeat
 from libs.utils.log import log_exception
 from projects.mass_updaters.base import BaseMassUpdater
 
@@ -67,7 +68,8 @@ class NounMorphologyMassUpdater(BaseMassUpdater):
         return True
 
 
-@log_exception('loaders')
+@log_exception('loaders/noun_morphology')
+@locked_repeat('loaders/noun_morphology')
 def noun_morphology_mass_update():
     NounMorphologyMassUpdater().start()
 
