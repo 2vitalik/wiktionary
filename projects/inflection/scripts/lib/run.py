@@ -1,3 +1,5 @@
+import platform
+
 from libs.utils.parse import remove_stress
 from projects.inflection.modules.py.ru.noun.noun import forms
 
@@ -30,15 +32,41 @@ def run(word, index):
     width = max(cases_width, word_width, index_width) + 2
     len2 = max(len2, width - len1 - 9 - 2)
 
+    # print(platform.platform())
+    if platform.platform().startswith('...'):  # just in case, for old OS/font
+        tl = '='  # top-left corner
+        tr = '='  # top-right corner
+        bl = '='  # bottom-left corner
+        br = '='  # bottom-right corner
+        v = '|'   # vertical line
+        vm = '|'  # middle vertical line
+        h = '='   # horizontal line
+        vl = '|'  # left vertical tee
+        vr = '|'  # right vertical tee
+        ht = '='  # top horizontal tee
+        hb = '='  # bottom horizontal tee
+    else:
+        tl = '╔'  # top-left corner
+        tr = '╗'  # top-right corner
+        bl = '╚'  # bottom-left corner
+        br = '╝'  # bottom-right corner
+        v = '║'   # vertical line
+        vm = '│'  # middle vertical line
+        h = '═'   # horizontal line
+        vl = '╠'  # left vertical tee
+        vr = '╣'  # right vertical tee
+        ht = '╤'  # top horizontal tee
+        hb = '╧'  # bottom horizontal tee
+
     print()
-    print(f'╔{"═" * width}╗')
-    print(f'║ Слово:  {replace_stress(word)}{" " * (width-9-len(word))}║')
-    print(f'║ Индекс: {index}{" " * (width-9-len(index))}║')
-    print(f'╠═════╤═{"═" * len1}═╤═{"═" * len2}═╣')
+    print(f'{tl}{h * width}{tr}')
+    print(f'{v} Слово:  {replace_stress(word)}{" " * (width-9-len(word))}{v}')
+    print(f'{v} Индекс: {index}{" " * (width-9-len(index))}{v}')
+    print(f'{vl}{h * 5}{ht}{h * (len1 + 2)}{ht}{h * (len2 + 2)}{vr}')
     for key, key1, key2 in keys:
-        print(f'║ {key} '
-              f'│ {replace_stress(result.get(key1, "-")).ljust(len1)} '
-              f'│ {replace_stress(result.get(key2, "-")).ljust(len2)} '
-              f'║')
-    print(f'╚═════╧═{"═" * len1}═╧═{"═" * len2}═╝')
+        print(f'{v} {key} '
+              f'{vm} {replace_stress(result.get(key1, "-")).ljust(len1)} '
+              f'{vm} {replace_stress(result.get(key2, "-")).ljust(len2)} '
+              f'{v}')
+    print(f'{bl}{h * 5}{hb}{h * (len1 + 2)}{hb}{h * (len2 + 2)}{br}')
     print()
