@@ -12,8 +12,12 @@ def char_info(char):
     return category, name
 
 
+def unicode_sorted_key(key):
+    return Collator().sort_key(key)
+
+
 def unicode_sorted(iterable):
-    return sorted(iterable, key=Collator().sort_key)
+    return sorted(iterable, key=unicode_sorted_key)
 
 
 if __name__ == '__main__':
