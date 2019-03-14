@@ -8,7 +8,7 @@ from projects.mass_updaters.base import BaseMassUpdater
 
 class NounMorphologyMassUpdater(BaseMassUpdater):
     slug = 'morfol'
-    data_page = f"Участник:Cinemantique/{slug}"
+    data_page = f"User:Cinemantique/{slug}"
     desc = u'Заполнение шаблона {сущ-ru}'
 
     allow_several_lines = False
