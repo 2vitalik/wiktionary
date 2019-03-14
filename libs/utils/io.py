@@ -120,3 +120,17 @@ def fix_filename(filename):
         replace('*', '{asterisk}').\
         replace('<', '{lt}').\
         replace('>', '{gt}')
+
+
+def unfix_filename(filename):
+    if filename.lower() in ['con{}', 'nul{}']:
+        return filename[:-2]
+    return filename.\
+        replace('{question}', '?').\
+        replace('{colon}', ':').\
+        replace('{slash}', '/').\
+        replace('{quot}', '"').\
+        replace('{pipe}', '|').\
+        replace('{asterisk}', '*').\
+        replace('{lt}', '<').\
+        replace('{gt}', '>')
