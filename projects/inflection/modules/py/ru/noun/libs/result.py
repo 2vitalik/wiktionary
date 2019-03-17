@@ -90,6 +90,7 @@ def forward_args(forms, data):
         'hide-text', 'зачин', 'слоги', 'дореф',
         'скл', 'зализняк', 'зализняк1', 'чередование',
         'pt', 'st', 'затрудн', 'клитика',
+        'коммент',
     ]  # list
     for i, key in enumerate(keys):
         if _.has_value(args, key):
@@ -103,13 +104,6 @@ def forward_args(forms, data):
         # end
     else:
         forms['слоги'] = data.word
-    # end
-
-    if _.has_key(args, 'коммент'):
-        if not forms['коммент']:
-            forms['коммент'] = ''
-        # end
-        forms['коммент'] = forms['коммент'] + args['коммент']
     # end
 # end
 

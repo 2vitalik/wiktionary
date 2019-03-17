@@ -28,7 +28,7 @@ regexps_MULTILINE = {
         ('from projects.inflection.modules.py.additional import syllables', 'local syllables = require("Модуль:слоги")'),
         (r'from .libs import (\w+)', "local \\1 = require(parent_prefix .. '/\\1')"),
         # (r"\bmw\.text\.", 'mw.'),
-        (r'"\{\{expandTemplate\}\}"', r"frame:expandTemplate{title='incorrect', args={forms['gen_pl']} }", ),  # fixme: don't hardcode this!
+
         (r'^unstressed = 0', 'unstressed = 1'),
         (r'^stressed = 1', 'stressed = 2'),
 
@@ -85,7 +85,7 @@ regexps_MULTILINE = {
         (r"^local (\w+) = require\(parent_prefix \.\. '/(\w+)'\)", 'from .libs import \\1'),
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),
-        (r"\bframe:expandTemplate\{.*\}", '"{{expandTemplate}}"'),  # fixme: don't hardcode this!
+
         (r'^unstressed = 1', 'unstressed = 0'),
         (r'^stressed = 2', 'stressed = 1'),
 

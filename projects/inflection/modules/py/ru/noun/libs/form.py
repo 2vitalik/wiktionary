@@ -55,16 +55,11 @@ def fix_stress(forms):
 # end
 
 
-def apply_obelus(forms, rest_index, frame):
+def apply_obelus(forms, rest_index):
     _.log_func('forms', 'apply_obelus')
 
     if _.contains(rest_index, '÷'):
-        if frame:
-            forms['gen_pl'] = "{{expandTemplate}}"
-        else:
-            forms['gen_pl'] = '{{incorrect|' + forms['gen_pl'] + '}}'
-        # end
-        forms['коммент'] = 'образование род. п. мн. ч. затруднительно'
+        forms['obelus'] = '1'
     # end
 # end
 
@@ -154,7 +149,7 @@ def generate_forms(data):  # export
         # end
     # end
 
-    apply_obelus(forms, data.rest_index, data.frame)
+    apply_obelus(forms, data.rest_index)
 
     choose_accusative_forms(forms, data)
 

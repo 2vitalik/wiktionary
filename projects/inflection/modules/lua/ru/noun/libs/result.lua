@@ -90,6 +90,7 @@ local function forward_args(forms, data)
 		'hide-text', 'зачин', 'слоги', 'дореф',
 		'скл', 'зализняк', 'зализняк1', 'чередование',
 		'pt', 'st', 'затрудн', 'клитика',
+		'коммент',
 	}  -- list
 	for i, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
@@ -103,13 +104,6 @@ local function forward_args(forms, data)
 		end
 	else
 		forms['слоги'] = data.word
-	end
-
-	if _.has_key(args['коммент']) then
-		if not forms['коммент'] then
-			forms['коммент'] = ''
-		end
-		forms['коммент'] = forms['коммент'] .. args['коммент']
 	end
 end
 

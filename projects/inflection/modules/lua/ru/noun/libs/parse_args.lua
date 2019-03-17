@@ -224,7 +224,7 @@ local function init(data)
 	if several_vovwels and not has_stress then
 		return {
 			error='Ошибка: Не указано ударение в слове',
-			error_category='Ошибка в шаблоне "сущ-ru" (не указано ударение в слове)',
+			error_category='Ошибка в шаблоне "сущ-ru": не указано ударение в слове',
 		}  -- dict
 	end
 end

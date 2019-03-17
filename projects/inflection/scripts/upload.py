@@ -63,10 +63,10 @@ def upload(dev, ru_noun_version, inflection_version, desc):
 
 
 if __name__ == '__main__':
-    dev = False
-    #dev = True
-    ru_noun_version = '3.5.10'
+    # dev = False
+    dev = True
+    ru_noun_version = '3.5.12'
     inflection_version = '2.3'
-    desc = 'b'
+    desc = 'Исправление работы параметра "коммент" и добавление "obelus=1"'
 
     upload(dev, ru_noun_version, inflection_version, desc)
