@@ -49,6 +49,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
     text = re.sub('\[\[([^][]*)\]\]', '\\1', text)
 
     text = text.replace('<', '&lt;').replace('>', '&gt;')
+    text = text.replace('&nbsp;', ' ')
 
     # пометы:
     text = text.replace('{п.}', '{перен.}')
