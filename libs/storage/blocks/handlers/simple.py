@@ -35,7 +35,8 @@ class SimpleBlockHandler(BaseBlockHandler):
         if self.index is None:
             if silent:
                 return ''
-            raise StorageError(f"Block doesn't contain title: '{self.title}'")
+            raise StorageError(f"Block doesn't contain title: '{self.title}', "
+                               f"path: {self.path}")
         return self.contents[self.index].split('\t', maxsplit=1)[1]
 
     def do_delete(self):

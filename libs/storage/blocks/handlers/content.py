@@ -31,7 +31,8 @@ class ContentsBlockHandler(BaseBlockHandler):
         if self.index is None:
             if silent:
                 return ''
-            raise PageNotFound(f"Block doesn't contain title: '{self.title}'")
+            raise PageNotFound(f"Block doesn't contain title: '{self.title}', "
+                               f"path: {self.path}")
         return self.contents[self.index]
 
     def do_delete(self):
