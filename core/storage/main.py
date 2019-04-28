@@ -112,18 +112,23 @@ class LogsIterator:
 
 class MainStorage(UpdatersValuesMixin, ArticlesRedirectsLists, LogsIterator,
                   Storage):
-    def __init__(self, lock_slug='', **kwargs):
-        kwargs['path'] = conf.MAIN_STORAGE_PATH
-        kwargs['tables'] = {
-            'content': 'content',
-            'info': 'simple',
-        }
-        kwargs['lock_slug'] = lock_slug
+    def __init__(self, lock_slug='', path=None):
+        super().__init__(
+            path=path or conf.MAIN_STORAGE_PATH,
+            tables={
+                'content': 'content',
+                'info': 'simple',
+            },
+            max_counts={
+                'content': 1000,
+                'info': 50000,
+            },
+            lock_slug=lock_slug,
+        )
         self._articles = None
         self._articles_set = None
         self._redirects = None
         self._redirects_set = None
-        super().__init__(**kwargs)
 
     def get(self, title, table=None, silent=False):
         if table:
