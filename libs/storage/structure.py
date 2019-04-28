@@ -14,7 +14,6 @@ class StructureBuilder:
         self.structure = {}
 
         # counters:
-        self.categories = Counter()
         self.names = Counter()
         self.prefixes = {i: Counter() for i in range(1, MAX_DEPTH)}
 
@@ -29,8 +28,7 @@ class StructureBuilder:
             category, name = char_info(letter)
             self.char_info[letter] = (category, name)
 
-            self.categories[category] += 1
-            self.names[(category, name)] += 1
+            self.names[name] += 1
 
             for i in range(1, MAX_DEPTH):
                 if len(title) >= i:
@@ -39,14 +37,9 @@ class StructureBuilder:
 
     @timing
     def build_structure(self):
-        for category, count in self.categories.items():
-            if count > self.max_count or category in ['Ll', 'Lo', 'Lu', 'Pd']:
-                self.structure[category] = {}
-
-        for (category, name), count in self.names.items():
-            category_dict = self.structure.get(category)
+        for name, count in self.names.items():
             if count > self.max_count:
-                category_dict[name] = {}
+                self.structure[name] = {}
 
         for i in range(1, MAX_DEPTH):
             for prefix, count in self.prefixes[i].items():
@@ -59,8 +52,7 @@ class StructureBuilder:
 
     def name_dict(self, letter):
         category, name = self.char_info[letter]
-        category_dict = self.structure.get(category) or {}
-        return category_dict.get(name)
+        return self.structure.get(name)
 
     def prefix_dict(self, prefix):
         i = len(prefix)
@@ -84,14 +76,11 @@ class StructureBuilder:
             return type(_dict[key]) == list
 
         category, name = self.char_info[title[0]]
-        if is_block(self.structure, category):
-            return self.structure[category]
 
-        names = self.structure[category]
-        if is_block(names, name):
-            return names[name]
+        if is_block(self.structure, name):
+            return self.structure[name]
 
-        prefixes = names[name]
+        prefixes = self.structure[name]
         for i in range(1, MAX_DEPTH):
             prefix = title[:i]
             if is_block(prefixes, prefix):

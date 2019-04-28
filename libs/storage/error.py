@@ -5,3 +5,7 @@ class StorageError(Exception):
 
 class PageNotFound(StorageError):
     pass
+
+
+class BlockNotFound(StorageError):
+    pass

@@ -30,8 +30,8 @@ class BaseStorageBuilder:
         for prefix, sub_structure in structure.items():
             # print(' ' * level, prefix)
             key = prefix
-            if level > 2:
-                code = ord(prefix[-1]) if len(prefix) + 2 >= level else 0
+            if level > 1:
+                code = ord(prefix[-1]) if len(prefix) + 1 >= level else 0
                 key = f'{code} - {hex(code)}'
             new_path = join(path, key)
             if type(sub_structure) == dict:
