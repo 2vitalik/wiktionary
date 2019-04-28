@@ -26,6 +26,8 @@ class StructureBuilder:
         for title in self.titles:
             letter = title[0]
             category, name = char_info(letter)
+            if category not in ['Ll', 'Lo', 'Lu', 'Pd']:
+                name = 'OTHER'
             self.char_info[letter] = (category, name)
 
             self.names[name] += 1
