@@ -1,4 +1,5 @@
 from libs.storage.builder import SimpleStorageBuilder, ContentsStorageBuilder
+from libs.utils.io import append
 from libs.utils.timing import timing
 
 
@@ -14,6 +15,7 @@ class StorageCopier:
 
 class StorageCopierSingleData(StorageCopier):
     def data(self, title):
+        append('copier_log.txt', title)
         return self.old_storage.get(title)
 
 
