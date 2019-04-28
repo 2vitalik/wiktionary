@@ -12,16 +12,17 @@ from libs.utils.io import read, write
 class ContentsBlockHandler(BaseBlockHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        try:
+            self.index = self.titles.index(self.title)
+        except ValueError:
+            self.index = None
 
+    def get_contents_and_title(self):
         block_content = read(self.path)
         if not block_content:
             raise StorageError(f'Block is empty: "{self.path}"')
         self.contents = block_content.split(SEPARATOR)
         self.titles = self.contents[0].split('\n')
-        try:
-            self.index = self.titles.index(self.title)
-        except ValueError:
-            self.index = None
 
     def default_empty(self, prefix):
         return f"Prefix: {prefix}"
@@ -64,6 +65,7 @@ class ContentsBlockHandler(BaseBlockHandler):
     def save(self):
         copy(self.path, f'{self.path}.bak')
         write(self.path, SEPARATOR.join(self.contents))
+        super(ContentsBlockHandler, self).save()
 
     def split_block(self):
         # todo: log('Разделение файла')

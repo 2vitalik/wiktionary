@@ -2,6 +2,7 @@ from os.path import join, exists, isfile
 
 from libs.storage.const import MAX_DEPTH
 from libs.storage.error import StorageError
+from libs.utils.cache import Cache
 from libs.utils.exceptions import LockedError
 from libs.utils.io import write, is_locked, lock_file, unlock_file
 from libs.utils.unicode import char_info
@@ -13,6 +14,8 @@ class BaseBlockHandler:
     Комментарий по поводу `lock` механизма:
     - в наследниках нужно делать self.unlock() после `delete()` или `update()`
     """
+    cache = Cache(400)
+
     def __init__(self, title, handler, lock=False):
         self.title = title
         self.handler = handler
@@ -22,6 +25,17 @@ class BaseBlockHandler:
         self.locked = lock
         if lock:
             self.lock()
+
+        data = self.cache.get(self.path)
+        if data:
+            self.contents, self.titles = data
+        else:
+            self.contents, self.titles = None, None
+            self.get_contents_and_title()
+            self.cache.update(self.path, (self.contents, self.titles))
+
+    def get_contents_and_title(self):
+        raise NotImplementedError()
 
     def lock(self):
         lock_file(self.path)
@@ -44,6 +58,9 @@ class BaseBlockHandler:
     def update(self, value):
         self.do_update(value)
         self.unlock()
+
+    def save(self):
+        self.cache.remove(self.path)
 
     def do_delete(self):
         raise NotImplementedError()

@@ -12,7 +12,12 @@ from libs.utils.io import read, write
 class SimpleBlockHandler(BaseBlockHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        try:
+            self.index = self.titles.index(self.title)
+        except ValueError:
+            self.index = None
 
+    def get_contents_and_title(self):
         block_content = read(self.path)
         if not block_content:
             if exists(f'{self.path}.bak'):
@@ -22,10 +27,6 @@ class SimpleBlockHandler(BaseBlockHandler):
         else:
             self.contents = []
         self.titles = [line.split('\t')[0] for line in self.contents]
-        try:
-            self.index = self.titles.index(self.title)
-        except ValueError:
-            self.index = None
 
     def default_empty(self, prefix):
         return ''
@@ -62,6 +63,7 @@ class SimpleBlockHandler(BaseBlockHandler):
     def save(self):
         copy(self.path, f'{self.path}.bak')
         write(self.path, '\n'.join(self.contents))
+        super(SimpleBlockHandler, self).save()
 
     def get_data_dict(self):
         data_dict = {}

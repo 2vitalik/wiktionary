@@ -16,3 +16,6 @@ class Cache:
             del self.cache[remove_key]
         self.cache[key] = value
         self.keys.append(key)
+
+    def remove(self, key):
+        del self.cache[key]
