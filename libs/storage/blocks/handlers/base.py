@@ -1,7 +1,7 @@
 from os.path import join, exists, isfile
 
 from libs.storage.const import MAX_DEPTH
-from libs.storage.error import StorageError
+from libs.storage.error import BlockNotFound
 from libs.utils.cache import Cache
 from libs.utils.exceptions import LockedError
 from libs.utils.io import write, is_locked, lock_file, unlock_file
@@ -19,7 +19,10 @@ class BaseBlockHandler:
     def __init__(self, title, handler, lock=False):
         self.title = title
         self.handler = handler
-        self.path = self.block_path(title)
+        try:
+            self.path = self.old_block_path(title)
+        except BlockNotFound:
+            self.path = self.block_path(title)
         if is_locked(self.path):
             raise LockedError(self.path)  # todo: several attempts
         self.locked = lock
@@ -68,7 +71,7 @@ class BaseBlockHandler:
     def do_update(self, value):
         raise NotImplementedError()
 
-    def block_path(self, title):
+    def old_block_path(self, title):  # todo: remove
         category, name = char_info(title[0])
 
         candidates = [
@@ -85,6 +88,32 @@ class BaseBlockHandler:
 
         for prefix, candidate in candidates:
             if not exists(candidate):
+                raise BlockNotFound(f"Path does't exist for title '{title}'")
+            if is_locked(candidate):
+                raise LockedError(candidate)  # todo: several attempts
+            if isfile(candidate):
+                return candidate
+
+        raise BlockNotFound(f"Path does't exist for title '{title}'")
+
+    def block_path(self, title):
+        category, name = char_info(title[0])
+        if category not in ['Ll', 'Lo', 'Lu', 'Pd']:
+            name = 'OTHER'
+        candidates = [
+            (name, join(self.handler.path, name)),
+        ]
+
+        path = candidates[-1][1]
+        for i in range(MAX_DEPTH):
+            code = ord(title[i]) if i < len(title) else 0
+            key = f'{code} - {hex(code)}'
+            path = join(path, key)
+            candidates.append((title[:i + 1], path))
+
+        for prefix, candidate in candidates:
+            if not exists(candidate):
+                print(f"`write`: {candidate}")
                 write(candidate, self.default_empty(prefix))
                 return candidate
             if is_locked(candidate):
@@ -92,4 +121,4 @@ class BaseBlockHandler:
             if isfile(candidate):
                 return candidate
 
-        raise StorageError(f"Path does't exist for title '{title}'")
+        raise BlockNotFound(f"Path does't exist for title '{title}'")  # fixme: never should happen?
