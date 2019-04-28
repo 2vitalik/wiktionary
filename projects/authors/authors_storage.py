@@ -9,9 +9,9 @@ class AuthorsStorage(Storage):
             tables={
                 'created': 'simple',
             },
-            max_counts={  # todo: implement such feature
-                'created': ...,
-            },
+            # max_counts={  # todo: implement such feature
+            #     'created': ...,
+            # },
             lock_slug=lock_slug,
         )
 
