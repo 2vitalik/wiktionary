@@ -3,13 +3,17 @@ from libs.storage.storage import Storage
 
 
 class AuthorsStorage(Storage):
-    def __init__(self, lock_slug='', **kwargs):
-        kwargs['path'] = conf.AUTHORS_STORAGE_PATH
-        kwargs['tables'] = {
-            'created': 'simple',
-        }
-        kwargs['lock_slug'] = lock_slug
-        super().__init__(**kwargs)
+    def __init__(self, lock_slug='', path=None):
+        super().__init__(
+            path=path or conf.AUTHORS_STORAGE_PATH,
+            tables={
+                'created': 'simple',
+            },
+            max_counts={  # todo: implement such feature
+                'created': ...,
+            },
+            lock_slug=lock_slug,
+        )
 
     def get(self, title, silent=False, **kwargs):
         """
@@ -24,15 +28,6 @@ class AuthorsStorage(Storage):
         дополнительный параметр `table` (он всегда должен быть 'created')
         """
         yield from super().iterate('created')
-
-    # def iterate_pages(self, limit=None, silent=False):
-    #     # todo: cyrilic= latin=...
-    #     count = 0
-    #     for title, content in self.iterate('content'):
-    #         yield title, Page(title, content, silent=silent)
-    #         count += 1
-    #         if limit and count >= limit:
-    #             break
 
 
 authors_storage = AuthorsStorage()
