@@ -14,7 +14,7 @@ class Storage:
         'simple': SimpleStorageHandler,
     }
 
-    def __init__(self, path, tables, lock_slug=''):
+    def __init__(self, path, tables, max_counts=None, lock_slug=''):
         """
         Если lock_slug == '', то хранилище не блокируется
         """
@@ -26,9 +26,15 @@ class Storage:
         self.handlers = {}
         for table, handler_type in tables.items():
             table_path = join(path, table)
-            max_count = int(read(join(table_path, '_sys', 'max_count')))
-            self.handlers[table] = self.handler_types[handler_type](table_path,
-                                                                    max_count)
+            max_count_path = join(table_path, '_sys', 'max_count')
+            if exists(max_count_path):
+                max_count = int(read(max_count_path))
+            elif max_counts and table in max_counts:
+                max_count = max_counts[table]
+            else:
+                raise Exception('Undefined `max_count` for storage')
+            self.handlers[table] = \
+                self.handler_types[handler_type](table_path, max_count)
         self._titles = None
         self._titles_set = None
 
