@@ -7,7 +7,6 @@ from django.views import View
 
 from core.conf import conf
 from projects.authors.authors_storage import authors_storage
-from projects.htmls.htmls_storage import htmls_storage
 from core.storage.main import storage
 from libs.parse.storage_page import StoragePage
 from libs.utils.io import read
@@ -24,7 +23,7 @@ class LogsPathMixin:
         roots = {
             'storage': storage.logs_path,
             'authors': authors_storage.logs_path,
-            'htmls': htmls_storage.logs_path,
+            # 'htmls': htmls_storage.logs_path,
             # 'reports': conf.MAIN_STORAGE_PATH,
             'errors': join(conf.LOGS_PATH, 'exceptions'),
         }
