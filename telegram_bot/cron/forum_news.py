@@ -33,7 +33,7 @@ def check_for_new_titles(bot):
 
     for forum in forums:
         content = load_page(forum)
-        titles = re.findall('^==(.*)==$', content, re.MULTILINE)
+        titles = re.findall('^==(.*)==\s*$', content, re.MULTILINE)
         titles = list(map(str.strip, titles))
         new_data[forum] = titles
         old_titles = old_data.get(forum, [])
