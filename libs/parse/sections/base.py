@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Dict
+
 from libs.parse.groupers.sections.base import BaseSectionsGrouper
 from libs.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
 from libs.parse.groupers.sections.empty import EmptyBaseSectionsGrouper
@@ -7,12 +11,12 @@ from libs.utils.collection import chunks
 
 
 class BaseSection(BaseSectionsGrouper):
-    is_leaf = False
+    is_leaf: bool = False
     parse_pattern = None
     child_section_type = None
-    copy_top_to_sub_sections = False
+    copy_top_to_sub_sections: bool = False
 
-    def __init__(self, base, full_header, header, content, silent):
+    def __init__(self, base: str, full_header: str, header: str, content: str, silent: bool):
         super().__init__(base)
 
         if not self.is_leaf:
@@ -24,17 +28,18 @@ class BaseSection(BaseSectionsGrouper):
         self.base = base
         if base:
             self.title = base.title
-        self.full_header = full_header
-        self.header = header
-        self.content = content
-        self.silent = silent
+        self.full_header: str = full_header
+        self.header: str = header
+        self.content: str = content
+        self.silent: bool = silent
 
-        self.is_parsing = False
-        self.parsed = False
+        self.is_parsing: bool = False
+        self.parsed: bool = False
         self._key = None
         self._top = None
-        self._sub_sections = None
-        self._old_content = content
+        self._sub_sections: Dict[str, BaseSection] = None  # TODO: fix None
+        self._old_content: str = content
+        """The string that contains content of Section before any changes made"""
 
     def __str__(self):
         name = type(self).__name__
@@ -45,7 +50,7 @@ class BaseSection(BaseSectionsGrouper):
 
     def __eq__(self, other):
         return self.full_header == other.full_header and \
-            self.header == other.header and self.content == other.content
+               self.header == other.header and self.content == other.content
 
     def __bool__(self):
         return True  # т.к. этот элемент всегда "есть"
@@ -65,7 +70,7 @@ class BaseSection(BaseSectionsGrouper):
 
     @property
     @parsed
-    def sub_sections(self):
+    def sub_sections(self) -> Dict[str, BaseSection]:
         return self._sub_sections
 
     @property

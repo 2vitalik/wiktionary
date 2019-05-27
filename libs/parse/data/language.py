@@ -7,7 +7,6 @@ class LanguageData(BaseData):
 
     @parsing
     def _parse(self):
-        self._sub_data = {}
         for homonym_key, homonym_section in self.base.sub_sections.items():
             self._sub_data[homonym_key] = HomonymData(homonym_section)
 
