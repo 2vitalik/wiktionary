@@ -19,6 +19,7 @@ class BaseSection(BaseSectionsGrouper):
     def __init__(self, base: str, full_header: str, header: str, content: str, silent: bool):
         super().__init__(base)
 
+        # leafs don't have sub-sections don't parse anything
         if not self.is_leaf:
             if not self.parse_pattern:
                 raise NotImplementedError('`parse_pattern` is absent')
@@ -27,7 +28,8 @@ class BaseSection(BaseSectionsGrouper):
 
         self.base = base
         if base:
-            self.title = base.title
+            self.title: str = base.title
+            """The page title"""
         self.full_header: str = full_header
         self.header: str = header
         self.content: str = content
@@ -36,7 +38,7 @@ class BaseSection(BaseSectionsGrouper):
         self.is_parsing: bool = False
         self.parsed: bool = False
         self._key = None
-        self._top = None
+        self._top: str = None
         self._sub_sections: Dict[str, BaseSection] = None  # TODO: fix None
         self._old_content: str = content
         """The string that contains content of Section before any changes made"""
@@ -56,7 +58,7 @@ class BaseSection(BaseSectionsGrouper):
         return True  # т.к. этот элемент всегда "есть"
 
     @property
-    def key(self):
+    def key(self) -> str:
         if self._key is not None:
             return self._key
         if self.header is not None:
@@ -66,6 +68,9 @@ class BaseSection(BaseSectionsGrouper):
     @property
     @parsed
     def top(self):
+        """Returns the text between section's header but before the first sub-section.
+        So, for example, for Page this would be text of section 0.
+        TODO rename to more meaningful title"""
         return self._top
 
     @property
@@ -76,6 +81,8 @@ class BaseSection(BaseSectionsGrouper):
     @property
     @parsed
     def keys(self):
+        """All children sections keys
+        TODO rename to more meaningful title"""
         return list(self._sub_sections.keys())
 
     @parsed

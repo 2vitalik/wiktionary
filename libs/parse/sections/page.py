@@ -1,21 +1,22 @@
 from libs.parse.data.page import PageData
+from libs.parse.patterns import R
 from libs.parse.sections.base import BaseSection
 from libs.parse.sections.grouper_mixins.languages import LanguagesGrouperMixin
-from libs.parse.patterns import R
 from libs.parse.sections.language import LanguageSection
 from libs.parse.utils.iterators import DeepIterator
 from libs.utils.wikibot import load_page, save_page
 
 
 class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
-    fields = ('lang', )
+    fields = ('lang',)
 
     parse_pattern = R.first_header
     child_section_type = LanguageSection
 
-    def __init__(self, title, content, is_redirect=None, silent=False):
+    def __init__(self, title, content, site_lang: str, is_redirect=None, silent=False):
         super().__init__(base=None, full_header=None, header=None,
                          content=content, silent=silent)
+        self.site_lang: str = site_lang
         self.title = title
         self.is_redirect = is_redirect  # todo: implement in inheritors
         self.is_category = title.startswith(u'Категория:')
