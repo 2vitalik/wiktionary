@@ -47,11 +47,6 @@ local function fix_stress(forms)
 	if _.contains_several(forms['gen_pl'], '{vowel+ё}') and not _.contains(forms['gen_pl'], '[́ ё]') then
 		_.replace(forms, 'gen_pl', '({vowel})({consonant}*)$', '%1́ %2')
 	end
-
-	for key, value in pairs(forms) do
---		INFO Удаляем ударение, если только один слог:
-		forms[key] = remove_stress_if_one_syllable(value)
-	end
 end
 
 
@@ -124,10 +119,10 @@ local function apply_specific_3(forms, gender, rest_index)
 	-- Специфика по (3)
 	if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③') then
 		if _.endswith(forms['prp_sg'], 'и') then
-			forms['prp_sg'] = forms['prp_sg'] .. ' // ' .. _.replaced(forms['prp_sg'], 'и$', 'е')
+			forms['prp_sg'] = forms['prp_sg'] .. '&nbsp;//<br />' .. _.replaced(forms['prp_sg'], 'и$', 'е')
 		end
 		if gender == 'f' and _.endswith(forms['dat_sg'], 'и') then
-			forms['dat_sg'] = forms['dat_sg'] .. ' // ' .. _.replaced(forms['dat_sg'], 'и$', 'е')
+			forms['dat_sg'] = forms['dat_sg'] .. '&nbsp;//<br />' .. _.replaced(forms['dat_sg'], 'и$', 'е')
 		end
 	end
 end
@@ -156,6 +151,11 @@ function export.generate_forms(data)
 	second_ins_case(forms, data.gender)
 
 	apply_specific_3(forms, data.gender, data.rest_index)
+
+	for key, value in pairs(forms) do
+--		INFO Удаляем ударение, если только один слог:
+		forms[key] = remove_stress_if_one_syllable(value)
+	end
 
 	if data.adj then
 		if data.postfix then
@@ -210,7 +210,7 @@ local function loc_case(forms, args, index)  -- Местный падеж
 		end
 		forms['loc_sg'] = '(' .. loc_prep .. ') ' .. forms['loc_sg']
 		if _.contains(index, '%[П') then
-			forms['loc_sg'] = forms['loc_sg'] .. ' // ' .. forms['prp_sg']
+			forms['loc_sg'] = forms['loc_sg'] .. '&nbsp;//<br />' .. forms['prp_sg']
 		end
 	end
 	if _.has_value(args['М']) then

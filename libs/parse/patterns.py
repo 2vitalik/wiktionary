@@ -70,7 +70,7 @@ class R:
     first_header = re.compile(P.header.replace('__N__', '1'), re.MULTILINE)
     second_header = re.compile(P.header.replace('__N__', '2'), re.MULTILINE)
     third_header = re.compile(P.header.replace('__N__', '3'), re.MULTILINE)
-    forth_header = re.compile(P.header.replace('__N__', '4'), re.MULTILINE)
+    fourth_header = re.compile(P.header.replace('__N__', '4'), re.MULTILINE)
 
     lang_header = re.compile(f'^(= *{TP.lang_header} *= *)$', re.MULTILINE)
 
