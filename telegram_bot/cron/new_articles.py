@@ -55,13 +55,10 @@ def get_new_articles():
     latest_edited = None
     for page in generator:
         title = page.title()
-        print(title, '- ', end='')
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
-            print(edited)
         except NoPage:
-            print('None')
             continue
         latest_edited = latest_edited or convert_date(edited)
         if title in new_titles:
@@ -77,7 +74,6 @@ def get_new_articles():
             continue
         if Page(title, content).ru:
             new_titles.append(title)
-            print('- NEW!', '*' * 100)
     if latest_edited:
         set_latest_date(latest_edited)
     return new_titles
@@ -86,7 +82,6 @@ def get_new_articles():
 if __name__ == '__main__':
     bot = telegram.Bot(TELEGRAM_BOT_TOKEN)
     new_titles = get_new_articles()
-    print(new_titles)
     chat_id = NEW_CHANNEL_ID
     for title in reversed(new_titles):
         send(bot, chat_id, Reply(title).text)
