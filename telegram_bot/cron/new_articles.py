@@ -10,6 +10,7 @@ from libs.parse.sections.page import Page
 from libs.utils.io import write, read, read_lines, append
 from libs.utils.wikibot import Namespace
 from telegram_bot.config import TELEGRAM_BOT_TOKEN, ROOT_PATH, NEW_CHANNEL_ID
+from telegram_bot.cron.bots import bots
 from telegram_bot.src.semantic import Reply
 from telegram_bot.src.utils import send
 
@@ -58,6 +59,9 @@ def get_new_articles():
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
+            user = page.userName()
+            if user in bots:
+                continue
         except NoPage:
             continue
         latest_edited = latest_edited or convert_date(edited)
