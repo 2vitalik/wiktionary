@@ -53,6 +53,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
 
     # пометы:
     text = text.replace('{п.}', '{перен.}')
+    text = text.replace('{помета.}', '')
 
     # пометы курсивом:
     text = re.sub('{([\w-]+\.)\},?', '<i>\\1</i> ', text)
