@@ -250,8 +250,8 @@ class Reply(ShortReply):
         if 'definition' in block_obj.keys:  # todo: fix to be able to check by header "Значение"
             definitions = \
                 clear_definitions(block_obj['Значение'].content).split('\n')
-            definitions = map(str.strip, definitions)
-            definitions = filter(lambda x: x != '#', definitions)
+            definitions = list(map(str.strip, definitions))
+            definitions = list(filter(lambda x: x != '#', definitions))
 
             if not definitions:
                 return '🔺 Значение отсутствует'
