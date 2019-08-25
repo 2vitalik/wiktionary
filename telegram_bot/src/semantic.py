@@ -317,6 +317,13 @@ class Reply(ShortReply):
                     telegram.InlineKeyboardButton(text, callback_data=data)
                     for text, data in chunk
                 ])
+        if len(self.lang_keys) == 1 and self.homonyms_count == 1:
+            buttons.append([
+                telegram.InlineKeyboardButton(
+                    'Обновить',
+                    callback_data=f'{self.title}|{self.lang_keys[0]}|0'
+                )
+            ])
         return telegram.InlineKeyboardMarkup(buttons)
 
 
@@ -394,14 +401,17 @@ def process_message(bot, update):
 
 
 def process_callback(bot, update):
-    callback_query = update.callback_query
-    query_data = callback_query.data
+    query = update.callback_query
+    query_data = query.data
     title, lang, homonym = query_data.split('|')
     reply = Reply(title, lang, homonym)
-    callback_query.edit_message_text(reply.text, reply_markup=reply.buttons,
-                                     parse_mode=telegram.ParseMode.HTML,
-                                     disable_web_page_preview=True)
-
+    old_text = query.message.text_html
+    if old_text.strip() != reply.text.strip():
+        # todo: check also for buttons changes
+        query.edit_message_text(reply.text, reply_markup=reply.buttons,
+                                parse_mode=telegram.ParseMode.HTML,
+                                disable_web_page_preview=True)
+    query.answer()
 
 # todo: catch any exception and send them to me!
 # todo: check if message was edited?
