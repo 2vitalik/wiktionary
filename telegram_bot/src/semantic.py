@@ -10,6 +10,7 @@ from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
 from libs.utils.collection import chunks
 from libs.utils.io import read, append
+from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect
 from telegram_bot.src.tpls import tpls, replace_tpl
 from telegram_bot.src.utils import send, edit
@@ -230,15 +231,17 @@ class Reply(ShortReply):
 
         homonym_obj = lang_obj.homonyms[self.homonym_index]
 
-        stresses = set()  # todo: several stresses feature
-        for tpl in homonym_obj.templates('по-слогам', 'по слогам').last_list():
-            value = tpl.params.replace('|', '').replace('.', '')
+        stresses = set()
+        tpl_names = ['по-слогам', 'по слогам', 'слоги']
+        for tpl in homonym_obj.templates(*tpl_names).last_list():
+            value = \
+                tpl.params.replace('|', '').replace('.', '').replace('/', '')
             if not value:
                 continue
-            if value.replace('́', '') != self.active_title:
+            if remove_stress(value) != self.active_title:
                 continue
-            # stresses.add(value.index('́'))  # todo: several stresses feature
-            self.title_stressed = value
+            stresses.add(value)
+        self.title_stressed = '</b> или <b>'.join(stresses)
 
         if 'semantic' not in homonym_obj.keys:  # todo: fix to be able to check by header "Семантические свойства"
             return '🔻 Секция «Семантические свойства» не найдена'
