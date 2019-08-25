@@ -245,7 +245,7 @@ class Reply(ShortReply):
                 continue
             stresses.add(value)
         if stresses:
-            self.title_stressed = '</b> или <b>'.join(stresses)
+            self.title_stressed = '</b>  или  <b>'.join(stresses)
 
         if 'semantic' not in homonym_obj.keys:  # todo: fix to be able to check by header "Семантические свойства"
             return '🔻 Секция «Семантические свойства» не найдена'
