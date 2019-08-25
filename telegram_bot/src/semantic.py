@@ -11,6 +11,7 @@ from libs.parse.online_page import OnlinePage
 from libs.utils.collection import chunks
 from libs.utils.io import read, append
 from libs.utils.wikibot import load_page_with_redirect
+from telegram_bot.src.tpls import tpls, replace_tpl
 from telegram_bot.src.utils import send, edit
 
 
@@ -31,7 +32,6 @@ def clear_definitions(text):  # todo: move this to some `lib`
     text = text.replace('<sub>4</sub>', '₄')
 
     # замена шаблонов:
-    text = re.sub('{{помета\|([^|{}]+)', '{{\\1', text)
     text = re.sub('{{итп\}\}', 'и т.п.', text)
     text = re.sub('{{итд\}\}', 'и т.д.', text)
     text = re.sub('\|[a-z_]+\}\}', '}}', text)
@@ -61,6 +61,9 @@ def clear_definitions(text):  # todo: move this to some `lib`
 
     # замены шаблонов:
     text = text.replace('{as ru}', '<i>(аналогично русскому слову)</i>')
+
+    for tpl, replace in tpls.items():
+        text = re.sub(replace_tpl(tpl), replace, text)
 
     return text.strip()
 
