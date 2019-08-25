@@ -8,6 +8,8 @@ from pywikibot.exceptions import NoPage
 from core.conf.conf import ROOT_PATH, SYNC_PATH
 from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
+from libs.parse.storage_page import StoragePage
+from libs.storage.error import PageNotFound
 from libs.utils.collection import chunks
 from libs.utils.io import read, append
 from libs.utils.parse import remove_stress
@@ -176,6 +178,7 @@ class ShortReply:
 
 
 class Reply(ShortReply):
+    bullet = '▪️'
     languages = load_languages()
 
     def __init__(self, title, lang_key='', homonym_index=0):
@@ -200,9 +203,9 @@ class Reply(ShortReply):
     @property
     def _reply_title(self):
         if self.title_redirected:
-            result = f'▪ <b>{self.title}</b> → <b>{self.title_stressed}</b>'
+            result = f'{self.bullet} <b>{self.title}</b> → <b>{self.title_stressed}</b>'
         else:
-            result = f'▪ <b>{self.title_stressed}</b>'
+            result = f'{self.bullet} <b>{self.title_stressed}</b>'
         lang_text = self.languages.get(self.lang_key, self.lang_key)
         if lang_text:
             result += f'   <i>// {lang_text}</i>'
@@ -327,6 +330,33 @@ class Reply(ShortReply):
         return telegram.InlineKeyboardMarkup(buttons)
 
 
+class StorageReply(Reply):
+    bullet = '▫️'
+
+    def load_from_storage(self, title):
+        page = StoragePage(title)
+
+        if not page.is_redirect:
+            return page.content, None
+
+        m = re.search(
+            '^#(перенаправление|redirect)[:\s]*\[\[(?P<redirect>[^]]+)\]\]',  # todo: move to lib
+            page.content.strip(), re.IGNORECASE
+        )
+        if m:
+            title_redirected = m.group('redirect')
+            return self.load_from_storage(title_redirected), title_redirected
+
+        raise Exception('Never should happen: redirect problem in storage')
+
+    def load_page_with_redirect(self, title):
+        try:
+            self.content, self.title_redirected = self.load_from_storage(title)
+            return True
+        except PageNotFound:
+            return False
+
+
 def save_log(message, title):  # todo: move it to some `utils`
     user = message.from_user
     name = f'{user.first_name} {user.last_name}'.strip()
@@ -380,6 +410,7 @@ def process_message(bot, update):
 
     # bot is typing:
     bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING)
+    msg = send(bot, chat_id, '🔎 <i>Делаю запрос...</i>')
 
     skip_content = title.endswith('==')
 
@@ -390,14 +421,17 @@ def process_message(bot, update):
     title = title.strip()
     save_log(update.message, title)
 
-    msg = send(bot, chat_id, '🔎 <i>Делаю запрос в Викисловарь...</i>')
+    def edit_message():
+        edit(bot, chat_id, msg.message_id, reply.text, reply.buttons)
 
     if skip_content:
         reply = ShortReply(title)
+        edit_message()
     else:
+        reply = StorageReply(title, lang, homonym)
+        edit_message()
         reply = Reply(title, lang, homonym)
-
-    edit(bot, chat_id, msg.message_id, reply.text, reply.buttons)
+        edit_message()
 
 
 def process_callback(bot, update):
@@ -416,3 +450,8 @@ def process_callback(bot, update):
 # todo: catch any exception and send them to me!
 # todo: check if message was edited?
 # todo: справку по использованию (=, ==, /2, /en)
+
+
+if __name__ == '__main__':
+    reply = Reply('привет')
+    print(reply.text)
