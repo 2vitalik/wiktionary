@@ -88,9 +88,9 @@ if __name__ == '__main__':
     new_titles = get_new_articles()
     chat_id = NEW_CHANNEL_ID
     for title in reversed(new_titles):
-        text = Reply(title).text
-        if '🔻 Секция «Семантические свойства» не найдена' not in text:
-            send(bot, chat_id, text)
+        reply = Reply(title)
+        if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
+            send(bot, chat_id, reply.text, reply_markup=reply.buttons)
         append_title(title)
 
 
