@@ -1,3 +1,4 @@
+import json
 import re
 from os.path import join
 from urllib.parse import quote
@@ -11,11 +12,15 @@ from libs.parse.online_page import OnlinePage
 from libs.parse.storage_page import StoragePage
 from libs.storage.error import PageNotFound
 from libs.utils.collection import chunks
-from libs.utils.io import read, append
+from libs.utils.io import read, append, json_load, json_dump
 from libs.utils.parse import remove_stress
-from libs.utils.wikibot import load_page_with_redirect
-from telegram_bot.src.tpls import tpls, replace_tpl
+from libs.utils.wikibot import load_page_with_redirect, load_page
+from telegram_bot.config import ADMINS
+from telegram_bot.src.tpls import replace_tpl
 from telegram_bot.src.utils import send, edit
+
+
+tpls_filename = join(ROOT_PATH, 'telegram_bot', 'data', 'tpls.json')
 
 
 def clear_definitions(text):  # todo: move this to some `lib`
@@ -65,6 +70,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
     # замены шаблонов:
     text = text.replace('{as ru}', '<i>(аналогично русскому слову)</i>')
 
+    tpls = json_load(tpls_filename)
     for tpl, replace in tpls.items():
         text = re.sub(replace_tpl(tpl), replace, text)
 
@@ -408,6 +414,14 @@ def process_message(bot, update):
     if update.message.chat_id < 0:  # if we are in a group chat
         if not title.endswith(('=', '~', ' ?')):
             return
+
+    if update.message.from_user.id in ADMINS and \
+            title.lower() == 'update!':
+        content = load_page('User:VitalikBot/conf/telegram/tpls.json')
+        data = json.loads(content)
+        json_dump(tpls_filename, data)
+        send(bot, chat_id, 'Done')
+        return
 
     # bot is typing:
     bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING)

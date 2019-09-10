@@ -8,6 +8,10 @@ MAIN_GROUP_CHAT_ID = None  # should be secure set in `local_config.py`
 NEW_CHANNEL_ID = None  # should be secure set in `local_config.py`
 DEV_CHAT_ID = None  # should be secure set in `local_config.py`
 
+ADMINS = [
+    # should be secure set in `local_config.py`
+]
+
 try:
     from .local_config import *
 except ImportError:
