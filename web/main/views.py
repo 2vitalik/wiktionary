@@ -63,3 +63,14 @@ class LogsFolderView(LogsPathMixin, TemplateView):
             'files': files,
         })
         return context
+
+
+class TextView(TemplateView):
+    template_name = 'text.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'text': self.kwargs.get('text')
+        })
+        return context
