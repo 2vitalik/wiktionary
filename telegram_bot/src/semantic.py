@@ -16,7 +16,7 @@ from libs.utils.io import read, append, json_load, json_dump
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page
 from telegram_bot.config import ADMINS
-from telegram_bot.src.tpls import replace_tpl
+from telegram_bot.src.tpls import replace_tpl, replace_result
 from telegram_bot.src.utils import send, edit
 
 
@@ -72,7 +72,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
 
     tpls = json_load(tpls_filename)
     for tpl, replace in tpls.items():
-        text = re.sub(replace_tpl(tpl), replace, text)
+        text = re.sub(replace_tpl(tpl), replace_result(replace), text)
 
     return text.strip()
 

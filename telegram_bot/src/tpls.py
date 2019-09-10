@@ -13,6 +13,10 @@ def replace_tpl(tpl):
     return tpl
 
 
+def replace_result(result):
+    return result.replace('[', '<').replace(']', '>')
+
+
 tpls = {  # todo: remove
     "{помета|(*)}:": "<i>\\1:</i>",
     "{помета|(*)}": "<i>\\1</i> ",
