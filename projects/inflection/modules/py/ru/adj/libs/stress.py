@@ -106,9 +106,11 @@ def get_adj_stress_schema(stress_type):  # export  # INFO: Вычисление 
     )  # dict
 
     types = ['stem', 'ending']
-    cases = ['sg', 'pl',
-             'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
-             'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl']
+    cases = [
+        'sg', 'pl',
+        'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
+        'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
+    ]  # list
     for i, type in enumerate(types):
         sg_value = stress_schema[type]['full']
         for i, case in enumerate(cases):

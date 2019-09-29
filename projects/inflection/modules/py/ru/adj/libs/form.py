@@ -120,13 +120,15 @@ def generate_forms(data):  # export
         # end
     # end
 
-    # apply_obelus(forms, data.rest_index)  # fixme: noun only
+    # fixme: noun only
+    # apply_obelus(forms, data.rest_index)
 
     choose_accusative_forms(forms, data)
 
     second_ins_case(forms, data.gender)
 
-    # apply_specific_3(forms, data.gender, data.rest_index)  # fixme: noun only
+    # fixme: noun only
+    # apply_specific_3(forms, data.gender, data.rest_index)
 
     for key, value in forms.items():
 #        INFO Удаляем ударение, если только один слог:

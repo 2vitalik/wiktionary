@@ -131,10 +131,10 @@ def main_algorithm(data):
         _.log_table(data.endings, 'data.endings')
 
 
-    #    # *** для случая с расстановкой ударения  (см. ниже)
+    #    -- *** для случая с расстановкой ударения  (см. ниже)
     #    # local orig_stem = data.stem
     #    if _.contains(data.rest_index, ['%(2%)', '②']):
-    #        orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  # удаляем ударение для случая "сапожок *d(2)"
+    #        orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
     #        mw.log('> Another `orig_stem`: ' + str(orig_stem))
     #    # end
 
@@ -242,7 +242,8 @@ def forms(base, args, frame):  # export
         forms = main_algorithm(data)
     # end
 
-    # form.special_cases(forms, args, data.index, data.word)  # fixme: noun only
+    # fixme: noun only
+    # form.special_cases(forms, args, data.index, data.word)
 
     result.finalize(data, forms)
 
