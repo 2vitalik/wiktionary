@@ -163,7 +163,7 @@ def finalize(data, forms):  # export
     additional_arguments(forms, data)
     replace_underscore_with_hyphen(forms)
 
-    forward_gender_animacy(forms, data)
+    # forward_gender_animacy(forms, data)  # fixme: exclude from adj
     forward_args(forms, data)
 
     if not _.has_key(forms, 'зализняк'):

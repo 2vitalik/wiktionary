@@ -108,7 +108,7 @@ def main_algorithm(data):
 
     _.log_info('Вычисление схемы ударения')
 
-    data.stress_schema = stress.get_noun_stress_schema(data.stress_type)
+    data.stress_schema = stress.get_adj_stress_schema(data.stress_type)
 
     _.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
     _.log_table(data.stress_schema['ending'], "data.stress_schema['ending']")
@@ -209,14 +209,7 @@ def forms(base, args, frame):  # export
 
     # INFO: Запуск основного алгоритма и получение результирующих словоформ:
     forms = dict()  # dict
-    if data.sub_cases:
-        _.log_info("Случай с вариациями '//'")
-        data1 = data.sub_cases[1]
-        data2 = data.sub_cases[2]
-        forms1 = main_algorithm(data1)
-        forms2 = main_algorithm(data2)
-        forms = form.join_forms(forms1, forms2)
-    elif data.sub_parts:
+    if data.sub_parts:
         _.log_info("Случай с '+'")
         sub_forms = []  # list
         for i, sub_part in data.sub_parts.items():
