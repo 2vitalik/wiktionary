@@ -110,7 +110,7 @@ local function main_algorithm(data)
 		'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
 	}  -- list
 
-	genders = {'m', 'n', 'f', ''}
+	genders = {'', 'm', 'n', 'f'}
 	for i, gender in pairs(genders) do  -- list
 		data.gender = gender
 
@@ -176,14 +176,14 @@ local function main_algorithm(data)
 			data.rest_index = data.rest_index .. 'ё'  -- ???
 		end
 
-		sub_forms = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
-		for i, case in pairs(cases) do  -- list
-			if gender == '' then
-				key = case
-			else
-				key = gender .. '_' .. case
+		if gender == '' then
+			forms = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
+		else
+			sub_forms = form.generate_forms(data)
+			for i, case in pairs(cases) do  -- list
+				key = case .. '_' .. gender
+				forms[key] = sub_forms[case]
 			end
-			forms[key] = sub_forms[case]
 		end
 	end
 

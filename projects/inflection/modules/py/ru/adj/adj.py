@@ -110,7 +110,7 @@ def main_algorithm(data):
         'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
     ]  # list
 
-    genders = ['m', 'n', 'f', '']
+    genders = ['', 'm', 'n', 'f']
     for i, gender in enumerate(genders):
         data.gender = gender
 
@@ -176,14 +176,14 @@ def main_algorithm(data):
             data.rest_index = data.rest_index + 'ё'  # ???
         # end
 
-        sub_forms = form.generate_forms(data)  # TODO: Rename to `out_args` ?
-        for i, case in enumerate(cases):
-            if gender == '':
-                key = case
-            else:
+        if gender == '':
+            forms = form.generate_forms(data)  # TODO: Rename to `out_args` ?
+        else:
+            sub_forms = form.generate_forms(data)
+            for i, case in enumerate(cases):
                 key = case + '_' + gender
+                forms[key] = sub_forms[case]
             # end
-            forms[key] = sub_forms[case]
         # end
     # end
 
