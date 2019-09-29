@@ -221,7 +221,7 @@ def forms(base, args, frame):  # export
         forms = main_algorithm(data)
     # end
 
-    form.special_cases(forms, args, data.index, data.word)
+    # form.special_cases(forms, args, data.index, data.word)  # fixme: noun only
 
     result.finalize(data, forms)
 

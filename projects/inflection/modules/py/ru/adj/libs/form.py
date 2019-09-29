@@ -50,15 +50,6 @@ def fix_stress(forms):
 # end
 
 
-def apply_obelus(forms, rest_index):
-    _.log_func('forms', 'apply_obelus')
-
-    if _.contains(rest_index, '÷'):
-        forms['obelus'] = '1'
-    # end
-# end
-
-
 # Выбор винительного падежа
 def choose_accusative_forms(forms, data):
     _.log_func('forms', 'choose_accusative_forms')
@@ -113,21 +104,6 @@ def second_ins_case(forms, gender):
 # end
 
 
-def apply_specific_3(forms, gender, rest_index):
-    _.log_func('forms', 'apply_specific_3')
-
-    # Специфика по (3)
-    if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③'):
-        if _.endswith(forms['prp_sg'], 'и'):
-            forms['prp_sg'] = forms['prp_sg'] + '&nbsp;//<br />' + _.replaced(forms['prp_sg'], 'и$', 'е')
-        # end
-        if gender == 'f' and _.endswith(forms['dat_sg'], 'и'):
-            forms['dat_sg'] = forms['dat_sg'] + '&nbsp;//<br />' + _.replaced(forms['dat_sg'], 'и$', 'е')
-        # end
-    # end
-# end
-
-
 def generate_forms(data):  # export
     _.log_func('forms', 'generate_forms')
 
@@ -144,13 +120,13 @@ def generate_forms(data):  # export
         # end
     # end
 
-    apply_obelus(forms, data.rest_index)
+    # apply_obelus(forms, data.rest_index)  # fixme: noun only
 
     choose_accusative_forms(forms, data)
 
     second_ins_case(forms, data.gender)
 
-    apply_specific_3(forms, data.gender, data.rest_index)
+    # apply_specific_3(forms, data.gender, data.rest_index)  # fixme: noun only
 
     for key, value in forms.items():
 #        INFO Удаляем ударение, если только один слог:
@@ -172,113 +148,7 @@ def generate_forms(data):  # export
     return forms
 # end
 
-
 #------------------------------------------------------------------------------
-
-
-def prt_case(forms, args, index):  # Разделительный падеж
-    _.log_func('forms', 'prt_case')
-
-    if _.contains(index, 'Р2') or _.contains(index, 'Р₂'):
-        forms['prt_sg'] = forms['dat_sg']
-    # end
-    if _.has_value(args, 'Р'):
-        forms['prt_sg'] = args['Р']
-    # end
-# end
-
-
-def loc_case(forms, args, index):  # Местный падеж
-    _.log_func('forms', 'loc_case')
-
-    # local loc, loc_prep
-
-    if _.contains(index, 'П2') or _.contains(index, 'П₂'):
-        loc = forms['dat_sg']
-        loc = _.replaced(loc, '́ ', '')
-        loc = _.replaced(loc, 'ё', 'е')
-        loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
-        loc = remove_stress_if_one_syllable(loc)
-        forms['loc_sg'] = loc
-        loc_prep = '?'
-        loc_prep = _.extract(index, 'П2%((.+)%)')
-        if not loc_prep:
-            loc_prep = _.extract(index, 'П₂%((.+)%)')
-        # end
-        if not loc_prep:
-            loc_prep = 'в, на'
-        # end
-        forms['loc_sg'] = '(' + loc_prep + ') ' + forms['loc_sg']
-        if _.contains(index, '%[П'):
-            forms['loc_sg'] = forms['loc_sg'] + '&nbsp;//<br />' + forms['prp_sg']
-        # end
-    # end
-    if _.has_value(args, 'М'):
-        forms['loc_sg'] = args['М']
-    # end
-# end
-
-
-def voc_case(forms, args, index, word):  # Звательный падеж
-    _.log_func('forms', 'voc_case')
-
-    if _.has_value(args, 'З'):
-        forms['voc_sg'] = args['З']
-    elif _.contains(index, 'З'):
-        if _.endswith(word, ['а', 'я']):
-            forms['voc_sg'] = forms['gen_pl']
-        else:
-            forms['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
-        # end
-    # end
-# end
-
-
-def special_cases(forms, args, index, word):  # export
-    _.log_func('forms', 'special_cases')
-
-    prt_case(forms, args, index)
-    loc_case(forms, args, index)
-    voc_case(forms, args, index, word)
-# end
-
-
-#------------------------------------------------------------------------------
-
-
-def join_forms(forms1, forms2):  # export
-    _.log_func('forms', 'join_forms')
-
-    # local keys, forms, delim
-
-    keys = [
-        'nom_sg',  'gen_sg',  'dat_sg',  'acc_sg',  'ins_sg',  'prp_sg',
-        'nom_pl',  'gen_pl',  'dat_pl',  'acc_pl',  'ins_pl',  'prp_pl',
-        'ins_sg2',
-        'зализняк1', 'зализняк',
-        'error',
-    ]  # list
-
-    forms = forms1
-    forms['зализняк-1'] = forms1['зализняк']
-    forms['зализняк-2'] = forms2['зализняк']
-    for i, key in enumerate(keys):
-        if not forms[key] and forms2[key]:  # INFO: Если forms[key] == None
-            forms[key] = forms2[key]
-        elif forms[key] != forms2[key] and forms2[key]:
-            delim = '<br/>'
-            if _.equals(key, ['зализняк1', 'зализняк']):
-                delim = '&nbsp;'
-            # end
-            # TODO: <br/> только для падежей
-            forms[key] = forms[key] + '&nbsp;//' + delim + forms2[key]
-        # end
-        if not forms[key]:  # INFO: Если forms[key] == None
-            forms[key] = ''
-        # end
-    # end
-    return forms
-# end
 
 
 def plus_forms(sub_forms):  # export
