@@ -33,3 +33,4 @@ def download(dev=True):
 
 if __name__ == '__main__':
     download()
+    # download(dev=False)

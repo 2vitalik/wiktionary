@@ -147,6 +147,13 @@ def extract_gender_animacy(data):
             _.log_value(data.rest_index, 'data.rest_index')
             return
         # end
+        rest_index = _.replaced(data.index, '^мн%.? одуш%.? ?', '')
+        if rest_index != orig_index:
+            data.rest_index = mw.text.trim(rest_index)
+            mw.log('  # Удаление "мн. одуш." из индекса')
+            _.log_value(data.rest_index, 'data.rest_index')
+            return
+        # end
         rest_index = _.replaced(data.index, '^мн%.? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)

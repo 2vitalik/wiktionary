@@ -289,7 +289,7 @@ def plus_forms(sub_forms):  # export
     keys = [
         'nom_sg',  'gen_sg',  'dat_sg',  'acc_sg',  'ins_sg',  'prp_sg',
         'nom_pl',  'gen_pl',  'dat_pl',  'acc_pl',  'ins_pl',  'prp_pl',
-        'ins_sg2',
+        # 'ins_sg2',
         'зализняк1', 'зализняк',
         'error',
     ]  # list
