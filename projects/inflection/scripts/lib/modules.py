@@ -16,8 +16,8 @@ def get_module_title(unit, file, dev=True):
     dev_prefix = 'User:Vitalik/' if dev else ''
     file = file.replace('[unit]', unit)
     file = file.replace('[.out]', '')
-    title = f'Module:{dev_prefix}inflection/ru/noun'
-    if file == 'noun':
+    title = f'Module:{dev_prefix}inflection/ru/{unit}'
+    if file == unit:
         return title
     if file.startswith('libs/'):
         title += file[len('libs'):]

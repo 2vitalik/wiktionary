@@ -28,6 +28,8 @@ def download(unit, dev=True):
 
     for file in files:
         title = get_module_title(unit, file, dev)
+
+        file = file.replace('[unit]', unit)
         download_module(title, f'{path}/{file}.lua')
 
 

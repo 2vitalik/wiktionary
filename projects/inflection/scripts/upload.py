@@ -24,7 +24,7 @@ def process_desc(dev, desc):
         raise Exception('Description is required')
     d = 'D' if dev else 'P'
     append('logs/changes.txt',
-           f'[{dt()}] [{d}] v{ru_noun_version}/{inflection_version}: {desc}')
+           f'[{dt()}] [{d}] v{version}/{inflection_version}: {desc}')
     return desc
 
 
@@ -36,7 +36,7 @@ def read_file(dev, filename):
     return result
 
 
-def upload(dev, unit, ru_noun_version, inflection_version, desc):
+def upload(dev, unit, version, inflection_version, desc):
     if not compare_dir(unit, 'lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
@@ -50,9 +50,10 @@ def upload(dev, unit, ru_noun_version, inflection_version, desc):
         title = get_module_title(unit, file, dev)
         print(f'- {title} - ', end='')
 
+        file = file.replace('[unit]', unit)
         file = file.replace('[.out]', '.out')
         if save_page(title, read_file(dev, f'{path}/{file}.lua'),
-                     f'v{ru_noun_version}: {desc}'):
+                     f'v{version}: {desc}'):
             print('OK')
 
     dev_prefix = 'User:Vitalik/' if dev else ''
@@ -66,11 +67,14 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    # unit = 'noun'
-    unit = 'adj'
-
-    ru_noun_version = '3.5.16'
     inflection_version = '2.3'
-    desc = ''
 
-    upload(dev, unit, ru_noun_version, inflection_version, desc)
+    # unit = 'noun'
+    # version = '3.5.16'
+
+    unit = 'adj'
+    version = '0.1.4'
+
+    desc = 'b'
+
+    upload(dev, unit, version, inflection_version, desc)
