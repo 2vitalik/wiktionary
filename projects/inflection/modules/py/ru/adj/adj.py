@@ -106,69 +106,90 @@ def main_algorithm(data):
 
     # -------------------------------------------------------------------------
 
-    _.log_info('Вычисление схемы ударения')
+    forms = {}
+    cases = [
+        'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
+        'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
+    ]  # list
 
-    data.stress_schema = stress.get_adj_stress_schema(data.stress_type)
+    genders = ['m', 'n', 'f', '']
+    for i, gender in enumerate(genders):
+        data.gender = gender
 
-    _.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
-    _.log_table(data.stress_schema['ending'], "data.stress_schema['ending']")
+        _.log_info('Вычисление схемы ударения')
 
-    data.endings = endings.get_endings(data)
+        data.stress_schema = stress.get_adj_stress_schema(data.stress_type)
 
-    data.stems = dict()  # dict
-    stress.apply_stress_type(data)
-    _.log_table(data.stems, 'data.stems')
-    _.log_table(data.endings, 'data.endings')
+        _.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
+        _.log_table(data.stress_schema['ending'], "data.stress_schema['ending']")
+
+        data.endings = endings.get_endings(data)
+
+        data.stems = dict()  # dict
+        stress.apply_stress_type(data)
+        _.log_table(data.stems, 'data.stems')
+        _.log_table(data.endings, 'data.endings')
 
 
-#    # *** для случая с расстановкой ударения  (см. ниже)
-#    # local orig_stem = data.stem
-#    if _.contains(data.rest_index, ['%(2%)', '②']):
-#        orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  # удаляем ударение для случая "сапожок *d(2)"
-#        mw.log('> Another `orig_stem`: ' + str(orig_stem))
-#    # end
+    #    # *** для случая с расстановкой ударения  (см. ниже)
+    #    # local orig_stem = data.stem
+    #    if _.contains(data.rest_index, ['%(2%)', '②']):
+    #        orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  # удаляем ударение для случая "сапожок *d(2)"
+    #        mw.log('> Another `orig_stem`: ' + str(orig_stem))
+    #    # end
 
-    # reducable
-    data.rest_index = reducable.apply_specific_degree(data.stems, data.endings, data.word, data. stem, data. stem_type, data. gender, data.animacy, data. stress_type, data.rest_index, data)
-    reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, False)
+        # reducable
+        data.rest_index = reducable.apply_specific_degree(data.stems, data.endings, data.word, data. stem, data. stem_type, data.gender, data.animacy, data. stress_type, data.rest_index, data)
+        reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, False)
 
-    if not _.equals(data.stress_type, ["f", "f'"]) and _.contains(data.rest_index, '%*'):
-        mw.log('# Обработка случая на препоследний слог основы при чередовании')
-        orig_stem = data.stem
-        if data.forced_stem:
-            orig_stem = data.forced_stem
-        # end
-        for key, stem in data.stems.items():
-#            mw.log(' - ' + key + ' -> ' + stem)
-#            mw.log('Ударение на основу?')
-#            mw.log(data.stress_schema['stem'][key])
-            if not _.contains(stem, '[́ ё]') and data.stress_schema['stem'][key]:
-                # *** случай с расстановкой ударения  (см. выше)
-                # "Дополнительные правила об ударении", стр. 34
-                old_value = data.stems[key]
-                # mw.log('> ' + key + ' (old): ' + str(old_value))
-                if data.stems[key] != orig_stem:  # попытка обработать наличие беглой гласной (не знаю, сработает ли всегда)
-                    data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)({vowel})({consonant}*)$', '%1́ %2%3%4')
-                    if not _.contains(data.stems[key], '[́ ё]'): # если предпоследнего слога попросту нет
-                        # сделаем хоть последний ударным
+        if not _.equals(data.stress_type, ["f", "f'"]) and _.contains(data.rest_index, '%*'):
+            mw.log('# Обработка случая на препоследний слог основы при чередовании')
+            orig_stem = data.stem
+            if data.forced_stem:
+                orig_stem = data.forced_stem
+            # end
+            for key, stem in data.stems.items():
+    #            mw.log(' - ' + key + ' -> ' + stem)
+    #            mw.log('Ударение на основу?')
+    #            mw.log(data.stress_schema['stem'][key])
+                if not _.contains(stem, '[́ ё]') and data.stress_schema['stem'][key]:
+                    # *** случай с расстановкой ударения  (см. выше)
+                    # "Дополнительные правила об ударении", стр. 34
+                    old_value = data.stems[key]
+                    # mw.log('> ' + key + ' (old): ' + str(old_value))
+                    if data.stems[key] != orig_stem:  # попытка обработать наличие беглой гласной (не знаю, сработает ли всегда)
+                        data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)({vowel})({consonant}*)$', '%1́ %2%3%4')
+                        if not _.contains(data.stems[key], '[́ ё]'): # если предпоследнего слога попросту нет
+                            # сделаем хоть последний ударным
+                            data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)$', '%1́ %2')
+                        # end
+                    else:
                         data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)$', '%1́ %2')
                     # end
-                else:
-                    data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)$', '%1́ %2')
+                    # mw.log('> ' + key + ' (new): ' + str(data.stems[key]))
+                    mw.log('  - ' + key + ': "' + str(old_value) + '" -> "' + str(data.stems[key]) + '"')
                 # end
-                # mw.log('> ' + key + ' (new): ' + str(data.stems[key]))
-                mw.log('  - ' + key + ': "' + str(old_value) + '" -> "' + str(data.stems[key]) + '"')
             # end
+        # end
+
+        # Специфика по "ё"
+        if _.contains(data.rest_index, 'ё') and not _.contains(data.endings['gen_pl'], '{vowel+ё}') and not _.contains(data.stems['gen_pl'], 'ё'):
+            data.stems['gen_pl'] = _.replaced(data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
+            data.rest_index = data.rest_index + 'ё'  # ???
+        # end
+
+        sub_forms = form.generate_forms(data)  # TODO: Rename to `out_args` ?
+        for i, case in enumerate(cases):
+            if gender == '':
+                key = case
+            else:
+                key = gender + '_' + case
+            # end
+            forms[key] = sub_forms[case]
         # end
     # end
 
-    # Специфика по "ё"
-    if _.contains(data.rest_index, 'ё') and not _.contains(data.endings['gen_pl'], '{vowel+ё}') and not _.contains(data.stems['gen_pl'], 'ё'):
-        data.stems['gen_pl'] = _.replaced(data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
-        data.rest_index = data.rest_index + 'ё'  # ???
-    # end
-
-    forms = form.generate_forms(data)  # TODO: Rename to `out_args` ?
+    data.gender = ''  # redundant?
 
     forms['зализняк1'] = index.get_zaliznyak(data.stem_type, data.stress_type, data.rest_index)
 
