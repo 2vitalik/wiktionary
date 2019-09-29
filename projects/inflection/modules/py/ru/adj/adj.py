@@ -17,9 +17,7 @@ from .libs import result
 
 
 def template(base, args):  # export
-#    return dev_prefix + 'inflection сущ ru'
-#    return 'User:Vitalik/' + 'inflection сущ ru'
-    return 'inflection/ru/noun'
+    return 'inflection/ru/adj'
 # end
 
 

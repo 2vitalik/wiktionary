@@ -17,9 +17,7 @@ local result = require(parent_prefix .. '/result')
 
 
 function export.template(base, args)
---	return dev_prefix .. 'inflection сущ ru'
---	return 'User:Vitalik/' .. 'inflection сущ ru'
-	return 'inflection/ru/noun'
+	return 'inflection/ru/adj'
 end
 
 
