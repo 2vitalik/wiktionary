@@ -1,7 +1,8 @@
 import platform
 
 from libs.utils.parse import remove_stress
-from projects.inflection.modules.py.ru.noun.noun import forms
+from projects.inflection.modules.py.ru.adj import adj
+from projects.inflection.modules.py.ru.noun import noun
 
 
 def replace_stress(value):
@@ -9,7 +10,10 @@ def replace_stress(value):
 
 
 def run(word, index):
-    result = forms(remove_stress(word), {'индекс': index, 'слово': word}, None)
+    # result = \
+    #     noun.forms(remove_stress(word), {'индекс': index, 'слово': word}, None)
+    result = \
+        adj.forms(remove_stress(word), {'индекс': index, 'слово': word}, None)
 
     keys = [
         ('Им.', 'nom-sg', 'nom-pl'),
