@@ -23,12 +23,12 @@ def run(word, index):
 
     if run_adj:
         keys = [
-            ('Им.', 'm_nom_sg', 'n_nom_sg', 'f_nom_sg', 'nom_pl'),
-            ('Р. ', 'm_gen_sg', 'n_gen_sg', 'f_gen_sg', 'gen_pl'),
-            ('Д. ', 'm_dat_sg', 'n_dat_sg', 'f_dat_sg', 'dat_pl'),
-            ('В. ', 'm_acc_sg', 'n_acc_sg', 'f_acc_sg', 'acc_pl'),
-            ('Тв.', 'm_ins_sg', 'n_ins_sg', 'f_ins_sg', 'ins_pl'),
-            ('Пр.', 'm_prp_sg', 'n_prp_sg', 'f_prp_sg', 'prp_pl'),
+            ('Им.', 'nom_sg_m', 'nom_sg_n', 'nom_sg_f', 'nom_pl'),
+            ('Р. ', 'gen_sg_m', 'gen_sg_n', 'gen_sg_f', 'gen_pl'),
+            ('Д. ', 'dat_sg_m', 'dat_sg_n', 'dat_sg_f', 'dat_pl'),
+            ('В. ', 'acc_sg_m', 'acc_sg_n', 'acc_sg_f', 'acc_pl'),
+            ('Тв.', 'ins_sg_m', 'ins_sg_n', 'ins_sg_f', 'ins_pl'),
+            ('Пр.', 'prp_sg_m', 'prp_sg_n', 'prp_sg_f', 'prp_pl'),
         ]
         lens = [0] * 4
     else:

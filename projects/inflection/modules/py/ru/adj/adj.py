@@ -181,7 +181,7 @@ def main_algorithm(data):
             if gender == '':
                 key = case
             else:
-                key = gender + '_' + case
+                key = case + '_' + gender
             # end
             forms[key] = sub_forms[case]
         # end
