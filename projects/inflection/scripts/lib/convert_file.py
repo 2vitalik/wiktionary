@@ -165,9 +165,9 @@ regexps_after = {
 }
 
 
-def convert_file(filename, _from, _to):
-    py_file = join(get_path('py'), f'{filename}.py')
-    lua_file = join(get_path('lua'), f'{filename}.lua')
+def convert_file(unit, filename, _from, _to):
+    py_file = join(get_path(unit, 'py'), f'{filename}.py')
+    lua_file = join(get_path(unit, 'lua'), f'{filename}.lua')
     in_file = py_file if _from == 'py' else lua_file
     out_file = py_file if _to == 'py' else lua_file
 

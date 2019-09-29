@@ -1,5 +1,5 @@
 files = [
-    'noun[.out]',
+    '[unit][.out]',
     'libs[.out]/endings',
     'libs[.out]/form',
     'libs[.out]/index',
@@ -12,8 +12,9 @@ files = [
 ]
 
 
-def get_module_title(file, dev=True):
+def get_module_title(unit, file, dev=True):
     dev_prefix = 'User:Vitalik/' if dev else ''
+    file = file.replace('[unit]', unit)
     file = file.replace('[.out]', '')
     title = f'Module:{dev_prefix}inflection/ru/noun'
     if file == 'noun':
