@@ -5,7 +5,7 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
-# local parent_prefix = 'Module:' + dev_prefix + 'inflection/ru/noun'
+# local parent_prefix = 'Module:' + dev_prefix + 'inflection/ru/adj'
 from .libs import parse_args
 from .libs import stress
 from .libs import stem_type
@@ -30,7 +30,7 @@ def prepare_stash():
 
 
 def main_algorithm(data):
-    _.log_func('noun', 'main_algorithm')
+    _.log_func('adj', 'main_algorithm')
 
     # local error, keys, forms, orig_stem, for_category, old_value
 
@@ -203,7 +203,7 @@ def main_algorithm(data):
 
 def forms(base, args, frame):  # export
     mw.log('==================================================')
-    _.log_func('noun', 'forms')
+    _.log_func('adj', 'forms')
 
     # local data, error, forms
     # local data1, data2, forms1, forms2, sub_forms

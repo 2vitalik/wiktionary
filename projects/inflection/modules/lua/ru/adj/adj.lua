@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local parent_prefix = 'Module:' .. dev_prefix .. 'inflection/ru/noun'
+local parent_prefix = 'Module:' .. dev_prefix .. 'inflection/ru/adj'
 local parse_args = require(parent_prefix .. '/parse_args')
 local stress = require(parent_prefix .. '/stress')
 local stem_type = require(parent_prefix .. '/stem_type')
@@ -30,7 +30,7 @@ end
 
 
 local function main_algorithm(data)
-	_.log_func('noun', 'main_algorithm')
+	_.log_func('adj', 'main_algorithm')
 
 	local error, keys, forms, orig_stem, for_category, old_value
 
@@ -203,7 +203,7 @@ end
 
 function export.forms(base, args, frame)
 	mw.log('==================================================')
-	_.log_func('noun', 'forms')
+	_.log_func('adj', 'forms')
 
 	local data, error, forms
 	local data1, data2, forms1, forms2, sub_forms

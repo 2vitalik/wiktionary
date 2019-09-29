@@ -39,6 +39,7 @@ local function init(data)
 	several_vovwels = _.contains_several(data.word_stressed, '{vowel+ё}')
 	has_stress = _.contains(data.word_stressed, '[́ ё]')
 	if several_vovwels and not has_stress then
+		_.log_info('Ошибка: Не указано ударение в слове')
 		return {
 			error='Ошибка: Не указано ударение в слове',
 			error_category='Ошибка в шаблоне "сущ-ru": не указано ударение в слове',
@@ -100,6 +101,7 @@ function export.parse(base, args)
 	_.log_info('Получение информации о роде и одушевлённости')
 
 	data.gender = ''  -- fixme
+	data.animacy = ''  -- fixme
 	data.adj = true  -- fixme
 	data.rest_index = data.index  -- fixme
 	_.log_value(data.pt, 'data.pt')
@@ -108,11 +110,6 @@ function export.parse(base, args)
 --	INFO: stem, stem_stressed, etc.
 	error = init(data)
 	if error then return data, error end
-
---	INFO: Случай, если род или одушевлённость не указаны:
-	if (not data.gender or not data.animacy) and not data.pt then
-		return data, {}  -- dict -- INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
-	end
 
 --	INFO: Проверяем случай с вариациями:
 	parts = mw.text.split(data.rest_index, '//')
