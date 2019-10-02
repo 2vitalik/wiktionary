@@ -5,7 +5,7 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
-def apply_obelus(forms, rest_index):
+def apply_obelus(forms, rest_index):  # export
     _.log_func('forms', 'apply_obelus')
 
     if _.contains(rest_index, '÷'):
@@ -15,7 +15,7 @@ def apply_obelus(forms, rest_index):
 
 
 
-def apply_specific_3(forms, gender, rest_index):
+def apply_specific_3(forms, gender, rest_index):  # export
     _.log_func('forms', 'apply_specific_3')
 
     # Специфика по (3)

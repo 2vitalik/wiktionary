@@ -5,7 +5,7 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
-def get_standard_pronoun_endings():
+def get_standard_pronoun_endings():  # export
     _.log_func('endings', 'get_standard_pronoun_endings')
 
     # TODO: Пока что не используется
@@ -82,7 +82,8 @@ def get_standard_pronoun_endings():
     # todo: сразу преобразовать в дефисы
 # end
 
-def get_standard_pronoun_noun_endings():
+
+def get_standard_pronoun_noun_endings():  # export
     _.log_func('endings', 'get_standard_pronoun_noun_endings')
 
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
@@ -158,9 +159,8 @@ def get_standard_pronoun_noun_endings():
 # end
 
 
-
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-def fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema):
+def fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema):  # export
     _.log_func('endings', 'fix_pronoun_noun_endings')
 
     # INFO: Replace "ы" to "и"

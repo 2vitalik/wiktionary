@@ -5,8 +5,14 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
+# constants:
+# local unstressed, stressed
+unstressed = 0
+stressed = 1
+
+
 # Данные: все стандартные окончания для двух типов основ
-def get_standard_noun_endings():
+def get_standard_noun_endings():  # export
     _.log_func('endings', 'get_standard_noun_endings')
 
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
@@ -88,7 +94,7 @@ def get_standard_noun_endings():
 
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-def fix_noun_endendings(endings, gender, stem_type, stress_schema):
+def fix_noun_endendings(endings, gender, stem_type, stress_schema):  # export
     _.log_func('endings', 'fix_noun_endendings')
 
     # INFO: Replace "ы" to "и"
@@ -164,7 +170,7 @@ def fix_noun_endendings(endings, gender, stem_type, stress_schema):
 # end
 
 
-def apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index):
+def apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index):  # export
     if _.contains(rest_index, ['%(1%)', '①']):
         if base_stem_type == 'hard':
             if gender == 'm': endings['nom_pl'] = 'а' # end

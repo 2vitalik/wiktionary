@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local function apply_obelus(forms, rest_index)
+function export.apply_obelus(forms, rest_index)
 	_.log_func('forms', 'apply_obelus')
 
 	if _.contains(rest_index, '÷') then
@@ -15,7 +15,7 @@ end
 
 
 
-local function apply_specific_3(forms, gender, rest_index)
+function export.apply_specific_3(forms, gender, rest_index)
 	_.log_func('forms', 'apply_specific_3')
 
 	-- Специфика по (3)

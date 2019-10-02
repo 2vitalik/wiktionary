@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local function get_standard_pronoun_endings()
+function export.get_standard_pronoun_endings()
 	_.log_func('endings', 'get_standard_pronoun_endings')
 
 	-- TODO: Пока что не используется
@@ -82,7 +82,8 @@ local function get_standard_pronoun_endings()
 	-- todo: сразу преобразовать в дефисы
 end
 
-local function get_standard_pronoun_noun_endings()
+
+function export.get_standard_pronoun_noun_endings()
 	_.log_func('endings', 'get_standard_pronoun_noun_endings')
 
 	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
@@ -158,9 +159,8 @@ local function get_standard_pronoun_noun_endings()
 end
 
 
-
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-local function fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema)
+function export.fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema)
 	_.log_func('endings', 'fix_pronoun_noun_endings')
 
 --	INFO: Replace "ы" to "и"

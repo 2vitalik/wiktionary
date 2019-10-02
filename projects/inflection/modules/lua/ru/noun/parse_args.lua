@@ -20,7 +20,7 @@ local function get_cyrl_animacy(index, gender)
 end
 
 
-local function extract_gender_animacy(data)
+function export.extract_gender_animacy(data)
 	_.log_func('parse_args', 'extract_gender_animacy')
 
 	local convert_animacy, orig_index, rest_index
@@ -195,7 +195,7 @@ local function extract_gender_animacy(data)
 end
 
 
-local function angle_brackets(data)
+function export.angle_brackets(data)
 	_.log_func('parse_args', 'angle_brackets')
 
 	local another_index, pt, error

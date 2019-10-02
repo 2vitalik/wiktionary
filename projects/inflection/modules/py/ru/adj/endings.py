@@ -12,7 +12,7 @@ stressed = 1
 
 
 # Данные: все стандартные окончания для двух типов основ
-def get_standard_adj_endings():
+def get_standard_adj_endings():  # export
     _.log_func('endings', 'get_standard_adj_endings')
 
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
@@ -98,7 +98,7 @@ def get_standard_adj_endings():
 
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun):
+def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun):  # export
     _.log_func('endings', 'fix_adj_pronoun_endings')
 
     # INFO: Replace "ы" to "и"

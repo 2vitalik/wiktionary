@@ -5,8 +5,14 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+-- constants:
+local unstressed, stressed
+unstressed = 1
+stressed = 2
+
+
 -- Данные: все стандартные окончания для двух типов основ
-local function get_standard_noun_endings()
+function export.get_standard_noun_endings()
 	_.log_func('endings', 'get_standard_noun_endings')
 
 	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
@@ -88,7 +94,7 @@ end
 
 
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-local function fix_noun_endendings(endings, gender, stem_type, stress_schema)
+function export.fix_noun_endendings(endings, gender, stem_type, stress_schema)
 	_.log_func('endings', 'fix_noun_endendings')
 
 --	INFO: Replace "ы" to "и"
@@ -164,7 +170,7 @@ local function fix_noun_endendings(endings, gender, stem_type, stress_schema)
 end
 
 
-local function apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index)
+function export.apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index)
 	if _.contains(rest_index, {'%(1%)', '①'}) then
 		if base_stem_type == 'hard' then
 			if gender == 'm' then endings['nom_pl'] = 'а' end
