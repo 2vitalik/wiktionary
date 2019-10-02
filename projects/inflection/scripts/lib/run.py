@@ -1,27 +1,32 @@
 import platform
 
 from libs.utils.parse import remove_stress
-from projects.inflection.modules.py.ru.adj import adj
-from projects.inflection.modules.py.ru.noun import noun
+from projects.inflection.modules.py.ru.declension import declension
 
 
 def replace_stress(value):
     return value.replace('́', "'")
 
 
-run_adj = True
-# run_adj = False
+def noun(word, index):
+    run('noun',  word, index)
 
 
-def run(word, index):
-    if run_adj:
-        result = adj.forms(remove_stress(word),
-                           {'индекс': index, 'слово': word}, None)
-    else:
-        result = noun.forms(remove_stress(word),
-                            {'индекс': index, 'слово': word}, None)
+def adj(word, index):
+    run('adj',  word, index)
 
-    if run_adj:
+
+def run(unit, word, index):
+    result = declension.forms(
+        remove_stress(word),
+        {'lang': 'ru',
+         'unit': unit,
+         'индекс': index,
+         'слово': word},
+        None,
+    )
+
+    if unit == 'adj':
         keys = [
             ('Им.', 'nom-sg-m', 'nom-sg-n', 'nom-sg-f', 'nom-pl'),
             ('Р. ', 'gen-sg-m', 'gen-sg-n', 'gen-sg-f', 'gen-pl'),
@@ -49,7 +54,7 @@ def run(word, index):
     word_width = len("Слово:  ") + len(word)
     index_width = len("Индекс: ") + len(index)
     cases_width = sum(lens) + 9
-    width = max(cases_width, word_width, index_width) + 2 + (6 if run_adj else 0)
+    width = max(cases_width, word_width, index_width) + 2 + (6 if unit == 'adj' else 0)
     # len2 = max(len2, width - len1 - 9 - 2)  # fixme
 
     # print(platform.platform())
