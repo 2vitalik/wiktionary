@@ -63,18 +63,23 @@ function export.get(frame)
 	-- end
 	-- return args[1]
 	local unit_name = frame.args['unit']
-	local unit = load_unit(unit_name)
-	if unit == nil then
+	local lang_unit = mw.text.split(unit_name, '%/')
+	local lang = lang_unit[1]
+	local unit = lang_unit[2]
+	args['lang'] = lang
+	args['unit'] = unit
+
+	local declension_unit = load_unit(lang .. '/declension')  -- TODO: Make universal
+	if declension_unit == nil then
 		return 'Error: Name of unit is absent'
 	end
 
 	fix_args(base, args)
-	local lang_unit = mw.text.split(unit_name, '%/')
-	args['lang'] = lang_unit[1]
-	args['unit'] = lang_unit[2]
 
-    local forms = unit.forms(base, args, frame)
-    local template = unit.template(base, args)
+    local forms = declension_unit.forms(base, args, frame)
+
+    local template_unit = load_unit(lang .. '/' .. unit .. '/template')
+    local template = template_unit.template(base, args)
 
     local output = frame:expandTemplate{title=template, args=forms }
 

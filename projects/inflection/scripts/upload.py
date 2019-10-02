@@ -62,12 +62,12 @@ def upload(dev, version, desc):
 
 
 if __name__ == '__main__':
-    # inflection_version = '2.3'
+    # inflection_version = '2.4'
 
     # dev = False
     dev = True
 
-    version = '3.6.1'
+    version = '3.6.2'
 
     desc = ''
 
