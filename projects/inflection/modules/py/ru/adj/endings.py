@@ -4,6 +4,7 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
+
 # constants:
 # local unstressed, stressed
 unstressed = 0

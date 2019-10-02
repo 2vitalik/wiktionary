@@ -4,6 +4,7 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
+
 from ...noun import endings as noun_endings
 from ...adj import endings as adj_endings
 from ...pronoun import endings as pronoun_endings

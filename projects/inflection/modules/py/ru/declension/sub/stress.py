@@ -4,6 +4,7 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
+
 from ...noun import stress as noun_stress
 from ...adj import stress as adj_stress
 from ...pronoun import stress as pronoun_stress
