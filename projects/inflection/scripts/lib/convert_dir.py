@@ -1,34 +1,30 @@
-from os.path import join
 from shutil import copy
 
+from libs.utils.io import write
 from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.convert_file import convert_file
 from projects.inflection.scripts.lib.modules import files
 from projects.inflection.scripts.lib.paths import get_path
 
 
-def convert_dir(unit, _from, _to):
-    if not compare_dir(unit, _to):
+def convert_dir(_from, _to):
+    if not compare_dir(_to):
         print(f'Ошибка: папки `{_to}` не синхронизированы.')
         return
 
-    py_path = get_path(unit, _to)
-
-    for module in files:
-        module = module.replace('[unit]', unit)
-        active = module.replace('[.out]', '')
-        out = module.replace('[.out]', '.out')
-
+    for file in files:
         # Прямое преобразование:
-        convert_file(unit, active, _from, _to)
+        convert_file(file, _from, _to, out=False)
 
-        # Копирование результата в `libs.out`:
-        copy(join(py_path, f'{active}.{_to}'),
-             join(py_path, f'{out}.{_to}'))
+        # Копирование результата в `ru.out`:
+        in_file = get_path(_to, file, out=False)
+        out_file = get_path(_to, file, out=True)
+        write(out_file, '')  # чтобы создать папки, если их нет
+        copy(in_file, out_file)
 
         # Обратное преобразование для .out:
-        convert_file(unit, out, _to, _from)
+        convert_file(file, _to, _from, out=True)
 
-    if not compare_dir(unit, _from):
+    if not compare_dir(_from):
         print(f'Ошибка: папки `{_from}` не синхронизированы.')
         return

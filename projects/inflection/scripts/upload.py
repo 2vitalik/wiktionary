@@ -36,29 +36,26 @@ def read_file(dev, filename):
     return result
 
 
-def upload(dev, unit, version, inflection_version, desc):
-    if not compare_dir(unit, 'lua'):
+def upload(dev, version, inflection_version, desc):
+    if not compare_dir('lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
 
     desc = process_desc(dev, desc)
 
-    path = get_path(unit, 'lua')
     print(f'Загружаю lua-модули в ВС:')
 
     for file in files:
-        title = get_module_title(unit, file, dev)
+        title = get_module_title(file, dev)
         print(f'- {title} - ', end='')
 
-        file = file.replace('[unit]', unit)
-        file = file.replace('[.out]', '.out')
-        if save_page(title, read_file(dev, f'{path}/{file}.lua'),
-                     f'v{version}: {desc}'):
+        path = get_path('lua', file, out=True)
+        if save_page(title, read_file(dev, path), f'v{version}: {desc}'):
             print('OK')
 
     dev_prefix = 'User:Vitalik/' if dev else ''
     title = f'Module:{dev_prefix}inflection/tools'
-    path = get_path('root', 'lua')
+    path = get_path('lua', root=True)  # todo: fixme
     save_page(title, read_file(dev, f'{path}/tools.lua'),
               f'v{inflection_version}: {desc}')
 
@@ -69,12 +66,8 @@ if __name__ == '__main__':
 
     inflection_version = '2.3'
 
-    # unit = 'noun'
-    # version = '3.5.16'
-
-    unit = 'adj'
-    version = '0.1.4'
+    version = '3.6.0'
 
     desc = 'b'
 
-    upload(dev, unit, version, inflection_version, desc)
+    upload(dev, version, inflection_version, desc)

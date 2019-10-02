@@ -18,21 +18,19 @@ def download_module(title, path):
     print(' - OK')
 
 
-def download(unit, dev=True):
-    if not compare_dir(unit, 'lua'):
+def download(dev=True):
+    if not compare_dir('lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
 
-    path = get_path(unit, 'lua')
+    path = get_path('lua')
     print(f'Скачиваю lua-модули в папку:\n  {path}\nМодули:')
 
     for file in files:
-        title = get_module_title(unit, file, dev)
-
-        file = file.replace('[unit]', unit)
+        title = get_module_title(file, dev)
         download_module(title, f'{path}/{file}.lua')
 
 
 if __name__ == '__main__':
-    download('noun')
-    # download('noun', dev=False)
+    download()
+    # download(dev=False)

@@ -1,14 +1,25 @@
 files = [
-    '[unit][.out]',
-    'libs[.out]/endings',
-    'libs[.out]/form',
-    'libs[.out]/index',
-    'libs[.out]/parse_args',
-    'libs[.out]/reducable',
-    'libs[.out]/result',
-    'libs[.out]/stem_type',
-    'libs[.out]/stress',
-    # 'libs[.out]/testcases',
+    'adj/endings',
+    'adj/stress',
+    'adj/template',
+    'declension/declension',
+    'declension/sub/endings',
+    'declension/sub/form',
+    'declension/sub/index',
+    'declension/sub/parse_args',
+    'declension/sub/reducable',
+    'declension/sub/result',
+    'declension/sub/stem_type',
+    'declension/sub/stress',
+    'noun/endings',
+    'noun/form',
+    'noun/parse_args',
+    'noun/stress',
+    'noun/template',
+    'pronoun/endings',
+    'pronoun/stress',
+    # 'pronoun/template',  # todo
+    # '/testcases',  # todo
 ]
 
 
