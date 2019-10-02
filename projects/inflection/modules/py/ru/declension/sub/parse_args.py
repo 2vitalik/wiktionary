@@ -87,6 +87,7 @@ def parse(base, args):  # export
     data.args = args
     data.index = mw.text.trim(args['индекс'])
     data.word_stressed = mw.text.trim(args['слово'])
+    # todo: get also type of speach from args? unit name?
 
     _.log_value(data.index, 'data.index')
     _.log_value(data.word_stressed, 'data.word_stressed')
@@ -100,16 +101,35 @@ def parse(base, args):  # export
 
     _.log_info('Получение информации о роде и одушевлённости')
 
-    data.gender = ''  # fixme
-    data.animacy = ''  # fixme
-    data.adj = True  # fixme
-    data.rest_index = data.index  # fixme
+    if data.noun:  # fxime
+        error = extract_gender_animacy(data)
+        if error: return data, error # end
+
+        _.log_value(data.gender, 'data.gender')
+        _.log_value(data.animacy, 'data.animacy')
+        _.log_value(data.common_gender, 'data.common_gender')
+        _.log_value(data.adj, 'data.adj')
+        _.log_value(data.pronoun, 'data.pronoun')
+    else:
+        data.gender = ''  # fixme
+        data.animacy = ''  # fixme
+        data.adj = True  # fixme
+        data.rest_index = data.index  # fixme
+    # end
+
     _.log_value(data.pt, 'data.pt')
     _.log_value(data.rest_index, 'data.rest_index')
 
     # INFO: stem, stem_stressed, etc.
     error = init(data)
     if error: return data, error # end
+
+    if data.noun:
+        # INFO: Случай, если род или одушевлённость не указаны:
+        if (not data.gender or not data.animacy) and not data.pt:
+            return data, dict()  # dict # INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
+        # end
+    # end
 
     # INFO: Проверяем случай с вариациями:
     parts = mw.text.split(data.rest_index, '//')

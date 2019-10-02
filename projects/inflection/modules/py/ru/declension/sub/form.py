@@ -120,15 +120,17 @@ def generate_forms(data):  # export
         # end
     # end
 
-    # fixme: noun only
-    # apply_obelus(forms, data.rest_index)
+    if data.noun:
+        apply_obelus(forms, data.rest_index)
+    # end
 
     choose_accusative_forms(forms, data)
 
     second_ins_case(forms, data.gender)
 
-    # fixme: noun only
-    # apply_specific_3(forms, data.gender, data.rest_index)
+    if data.noun:
+        apply_specific_3(forms, data.gender, data.rest_index)
+    # end
 
     for key, value in forms.items():
 #        INFO Удаляем ударение, если только один слог:
@@ -150,7 +152,40 @@ def generate_forms(data):  # export
     return forms
 # end
 
-#------------------------------------------------------------------------------
+
+def join_forms(forms1, forms2):  # export
+    _.log_func('forms', 'join_forms')
+
+    # local keys, forms, delim
+
+    keys = [
+        'nom_sg',  'gen_sg',  'dat_sg',  'acc_sg',  'ins_sg',  'prp_sg',
+        'nom_pl',  'gen_pl',  'dat_pl',  'acc_pl',  'ins_pl',  'prp_pl',
+        'ins_sg2',
+        'зализняк1', 'зализняк',
+        'error',
+    ]  # list
+
+    forms = forms1
+    forms['зализняк-1'] = forms1['зализняк']
+    forms['зализняк-2'] = forms2['зализняк']
+    for i, key in enumerate(keys):
+        if not forms[key] and forms2[key]:  # INFO: Если forms[key] == None
+            forms[key] = forms2[key]
+        elif forms[key] != forms2[key] and forms2[key]:
+            delim = '<br/>'
+            if _.equals(key, ['зализняк1', 'зализняк']):
+                delim = '&nbsp;'
+            # end
+            # TODO: <br/> только для падежей
+            forms[key] = forms[key] + '&nbsp;//' + delim + forms2[key]
+        # end
+        if not forms[key]:  # INFO: Если forms[key] == None
+            forms[key] = ''
+        # end
+    # end
+    return forms
+# end
 
 
 def plus_forms(sub_forms):  # export
