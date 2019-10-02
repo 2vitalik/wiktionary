@@ -15,6 +15,8 @@ from ..declension.sub import form  # fixme
 from ..declension.sub import index
 from ..declension.sub import result
 
+from ..noun import form as noun_form
+
 
 def prepare_stash():
     _.clear_stash()
@@ -255,7 +257,7 @@ def forms(base, args, frame):  # export
     # end
 
     if data.noun:
-        form.special_cases(forms, args, data.index, data.word)
+        noun_form.special_cases(forms, args, data.index, data.word)
     # end
 
     result.finalize(data, forms)

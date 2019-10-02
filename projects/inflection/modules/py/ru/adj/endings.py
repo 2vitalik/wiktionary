@@ -4,6 +4,11 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
+# constants:
+# local unstressed, stressed
+unstressed = 0
+stressed = 1
+
 
 # Данные: все стандартные окончания для двух типов основ
 def get_standard_adj_endings():

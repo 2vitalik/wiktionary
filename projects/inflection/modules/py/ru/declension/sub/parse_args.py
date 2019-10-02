@@ -2,6 +2,8 @@ from projects.inflection.modules.py import additional
 from projects.inflection.modules.py import mw
 from projects.inflection.modules.py import tools as _
 
+from ...noun import parse_args as noun_parse_args
+
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
@@ -48,33 +50,6 @@ def init(data):
 # end
 
 
-def angle_brackets(data):
-    _.log_func('parse_args', 'angle_brackets')
-
-    # local another_index, pt, error
-
-    another_index = _.extract(data.rest_index, '%<([^>]+)%>')
-    if another_index:
-        pt = data.pt
-        if not pt:
-            data.output_gender = data.gender
-            data.output_animacy = data.animacy
-        # end
-        data.orig_index = data.index
-        data.index = another_index
-        error = extract_gender_animacy(data)
-        data.pt = pt
-        if error: return error # end
-
-        _.log_value(data.adj, 'data.adj')
-        if data.adj:  # Для прилагательных надо по-особенному
-            error = init(data)
-            if error: return data, error # end
-        # end
-    # end
-# end
-
-
 def parse(base, args):  # export
     _.log_func('parse_args', 'parse')
 
@@ -85,9 +60,12 @@ def parse(base, args):  # export
     data = additional.AttrDict()  # AttrDict
     data.base = base
     data.args = args
+    data.lang = mw.text.trim(args['lang'])
+    data.unit = mw.text.trim(args['unit'])
     data.index = mw.text.trim(args['индекс'])
     data.word_stressed = mw.text.trim(args['слово'])
-    # todo: get also type of speach from args? unit name?
+
+    data.noun = (data.unit == 'noun')
 
     _.log_value(data.index, 'data.index')
     _.log_value(data.word_stressed, 'data.word_stressed')
@@ -102,7 +80,7 @@ def parse(base, args):  # export
     _.log_info('Получение информации о роде и одушевлённости')
 
     if data.noun:  # fxime
-        error = extract_gender_animacy(data)
+        error = noun_parse_args.extract_gender_animacy(data)
         if error: return data, error # end
 
         _.log_value(data.gender, 'data.gender')
@@ -168,16 +146,20 @@ def parse(base, args):  # export
 
                 data_copy.rest_index = index_parts[i]
 
-                error = angle_brackets(data_copy)
-                if error: return data, error # end
+                if data.noun:
+                    error = noun_parse_args.angle_brackets(data_copy)
+                    if error: return data, error # end
+                # end
 
                 data.sub_parts.append(data_copy)
             # end
             return data, None
         # end
 
-        error = angle_brackets(data)
-        if error: return data, error # end
+        if data.noun:
+            error = noun_parse_args.angle_brackets(data)
+            if error: return data, error # end
+        # end
 
         if _.contains(data.rest_index, '%[%([12]%)%]') or _.contains(data.rest_index, '%[[①②]%]'):
             # INFO: Клонируем две вариации на основании текущих данных
@@ -215,9 +197,11 @@ def parse(base, args):  # export
         data1.rest_index = parts[1]
         data2.rest_index = parts[2]
 
-        # INFO: Проверяем, не находится ли род+одушевлённость во второй вариации
-        data2.index = parts[2]  # INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
-        extract_gender_animacy(data2)
+        if data.noun:
+            # INFO: Проверяем, не находится ли род+одушевлённость во второй вариации
+            data2.index = parts[2]  # INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
+            noun_parse_args.extract_gender_animacy(data2)
+        # end
 
         # INFO: Если рода и одушевлённости во второй вариации нет (простой случай):
         if not data2.gender and not data2.animacy:

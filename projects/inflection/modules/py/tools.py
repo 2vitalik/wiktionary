@@ -62,10 +62,8 @@ def check(string, values, checker):
              or checker == 'endswith' and mw.ustring.match(string, value + "$") != None \
              or checker == 'penultimate' and mw.ustring.match(string, value + ".$") != None \
              or checker == 'contains' and mw.ustring.match(string, value) != None \
-             or checker == 'contains_once' and len(
-            mw.text.split(string, value)) == 2 \
-             or checker == 'contains_several' and len(
-            mw.text.split(string, value)) > 2
+             or checker == 'contains_once' and len(mw.text.split(string, value)) == 2 \
+             or checker == 'contains_several' and len(mw.text.split(string, value)) > 2
         if ok:
             return True
 

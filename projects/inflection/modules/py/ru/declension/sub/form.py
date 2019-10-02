@@ -5,6 +5,9 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
+from ...noun import form as noun_form
+
+
 def init_forms(stems, endings):  # Генерация словоформ
     _.log_func('forms', 'init_forms')
 
@@ -121,7 +124,7 @@ def generate_forms(data):  # export
     # end
 
     if data.noun:
-        apply_obelus(forms, data.rest_index)
+        noun_form.apply_obelus(forms, data.rest_index)
     # end
 
     choose_accusative_forms(forms, data)
@@ -129,7 +132,7 @@ def generate_forms(data):  # export
     second_ins_case(forms, data.gender)
 
     if data.noun:
-        apply_specific_3(forms, data.gender, data.rest_index)
+        noun_form.apply_specific_3(forms, data.gender, data.rest_index)
     # end
 
     for key, value in forms.items():

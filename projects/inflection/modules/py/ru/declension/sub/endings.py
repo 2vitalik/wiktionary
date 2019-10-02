@@ -4,6 +4,10 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
+from ...noun import endings as noun_endings
+from ...adj import endings as adj_endings
+from ...pronoun import endings as pronoun_endings
+
 
 # constants:
 # local unstressed, stressed
@@ -19,11 +23,11 @@ def get_base_endings(gender, base_stem_type, adj, pronoun):
 
     # INFO: Получение списка всех стандартных окончаний
     if adj:
-        standard_endings = get_standard_adj_endings()
+        standard_endings = adj_endings.get_standard_adj_endings()
     elif pronoun:
-        standard_endings = get_standard_pronoun_noun_endings()  # fixme
+        standard_endings = pronoun_endings.get_standard_pronoun_noun_endings()
     else:
-        standard_endings = get_standard_noun_endings()  # fixme
+        standard_endings = noun_endings.get_standard_noun_endings()
     # end
 
     if adj and gender == '':  # INFO: Случай с множественным числом
@@ -52,7 +56,7 @@ def apply_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index, a
         pass  # TODO
 
     else:
-        apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index)
+        noun_endings.apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index)
     # end
 # end
 
@@ -117,11 +121,11 @@ def get_endings(data):  # export
 
     # INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
     if data.adj:  # or data.pronoun
-        fix_adj_pronoun_endings(endings, data.gender, data.stem_type, data.stress_schema, data.adj, False)
+        adj_endings.fix_adj_pronoun_endings(endings, data.gender, data.stem_type, data.stress_schema, data.adj, False)
     elif data.pronoun:
-        fix_pronoun_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)  # fixme
+        pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
     else:
-        fix_noun_endendings(endings, data.gender, data.stem_type, data.stress_schema)  # fixme
+        noun_endings.fix_noun_endendings(endings, data.gender, data.stem_type, data.stress_schema)
     # end
 
     # apply special cases (1) or (2) in index

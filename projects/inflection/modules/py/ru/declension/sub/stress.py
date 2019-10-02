@@ -4,6 +4,10 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
+from ...noun import stress as noun_stress
+from ...adj import stress as adj_stress
+from ...pronoun import stress as pronoun_stress
+
 
 def extract_stress_type(rest_index):  # export
     _.log_func('stress', 'extract_stress_type')
@@ -42,11 +46,11 @@ def get_stress_schema(stress_type, adj, pronoun):  # export  # Пока не и�
     _.log_func('stress', 'get_stress_schema')
 
     if adj:
-        return export.get_adj_stress_schema(stress_type)
+        return adj_stress.get_adj_stress_schema(stress_type)
     elif pronoun:
-        return export.get_pronoun_stress_schema(stress_type)
+        return pronoun_stress.get_pronoun_stress_schema(stress_type)
     else:
-        return export.get_noun_stress_schema(stress_type)
+        return noun_stress.get_noun_stress_schema(stress_type)
     # end
 # end
 
