@@ -211,3 +211,7 @@ local function apply_noun_specific_1_2(endings, gender, stem_type, base_stem_typ
 --			end
 --		--
 	end
+end
+
+
+return export

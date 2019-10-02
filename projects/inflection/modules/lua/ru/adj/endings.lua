@@ -169,3 +169,6 @@ local function fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema
 		end
 	end
 end
+
+
+return export

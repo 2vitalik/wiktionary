@@ -25,3 +25,6 @@ def get_pronoun_stress_schema(stress_type):  # export  # INFO: Вычислен�
     )  # dict
     return stress_schema
 # end
+
+
+# return export

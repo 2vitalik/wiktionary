@@ -169,3 +169,6 @@ def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pron
         # end
     # end
 # end
+
+
+# return export

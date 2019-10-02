@@ -47,3 +47,6 @@ function export.get_noun_stress_schema(stress_type)  -- INFO: Вычислени
 
 	return stress_schema
 end
+
+
+return export

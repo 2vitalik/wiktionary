@@ -47,3 +47,6 @@ def get_noun_stress_schema(stress_type):  # export  # INFO: Вычисление
 
     return stress_schema
 # end
+
+
+# return export

@@ -8,3 +8,6 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 function export.template(base, args)
 	return 'inflection/ru/noun'
 end
+
+
+return export

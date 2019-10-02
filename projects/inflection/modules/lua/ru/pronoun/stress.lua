@@ -25,3 +25,6 @@ function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисле�
 	}  -- dict
 	return stress_schema
 end
+
+
+return export

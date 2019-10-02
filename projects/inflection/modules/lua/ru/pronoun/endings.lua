@@ -201,3 +201,6 @@ local function fix_pronoun_noun_endings(endings, gender, stem_type, stress_schem
 		end
 	end
 end
+
+
+return export

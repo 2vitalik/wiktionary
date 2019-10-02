@@ -211,3 +211,7 @@ def apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_ind
 #            # end
 #        #
     # end
+# end
+
+
+# return export

@@ -44,3 +44,6 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 
 	return stress_schema
 end
+
+
+return export

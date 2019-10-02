@@ -44,3 +44,6 @@ def get_adj_stress_schema(stress_type):  # export  # INFO: Вычисление 
 
     return stress_schema
 # end
+
+
+# return export
