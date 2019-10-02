@@ -69,6 +69,9 @@ function export.get(frame)
 	end
 
 	fix_args(base, args)
+	local lang_unit = mw.text.split(unit_name, '%/')
+	args['lang'] = lang_unit[1]
+	args['unit'] = lang_unit[2]
 
     local forms = unit.forms(base, args, frame)
     local template = unit.template(base, args)
