@@ -5,13 +5,12 @@ from projects.inflection.modules.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
 
-# local parent_prefix = 'Module:' + dev_prefix + 'inflection/ru/adj'  # todo: remove
 from ..declension.sub import parse_args
 from ..declension.sub import stress
 from ..declension.sub import stem_type
-from ..declension.sub import endings  # fixme
+from ..declension.sub import endings
 from ..declension.sub import reducable
-from ..declension.sub import form  # fixme
+from ..declension.sub import form
 from ..declension.sub import index
 from ..declension.sub import result
 
