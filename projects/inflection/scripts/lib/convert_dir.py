@@ -3,7 +3,7 @@ from shutil import copy
 from libs.utils.io import write
 from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.convert_file import convert_file
-from projects.inflection.scripts.lib.modules import files
+from projects.inflection.scripts.lib.files import files
 from projects.inflection.scripts.lib.paths import get_path
 
 

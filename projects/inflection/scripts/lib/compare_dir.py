@@ -1,5 +1,5 @@
 from libs.utils.io import compare
-from projects.inflection.scripts.lib.modules import files
+from projects.inflection.scripts.lib.files import files
 from projects.inflection.scripts.lib.paths import get_path
 
 

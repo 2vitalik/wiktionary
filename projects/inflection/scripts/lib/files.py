@@ -23,14 +23,13 @@ files = [
 ]
 
 
-def get_module_title(unit, file, dev=True):
+def get_module_title(file, dev=True):
     dev_prefix = 'User:Vitalik/' if dev else ''
-    file = file.replace('[unit]', unit)
-    file = file.replace('[.out]', '')
-    title = f'Module:{dev_prefix}inflection/ru/{unit}'
-    if file == unit:
-        return title
-    if file.startswith('libs/'):
-        title += file[len('libs'):]
-        return title
-    raise Exception('Unknown module title')
+    title = f'Module:{dev_prefix}inflection/ru/'
+    if file == 'declension/declension':
+        title += 'declension'
+    elif file.startswith('declension/'):
+        title += file.replace('/sub',  '')
+    else:
+        title += file
+    return title

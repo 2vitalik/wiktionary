@@ -2,7 +2,7 @@ from libs.utils.dt import dt
 from libs.utils.io import read, append
 from libs.utils.wikibot import save_page
 from projects.inflection.scripts.lib.compare_dir import compare_dir
-from projects.inflection.scripts.lib.modules import files, get_module_title
+from projects.inflection.scripts.lib.files import files, get_module_title
 from projects.inflection.scripts.lib.paths import get_path
 
 
@@ -24,7 +24,7 @@ def process_desc(dev, desc):
         raise Exception('Description is required')
     d = 'D' if dev else 'P'
     append('logs/changes.txt',
-           f'[{dt()}] [{d}] v{version}/{inflection_version}: {desc}')
+           f'[{dt()}] [{d}] v{version}: {desc}')
     return desc
 
 
@@ -36,7 +36,7 @@ def read_file(dev, filename):
     return result
 
 
-def upload(dev, version, inflection_version, desc):
+def upload(dev, version, desc):
     if not compare_dir('lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
@@ -53,21 +53,22 @@ def upload(dev, version, inflection_version, desc):
         if save_page(title, read_file(dev, path), f'v{version}: {desc}'):
             print('OK')
 
-    dev_prefix = 'User:Vitalik/' if dev else ''
-    title = f'Module:{dev_prefix}inflection/tools'
-    path = get_path('lua', root=True)  # todo: fixme
-    save_page(title, read_file(dev, f'{path}/tools.lua'),
-              f'v{inflection_version}: {desc}')
+    # todo: fixme, and move to separate function! with separate logs/changes
+    # dev_prefix = 'User:Vitalik/' if dev else ''
+    # title = f'Module:{dev_prefix}inflection/tools'
+    # path = get_path('lua', root=True)  # todo: fixme
+    # save_page(title, read_file(dev, f'{path}/tools.lua'),
+    #           f'v{inflection_version}: {desc}')
 
 
 if __name__ == '__main__':
+    # inflection_version = '2.3'
+
     # dev = False
     dev = True
 
-    inflection_version = '2.3'
+    version = '3.6.1'
 
-    version = '3.6.0'
+    desc = ''
 
-    desc = 'b'
-
-    upload(dev, version, inflection_version, desc)
+    upload(dev, version, desc)

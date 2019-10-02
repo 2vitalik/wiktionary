@@ -1,7 +1,7 @@
 from shutil import copy
 
 from projects.inflection.scripts.lib.compare_dir import compare_dir
-from projects.inflection.scripts.lib.modules import files
+from projects.inflection.scripts.lib.files import files
 from projects.inflection.scripts.lib.paths import get_path
 
 
