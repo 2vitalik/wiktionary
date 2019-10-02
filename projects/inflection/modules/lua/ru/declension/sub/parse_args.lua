@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-from ...noun import parse_args as noun_parse_args
+local noun_parse_args = require('Module:' .. dev_prefix .. 'inflection/ru/noun/parse_args')  -- '.'
 
 
 local function init(data)

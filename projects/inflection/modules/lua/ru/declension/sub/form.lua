@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-from ...noun import form as noun_form
+local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form')  -- '.'
 
 
 local function init_forms(stems, endings)  -- Генерация словоформ

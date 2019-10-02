@@ -5,9 +5,9 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-from ...noun import stress as noun_stress
-from ...adj import stress as adj_stress
-from ...pronoun import stress as pronoun_stress
+local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/noun/stress')  -- '.'
+local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/adj/stress')  -- '.'
+local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/pronoun/stress')  -- '.'
 
 
 function export.extract_stress_type(rest_index)

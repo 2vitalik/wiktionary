@@ -5,9 +5,9 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-from ...noun import endings as noun_endings
-from ...adj import endings as adj_endings
-from ...pronoun import endings as pronoun_endings
+local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/noun/endings')  -- '.'
+local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/adj/endings')  -- '.'
+local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/pronoun/endings')  -- '.'
 
 
 -- constants:

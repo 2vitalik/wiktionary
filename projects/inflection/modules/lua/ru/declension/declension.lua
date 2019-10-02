@@ -5,17 +5,16 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local parent_prefix = 'Module:' .. dev_prefix .. 'inflection/ru/adj'  -- todo: remove
-from ..declension.sub import parse_args
-from ..declension.sub import stress
-from ..declension.sub import stem_type
-from ..declension.sub import endings  -- fixme
-from ..declension.sub import reducable
-from ..declension.sub import form  -- fixme
-from ..declension.sub import index
-from ..declension.sub import result
+local parse_args = require('Module:' .. dev_prefix .. 'inflection/ru/declension/parse_args')
+local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/stress')
+local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/stem_type')
+local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/endings')
+local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/reducable')
+local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/form')
+local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/index')
+local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/result')
 
-from ..noun import form as noun_form
+local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form')  -- ''
 
 
 local function prepare_stash()
