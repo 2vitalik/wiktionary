@@ -166,8 +166,9 @@ function export.finalize(data, forms)
 	additional_arguments(forms, data)
 	replace_underscore_with_hyphen(forms)
 
-	-- fixme: exclude from adj
-	-- forward_gender_animacy(forms, data)
+	if data.noun then
+		forward_gender_animacy(forms, data)
+	end
 
 	forward_args(forms, data)
 
