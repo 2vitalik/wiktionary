@@ -30,8 +30,8 @@ class BaseSection(BaseSectionsGrouper):
         if base:
             self.title: str = base.title
             """The page title"""
-        self.full_header: str = full_header
-        self.header: str = header
+        self.full_header: str = full_header  # Example: '\n\n= {{-ru-}} =\n'
+        self.header: str = header  # Example: '{{-ru-}}'
         self.content: str = content
         self.silent: bool = silent
 
