@@ -64,7 +64,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
     text = text.replace('{помета.}', '')
 
     # пометы курсивом:
-    text = re.sub('{([ .\w-]+\.)\},?', '<i>\\1</i> ', text)
+    text = re.sub('{([ .\w-]+\.)\}(,?)', '<i>\\1\\2</i> ', text)
     text = re.sub("''([^']+?)''", '<i>\\1</i> ', text)
 
     # замены шаблонов:
