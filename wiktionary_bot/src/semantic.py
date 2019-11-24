@@ -20,7 +20,7 @@ from wiktionary_bot.src.tpls import replace_tpl, replace_result
 from wiktionary_bot.src.utils import send, edit
 
 
-tpls_filename = join(ROOT_PATH, 'telegram_bot', 'data', 'tpls.json')
+tpls_filename = join(ROOT_PATH, 'wiktionary_bot', 'data', 'tpls.json')
 
 
 def clear_definitions(text):  # todo: move this to some `lib`
@@ -367,7 +367,7 @@ class StorageReply(Reply):
 def save_log(message, title):  # todo: move it to some `utils`
     user = message.from_user
     name = f'{user.first_name} {user.last_name}'.strip()
-    path = join(ROOT_PATH, 'telegram_bot', 'logs', 'titles.txt')
+    path = join(ROOT_PATH, 'wiktionary_bot', 'logs', 'titles.txt')
     append(path, f'[{message.date}] @{user.username} ({name}) #{user.id}\n'
                  f'{title}\n')
 
