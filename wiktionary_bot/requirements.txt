@@ -1,5 +1,4 @@
 natsort
-pyuca
+python-telegram-bot
 pywikibot
 regex
-requests
