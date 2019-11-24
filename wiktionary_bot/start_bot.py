@@ -3,8 +3,8 @@ import logging
 
 from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
 
-from telegram_bot.config import TELEGRAM_BOT_TOKEN
-from telegram_bot.src.semantic import process_message, process_callback
+from wiktionary_bot.config import TELEGRAM_BOT_TOKEN
+from wiktionary_bot.src.semantic import process_message, process_callback
 
 
 def start():

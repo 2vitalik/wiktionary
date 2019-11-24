@@ -9,10 +9,10 @@ from pywikibot.pagegenerators import RecentChangesPageGenerator
 from libs.parse.sections.page import Page
 from libs.utils.io import write, read, read_lines, append
 from libs.utils.wikibot import Namespace
-from telegram_bot.config import TELEGRAM_BOT_TOKEN, ROOT_PATH, NEW_CHANNEL_ID
-from telegram_bot.cron.bots import bots
-from telegram_bot.src.semantic import Reply
-from telegram_bot.src.utils import send
+from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, ROOT_PATH, NEW_CHANNEL_ID
+from wiktionary_bot.cron.bots import bots
+from wiktionary_bot.src.semantic import Reply
+from wiktionary_bot.src.utils import send
 
 
 def convert_date(value):

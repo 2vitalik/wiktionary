@@ -15,9 +15,9 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page
-from telegram_bot.config import ADMINS
-from telegram_bot.src.tpls import replace_tpl, replace_result
-from telegram_bot.src.utils import send, edit
+from wiktionary_bot.config import ADMINS
+from wiktionary_bot.src.tpls import replace_tpl, replace_result
+from wiktionary_bot.src.utils import send, edit
 
 
 tpls_filename = join(ROOT_PATH, 'telegram_bot', 'data', 'tpls.json')
