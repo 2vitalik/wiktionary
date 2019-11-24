@@ -23,7 +23,7 @@ def convert_date(value):
 
 
 def latest_date_file():
-    return join(ROOT_PATH, 'telegram_bot', 'data', 'latest_new_article.txt')
+    return join(ROOT_PATH, 'wiktionary_bot', 'data', 'latest_new_article.txt')
 
 
 def get_latest_date():
@@ -36,7 +36,7 @@ def set_latest_date(value):
 
 
 def titles_file():
-    return join(ROOT_PATH, 'telegram_bot', 'data', 'titles.txt')
+    return join(ROOT_PATH, 'wiktionary_bot', 'data', 'titles.txt')
 
 
 def get_titles_set():
