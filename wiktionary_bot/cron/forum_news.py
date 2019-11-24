@@ -26,7 +26,7 @@ def check_for_new_titles(bot):
     old_data = {}
     new_data = {}
 
-    json_path = join(ROOT_PATH, 'telegram_bot', 'data', 'forums.json')
+    json_path = join(ROOT_PATH, 'wiktionary_bot', 'data', 'forums.json')
     if exists(json_path):
         with open(json_path, encoding='utf-8') as f:
             old_data = json.load(f)
