@@ -456,7 +456,7 @@ def process_callback(bot, update):
     reply = Reply(title, lang, homonym)
     old_text = query.message.text_html
     if old_text.strip() != reply.text.strip():
-        # todo: check also for buttons changes
+        # todo: check also for buttons changes!
         query.edit_message_text(reply.text, reply_markup=reply.buttons,
                                 parse_mode=telegram.ParseMode.HTML,
                                 disable_web_page_preview=True)
