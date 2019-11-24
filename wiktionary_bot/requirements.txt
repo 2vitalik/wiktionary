@@ -1,4 +1,0 @@
-natsort
-python-telegram-bot
-pywikibot
-regex
