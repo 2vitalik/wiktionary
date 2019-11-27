@@ -26,6 +26,7 @@ SECRET_KEY = 'e6z)gi&yd6%b_ny=%ckqp_0#82s2zyn^1aljyz*1%0=d!w-9*y'
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'wikt.labs.in.ua',
     'wiktionary.labs.in.ua',
     '127.0.0.1',
 ]
