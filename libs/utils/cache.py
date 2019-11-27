@@ -19,3 +19,4 @@ class Cache:
 
     def remove(self, key):
         del self.cache[key]
+        self.keys.remove(key)
