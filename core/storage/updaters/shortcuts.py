@@ -6,11 +6,11 @@ from libs.utils.log import log_exception
 from libs.utils.wikibot import Namespace
 
 
-@log_exception('updaters')
+@log_exception('recent-errors')
 def update_recent_articles():
     RecentFetcher(LazyMainStorageUpdater, [Namespace.ARTICLES])
 
 
-@log_exception('updaters')
+@log_exception('all_pages-errors')
 def update_all_articles(stopper=None):
     AllPagesFetcher(LazyMainStorageUpdater, [Namespace.ARTICLES], stopper)
