@@ -25,7 +25,7 @@ class AllPagesFetcher(BaseFetcher):
 
     def run(self, start_from):
         start_from = start_from or self.updater.all_pages_start_from or '!'
-        msg = f'Processing `all_pages` from: {start_from}'
+        msg = f'→ *{start_from}*'
         self.updater.log_day('cron', msg)
         post_to_slack(f'{self.slug}-status', msg)
         generator = \
@@ -39,7 +39,7 @@ class AllPagesFetcher(BaseFetcher):
             self.updater.all_pages_start_from = title
 
             if self.stopper and self.stopper.check(count, title):
-                msg = f'New `start_from`: {title}'
+                msg = f'← *{title}*'
                 self.updater.log_day('cron', msg)
                 post_to_slack(f'{self.slug}-status', msg)
                 break
