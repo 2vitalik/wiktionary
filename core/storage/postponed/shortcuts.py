@@ -2,15 +2,14 @@ from libs.utils.log import log_exception
 
 
 def get_class(key):
-    from projects.authors.authors_updater import AuthorsStorageUpdater
-    from projects.htmls.htmls_updater import HtmlStorageUpdater
 
     if type(key) == str:
-        classes = {
-            'authors': AuthorsStorageUpdater,
-            'htmls': HtmlStorageUpdater,
-        }
-        return classes[key]
+        if key == 'authors':
+            from projects.authors.authors_updater import AuthorsStorageUpdater
+            return AuthorsStorageUpdater
+        elif key == 'htmls':
+            from projects.htmls.htmls_updater import HtmlStorageUpdater
+            return HtmlStorageUpdater
 
     return key  # if we just use certain class here
 
