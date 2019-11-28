@@ -33,7 +33,7 @@ class RecentFetcher(BaseFetcher):
         if start:
             msg += f' (starting from {dt(start)})'
         self.updater.log_day('cron', msg)
-        post_to_slack('recent-status', msg)
+        post_to_slack(f'{self.slug}-status', msg)
         generator = RecentChangesPageGenerator(start=start, end=end,
                                                namespaces=self.namespaces)
         latest_edited = None
@@ -46,4 +46,4 @@ class RecentFetcher(BaseFetcher):
             self.updater.latest_edited = latest_edited
             msg = f'New `latest_edited`: {dt(latest_edited)}'
             self.updater.log_day('cron', msg)
-            post_to_slack('recent-status', msg)
+            post_to_slack(f'{self.slug}-status', msg)

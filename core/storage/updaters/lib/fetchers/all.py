@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from pywikibot.pagegenerators import AllpagesPageGenerator
+from shared_utils.api.slack.core import post_to_slack
 
 from core.storage.updaters.lib.fetchers.base import BaseFetcher
 
@@ -24,8 +25,9 @@ class AllPagesFetcher(BaseFetcher):
 
     def run(self, start_from):
         start_from = start_from or self.updater.all_pages_start_from or '!'
-        self.updater.log_day('cron', f'Processing `all_pages` from: '
-                                     f'{start_from}')
+        msg = f'Processing `all_pages` from: {start_from}'
+        self.updater.log_day('cron', msg)
+        post_to_slack(f'{self.slug}-status', msg)
         generator = \
             AllpagesPageGenerator(start=start_from, namespace=self.namespace)
         latest_title = None
@@ -37,6 +39,9 @@ class AllPagesFetcher(BaseFetcher):
             self.updater.all_pages_start_from = title
 
             if self.stopper and self.stopper.check(count, title):
+                msg = f'New `start_from`: {title}'
+                self.updater.log_day('cron', msg)
+                post_to_slack(f'{self.slug}-status', msg)
                 break
 
 
