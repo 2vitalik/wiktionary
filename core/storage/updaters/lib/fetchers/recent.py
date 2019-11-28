@@ -1,5 +1,6 @@
 from pywikibot import Timestamp
 from pywikibot.pagegenerators import RecentChangesPageGenerator
+from shared_utils.api.slack.core import post_to_slack
 
 from core.storage.updaters.lib.fetchers.base import BaseFetcher
 from libs.utils.dt import dt
@@ -32,6 +33,7 @@ class RecentFetcher(BaseFetcher):
         if start:
             msg += f' (starting from {dt(start)})'
         self.updater.log_day('cron', msg)
+        post_to_slack('recent-status', msg)
         generator = RecentChangesPageGenerator(start=start, end=end,
                                                namespaces=self.namespaces)
         latest_edited = None
@@ -42,5 +44,6 @@ class RecentFetcher(BaseFetcher):
             latest_edited = latest_edited or reduce_seconds(edited)
         if latest_edited:
             self.updater.latest_edited = latest_edited
-            self.updater.log_day('cron',
-                                 f'New `latest_edited`: {dt(latest_edited)}')
+            msg = f'New `latest_edited`: {dt(latest_edited)}'
+            self.updater.log_day('cron', msg)
+            post_to_slack('recent-status', msg)

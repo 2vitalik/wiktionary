@@ -5,3 +5,5 @@ pyuca
 pywikibot
 regex
 requests
+
+git+ssh://git@github.com/2vitalik/shared_utils.git

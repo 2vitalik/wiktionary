@@ -1,4 +1,5 @@
 from pywikibot import NoPage
+from shared_utils.api.slack.core import post_to_slack
 
 from core.logs.mixins import StorageLogsMixin
 from libs.utils.debug import debug
@@ -14,6 +15,8 @@ class BaseUpdater(StorageLogsMixin):
         title = page.title()  # todo: except InvalidTitle ?
         self._debug_title(title)
         self.log_day('titles', title)
+        post_to_slack(f'{self.slug}-titles',
+                      f'<https://ru.wiktionary.org/wiki/{title}|{title}>')
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
@@ -21,6 +24,8 @@ class BaseUpdater(StorageLogsMixin):
         except NoPage:
             self.remove_page(title)
             self.log_day('deleted', title)
+            post_to_slack(f'{self.slug}-deleted',
+                          f'<https://ru.wiktionary.org/wiki/{title}|{title}>')
             return title, None
 
         self.update_page(title, content, edited, redirect)
