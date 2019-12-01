@@ -369,7 +369,7 @@ def save_log(message, title):  # todo: move it to some `utils`
     user = message.from_user
     name = f'{user.first_name} {user.last_name}'.strip()
     path = join(logs_path, 'wiktionary_bot', 'messages',
-                f'{dtf("Ym/Ymd").txt}')
+                f'{dtf("Ym/Ymd")}.txt')
     append(path, f'[{message.date}] @{user.username} ({name}) #{user.id}\n'
                  f'{title}\n')
 
