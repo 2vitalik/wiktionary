@@ -5,6 +5,7 @@ from urllib.parse import quote
 
 import telegram
 from pywikibot.exceptions import NoPage
+from shared_utils.common.dt import dtf
 
 from core.conf.conf import ROOT_PATH, SYNC_PATH
 from core.storage.main import storage
@@ -15,12 +16,12 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page
-from wiktionary_bot.config import ADMINS
+from wiktionary_bot.config import ADMINS, data_path, logs_path
 from wiktionary_bot.src.tpls import replace_tpl, replace_result
 from wiktionary_bot.src.utils import send, edit
 
 
-tpls_filename = join(ROOT_PATH, 'wiktionary_bot', 'data', 'tpls.json')
+tpls_filename = join(data_path, 'wiktionary_bot', 'tpls.json')
 
 
 def clear_definitions(text):  # todo: move this to some `lib`
@@ -367,7 +368,8 @@ class StorageReply(Reply):
 def save_log(message, title):  # todo: move it to some `utils`
     user = message.from_user
     name = f'{user.first_name} {user.last_name}'.strip()
-    path = join(ROOT_PATH, 'wiktionary_bot', 'logs', 'titles.txt')
+    path = join(logs_path, 'wiktionary_bot', 'messages',
+                f'{dtf("Ym/Ymd").txt}')
     append(path, f'[{message.date}] @{user.username} ({name}) #{user.id}\n'
                  f'{title}\n')
 

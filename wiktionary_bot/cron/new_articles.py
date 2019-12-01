@@ -9,7 +9,7 @@ from pywikibot.pagegenerators import RecentChangesPageGenerator
 from libs.parse.sections.page import Page
 from libs.utils.io import write, read, read_lines, append
 from libs.utils.wikibot import Namespace
-from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, ROOT_PATH, NEW_CHANNEL_ID
+from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, NEW_CHANNEL_ID, data_path
 from wiktionary_bot.cron.bots import bots
 from wiktionary_bot.src.semantic import Reply
 from wiktionary_bot.src.utils import send
@@ -23,7 +23,7 @@ def convert_date(value):
 
 
 def latest_date_file():
-    return join(ROOT_PATH, 'wiktionary_bot', 'data', 'latest_new_article.txt')
+    return join(data_path, 'new_articles', 'latest_new_article.txt')
 
 
 def get_latest_date():
@@ -36,7 +36,7 @@ def set_latest_date(value):
 
 
 def titles_file():
-    return join(ROOT_PATH, 'wiktionary_bot', 'data', 'titles.txt')
+    return join(data_path, 'new_articles', 'titles.txt')
 
 
 def get_titles_set():

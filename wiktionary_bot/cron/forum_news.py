@@ -6,8 +6,8 @@ from os.path import exists, join
 import telegram
 
 from libs.utils.wikibot import load_page
-from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, ROOT_PATH, \
-    MAIN_GROUP_CHAT_ID
+from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, MAIN_GROUP_CHAT_ID, \
+    data_path
 from wiktionary_bot.src.utils import send
 
 
@@ -26,7 +26,7 @@ def check_for_new_titles(bot):
     old_data = {}
     new_data = {}
 
-    json_path = join(ROOT_PATH, 'wiktionary_bot', 'data', 'forums.json')
+    json_path = join(data_path, 'forum_news', 'forums.json')
     if exists(json_path):
         with open(json_path, encoding='utf-8') as f:
             old_data = json.load(f)

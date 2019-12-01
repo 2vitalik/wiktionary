@@ -12,6 +12,9 @@ ADMINS = [
     # should be secure set in `local_config.py`
 ]
 
+data_path = 'data'
+logs_path = 'logs'
+
 try:
     from .local_config import *
 except ImportError:
