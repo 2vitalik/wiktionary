@@ -9,4 +9,4 @@ if __name__ == '__main__':
     update_recent_articles()
     # update_recent('authors')  # todo: process slack errors
     # todo: update_recent_sync()
-    update_all_articles(MinuteStopper(59))
+    # update_all_articles(MinuteStopper(59))
