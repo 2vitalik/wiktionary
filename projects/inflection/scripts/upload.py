@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.6.6'
+    version = '3.6.7'
 
-    desc = 'Возможность отмены кратких форм'
+    desc = 'Винительный падеж для прилагательных'
 
     upload(dev, version, desc)
 

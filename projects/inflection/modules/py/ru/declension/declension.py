@@ -193,6 +193,10 @@ def main_algorithm(data):
                 # end
             # end
         # end
+        forms['acc_sg_m_a'] = forms['gen_sg_m']
+        forms['acc_sg_m_n'] = forms['nom_sg_m']
+        forms['acc_pl_a'] = forms['gen_pl']
+        forms['acc_pl_n'] = forms['nom_pl']
 
         data.gender = ''  # redundant?
     # end

@@ -23,6 +23,7 @@ local function replace_underscore_with_hyphen(forms)
 --		'nom-pl2', 'gen-pl2', 'dat-pl2', 'acc-pl2', 'ins-pl2', 'prp-pl2',
 		'voc-sg',  'loc-sg',  'prt-sg',
 		'srt-sg',  'srt-sg-m',  'srt-sg-n',  'srt-sg-f',  'srt-pl',
+		'acc-sg-m-a', 'acc-sg-m-n', 'acc-pl-a', 'acc-pl-n',
 		'ins-sg2',  -- temp?
 	}  -- list
 	for i, new_key in pairs(keys) do  -- list
