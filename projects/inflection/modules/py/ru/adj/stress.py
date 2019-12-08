@@ -17,15 +17,15 @@ def get_adj_stress_schema(stress_type):  # export  # INFO: Вычисление 
     stress_schema = dict(  # dict
         stem = dict(  # dict
             full = _.startswith(stress_type, ["a", "a/"]),
-            srt_sg_f = _.endswith(stress_type, ["/a", "/a'"]),
-            srt_sg_n = _.endswith(stress_type, ["/a", "/c", "/a'", "/c'", "/c''"]),
-            srt_pl = _.endswith(stress_type, ["/a", "/c", "/a'", "/b'", "/c'", "/c''"]),
+            srt_sg_f = _.endswith(stress_type, ["/a", "/a'"]) or stress_type == 'a',
+            srt_sg_n = _.endswith(stress_type, ["/a", "/c", "/a'", "/c'", "/c''"]) or stress_type == 'a',
+            srt_pl = _.endswith(stress_type, ["/a", "/c", "/a'", "/b'", "/c'", "/c''"]) or stress_type == 'a',
         ),  # dict
         ending = dict(  # dict
             full = _.startswith(stress_type, ["b", "b/"]),
-            srt_sg_f = _.endswith(stress_type, ["/b", "/c", "/a'", "/b'", "/c'", "/c''"]),
-            srt_sg_n = _.endswith(stress_type, ["/b", "/b'", "/c''"]),
-            srt_pl = _.endswith(stress_type, ["/b", "/b'", "/c'", "/c''"]),
+            srt_sg_f = _.endswith(stress_type, ["/b", "/c", "/a'", "/b'", "/c'", "/c''"]) or stress_type == 'b',
+            srt_sg_n = _.endswith(stress_type, ["/b", "/b'", "/c''"]) or stress_type == 'b',
+            srt_pl = _.endswith(stress_type, ["/b", "/b'", "/c'", "/c''"]) or stress_type == 'b',
         ),  # dict
     )  # dict
 
