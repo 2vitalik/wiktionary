@@ -30,8 +30,8 @@ end
 
 
 local function init_srt_forms(forms, stems, endings)
-	forms['srt_sg'] = stems['nom_sg'] .. endings['srt_sg']
-	forms['srt_pl'] = stems['nom_pl'] .. endings['srt_pl']
+	forms['srt_sg'] = stems['srt_sg'] .. endings['srt_sg']
+	forms['srt_pl'] = stems['srt_pl'] .. endings['srt_pl']
 end
 
 

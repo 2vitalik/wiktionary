@@ -24,7 +24,7 @@ def extract_stress_type(rest_index):  # export
     # local stress_type, allowed_stress_types
 
     # INFO: Извлечение ударения из оставшейся части индекса:
-    stress_type = _.extract(rest_index, "([abcdef][′']?[′']?)")
+    stress_type = _.extract(rest_index, "([abcdef][′']?[′']?[/]?[abc]?[′']?[′']?)")
 
     # INFO: Замена особых апострофов в ударении на обычные:
     if stress_type:
@@ -32,7 +32,11 @@ def extract_stress_type(rest_index):  # export
     # end
 
     # INFO: Список допустимых схем ударений:
-    allowed_stress_types = {'a', "a'", 'b', "b'", 'c', 'd', "d'", 'e', 'f', "f'", "f''" }
+    allowed_stress_types = {
+        'a', "a'", 'b', "b'", 'c', 'd', "d'", 'e', 'f', "f'", "f''",
+        'a/a', 'a/b', 'a/c', "a/a'", "a/b'", "a/c'", "a/c''",
+        'b/a', 'b/b', 'b/c', "b/a'", "b/b'", "b/c'", "b/c''",
+    }
 
     # INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
     if stress_type and not _.equals(stress_type, allowed_stress_types):
@@ -136,6 +140,34 @@ def apply_stress_type(data):  # export
         add_stress(data.endings, 'dat_pl')
         add_stress(data.endings, 'ins_pl')
         add_stress(data.endings, 'prp_pl')
+    # end
+
+    data.stems['srt_sg'] = data.stem_stressed
+    data.stems['srt_pl'] = data.stem_stressed
+
+    if data.gender == 'm':
+        pass
+    elif data.gender == 'n':
+        if data.stress_schema['stem']['srt_sg_n']:
+            pass
+        else:
+            data.stems['srt_sg'] = data.stem
+            add_stress(data.endings, 'srt_sg')
+        # end
+    elif data.gender == 'f':
+        if data.stress_schema['stem']['srt_sg_f']:
+            pass
+        else:
+            data.stems['srt_sg'] = data.stem
+            add_stress(data.endings, 'srt_sg')
+        # end
+    else:
+        if data.stress_schema['stem']['srt_pl']:
+            pass
+        else:
+            data.stems['srt_pl'] = data.stem
+            add_stress(data.endings, 'srt_pl')
+        # end
     # end
 # end
 
