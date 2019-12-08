@@ -96,7 +96,6 @@ def get_standard_adj_endings():  # export
 # end
 
 
-
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun):  # export
     _.log_func('endings', 'fix_adj_pronoun_endings')

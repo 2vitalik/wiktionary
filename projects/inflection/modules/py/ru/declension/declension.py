@@ -174,6 +174,7 @@ def main_algorithm(data):
         cases = [
             'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
             'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
+            'srt_sg', 'srt_pl',
         ]  # list
 
         genders = ['', 'm', 'n', 'f']
@@ -183,8 +184,7 @@ def main_algorithm(data):
             main_sub_algorithm(data)
 
             if gender == '':
-                forms = form.generate_forms(
-                    data)  # TODO: Rename to `out_args` ?
+                forms = form.generate_forms(data)  # TODO: Rename to `out_args` ?
             else:
                 sub_forms = form.generate_forms(data)
                 for i, case in enumerate(cases):

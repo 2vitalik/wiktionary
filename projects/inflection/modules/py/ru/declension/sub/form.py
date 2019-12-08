@@ -29,6 +29,12 @@ def init_forms(stems, endings):  # Генерация словоформ
 # end
 
 
+def init_srt_forms(forms, stems, endings):
+    forms['srt_sg'] = stems['nom_sg'] + endings['srt_sg']
+    forms['srt_pl'] = stems['nom_pl'] + endings['srt_pl']
+# end
+
+
 def remove_stress_if_one_syllable(value):
     # _.log_func('forms', 'remove_stress_if_one_syllable')
 
@@ -113,6 +119,9 @@ def generate_forms(data):  # export
     # local forms, keys
 
     forms = init_forms(data.stems, data.endings)
+    if data.adj:
+        init_srt_forms(forms, data.stems, data.endings)
+    # end
 
     fix_stress(forms)
 
