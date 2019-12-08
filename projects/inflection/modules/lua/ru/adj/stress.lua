@@ -9,7 +9,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 function export.get_adj_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
 	_.log_func('stress', 'get_adj_stress_schema')
 
-	-- TODO: Пока не используется
+	local stress_schema, types, cases, sg_value
 
 	-- общий подход следующий:
 	-- если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)

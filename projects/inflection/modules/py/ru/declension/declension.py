@@ -93,7 +93,7 @@ def main_sub_algorithm(data):
 def main_algorithm(data):
     _.log_func('declension', 'main_algorithm')
 
-    # local error, keys, forms, orig_stem, for_category, old_value
+    # local error, keys, forms, orig_stem, for_category, old_value, cases
 
     _.log_value(data.rest_index, 'data.rest_index')
 
