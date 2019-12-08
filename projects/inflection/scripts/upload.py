@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.6.3'
+    version = '3.6.4'
 
-    desc = 'Генерация кратких форм прилагательных'
+    desc = 'Нужен дополнительный параметр для шаблона "прил": "краткая"'
 
     upload(dev, version, desc)

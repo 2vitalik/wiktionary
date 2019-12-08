@@ -121,6 +121,7 @@ def generate_forms(data):  # export
     forms = init_forms(data.stems, data.endings)
     if data.adj:
         init_srt_forms(forms, data.stems, data.endings)
+        forms['краткая'] = '1'
     # end
 
     fix_stress(forms)
