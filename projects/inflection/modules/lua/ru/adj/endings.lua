@@ -43,7 +43,7 @@ function export.get_standard_adj_endings()
 				acc_sg = 'ую',
 				ins_sg = 'ой',
 				prp_sg = 'ой',
-				srt_sg = 'о',
+				srt_sg = 'а',
 			},  -- dict
 			soft = {
 				nom_sg = 'яя',
@@ -52,7 +52,7 @@ function export.get_standard_adj_endings()
 				acc_sg = 'юю',
 				ins_sg = 'ей',
 				prp_sg = 'ей',
-				srt_sg = {'е', 'ё'},
+				srt_sg = 'я',
 			},  -- dict
 		},  -- dict
 		n = {
@@ -62,7 +62,7 @@ function export.get_standard_adj_endings()
 				dat_sg = 'ому',
 				ins_sg = 'ым',
 				prp_sg = 'ом',
-				srt_sg = 'а',
+				srt_sg='о',
 			},  -- dict
 			soft = {
 				nom_sg = 'ее',
@@ -70,7 +70,7 @@ function export.get_standard_adj_endings()
 				dat_sg = 'ему',
 				ins_sg = 'им',
 				prp_sg = 'ем',
-				srt_sg = 'я',
+				srt_sg={'е', 'ё'},
 			},  -- dict
 		},  -- dict
 		common = {  -- common endings
@@ -94,7 +94,6 @@ function export.get_standard_adj_endings()
 	}  -- dict
 	-- todo: сразу преобразовать в дефисы
 end
-
 
 
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)

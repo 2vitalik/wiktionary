@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.6.2'
+    version = '3.6.3'
 
-    desc = ''
+    desc = 'Генерация кратких форм прилагательных'
 
     upload(dev, version, desc)
