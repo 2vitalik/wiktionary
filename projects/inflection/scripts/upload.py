@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.6.5'
+    version = '3.6.6'
 
-    desc = 'b'
+    desc = 'Возможность отмены кратких форм'
 
     upload(dev, version, desc)
 
