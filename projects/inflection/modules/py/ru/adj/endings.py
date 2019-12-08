@@ -43,7 +43,7 @@ def get_standard_adj_endings():  # export
                 acc_sg = 'ую',
                 ins_sg = 'ой',
                 prp_sg = 'ой',
-                srt_sg = 'о',
+                srt_sg = 'а',
             ),  # dict
             soft = dict(
                 nom_sg = 'яя',
@@ -52,7 +52,7 @@ def get_standard_adj_endings():  # export
                 acc_sg = 'юю',
                 ins_sg = 'ей',
                 prp_sg = 'ей',
-                srt_sg = ['е', 'ё'],
+                srt_sg = 'я',
             ),  # dict
         ),  # dict
         n = dict(
@@ -62,7 +62,7 @@ def get_standard_adj_endings():  # export
                 dat_sg = 'ому',
                 ins_sg = 'ым',
                 prp_sg = 'ом',
-                srt_sg = 'а',
+                srt_sg='о',
             ),  # dict
             soft = dict(
                 nom_sg = 'ее',
@@ -70,7 +70,7 @@ def get_standard_adj_endings():  # export
                 dat_sg = 'ему',
                 ins_sg = 'им',
                 prp_sg = 'ем',
-                srt_sg = 'я',
+                srt_sg=['е', 'ё'],
             ),  # dict
         ),  # dict
         common = dict(  # common endings
