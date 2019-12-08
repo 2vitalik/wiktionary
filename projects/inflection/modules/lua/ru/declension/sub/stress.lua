@@ -143,6 +143,7 @@ function export.apply_stress_type(data)
 	end
 
 	data.stems['srt_sg'] = data.stem
+	data.stems['srt_pl'] = data.stem
 
 	if data.gender == 'm' then
 		data.stems['srt_sg'] = data.stem_stressed

@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.7.4'
+    version = '3.7.5'
 
-    desc = 'Дополнительные схемы ударения кратких прилагательных'
+    desc = 'b'
 
     upload(dev, version, desc)
 
