@@ -28,14 +28,15 @@ def run(unit, word, index):
 
     if unit == 'adj':
         keys = [
-            ('Им.', 'nom-sg-m',   'nom-sg-n', 'nom-sg-f', 'nom-pl'),
-            ('Р. ', 'gen-sg-m',   'gen-sg-n', 'gen-sg-f', 'gen-pl'),
-            ('Д. ', 'dat-sg-m',   'dat-sg-n', 'dat-sg-f', 'dat-pl'),
-            ('В. ', 'acc-sg-m-a', 'acc-sg-n', 'acc-sg-f', 'acc-pl-a'),
-            ('В2.', 'acc-sg-m-n', '',         '',         'acc-pl-n'),
-            ('Тв.', 'ins-sg-m',   'ins-sg-n', 'ins-sg-f', 'ins-pl'),
-            ('Пр.', 'prp-sg-m',   'prp-sg-n', 'prp-sg-f', 'prp-pl'),
-            ('Кр.', 'srt-sg-m',   'srt-sg-n', 'srt-sg-f', 'srt-pl'),
+            ('Им.', 'nom-sg-m',   'nom-sg-n', 'nom-sg-f',  'nom-pl'),
+            ('Р. ', 'gen-sg-m',   'gen-sg-n', 'gen-sg-f',  'gen-pl'),
+            ('Д. ', 'dat-sg-m',   'dat-sg-n', 'dat-sg-f',  'dat-pl'),
+            ('В. ', 'acc-sg-m-a', 'acc-sg-n', 'acc-sg-f',  'acc-pl-a'),
+            ('В2.', 'acc-sg-m-n', '',         '',          'acc-pl-n'),
+            ('Тв.', 'ins-sg-m',   'ins-sg-n', 'ins-sg-f',  'ins-pl'),
+            ('Тв2', '',           '',         'ins-sg2-f', ''),
+            ('Пр.', 'prp-sg-m',   'prp-sg-n', 'prp-sg-f',  'prp-pl'),
+            ('Кр.', 'srt-sg-m',   'srt-sg-n', 'srt-sg-f',  'srt-pl'),
         ]
         lens = [0] * 4
     else:

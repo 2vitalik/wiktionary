@@ -25,6 +25,7 @@ def replace_underscore_with_hyphen(forms):
         'srt-sg',  'srt-sg-m',  'srt-sg-n',  'srt-sg-f',  'srt-pl',
         'acc-sg-m-a', 'acc-sg-m-n', 'acc-pl-a', 'acc-pl-n',
         'ins-sg2',  # temp?
+        'ins-sg2-f',
     ]  # list
     for i, new_key in enumerate(keys):
         old_key = mw.ustring.gsub(new_key, '-', '_')

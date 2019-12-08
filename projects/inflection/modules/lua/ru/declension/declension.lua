@@ -191,6 +191,9 @@ local function main_algorithm(data)
 					key = case .. '_' .. gender
 					forms[key] = sub_forms[case]
 				end
+				if gender == 'f' then
+					forms['ins_sg2_f'] = sub_forms['ins_sg2']
+				end
 			end
 		end
 		forms['acc_sg_m_a'] = forms['gen_sg_m']
