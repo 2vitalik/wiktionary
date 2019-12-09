@@ -17,15 +17,15 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 	stress_schema = {  -- dict
 		stem = {  -- dict
 			full = _.startswith(stress_type, {"a", "a/"}),
-			srt_sg_f = _.endswith(stress_type, {"/a", "/a'"}) or stress_type == 'a',
-			srt_sg_n = _.endswith(stress_type, {"/a", "/c", "/a'", "/c'", "/c''"}) or stress_type == 'a',
-			srt_pl = _.endswith(stress_type, {"/a", "/c", "/a'", "/b'", "/c'", "/c''"}) or stress_type == 'a',
+			srt_sg_f = _.endswith(stress_type, {"/a", "/a'"}) or _.equals(stress_type, {'a', "a'"}),
+			srt_sg_n = _.endswith(stress_type, {"/a", "/c", "/a'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'"}),
+			srt_pl = _.endswith(stress_type, {"/a", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'", "b'"}),
 		},  -- dict
 		ending = {  -- dict
 			full = _.startswith(stress_type, {"b", "b/"}),
-			srt_sg_f = _.endswith(stress_type, {"/b", "/c", "/a'", "/b'", "/c'", "/c''"}) or stress_type == 'b',
-			srt_sg_n = _.endswith(stress_type, {"/b", "/b'", "/c''"}) or stress_type == 'b',
-			srt_pl = _.endswith(stress_type, {"/b", "/b'", "/c'", "/c''"}) or stress_type == 'b',
+			srt_sg_f = _.endswith(stress_type, {"/b", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "a'", "b'"}),
+			srt_sg_n = _.endswith(stress_type, {"/b", "/b'", "/c''"}) or _.equals(stress_type, {'b', "b'"}),
+			srt_pl = _.endswith(stress_type, {"/b", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "b'"}),
 		},  -- dict
 	}  -- dict
 

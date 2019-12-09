@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.8'
+    version = '3.8.2'
 
-    desc = 'Просто «пометка» последних актуальных файлов (в истории изменений)'
+    desc = 'Случаи a\' и b\' кратких прилагательных'
 
     upload(dev, version, desc)
 
