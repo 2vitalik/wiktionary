@@ -182,6 +182,7 @@ def apply_adj_specific_1_2(stems, gender, rest_index):  # export
     # end
     if _.contains(rest_index, ['%(2%)', '②']):
         _.replace(stems, 'srt_sg', 'нн$', 'н')
+        _.replace(stems, 'srt_pl', 'нн$', 'н')
     # end
 # end
 
