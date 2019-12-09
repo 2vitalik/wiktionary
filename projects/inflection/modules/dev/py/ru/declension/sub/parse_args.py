@@ -51,7 +51,7 @@ def init(data):
 # end
 
 
-def angle_brackets(data):  # export
+def angle_brackets(data):
     _.log_func('parse_args', 'angle_brackets')
 
     # local another_index, pt, error

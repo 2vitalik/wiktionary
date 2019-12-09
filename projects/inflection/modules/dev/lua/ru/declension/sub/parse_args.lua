@@ -51,7 +51,7 @@ local function init(data)
 end
 
 
-function export.angle_brackets(data)
+local function angle_brackets(data)
 	_.log_func('parse_args', 'angle_brackets')
 
 	local another_index, pt, error
