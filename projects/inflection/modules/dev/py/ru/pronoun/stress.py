@@ -2,7 +2,7 @@ from projects.inflection.modules.dev.py import additional
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
-dev_prefix = 'User:Vitalik/'  # comment this on active version
+dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 def get_pronoun_stress_schema(stress_type):  # export  # INFO: Вычисление схемы ударения

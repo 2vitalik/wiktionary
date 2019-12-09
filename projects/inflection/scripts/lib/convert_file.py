@@ -8,7 +8,7 @@ from projects.inflection.scripts.lib.paths import get_path
 before = {
     'lua': """
 local dev_prefix = ''
-dev_prefix = 'User:Vitalik/'  -- comment this on active version
+dev_prefix = 'User:Vitalik/'  -- comment this on `prod` version
 
 local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
@@ -18,7 +18,7 @@ from projects.inflection.modules.{dev}.py import additional
 from projects.inflection.modules.{dev}.py import mw
 from projects.inflection.modules.{dev}.py import tools as _
 
-dev_prefix = 'User:Vitalik/'  # comment this on active version
+dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 """}
 
 string = '''('[^']*'|"[^"]*")'''
