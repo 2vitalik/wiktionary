@@ -21,7 +21,7 @@ from projects.inflection.modules.{dev}.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 """}
 
-string = '''('[^']*'|"[^"]*")'''
+string = '''('[^']*?'|"[^"]*?")'''
 
 regexps_MULTILINE = {
     'py': [
@@ -38,6 +38,8 @@ regexps_MULTILINE = {
         (r'^def (.*):', 'local function \\1'),
         (r'# end\b', 'end'),
         (r'# return export\n', 'return export\n'),
+        (r'^(\s+)([^=\n]+?) = (.*?)  # = export.\n', '\\1\\2 = export.\\3\n'),
+        (r'^(\s+)([^=\n]*?)  # export.\n', '\\1export.\\2\n'),
 
         (r'\bpass\b', '-- pass'),
         (r'# local ', 'local '),
@@ -97,12 +99,14 @@ regexps_MULTILINE = {
         (r'^function export\.(.*?)(\s*--.*)?$', 'def \\1:  # export\\2'),
         (r'\bend\b', '# end'),
         (r'return export\n', '# return export\n'),
+        (r'^(\s+)([^=\n]+?) = export\.(.*?)\n', '\\1\\2 = \\3  # = export.\n'),
+        (r'^(\s+)export\.(.*?)\n', '\\1\\2  # export.\n'),
 
         (r'-- pass\b', 'pass'),
         (r'local ', '# local '),
-        (r"\{('.*', '.*')\}", '[\\1]'),
-        (r'\{(".*", ".*")\}', '[\\1]'),
-        (r'\{(\'.*\', ".*")\}', '[\\1]'),
+        (r"\{('.*?', '.*?')\}", '[\\1]'),
+        (r'\{(".*?", ".*?")\}', '[\\1]'),
+        (r'\{(\'.*?\', ".*?")\}', '[\\1]'),
 
         (r'\bif (.*) then', 'if \\1:'),
         (r'\belseif (.*) then', 'elif \\1:'),
