@@ -9,7 +9,7 @@ from projects.inflection.scripts.lib.paths import get_path
 
 def convert_dir(dev, _from, _to):
     if not compare_dir(dev, _to):
-        print(f'Ошибка: папки `{_to}` не синхронизированы.')
+        print(f'Ошибка: папки `{_to}` не синхронизированы до конвертации.')
         return
 
     for file in files:
@@ -26,5 +26,5 @@ def convert_dir(dev, _from, _to):
         convert_file(dev, file, _to, _from, out=True)
 
     if not compare_dir(dev, _from):
-        print(f'Ошибка: папки `{_from}` не синхронизированы.')
+        print(f'Ошибка: папки `{_from}` не синхронизированы после конвертации.')
         return
