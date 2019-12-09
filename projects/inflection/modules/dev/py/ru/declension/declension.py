@@ -1,18 +1,20 @@
-from projects.inflection.modules.py import mw
-from projects.inflection.modules.py import tools as _
+from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import mw
+from projects.inflection.modules.dev.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
-from projects.inflection.modules.dev.py.ru.declension.sub import parse_args, \
-    result
-from projects.inflection.modules.py.ru.declension.sub import stress
-from projects.inflection.modules.py.ru.declension.sub import stem_type
-from projects.inflection.modules.py.ru.declension.sub import endings
-from projects.inflection.modules.py.ru.declension.sub import reducable
-from projects.inflection.modules.py.ru.declension.sub import form
-from projects.inflection.modules.py.ru.declension.sub import index
 
-from projects.inflection.modules.py.ru.noun import form as noun_form
+from ..declension.sub import parse_args
+from ..declension.sub import stress
+from ..declension.sub import stem_type
+from ..declension.sub import endings
+from ..declension.sub import reducable
+from ..declension.sub import form
+from ..declension.sub import index
+from ..declension.sub import result
+
+from ..noun import form as noun_form
 
 
 def prepare_stash():

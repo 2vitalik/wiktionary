@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.7.5'
+    version = '3.7.6'
 
-    desc = 'b'
+    desc = 'Тестовая загрузка (пустышка)'
 
     upload(dev, version, desc)
 

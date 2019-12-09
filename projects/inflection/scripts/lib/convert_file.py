@@ -14,9 +14,9 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 """,
     'py': """
-from projects.inflection.modules.py import additional
-from projects.inflection.modules.py import mw
-from projects.inflection.modules.py import tools as _
+from projects.inflection.modules.{dev}.py import additional
+from projects.inflection.modules.{dev}.py import mw
+from projects.inflection.modules.{dev}.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 """}
@@ -178,7 +178,8 @@ def convert_file(dev, file, _from, _to, out):
     out_file = py_file if _to == 'py' else lua_file
 
     content = read(in_file)
-    content = content.replace(before[_from].strip(), '')
+    content = \
+        content.replace(before[_from].replace('{dev}', dev_str).strip(), '')
 
     for pattern, replace in regexps_before[_from]:
         content = re.sub(pattern, replace, content, flags=re.DOTALL)
@@ -198,7 +199,9 @@ def convert_file(dev, file, _from, _to, out):
     for pattern, replace in regexps_after[_from]:
         content = re.sub(pattern, replace, content, flags=re.DOTALL)
 
-    content = f"{before[_to]}\n\n{content.strip()}\n".lstrip()
+    content = \
+        f"{before[_to].replace('{dev}', dev_str)}\n\n" \
+        f"{content.strip()}\n".lstrip()
     write(out_file, content)
 
 
