@@ -209,7 +209,7 @@ function export.angle_brackets(data)
 		end
 		data.orig_index = data.index
 		data.index = another_index
-		error = extract_gender_animacy(data)
+		error = export.extract_gender_animacy(data)
 		data.pt = pt
 		if error then return error end
 

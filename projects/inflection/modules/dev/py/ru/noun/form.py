@@ -5,6 +5,9 @@ from projects.inflection.modules.dev.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
+from ..declension.sub import form
+
+
 def apply_obelus(forms, rest_index):  # export
     _.log_func('forms', 'apply_obelus')
 
@@ -56,7 +59,7 @@ def loc_case(forms, args, index):  # Местный падеж
         loc = _.replaced(loc, '́ ', '')
         loc = _.replaced(loc, 'ё', 'е')
         loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
-        loc = remove_stress_if_one_syllable(loc)
+        loc = form.remove_stress_if_one_syllable(loc)
         forms['loc_sg'] = loc
         loc_prep = '?'
         loc_prep = _.extract(index, 'П2%((.+)%)')

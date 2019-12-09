@@ -49,7 +49,7 @@ local function main_sub_algorithm(data)
 --	end
 
 	-- reducable
-	data.rest_index = reducable.apply_specific_degree(data.stems, data.endings, data.word, data. stem, data. stem_type, data.gender, data.animacy, data. stress_type, data.rest_index, data)
+	data.rest_index = reducable.apply_specific_degree(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
 	reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, false)
 
 	if not _.equals(data.stress_type, {"f", "f'"}) and _.contains(data.rest_index, '%*') then

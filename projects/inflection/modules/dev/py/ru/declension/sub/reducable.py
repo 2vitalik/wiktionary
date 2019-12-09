@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy, stress_type, rest_index, data):  # export
+def apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data):  # export
     _.log_func('reducable', 'apply_specific_degree')
 
     # If degree sign °
@@ -34,7 +34,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy
         endings['nom_pl'] = 'а'
         endings['gen_pl'] = ''
 
-        export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)
+        apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)  # export.
         return rest_index
     # end
 
@@ -44,10 +44,10 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy
         _.replace(stems, 'all_pl', 'о́ночек$', 'а́тк')
 
         # INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
-        export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data)
+        apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, False)  # export.
 
         # INFO: По сути должно примениться только к мн. формам (случай `B`)
-        export.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index + '*', data)
+        apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index + '*', data, False)  # export.
 
         endings['gen_pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
 

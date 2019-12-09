@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-function export.apply_specific_degree(stems, endings, word, stem, stem_type, gender, animacy, stress_type, rest_index, data)
+function export.apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data)
 	_.log_func('reducable', 'apply_specific_degree')
 
 	-- If degree sign °
@@ -44,10 +44,10 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		_.replace(stems, 'all_pl', 'о́ночек$', 'а́тк')
 
 --		INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
-		export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data)
+		export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data, false)
 
 --		INFO: По сути должно примениться только к мн. формам (случай `B`)
-		export.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index .. '*', data)
+		export.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index .. '*', data, false)
 
 		endings['gen_pl'] = ''  -- INFO: Странный фикс, но он нужен.. <_<
 
