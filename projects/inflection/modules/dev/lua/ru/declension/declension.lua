@@ -15,6 +15,7 @@ local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/index
 local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/result')
 
 local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form')  -- ''
+local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/adj/endings')  -- ''
 
 
 local function prepare_stash()
@@ -40,6 +41,10 @@ local function main_sub_algorithm(data)
 	_.log_table(data.stems, 'data.stems')
 	_.log_table(data.endings, 'data.endings')
 
+	-- apply special cases (1) or (2) in index
+	if data.adj then
+		adj_endings.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
+	end
 
 --	-- *** для случая с расстановкой ударения  (см. ниже)
 --	local orig_stem = data.stem

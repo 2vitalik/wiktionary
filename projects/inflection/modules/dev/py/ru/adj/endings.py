@@ -170,4 +170,20 @@ def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pron
 # end
 
 
+def apply_adj_specific_1_2(stems, gender, rest_index):  # export
+    if not _.endswith(stems['srt_sg'], 'нн'):
+        # todo: log some error?
+        return
+    # end
+    if _.contains(rest_index, ['%(1%)', '①']):
+        if gender == 'm':
+            _.replace(stems, 'srt_sg', 'нн$', 'н')
+        # end
+    # end
+    if _.contains(rest_index, ['%(2%)', '②']):
+        _.replace(stems, 'srt_sg', 'нн$', 'н')
+    # end
+# end
+
+
 # return export

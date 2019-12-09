@@ -49,19 +49,6 @@ def get_base_endings(gender, base_stem_type, adj, pronoun):
 # end
 
 
-# Изменение окончаний для случаев (1), (2), (3)
-def apply_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index, adj, pronoun):
-    _.log_func('endings', 'apply_specific_1_2')
-
-    if adj or pronoun:
-        pass  # TODO
-
-    else:
-        noun_endings.apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index)
-    # end
-# end
-
-
 # Схлопывание: Выбор окончания среди двух вариантов в зависимости от схемы ударения
 def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun):
     _.log_func('endings', 'choose_endings_stress')
@@ -130,7 +117,9 @@ def get_endings(data):  # export
     # end
 
     # apply special cases (1) or (2) in index
-    apply_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index, data.adj, data.pronoun)
+    if not data.adj and not data.pronoun:
+        noun_endings.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
+    # end
 
     # Resolve stressed/unstressed cases of endings
     choose_endings_stress(endings, data.gender, data.base_stem_type, data.stress_schema, data.adj, data.pronoun)

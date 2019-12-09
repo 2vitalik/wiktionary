@@ -15,6 +15,7 @@ from ..declension.sub import index
 from ..declension.sub import result
 
 from ..noun import form as noun_form
+from ..adj import endings as adj_endings
 
 
 def prepare_stash():
@@ -40,6 +41,10 @@ def main_sub_algorithm(data):
     _.log_table(data.stems, 'data.stems')
     _.log_table(data.endings, 'data.endings')
 
+    # apply special cases (1) or (2) in index
+    if data.adj:
+        adj_endings.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
+    # end
 
 #    # *** для случая с расстановкой ударения  (см. ниже)
 #    # local orig_stem = data.stem

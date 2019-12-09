@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.8.5'
+    version = '3.8.6'
 
-    desc = 'Попытка добавить звёздочку для прилагательных'
+    desc = 'Попытка добавить цифру в кружочке для прилагательных'
 
     upload(dev, version, desc)
 

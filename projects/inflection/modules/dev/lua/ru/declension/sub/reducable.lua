@@ -84,6 +84,12 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 		reduced = '?'
 		if data.adj then
 			if gender == 'm' then
+				if _.contains(rest_index, {'%(1%)', '①'}) then
+					return
+				end
+				if _.contains(rest_index, {'%(2%)', '②'}) then
+					return
+				end
 				reduced = 'B'
 			else
 				return

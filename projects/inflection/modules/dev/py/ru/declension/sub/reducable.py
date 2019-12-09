@@ -84,6 +84,12 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
         reduced = '?'
         if data.adj:
             if gender == 'm':
+                if _.contains(rest_index, ['%(1%)', '①']):
+                    return
+                # end
+                if _.contains(rest_index, ['%(2%)', '②']):
+                    return
+                # end
                 reduced = 'B'
             else:
                 return
