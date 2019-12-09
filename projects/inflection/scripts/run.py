@@ -4,7 +4,7 @@ from projects.inflection.scripts.lib.run import noun, adj
 if __name__ == '__main__':
 
     # noun('сло́во', 'с 1c')
-    # noun('ко́шка', 'жо *a')
+    noun('ко́шка', 'жо *a')
 
     # noun('наро́душко', 'м <с 3*a(1)>, Р2')
 
@@ -23,4 +23,7 @@ if __name__ == '__main__':
     # adj('хоро́ший', '4a')
     # adj('но́вый', "1a/c'")
     # adj('кито́вый', "1a")
-    adj('а́лый', "1a'")
+    # adj('а́лый', "1a'")
+
+    adj('удо́бный', "1*a")
+    adj('бу́йный', "1*a'")

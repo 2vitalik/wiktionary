@@ -77,10 +77,18 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
     # local reduced, reduced_letter, f_3rd, prev
     # local case_2_a, case_2_b, case_2_c, case_3_a, case_3_b
     # local skip_b_1, skip_b_2, skip_b_3, force_b
+    # local case
 
     if _.contains(rest_index, '%*'):
 
-        if gender == 'm' or data.pronoun:
+        reduced = '?'
+        if data.adj:
+            if gender == 'm':
+                reduced = 'B'
+            else:
+                return
+            # end
+        elif gender == 'm' or data.pronoun:
             reduced = 'A'
         elif gender == 'n':
             reduced = 'B'
@@ -200,20 +208,31 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
         # это для глАзок
 
         if (reduced == 'B' or force_b) and not skip_b_1 and not skip_b_2 and not skip_b_3:
+            if data.adj:
+                case = 'srt_sg'
+            else:
+                case = 'gen_pl'
+            # end
+
             mw.log('  # Зашли в случай чередования B')
             if stem_type == 'vowel':  # 1).
                 mw.log('  # Подслучай B.1).')
                 if _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" }):  # gen_pl ending stressed  -- TODO: special vars for that
-                    _.replace(stems, 'gen_pl', 'ь$', 'е́')
+                    _.replace(stems, case, 'ь$', 'е́')
                 else:
-                    _.replace(stems, 'gen_pl', 'ь$', 'и')
+                    _.replace(stems, case, 'ь$', 'и')
                 # end
             elif _.contains(stem, '[ьй]{consonant}$'):  # 2).
                 mw.log('  # Подслучай B.2).')
-                if stem_type == 'letter-ц' or _.equals(stress_type, ['a', 'd', "d'"]):  # gen_pl ending unstressed  -- TODO: special vars for that
-                    _.replace(stems, 'gen_pl', '[ьй]({consonant})$', 'е%1')
+                if data.adj:
+                    e = stem_type == 'letter-ц' or not _.contains(stress_type, 'b')
                 else:
-                    _.replace(stems, 'gen_pl', '[ьй]({consonant})$', 'ё%1')
+                    e = stem_type == 'letter-ц' or _.equals(stress_type, ['a', 'd', "d'"])  # gen_pl ending unstressed  -- TODO: special vars for that
+                # end
+                if e:
+                    _.replace(stems, case, '[ьй]({consonant})$', 'е%1')
+                else:
+                    _.replace(stems, case, '[ьй]({consonant})$', 'ё%1')
                 # end
             else:  # 3).
                 prev = _.extract(stem, '(.){consonant}$')
@@ -221,25 +240,25 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                 case_3_b = _.contains(prev, '[кгх]')  # 3). б).
                 if case_3_a or case_3_b:
                     mw.log('  # Подслучай B.3). а,б).')
-                    _.replace(stems, 'gen_pl', '(.)({consonant})$', '%1о%2')
+                    _.replace(stems, case, '(.)({consonant})$', '%1о%2')
                 else:  # 3). в).
                     mw.log('  # Подслучай B.3). в).')
                     if stem_type == 'letter-ц':
                         mw.log('  # stem_type == "letter-ц"')
-                        _.replace(stems, 'gen_pl', '(.)({consonant})$', '%1е%2')
+                        _.replace(stems, case, '(.)({consonant})$', '%1е%2')
                     else:
                         if _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" }):  # gen_pl ending stressed  -- TODO: special vars for that
-                            mw.log('  # в `gen-pl` ударение на окончание')
+                            mw.log('  # в `' + case + '` ударение на окончание')
                             if _.contains(prev, '[жшчщ]'):
                                 mw.log('  # предыдущая [жшчщ]')
-                                _.replace(stems, 'gen_pl', '(.)({consonant})$', '%1о́%2')
+                                _.replace(stems, case, '(.)({consonant})$', '%1о́%2')
                             else:
                                 mw.log('  # предыдущая не [жшчщ]')
-                                _.replace(stems, 'gen_pl', '(.)({consonant})$', '%1ё%2')
+                                _.replace(stems, case, '(.)({consonant})$', '%1ё%2')
                             # end
                         else:
-                            mw.log('    # ударение на основу в ["gen-pl"] ')
-                            _.replace(stems, 'gen_pl', '(.)({consonant})$', '%1е%2')
+                            mw.log('    # ударение на основу в ["' + case + '"] ')
+                            _.replace(stems, case, '(.)({consonant})$', '%1е%2')
                         # end
                     # end
                 # end

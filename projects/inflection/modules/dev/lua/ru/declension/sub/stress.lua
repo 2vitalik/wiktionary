@@ -142,32 +142,34 @@ function export.apply_stress_type(data)
 		add_stress(data.endings, 'prp_pl')
 	end
 
-	data.stems['srt_sg'] = data.stem
-	data.stems['srt_pl'] = data.stem
+	if data.adj then
+		data.stems['srt_sg'] = data.stem
+		data.stems['srt_pl'] = data.stem
 
-	if data.gender == 'm' then
-		data.stems['srt_sg'] = data.stem_stressed
-	elseif data.gender == 'n' then
-		if data.stress_schema['stem']['srt_sg_n'] then
+		if data.gender == 'm' then
 			data.stems['srt_sg'] = data.stem_stressed
+		elseif data.gender == 'n' then
+			if data.stress_schema['stem']['srt_sg_n'] then
+				data.stems['srt_sg'] = data.stem_stressed
+			end
+			if data.stress_schema['ending']['srt_sg_n'] then
+				add_stress(data.endings, 'srt_sg')
+			end
+		elseif data.gender == 'f' then
+			if data.stress_schema['stem']['srt_sg_f'] then
+				data.stems['srt_sg'] = data.stem_stressed
+			end
+			if data.stress_schema['ending']['srt_sg_f'] then
+				add_stress(data.endings, 'srt_sg')
+			end
 		end
-		if data.stress_schema['ending']['srt_sg_n'] then
-			add_stress(data.endings, 'srt_sg')
-		end
-	elseif data.gender == 'f' then
-		if data.stress_schema['stem']['srt_sg_f'] then
-			data.stems['srt_sg'] = data.stem_stressed
-		end
-		if data.stress_schema['ending']['srt_sg_f'] then
-			add_stress(data.endings, 'srt_sg')
-		end
-	end
 
-	if data.stress_schema['stem']['srt_pl'] then
-		data.stems['srt_pl'] = data.stem_stressed
-	end
-	if data.stress_schema['ending']['srt_pl'] then
-		add_stress(data.endings, 'srt_pl')
+		if data.stress_schema['stem']['srt_pl'] then
+			data.stems['srt_pl'] = data.stem_stressed
+		end
+		if data.stress_schema['ending']['srt_pl'] then
+			add_stress(data.endings, 'srt_pl')
+		end
 	end
 end
 
