@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.8.7'
+    version = '3.8.8'
 
-    desc = 'Краткая множественная форма при двойке в кружочке'
+    desc = 'Случай вариации цифры в кружочке: [(1)]'
 
     upload(dev, version, desc)
 

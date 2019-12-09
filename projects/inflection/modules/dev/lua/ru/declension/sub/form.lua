@@ -168,7 +168,13 @@ function export.join_forms(forms1, forms2)
 	keys = {
 		'nom_sg',  'gen_sg',  'dat_sg',  'acc_sg',  'ins_sg',  'prp_sg',
 		'nom_pl',  'gen_pl',  'dat_pl',  'acc_pl',  'ins_pl',  'prp_pl',
+		'nom_sg_m', 'gen_sg_m', 'dat_sg_m', 'acc_sg_m', 'ins_sg_m', 'prp_sg_m',
+		'nom_sg_n', 'gen_sg_n', 'dat_sg_n', 'acc_sg_n', 'ins_sg_n', 'prp_sg_n',
+		'nom_sg_f', 'gen_sg_f', 'dat_sg_f', 'acc_sg_f', 'ins_sg_f', 'prp_sg_f',
+		'srt_sg',  'srt_sg_m',  'srt_sg_n',  'srt_sg_f',  'srt_pl',
+		'acc_sg_m_a', 'acc_sg_m_n', 'acc_pl_a', 'acc_pl_n',
 		'ins_sg2',
+		'ins_sg2_f',
 		'зализняк1', 'зализняк',
 		'error',
 	}  -- list
@@ -177,7 +183,9 @@ function export.join_forms(forms1, forms2)
 	forms['зализняк-1'] = forms1['зализняк']
 	forms['зализняк-2'] = forms2['зализняк']
 	for i, key in pairs(keys) do  -- list
-		if not forms[key] and forms2[key] then  -- INFO: Если forms[key] == nil
+		if not _.has_key(forms[key]) and not _.has_key(forms2[key]) then
+			continue
+		elseif not _.has_key(forms[key]) and _.has_key(forms2[key]) then  -- INFO: Если forms[key] == nil
 			forms[key] = forms2[key]
 		elseif forms[key] ~= forms2[key] and forms2[key] then
 			delim = '<br/>'
@@ -187,7 +195,7 @@ function export.join_forms(forms1, forms2)
 			-- TODO: <br/> только для падежей
 			forms[key] = forms[key] .. '&nbsp;//' .. delim .. forms2[key]
 		end
-		if not forms[key] then  -- INFO: Если forms[key] == nil
+		if not _.has_key(forms[key]) or not forms[key] then  -- INFO: Если forms[key] == nil
 			forms[key] = ''
 		end
 	end
