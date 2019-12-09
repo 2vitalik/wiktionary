@@ -195,12 +195,12 @@ def parse(base, args):  # export
         data2 = mw.clone(data)
 
         # INFO: Предпогалаем, что у нас пока не "полная" вариация (не затрагивающая род)
-        data1.rest_index = parts[1]
-        data2.rest_index = parts[2]
+        data1.rest_index = parts[0]
+        data2.rest_index = parts[1]
 
         if data.noun:
             # INFO: Проверяем, не находится ли род+одушевлённость во второй вариации
-            data2.index = parts[2]  # INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
+            data2.index = parts[1]  # INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
             noun_parse_args.extract_gender_animacy(data2)
         # end
 

@@ -207,7 +207,7 @@ def plus_forms(sub_forms):  # export
         'зализняк1', 'зализняк',
         'error',
     ]  # list
-    forms = sub_forms[1]
+    forms = sub_forms[0]
     for i, forms2 in enumerate(sub_forms):
         if i != 1:
             for j, key in enumerate(keys):

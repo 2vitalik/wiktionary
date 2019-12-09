@@ -5,8 +5,8 @@ def log(value):
     print(value)
 
 
-def clone(str):
-    pass  # todo
+def clone(value):
+    return value.copy()
 
 
 def fix_re(value):

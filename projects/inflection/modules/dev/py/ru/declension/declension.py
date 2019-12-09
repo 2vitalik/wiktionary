@@ -250,8 +250,8 @@ def forms(base, args, frame):  # export
     forms = dict()  # dict
     if data.sub_cases:
         _.log_info("Случай с вариациями '//'")
-        data1 = data.sub_cases[1]
-        data2 = data.sub_cases[2]
+        data1 = data.sub_cases[0]
+        data2 = data.sub_cases[1]
         forms1 = main_algorithm(data1)
         forms2 = main_algorithm(data2)
         forms = form.join_forms(forms1, forms2)

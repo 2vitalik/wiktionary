@@ -8,6 +8,9 @@ class AttrDict(dict):
         # print(f"Error: AttrDict doesn't have attribute: \"{item}\"")
         return
 
+    def copy(self):
+        return AttrDict(self.__dict__)
+
 
 # class Dict(dict):
 #     # def __init__(self, **kwargs):
