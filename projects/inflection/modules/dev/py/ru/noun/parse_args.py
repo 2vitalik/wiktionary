@@ -195,30 +195,4 @@ def extract_gender_animacy(data):  # export
 # end
 
 
-def angle_brackets(data):  # export
-    _.log_func('parse_args', 'angle_brackets')
-
-    # local another_index, pt, error
-
-    another_index = _.extract(data.rest_index, '%<([^>]+)%>')
-    if another_index:
-        pt = data.pt
-        if not pt:
-            data.output_gender = data.gender
-            data.output_animacy = data.animacy
-        # end
-        data.orig_index = data.index
-        data.index = another_index
-        error = extract_gender_animacy(data)  # = export.
-        data.pt = pt
-        if error: return error # end
-
-        _.log_value(data.adj, 'data.adj')
-        if data.adj:  # Для прилагательных надо по-особенному?
-            return data, dict(error = 'TODO')  # dict
-        # end
-    # end
-# end
-
-
 # return export

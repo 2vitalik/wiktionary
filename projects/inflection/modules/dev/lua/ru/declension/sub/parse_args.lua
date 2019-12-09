@@ -51,6 +51,33 @@ local function init(data)
 end
 
 
+function export.angle_brackets(data)
+	_.log_func('parse_args', 'angle_brackets')
+
+	local another_index, pt, error
+
+	another_index = _.extract(data.rest_index, '%<([^>]+)%>')
+	if another_index then
+		pt = data.pt
+		if not pt then
+			data.output_gender = data.gender
+			data.output_animacy = data.animacy
+		end
+		data.orig_index = data.index
+		data.index = another_index
+		error = noun_parse_args.extract_gender_animacy(data)
+		data.pt = pt
+		if error then return error end
+
+		_.log_value(data.adj, 'data.adj')
+		if data.adj then  -- Для прилагательных надо по-особенному?
+			error = init(data)
+			if error then return error end
+		end
+	end
+end
+
+
 function export.parse(base, args)
 	_.log_func('parse_args', 'parse')
 
@@ -148,7 +175,7 @@ function export.parse(base, args)
 				data_copy.rest_index = index_parts[i]
 
 				if data.noun then
-					error = noun_parse_args.angle_brackets(data_copy)
+					error = angle_brackets(data_copy)
 					if error then return data, error end
 				end
 
@@ -158,7 +185,7 @@ function export.parse(base, args)
 		end
 
 		if data.noun then
-			error = noun_parse_args.angle_brackets(data)
+			error = angle_brackets(data)
 			if error then return data, error end
 		end
 

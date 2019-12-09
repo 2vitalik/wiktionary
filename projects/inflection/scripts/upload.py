@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.8.9'
+    version = '3.9'
 
-    desc = 'b'
+    desc = 'Исправление угловых скобок для существительных'
 
     upload(dev, version, desc)
 
