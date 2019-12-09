@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.8.8'
+    version = '3.8.9'
 
-    desc = 'Случай вариации цифры в кружочке: [(1)]'
+    desc = 'b'
 
     upload(dev, version, desc)
 

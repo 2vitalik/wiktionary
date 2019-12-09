@@ -184,7 +184,7 @@ def join_forms(forms1, forms2):  # export
     forms['зализняк-2'] = forms2['зализняк']
     for i, key in enumerate(keys):
         if not _.has_key(forms, key) and not _.has_key(forms2, key):
-            continue
+            pass
         elif not _.has_key(forms, key) and _.has_key(forms2, key):  # INFO: Если forms[key] == None
             forms[key] = forms2[key]
         elif forms[key] != forms2[key] and forms2[key]:

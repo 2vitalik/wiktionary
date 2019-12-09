@@ -184,7 +184,7 @@ function export.join_forms(forms1, forms2)
 	forms['зализняк-2'] = forms2['зализняк']
 	for i, key in pairs(keys) do  -- list
 		if not _.has_key(forms[key]) and not _.has_key(forms2[key]) then
-			continue
+			-- pass
 		elseif not _.has_key(forms[key]) and _.has_key(forms2[key]) then  -- INFO: Если forms[key] == nil
 			forms[key] = forms2[key]
 		elseif forms[key] ~= forms2[key] and forms2[key] then
