@@ -5,7 +5,14 @@ from projects.inflection.modules.dev.py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ..declension.sub import form
+def remove_stress_if_one_syllable(value):  # export
+    # _.log_func('forms', 'remove_stress_if_one_syllable')
+
+    if _.contains_once(value, '{vowel+ё}'):
+        return _.replaced(value, '́ ', '')
+    # end
+    return value
+# end
 
 
 def apply_obelus(forms, rest_index):  # export
@@ -15,7 +22,6 @@ def apply_obelus(forms, rest_index):  # export
         forms['obelus'] = '1'
     # end
 # end
-
 
 
 def apply_specific_3(forms, gender, rest_index):  # export
@@ -59,7 +65,7 @@ def loc_case(forms, args, index):  # Местный падеж
         loc = _.replaced(loc, '́ ', '')
         loc = _.replaced(loc, 'ё', 'е')
         loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
-        loc = form.remove_stress_if_one_syllable(loc)
+        loc = remove_stress_if_one_syllable(loc)  # = export.
         forms['loc_sg'] = loc
         loc_prep = '?'
         loc_prep = _.extract(index, 'П2%((.+)%)')

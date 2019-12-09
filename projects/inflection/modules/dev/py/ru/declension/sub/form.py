@@ -35,16 +35,6 @@ def init_srt_forms(forms, stems, endings):
 # end
 
 
-def remove_stress_if_one_syllable(value):
-    # _.log_func('forms', 'remove_stress_if_one_syllable')
-
-    if _.contains_once(value, '{vowel+ё}'):
-        return _.replaced(value, '́ ', '')
-    # end
-    return value
-# end
-
-
 def fix_stress(forms):
     _.log_func('forms', 'fix_stress')
 
@@ -151,7 +141,7 @@ def generate_forms(data):  # export
 
     for key, value in forms.items():
 #        INFO Удаляем ударение, если только один слог:
-        forms[key] = remove_stress_if_one_syllable(value)
+        forms[key] = noun_form.remove_stress_if_one_syllable(value)
     # end
 
     if data.adj:

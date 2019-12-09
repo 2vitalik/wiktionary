@@ -5,7 +5,14 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/form')
+function export.remove_stress_if_one_syllable(value)
+	-- _.log_func('forms', 'remove_stress_if_one_syllable')
+
+	if _.contains_once(value, '{vowel+ё}') then
+		return _.replaced(value, '́ ', '')
+	end
+	return value
+end
 
 
 function export.apply_obelus(forms, rest_index)
@@ -15,7 +22,6 @@ function export.apply_obelus(forms, rest_index)
 		forms['obelus'] = '1'
 	end
 end
-
 
 
 function export.apply_specific_3(forms, gender, rest_index)
@@ -59,7 +65,7 @@ local function loc_case(forms, args, index)  -- Местный падеж
 		loc = _.replaced(loc, '́ ', '')
 		loc = _.replaced(loc, 'ё', 'е')
 		loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
-		loc = form.remove_stress_if_one_syllable(loc)
+		loc = export.remove_stress_if_one_syllable(loc)
 		forms['loc_sg'] = loc
 		loc_prep = '?'
 		loc_prep = _.extract(index, 'П2%((.+)%)')

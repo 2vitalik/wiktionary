@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.8.3'
+    version = '3.8.4'
 
-    desc = 'Несколько небольших фиксов и баг-фиксов'
+    desc = 'Исправление циклического импорта'
 
     upload(dev, version, desc)
 

@@ -35,16 +35,6 @@ local function init_srt_forms(forms, stems, endings)
 end
 
 
-local function remove_stress_if_one_syllable(value)
-	-- _.log_func('forms', 'remove_stress_if_one_syllable')
-
-	if _.contains_once(value, '{vowel+ё}') then
-		return _.replaced(value, '́ ', '')
-	end
-	return value
-end
-
-
 local function fix_stress(forms)
 	_.log_func('forms', 'fix_stress')
 
@@ -151,7 +141,7 @@ function export.generate_forms(data)
 
 	for key, value in pairs(forms) do
 --		INFO Удаляем ударение, если только один слог:
-		forms[key] = remove_stress_if_one_syllable(value)
+		forms[key] = noun_form.remove_stress_if_one_syllable(value)
 	end
 
 	if data.adj then
