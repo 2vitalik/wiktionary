@@ -37,7 +37,7 @@ def read_file(dev, filename):
 
 
 def upload(dev, version, desc):
-    if not compare_dir('lua'):
+    if not compare_dir(dev, 'lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
 
@@ -49,7 +49,7 @@ def upload(dev, version, desc):
         title = get_module_title(file, dev)
         print(f'- {title} - ', end='')
 
-        path = get_path('lua', file, out=True)
+        path = get_path(dev, 'lua', file, out=True)
         if save_page(title, read_file(dev, path), f'v{version}: {desc}'):
             print('OK')
 

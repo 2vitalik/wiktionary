@@ -4,8 +4,8 @@ from projects.inflection.modules.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on active version
 
-
-from ...noun import parse_args as noun_parse_args
+from projects.inflection.modules.dev.py.ru.noun import \
+    parse_args as noun_parse_args
 
 
 def init(data):

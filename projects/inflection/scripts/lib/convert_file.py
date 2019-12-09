@@ -25,7 +25,7 @@ string = '''('[^']*'|"[^"]*")'''
 
 regexps_MULTILINE = {
     'py': [
-        ('from projects.inflection.modules.py.additional import syllables', 'local syllables = require("Модуль:слоги")'),
+        ('from projects.inflection.modules.{dev}.py.additional import syllables', 'local syllables = require("Модуль:слоги")'),
         (r'from .libs import (\w+)', "local \\1 = require(parent_prefix .. '/\\1')"),
         (r'from \.\.declension.sub import (\w+)', "local \\1 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\1')"),
         (r'from \.\.(\.)?(\w+) import (\w+) as (\w+)', "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/\\2/\\3')  -- '\\1'"),
@@ -83,7 +83,7 @@ regexps_MULTILINE = {
         (r'^(--)?' + '    ' * 1, '\\1' + '\t' * 1),
     ],
     'lua': [
-        ('local syllables = require\("Модуль:слоги"\)', 'from projects.inflection.modules.py.additional import syllables'),
+        ('local syllables = require\("Модуль:слоги"\)', 'from projects.inflection.modules.{dev}.py.additional import syllables'),
         (r"^local (\w+) = require\(parent_prefix \.\. '/(\w+)'\)", 'from .libs import \\1'),
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)'\)", 'from ..declension.sub import \\1'),
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/(\w+)/(\w+)'\)  -- '(\.)?'", 'from ..\\4\\2 import \\3 as \\1'),
@@ -169,9 +169,11 @@ regexps_after = {
 }
 
 
-def convert_file(file, _from, _to, out):
-    py_file = get_path('py', file, out=out)
-    lua_file = get_path('lua', file, out=out)
+def convert_file(dev, file, _from, _to, out):
+    dev_str = 'dev' if dev else 'prod'
+
+    py_file = get_path(dev, 'py', file, out=out)
+    lua_file = get_path(dev, 'lua', file, out=out)
     in_file = py_file if _from == 'py' else lua_file
     out_file = py_file if _to == 'py' else lua_file
 
@@ -185,6 +187,8 @@ def convert_file(file, _from, _to, out):
         content = re.sub(pattern, replace, content, flags=re.DOTALL)
 
     for pattern, replace in regexps_MULTILINE[_from]:
+        pattern = pattern.replace('{dev}', dev_str)
+        replace = replace.replace('{dev}', dev_str)
         content = re.sub(pattern, replace, content, flags=re.MULTILINE)
 
     for i in range(5):

@@ -1,5 +1,5 @@
-from projects.inflection.modules.py import mw
-from projects.inflection.modules.py import utils as u
+from projects.inflection.modules.dev.py import mw
+from projects.inflection.modules.dev.py import utils as u
 
 
 def trim_stress(str):
