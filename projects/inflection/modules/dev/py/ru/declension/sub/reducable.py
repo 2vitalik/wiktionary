@@ -253,7 +253,12 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                         mw.log('  # stem_type == "letter-ц"')
                         _.replace(stems, case, '(.)({consonant})$', '%1е%2')
                     else:
-                        if _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" }):  # gen_pl ending stressed  -- TODO: special vars for that
+                        if data.adj:
+                            e = _.contains(stress_type, 'b')
+                        else:
+                            e = _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" })  # gen_pl ending stressed  -- TODO: special vars for that
+                        # end
+                        if e:
                             mw.log('  # в `' + case + '` ударение на окончание')
                             if _.contains(prev, '[жшчщ]'):
                                 mw.log('  # предыдущая [жшчщ]')

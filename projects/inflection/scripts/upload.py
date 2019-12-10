@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.9.3'
+    version = '3.9.4'
 
-    desc = 'Исправление ударений местоименного склонения'
+    desc = 'Частичное исправление бага со звёздочкой'
 
     upload(dev, version, desc)
 
