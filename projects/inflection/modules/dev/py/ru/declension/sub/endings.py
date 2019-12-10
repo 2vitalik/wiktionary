@@ -53,7 +53,7 @@ def get_base_endings(gender, base_stem_type, adj, pronoun):
 def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun):
     _.log_func('endings', 'choose_endings_stress')
 
-    # local stress
+    # local stress, keys
 
     if adj:
         stress = stress_schema['ending']['nom_sg'] and stressed or unstressed
@@ -68,8 +68,8 @@ def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, p
             endings['srt_sg'] = endings['srt_sg'][stress]
         # end
     elif pronoun:  # TODO: может применить такой подход для всех случаев вообще?
-        # local keys = ['nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg', 'srt_sg']
-        for i, key in keys.items():
+        keys = ['nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg']  # list
+        for i, key in enumerate(keys):
             if type(endings[key]) == 'table':
                 stress = stress_schema['ending'][key] and stressed or unstressed
                 endings[key] = endings[key][stress]
