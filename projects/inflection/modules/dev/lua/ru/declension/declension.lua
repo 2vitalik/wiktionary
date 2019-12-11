@@ -29,6 +29,8 @@ end
 local function main_sub_algorithm(data)
 	_.log_info('Вычисление схемы ударения')
 
+	local stem_stress_schema
+
 	data.stress_schema = stress.get_stress_schema(data.stress_type, data.adj, data.pronoun)
 
 	_.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
@@ -67,7 +69,8 @@ local function main_sub_algorithm(data)
 --			mw.log(' - ' .. key .. ' -> ' .. stem)
 --			mw.log('Ударение на основу?')
 --			mw.log(data.stress_schema['stem'][key])
-			if not _.contains(stem, '[́ ё]') and data.stress_schema['stem'][key] then
+			stem_stress_schema = data.stress_schema['stem']
+			if not _.contains(stem, '[́ ё]') and _.has_key(stem_stress_schema[key]) and stem_stress_schema[key] then
 				-- *** случай с расстановкой ударения  (см. выше)
 				-- "Дополнительные правила об ударении", стр. 34
 				old_value = data.stems[key]
