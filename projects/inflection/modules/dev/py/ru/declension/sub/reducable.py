@@ -263,6 +263,7 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                         # end
                         if e:
                             mw.log('  # в `' + case + '` ударение на окончание')
+                            stems[case] = data.stem
                             if _.contains(prev, '[жшчщ]'):
                                 mw.log('  # предыдущая [жшчщ]')
                                 _.replace(stems, case, '(.)({consonant})$', '%1о́%2')
