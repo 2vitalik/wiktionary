@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.9.5'
+    version = '3.9.6'
 
-    desc = 'Исправление дублирования ударения у кратких форм прилагательных'
+    desc = 'Исправление ударения на основу для схем c\' и c\'\''
 
     upload(dev, version, desc)
 

@@ -150,7 +150,11 @@ def apply_stress_type(data):  # export
             data.stems['srt_sg'] = data.stem_stressed
         elif data.gender == 'n':
             if data.stress_schema['stem']['srt_sg_n']:
-                data.stems['srt_sg'] = data.stem_stressed
+                if not _.contains(data.stem_stressed, '[ ́ё]'):  # todo: возможно мы должны также менять stem_stressed изначально?
+                    _.replace(data.stems, 'srt_sg', '({vowel})({consonant}*)$', '%1́ %2')
+                else:
+                    data.stems['srt_sg'] = data.stem_stressed
+                # end
             # end
             if data.stress_schema['ending']['srt_sg_n']:
                 add_stress(data.endings, 'srt_sg')
