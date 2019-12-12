@@ -67,8 +67,8 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.9.10'
-    desc = 'Исправление для "умён" (звёздочка для кратких b)'
+    version = '3.9.11'
+    desc = 'Удаление лишнего дублирующего кода... (?)'
 
     print(f'v{version}: {desc}')
     upload(dev, version, desc)
