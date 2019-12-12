@@ -13,6 +13,7 @@ def noun(word, index):
 
 
 def adj(word, index):
+    # todo: only one argument separated by '|'
     run('adj',  word, index)
 
 
