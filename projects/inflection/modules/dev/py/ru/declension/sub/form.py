@@ -122,7 +122,8 @@ def generate_forms(data):  # export
 
     for key, value in forms.items():
         # replace 'ё' with 'е' when unstressed
-        if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё'):
+        # if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё'):  -- trying to bug-fix
+        if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё'):
             forms[key] = _.replaced(value, 'ё', 'е')
         # end
     # end

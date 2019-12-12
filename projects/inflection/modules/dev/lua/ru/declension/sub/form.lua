@@ -122,7 +122,8 @@ function export.generate_forms(data)
 
 	for key, value in pairs(forms) do
 		-- replace 'ё' with 'е' when unstressed
-		if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then
+		-- if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then  -- trying to bug-fix
+		if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then
 			forms[key] = _.replaced(value, 'ё', 'е')
 		end
 	end
