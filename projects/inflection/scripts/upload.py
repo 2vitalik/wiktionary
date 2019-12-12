@@ -67,9 +67,9 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.9.6'
+    version = '3.9.7'
 
-    desc = 'Исправление ударения на основу для схем c\' и c\'\''
+    desc = 'Исправление мягкого знака для прилагательных на -ний'
 
     upload(dev, version, desc)
 

@@ -277,6 +277,9 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
             if stem_type == 'soft' and _.endswith(word, 'ня') and stress_type == 'a' and endings['gen_pl'] == 'ь':
                 endings['gen_pl'] = ''  # вместо `ь` для `2*a`
             # end
+            if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь':
+                endings['srt_sg'] = ''  # вместо `ь` для `2*a`
+            # end
 #            if _.contains(rest_index, 'ё'):
 #                if _.contains(stems['gen_pl'], 'ё.*е'):
 #                    mw.log('% Специальный случай-исправление типа "сёстер" -> "сестёр"')
