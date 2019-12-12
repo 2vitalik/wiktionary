@@ -234,7 +234,7 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 			elseif _.contains(stem, '[ьй]{consonant}$') then  -- 2).
 				mw.log('  -- Подслучай B.2).')
 				if data.adj then
-					e = stem_type == 'letter-ц' or not _.contains(stress_type, 'b')  -- todo: fix only "b" for srt...
+					e = stem_type == 'letter-ц' or not _.contains(stress_type, 'b') or _.endswith(stress_type, {'/b', "/b'"})  -- todo: fix only "b" for srt...
 				else
 					e = stem_type == 'letter-ц' or _.equals(stress_type, {'a', 'd', "d'"})  -- gen_pl ending unstressed  -- TODO: special vars for that
 				end
@@ -257,7 +257,7 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 						_.replace(stems, case, '(.)({consonant})$', '%1е%2')
 					else
 						if data.adj then
-							e = _.contains(stress_type, 'b')  -- todo: fix only "b" for srt...
+							e = _.equals(stress_type, 'b') or _.endswith(stress_type, {'/b', "/b'"})  -- TODO: special vars for that
 						else
 							e = _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" })  -- gen_pl ending stressed  -- TODO: special vars for that
 						end

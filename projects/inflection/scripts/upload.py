@@ -23,8 +23,8 @@ def process_desc(dev, desc):
     if not desc:
         raise Exception('Description is required')
     d = 'D' if dev else 'P'
-    append('logs/changes.txt',
-           f'[{dt()}] [{d}] v{version}: {desc}')
+    new_desc = f'v{version}: {desc}'
+    append('logs/changes.txt', f'[{dt()}] [{d}] {new_desc}')
     return desc
 
 
@@ -67,10 +67,10 @@ if __name__ == '__main__':
     # dev = False
     dev = True
 
-    version = '3.9.8'
+    version = '3.9.9'
+    desc = 'Исправление для "дурен" (звёздочка для кратких b)'
 
-    desc = 'Кривоватое исправление мягкого знака для прилагательных на -ний с индексом (1)'
-
+    print(f'v{version}: {desc}')
     upload(dev, version, desc)
 
 

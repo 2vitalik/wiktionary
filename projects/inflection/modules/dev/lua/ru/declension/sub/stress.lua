@@ -147,7 +147,11 @@ function export.apply_stress_type(data)
 		data.stems['srt_pl'] = data.stem
 
 		if data.gender == 'm' then
-			data.stems['srt_sg'] = data.stem_stressed
+			if not _.contains(data.stem_stressed, '[ ́ё]') then  -- todo: возможно мы должны также менять stem_stressed изначально?
+				_.replace(data.stems, 'srt_sg', '({vowel})({consonant}*)$', '%1́ %2')
+			else
+				data.stems['srt_sg'] = data.stem_stressed
+			end
 		elseif data.gender == 'n' then
 			if data.stress_schema['stem']['srt_sg_n'] then
 				if not _.contains(data.stem_stressed, '[ ́ё]') then  -- todo: возможно мы должны также менять stem_stressed изначально?
