@@ -30,10 +30,3 @@ def download(dev):
         title = get_module_title(file, dev)
         filename = get_path(dev, 'lua', file, '')
         download_module(title, filename)
-
-
-if __name__ == '__main__':
-    # dev = False
-    dev = True
-
-    download(dev)

@@ -1,12 +1,12 @@
 from libs.utils.dt import dt
-from libs.utils.io import read, append
+from libs.utils.io import append, read
 from libs.utils.wikibot import save_page
 from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.files import files, get_module_title
 from projects.inflection.scripts.lib.paths import get_path
 
 
-def process_desc(dev, desc):
+def process_desc(dev, version, desc):
     if not desc:
         desc = input('Input description: ')
     replaces = {
@@ -24,7 +24,7 @@ def process_desc(dev, desc):
         raise Exception('Description is required')
     d = 'D' if dev else 'P'
     new_desc = f'v{version}: {desc}'
-    append('logs/changes.txt', f'[{dt()}] [{d}] {new_desc}')
+    append('../logs/changes.txt', f'[{dt()}] [{d}] {new_desc}')
     return desc
 
 
@@ -41,7 +41,7 @@ def upload(dev, version, desc):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
 
-    desc = process_desc(dev, desc)
+    desc = process_desc(dev, version, desc)
 
     print(f'Загружаю lua-модули в ВС:')
 
@@ -59,20 +59,3 @@ def upload(dev, version, desc):
     # path = get_path('lua', root=True)  # todo: fixme
     # save_page(title, read_file(dev, f'{path}/tools.lua'),
     #           f'v{inflection_version}: {desc}')
-
-
-if __name__ == '__main__':
-    # inflection_version = '2.4'
-
-    dev = False
-    # dev = True
-
-    version = '4.0.5'
-    desc = 'Bug-fix для крестика в квадратике (регулярка)'
-
-    print(f'v{version}: {desc}')
-    upload(dev, version, desc)
-
-
-# todo: почистить старые неиспользуемые модули на ВС (старые имена)
-# todo: разные файлы запуска для dev-версии и для prod-версии
