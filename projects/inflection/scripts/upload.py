@@ -67,8 +67,8 @@ if __name__ == '__main__':
     dev = False
     # dev = True
 
-    version = '4.0.2'
-    desc = 'Различие двух видов крестиков для прилагательных'
+    version = '4.0.4'
+    desc = 'Обработка прочерка для прилагательных'
 
     print(f'v{version}: {desc}')
     upload(dev, version, desc)
