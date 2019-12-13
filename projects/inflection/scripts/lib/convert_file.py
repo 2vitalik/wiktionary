@@ -19,7 +19,7 @@ from projects.inflection.modules.{dev}.py import mw
 from projects.inflection.modules.{dev}.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
-"""}
+"""}  # todo: use `from ....py` here
 
 string = '''('[^']*?'|"[^"]*?")'''
 

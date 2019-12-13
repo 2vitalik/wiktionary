@@ -1,11 +1,11 @@
-from projects.inflection.modules.dev.py import additional
-from projects.inflection.modules.dev.py import mw
-from projects.inflection.modules.dev.py import tools as _
+from projects.inflection.modules.prod.py import additional
+from projects.inflection.modules.prod.py import mw
+from projects.inflection.modules.prod.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from projects.inflection.modules.dev.py.additional import syllables
+from projects.inflection.modules.prod.py.additional import syllables
 
 # Использование дефисов вместо подчёркивания
 def replace_underscore_with_hyphen(forms):
