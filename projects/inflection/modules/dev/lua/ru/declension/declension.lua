@@ -188,6 +188,7 @@ local function main_algorithm(data)
 		genders = {'', 'm', 'n', 'f'}
 		for i, gender in pairs(genders) do  -- list
 			data.gender = gender
+			_.log_value(data.gender, 'data.gender')
 
 			main_sub_algorithm(data)
 

@@ -188,6 +188,7 @@ def main_algorithm(data):
         genders = ['', 'm', 'n', 'f']
         for i, gender in enumerate(genders):
             data.gender = gender
+            _.log_value(data.gender, 'data.gender')
 
             main_sub_algorithm(data)
 
