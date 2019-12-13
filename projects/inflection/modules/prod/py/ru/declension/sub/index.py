@@ -33,7 +33,7 @@ def get_zaliznyak(stem_type, stress_type, rest_index):  # export
         index = index + '*'
     # end
     index = index + _.replaced(stress_type, "'", "&#39;")
-    if _.contains(rest_index, ['⊠', '(x)', '(х)', '(X)', '(Х)']):
+    if _.contains(rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
         index = index + '⊠'
     elif _.contains(rest_index, ['×', 'x', 'х', 'X', 'Х']):
         index = index + '×'

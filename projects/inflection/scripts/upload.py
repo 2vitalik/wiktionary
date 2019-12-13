@@ -67,8 +67,8 @@ if __name__ == '__main__':
     dev = False
     # dev = True
 
-    version = '4.0.4'
-    desc = 'Обработка прочерка для прилагательных'
+    version = '4.0.5'
+    desc = 'Bug-fix для крестика в квадратике (регулярка)'
 
     print(f'v{version}: {desc}')
     upload(dev, version, desc)

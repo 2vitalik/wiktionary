@@ -111,7 +111,7 @@ function export.generate_forms(data)
 	forms = init_forms(data.stems, data.endings)
 	if data.adj then
 		init_srt_forms(forms, data.stems, data.endings)
-		if _.contains(data.rest_index, {'⊠', '(x)', '(х)', '(X)', '(Х)'}) then
+		if _.contains(data.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
 			forms['краткая'] = '⊠'
 		elseif _.contains(data.rest_index, {'×', 'x', 'х', 'X', 'Х'}) then
 			forms['краткая'] = '×'
