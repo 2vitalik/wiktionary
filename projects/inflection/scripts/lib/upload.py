@@ -24,6 +24,7 @@ def process_desc(dev, version, desc):
         raise Exception('Description is required')
     d = 'D' if dev else 'P'
     new_desc = f'v{version}: {desc}'
+    print(new_desc)
     append('../logs/changes.txt', f'[{dt()}] [{d}] {new_desc}')
     return desc
 
@@ -36,7 +37,7 @@ def read_file(dev, filename):
     return result
 
 
-def upload(dev, version, desc):
+def upload(version, desc, dev):
     if not compare_dir(dev, 'lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
