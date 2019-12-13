@@ -64,11 +64,11 @@ def upload(dev, version, desc):
 if __name__ == '__main__':
     # inflection_version = '2.4'
 
-    # dev = False
-    dev = True
+    dev = False
+    # dev = True
 
-    version = '3.9.13'
-    desc = 'Заплатка для "квёла" (именно заплатка)'
+    version = '4.0'
+    desc = 'Добавление модуля для прилагательных, рефакторинг всей структуры модулей склонения'
 
     print(f'v{version}: {desc}')
     upload(dev, version, desc)
