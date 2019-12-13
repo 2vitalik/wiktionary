@@ -115,6 +115,8 @@ function export.generate_forms(data)
 			forms['краткая'] = '⊠'
 		elseif _.contains(data.rest_index, {'×', 'x', 'х', 'X', 'Х'}) then
 			forms['краткая'] = '×'
+		elseif _.contains(data.rest_index, {'%-', '—', '−'}) then
+			forms['краткая'] = '−'
 		else
 			forms['краткая'] = '1'
 		end
