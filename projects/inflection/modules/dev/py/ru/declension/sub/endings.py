@@ -1,4 +1,4 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
@@ -11,15 +11,14 @@ from ...pronoun import endings as pronoun_endings
 
 
 # constants:
-# local unstressed, stressed
-unstressed = 0
-stressed = 1
+unstressed = 0  # local
+stressed = 1  # local
+module = 'declension.endings'  # local
 
 
 # Схлопывание: Выбор окончаний в зависимости от рода и типа основы
-def get_base_endings(gender, base_stem_type, adj, pronoun):
-    _.log_func('endings', 'get_base_endings')
-
+@a.starts(module)
+def get_base_endings(func, gender, base_stem_type, adj, pronoun):
     # local standard_endings, keys
 
     # INFO: Получение списка всех стандартных окончаний
@@ -36,6 +35,7 @@ def get_base_endings(gender, base_stem_type, adj, pronoun):
         for i, key in enumerate(keys):
             standard_endings['common'][base_stem_type][key] = ''
         # end
+        _.ends(module, func)
         return standard_endings['common'][base_stem_type]
     # end
 
@@ -45,14 +45,14 @@ def get_base_endings(gender, base_stem_type, adj, pronoun):
     # end
 
     # INFO: Возвращение соответствующих окончаний
+    _.ends(module, func)
     return standard_endings[gender][base_stem_type]
 # end
 
 
 # Схлопывание: Выбор окончания среди двух вариантов в зависимости от схемы ударения
-def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun):
-    _.log_func('endings', 'choose_endings_stress')
-
+@a.starts(module)
+def choose_endings_stress(func, endings, gender, base_stem_type, stress_schema, adj, pronoun):
     # local stress, keys
 
     if adj:
@@ -96,12 +96,13 @@ def choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, p
 
         endings['gen_pl'] = endings['gen_pl'][stress]
     # end
+
+    _.ends(module, func)
 # end
 
 
-def get_endings(data):  # export
-    _.log_func('endings', 'get_endings')
-
+@a.starts(module)
+def get_endings(func, data):  # export
     # INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
     # local endings
 
@@ -113,7 +114,7 @@ def get_endings(data):  # export
     elif data.pronoun:
         pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
     else:
-        noun_endings.fix_noun_endendings(endings, data.gender, data.stem_type, data.stress_schema)
+        noun_endings.fix_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
     # end
 
     # apply special cases (1) or (2) in index
@@ -129,6 +130,7 @@ def get_endings(data):  # export
         endings['nom_sg'] = 'ё'
     # end
 
+    _.ends(module, func)
     return endings
 # end
 

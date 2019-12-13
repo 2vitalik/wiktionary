@@ -5,9 +5,14 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'declension.index'
+
+
 -- Получение индекса Зализняка
+-- @starts
 function export.get_zaliznyak(stem_type, stress_type, rest_index)
-	_.log_func('index', 'get_zaliznyak')
+	func = "get_zaliznyak"
+	_.starts(module, func)
 
 	local stem_types, index
 
@@ -51,6 +56,8 @@ function export.get_zaliznyak(stem_type, stress_type, rest_index)
 	if _.contains(rest_index, 'ё') then
 		index = index .. ', ё'
 	end
+
+	_.ends(module, func)
 	return index
 end
 

@@ -1,4 +1,4 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
@@ -6,15 +6,14 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 # constants:
-# local unstressed, stressed
-unstressed = 0
-stressed = 1
+unstressed = 0  # local
+stressed = 1  # local
+module = 'adj.endings'  # local
 
 
 # Данные: все стандартные окончания для двух типов основ
+@a.call(module)
 def get_standard_adj_endings():  # export
-    _.log_func('endings', 'get_standard_adj_endings')
-
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
     return dict(
         m = dict(
@@ -97,9 +96,8 @@ def get_standard_adj_endings():  # export
 
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun):  # export
-    _.log_func('endings', 'fix_adj_pronoun_endings')
-
+@a.starts(module)
+def fix_adj_pronoun_endings(func, endings, gender, stem_type, stress_schema, adj, pronoun):  # export
     # INFO: Replace "ы" to "и"
     if _.equals(stem_type, ['velar', 'sibilant']):
         if gender == 'm':
@@ -167,12 +165,16 @@ def fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pron
             # end
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
-def apply_adj_specific_1_2(stems, gender, rest_index):  # export
+@a.starts(module)
+def apply_adj_specific_1_2(func, stems, gender, rest_index):  # export
     if not _.endswith(stems['srt_sg'], 'нн'):
         # todo: log some error?
+        _.ends(module, func)
         return
     # end
     if _.contains(rest_index, ['%(1%)', '①']):
@@ -184,6 +186,8 @@ def apply_adj_specific_1_2(stems, gender, rest_index):  # export
         _.replace(stems, 'srt_sg', 'нн$', 'н')
         _.replace(stems, 'srt_pl', 'нн$', 'н')
     # end
+
+    _.ends(module, func)
 # end
 
 

@@ -1,14 +1,16 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-# Получение индекса Зализняка
-def get_zaliznyak(stem_type, stress_type, rest_index):  # export
-    _.log_func('index', 'get_zaliznyak')
+module = 'declension.index'  # local
 
+
+# Получение индекса Зализняка
+@a.starts(module)
+def get_zaliznyak(func, stem_type, stress_type, rest_index):  # export
     # local stem_types, index
 
     # TODO: process <...> cases properly
@@ -51,6 +53,8 @@ def get_zaliznyak(stem_type, stress_type, rest_index):  # export
     if _.contains(rest_index, 'ё'):
         index = index + ', ё'
     # end
+
+    _.ends(module, func)
     return index
 # end
 

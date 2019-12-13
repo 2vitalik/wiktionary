@@ -1,3 +1,7 @@
+import functools
+
+from projects.inflection.modules.dev.py import tools as _
+
 
 class AttrDict(dict):
     def __init__(self, *args, **kwargs):
@@ -38,3 +42,25 @@ class syllables:
     @staticmethod
     def get_syllables(value):
         return value  # todo?
+
+
+def starts(module):
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            function = f.__name__
+            _.starts(module, function)
+            return f(function, *args, **kwargs)
+        return wrapper
+    return decorator
+
+
+def call(module):
+    def decorator(f):
+        @functools.wraps(f)
+        def wrapper(*args, **kwargs):
+            function = f.__name__
+            _.call(module, function)
+            return f(*args, **kwargs)
+        return wrapper
+    return decorator

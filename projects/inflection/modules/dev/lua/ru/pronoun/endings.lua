@@ -5,8 +5,13 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'pronoun.endings'
+
+
+-- @call
 function export.get_standard_pronoun_endings()
-	_.log_func('endings', 'get_standard_pronoun_endings')
+	func = "get_standard_pronoun_endings"
+	_.call(module, func)
 
 	-- TODO: Пока что не используется
 
@@ -83,8 +88,10 @@ function export.get_standard_pronoun_endings()
 end
 
 
+-- @call
 function export.get_standard_pronoun_noun_endings()
-	_.log_func('endings', 'get_standard_pronoun_noun_endings')
+	func = "get_standard_pronoun_noun_endings"
+	_.call(module, func)
 
 	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
 	return {
@@ -160,8 +167,10 @@ end
 
 
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
+-- @starts
 function export.fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema)
-	_.log_func('endings', 'fix_pronoun_noun_endings')
+	func = "fix_pronoun_noun_endings"
+	_.starts(module, func)
 
 --	INFO: Replace "ы" to "и"
 	if _.equals(stem_type, {'sibilant'}) then
@@ -200,6 +209,8 @@ function export.fix_pronoun_noun_endings(endings, gender, stem_type, stress_sche
 			endings['dat_sg'] = 'ему'
 		end
 	end
+
+	_.ends(module, func)
 end
 
 

@@ -14,7 +14,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 """,
     'py': """
-from projects.inflection.modules.{dev}.py import additional
+from projects.inflection.modules.{dev}.py import a
 from projects.inflection.modules.{dev}.py import mw
 from projects.inflection.modules.{dev}.py import tools as _
 
@@ -25,14 +25,14 @@ string = '''('[^']*?'|"[^"]*?")'''
 
 regexps_MULTILINE = {
     'py': [
-        ('from projects.inflection.modules.{dev}.py.additional import syllables', 'local syllables = require("Модуль:слоги")'),
+        ('from projects.inflection.modules.{dev}.py.a import syllables', 'local syllables = require("Модуль:слоги")'),
         (r'from .libs import (\w+)', "local \\1 = require(parent_prefix .. '/\\1')"),
         (r'from \.\.declension.sub import (\w+)', "local \\1 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\1')"),
         (r'from \.\.(\.)?(\w+) import (\w+) as (\w+)', "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/\\2/\\3')  -- '\\1'"),
         # (r"\bmw\.text\.", 'mw.'),
 
-        (r'^unstressed = 0', 'unstressed = 1'),
-        (r'^stressed = 1', 'stressed = 2'),
+        (r'stressed = 1', 'stressed = 2'),
+        (r'unstressed = 0', 'unstressed = 1'),
 
         (r'^def (.*):  # export', 'function export.\\1'),
         (r'^def (.*):', 'local function \\1'),
@@ -41,8 +41,11 @@ regexps_MULTILINE = {
         (r'^(\s+)([^=\n]+?) = (.*?)  # = export.\n', '\\1\\2 = export.\\3\n'),
         (r'^(\s+)([^=\n]*?)  # export.\n', '\\1export.\\2\n'),
 
+        (r'^(\s*)([^=\n]+?) = (.*?)  # local\n', '\\1local \\2 = \\3\n'),
+
         (r'\bpass\b', '-- pass'),
         (r'# local ', 'local '),
+        (r'global ', '# global '),
         (fr'''\[({string},\s*{string}(,\s*{string})*)\]''', '{\\1}'),
 
         (r'\bif (.*?):', 'if \\1 then'),
@@ -58,7 +61,7 @@ regexps_MULTILINE = {
         (r'for (\w+), (\w+) in enumerate\((\w+)\):', 'for \\1, \\2 in pairs(\\3) do  -- list'),
         (r'for (\w+), (\w+) in (.+).items\(\):', 'for \\1, \\2 in pairs(\\3) do'),
 
-        (r'additional\.table_len\(', 'table.getn('),
+        (r'a\.table_len\(', 'table.getn('),
         (r'(\s*)(.*)\.append\((.*)\)', '\\1table.insert(\\2, \\3)'),
 
         (r'_\.has_value\(([^)]+), ([^)]+)\)', '_.has_value(\\1[\\2])'),
@@ -88,15 +91,15 @@ regexps_MULTILINE = {
         (r'^(--)?' + '    ' * 1, '\\1' + '\t' * 1),
     ],
     'lua': [
-        ('local syllables = require\("Модуль:слоги"\)', 'from projects.inflection.modules.{dev}.py.additional import syllables'),
+        ('local syllables = require\("Модуль:слоги"\)', 'from projects.inflection.modules.{dev}.py.a import syllables'),
         (r"^local (\w+) = require\(parent_prefix \.\. '/(\w+)'\)", 'from .libs import \\1'),
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)'\)", 'from ..declension.sub import \\1'),
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/(\w+)/(\w+)'\)  -- '(\.)?'", 'from ..\\4\\2 import \\3 as \\1'),
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),
 
-        (r'^unstressed = 1', 'unstressed = 0'),
-        (r'^stressed = 2', 'stressed = 1'),
+        (r'stressed = 2', 'stressed = 1'),
+        (r'unstressed = 1', 'unstressed = 0'),
 
         (r'^local function (.*?)(\s*--.*)?$', 'def \\1:\\2'),
         (r'^function export\.(.*?)(\s*--.*)?$', 'def \\1:  # export\\2'),
@@ -105,8 +108,11 @@ regexps_MULTILINE = {
         (r'^(\s+)([^=\n]+?) = export\.(.*?)\n', '\\1\\2 = \\3  # = export.\n'),
         (r'^(\s+)export\.(.*?)\n', '\\1\\2  # export.\n'),
 
+        (r'^(\s*)local ([^=\n]+?) = (.*?)\n', '\\1\\2 = \\3  # local\n'),
+
         (r'-- pass\b', 'pass'),
         (r'local ', '# local '),
+        (r'# global ', 'global '),
         (r"\{('.*?', '.*?')\}", '[\\1]'),
         (r'\{(".*?", ".*?")\}', '[\\1]'),
         (r'\{(\'.*?\', ".*?")\}', '[\\1]'),
@@ -124,7 +130,7 @@ regexps_MULTILINE = {
         (r'for (\w+), (\w+) in pairs\((.*)\) do  -- list', 'for \\1, \\2 in enumerate(\\3):'),
         (r'for (\w+), (\w+) in pairs\((.*)\) do', 'for \\1, \\2 in \\3.items():'),
 
-        (r'table\.getn\(', 'additional.table_len('),
+        (r'table\.getn\(', 'a.table_len('),
         (r'table\.insert\((.*), (.*)\)', '\\1.append(\\2)'),
 
         (r'_\.has_value\((\w+)\[([^]]+)\]\)', '_.has_value(\\1, \\2)'),
@@ -151,13 +157,18 @@ regexps_DOTALL = {
         (r'\[([^][]*)\]([,)]?)  (--|#) list',     '{\\1}\\2  -- list'),
         (r'dict\(([^()]*)\)\)  (--|#) b-dict', '{\\1})  -- b-dict'),
         (r'dict\(([^()]*)\)([,)]?)  (--|#) dict', '{\\1}\\2  -- dict'),
-        (r'additional\.AttrDict\(([^()]*)\)([,)]?)  (--|#) AttrDict', '{\\1}\\2  -- AttrDict'),
+        (r'a\.AttrDict\(([^()]*)\)([,)]?)  (--|#) AttrDict', '{\\1}\\2  -- AttrDict'),
+        (r'@a\.starts\(module\)\ndef ([\w]+)\(func(, )?([^\n]*?)\n', '# @starts\ndef \\1(\\3\n    func = "\\1"\n    _.starts(module, func)\n\n'),
+        (r'@a\.call\(module\)\ndef ([\w]+)\(([^\n]*?)\n', '# @call\ndef \\1(\\2\n    func = "\\1"\n    _.call(module, func)\n\n'),
     ],
     'lua': [
         (r'\{([^{}]*)\}([,)]?)  (--|#) list', '[\\1]\\2  # list'),
         (r'\{([^{}]*)\}\)  (--|#) b-dict', 'dict(\\1))  # b-dict'),
         (r'\{([^{}]*)\}([,)]?)  (--|#) dict', 'dict(\\1)\\2  # dict'),
-        (r'\{([^{}]*)\}([,)]?)  (--|#) AttrDict', 'additional.AttrDict(\\1)\\2  # AttrDict'),
+        (r'\{([^{}]*)\}([,)]?)  (--|#) AttrDict', 'a.AttrDict(\\1)\\2  # AttrDict'),
+        (r'(--|#) @starts\n(local )?function ([\w.]+)\(\)([^\n]*?)\n\tfunc = "[^"]+"\n\t_\.starts\(module, func\)\n\n', '@a.starts(module)\n\\2function \\3(func)\\4\n'),
+        (r'(--|#) @starts\n(local )?function ([\w.]+)\(([^\n]*?)\n\tfunc = "[^"]+"\n\t_\.starts\(module, func\)\n\n', '@a.starts(module)\n\\2function \\3(func, \\4\n'),
+        (r'(--|#) @call\n(local )?function ([\w.]+)\(([^\n]*?)\n\tfunc = "[^"]+"\n\t_\.call\(module, func\)\n\n', '@a.call(module)\n\\2function \\3(\\4\n'),
     ],
 }
 regexps_before = {

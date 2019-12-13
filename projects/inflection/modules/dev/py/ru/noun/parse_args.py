@@ -1,13 +1,15 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-def get_cyrl_animacy(index, gender):
-    _.log_func('parse_args', 'get_cyrl_animacy')
+module = 'noun.parse_args'  # local
 
+
+@a.call(module)
+def get_cyrl_animacy(index, gender):
     if _.extract(index, '^' + gender + 'о//' + gender):
         return 'an//in'
     elif _.extract(index, '^' + gender + '//' + gender + 'о'):
@@ -20,9 +22,8 @@ def get_cyrl_animacy(index, gender):
 # end
 
 
-def extract_gender_animacy(data):  # export
-    _.log_func('parse_args', 'extract_gender_animacy')
-
+@a.starts(module)
+def extract_gender_animacy(func, data):  # export
     # local convert_animacy, orig_index, rest_index
 
     # мо-жо - mf a
@@ -131,42 +132,42 @@ def extract_gender_animacy(data):  # export
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "mf a" из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
         rest_index = _.replaced(data.index, '^[mnf]+ [a-z/]+ ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "[mnf] [in/an]" из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
         rest_index = _.replaced(data.index, '^мн%.? неод%.? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мн. неод." из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
         rest_index = _.replaced(data.index, '^мн%.? одуш%.? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мн. одуш." из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
         rest_index = _.replaced(data.index, '^мн%.? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мн." из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
         rest_index = _.replaced(data.index, '^[-мжсо/]+%,? ?', '')
         if rest_index != orig_index:
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "м/ж/с/мо/жо/со/..." из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
         return dict(error = 'TODO')  # dict # TODO: process such errors
     elif data.adj:
@@ -178,7 +179,7 @@ def extract_gender_animacy(data):  # export
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "п" из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
     elif data.pronoun:
         _.log_value(data.index, 'data.index (мс)')
@@ -189,9 +190,11 @@ def extract_gender_animacy(data):  # export
             data.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мс" из индекса')
             _.log_value(data.rest_index, 'data.rest_index')
-            return
+            return _.ends(module, func)
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 

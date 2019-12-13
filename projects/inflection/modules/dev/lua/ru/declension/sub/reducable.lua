@@ -5,8 +5,13 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'declension.reducable'
+
+
+-- @starts
 function export.apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data)
-	_.log_func('reducable', 'apply_specific_degree')
+	func = "apply_specific_degree"
+	_.starts(module, func)
 
 	-- If degree sign °
 
@@ -15,6 +20,7 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		_.replace(stems, 'all_pl', '([ая]́ ?н)ин$', '%1')
 		endings['nom_pl'] = 'е'
 		endings['gen_pl'] = ''
+		_.ends(module, func)
 		return rest_index
 	end
 
@@ -35,6 +41,7 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		endings['gen_pl'] = ''
 
 		export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data, true)
+		_.ends(module, func)
 		return rest_index
 	end
 
@@ -51,6 +58,7 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 
 		endings['gen_pl'] = ''  -- INFO: Странный фикс, но он нужен.. <_<
 
+		_.ends(module, func)
 		return rest_index
 	end
 
@@ -66,13 +74,16 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		endings['prp_sg'] = 'и'
 	end
 
+	_.ends(module, func)
 	return rest_index
 end
 
 
 -- Сложный алгоритм обработки всех случаев чередования
+-- @starts
 function export.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data, only_sg)
-	_.log_func('reducable', 'apply_specific_reducable')
+	func = "apply_specific_reducable"
+	_.starts(module, func)
 
 	local reduced, reduced_letter, f_3rd, prev
 	local case_2_a, case_2_b, case_2_c, case_3_a, case_3_b
@@ -85,17 +96,17 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 		if data.adj then
 			if gender == 'm' then
 				if _.contains(rest_index, {'%(1%)', '①'}) then
-					if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь' then  -- fixme: temporary duplicated with the same code at the ending of function...
+					if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь' then  -- fixme: temporary duplicated with the same code at the ending of func...
 						endings['srt_sg'] = ''  -- вместо `ь` для `2*a`
 					end
-					return
+					return _.ends(module, func)
 				end
 				if _.contains(rest_index, {'%(2%)', '②'}) then
-					return
+					return _.ends(module, func)
 				end
 				reduced = 'B'
 			else
-				return
+				return _.ends(module, func)
 			end
 		elseif gender == 'm' or data.pronoun then
 			reduced = 'A'
@@ -187,7 +198,7 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 		end  -- reduced A
 
 		if only_sg then
-			return  -- ниже всё равно обрабатывается только множественное число уже
+			return _.ends(module, func) -- ниже всё равно обрабатывается только множественное число уже
 		end
 
 		-- we should ignore asterix for 2*b and 2*f (so to process it just like 2b or 2f)
@@ -292,6 +303,8 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 --			end
 		end  -- reduced B
 	end  -- specific *
+
+	_.ends(module, func)
 end
 
 

@@ -1,16 +1,19 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from projects.inflection.modules.dev.py.additional import syllables
+from projects.inflection.modules.dev.py.a import syllables
+
+
+module = 'declension.result'  # local
+
 
 # Использование дефисов вместо подчёркивания
-def replace_underscore_with_hyphen(forms):
-    _.log_func('result', 'replace_underscore_with_hyphen')
-
+@a.starts(module)
+def replace_underscore_with_hyphen(func, forms):
     # local keys, old_key
 
     keys = [
@@ -33,13 +36,14 @@ def replace_underscore_with_hyphen(forms):
             forms[new_key] = forms[old_key]
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
 # Формирование параметров рода и одушевлённости для подстановки в шаблон
-def forward_gender_animacy(forms, data):
-    _.log_func('result', 'forward_gender_animacy')
-
+@a.starts(module)
+def forward_gender_animacy(func, forms, data):
     # local genders, animacies
 
     # Род:
@@ -65,12 +69,13 @@ def forward_gender_animacy(forms, data):
     else:
         forms['кат'] = animacies[data.animacy]
     # end
+
+    _.ends(module, func)
 # end
 
 
-def forward_args(forms, data):
-    _.log_func('result', 'forward_args')
-
+@a.starts(module)
+def forward_args(func, forms, data):
     # local keys, args
 
     args = data.args
@@ -111,12 +116,13 @@ def forward_args(forms, data):
     else:
         forms['слоги'] = data.word
     # end
+
+    _.ends(module, func)
 # end
 
 
-def additional_arguments(forms, data):
-    _.log_func('result', 'additional_arguments')
-
+@a.starts(module)
+def additional_arguments(func, forms, data):
     # RU (склонение)
     if _.contains(data.rest_index, '0'):
         forms['скл'] = 'не'
@@ -153,15 +159,16 @@ def additional_arguments(forms, data):
     else:
         pass  # TODO
     # end
+
+    _.ends(module, func)
 # end
 
 
 #------------------------------------------------------------------------------
 
 
-def finalize(data, forms):  # export
-    _.log_func('result', 'finalize')
-
+@a.starts(module)
+def finalize(func, data, forms):  # export
     forms['stem_type'] = data.stem_type  # for testcases
     forms['stress_type'] = data.stress_type  # for categories   -- is really used?
     forms['dev'] = dev_prefix
@@ -183,6 +190,7 @@ def finalize(data, forms):  # export
         forms['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
     # end
 
+    _.ends(module, func)
     return forms
 # end
 

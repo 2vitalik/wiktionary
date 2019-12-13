@@ -1,4 +1,4 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
@@ -10,9 +10,11 @@ from ...adj import stress as adj_stress
 from ...pronoun import stress as pronoun_stress
 
 
-def extract_stress_type(rest_index):  # export
-    _.log_func('stress', 'extract_stress_type')
+module = 'declension.stress'  # local
 
+
+@a.starts(module)
+def extract_stress_type(func, rest_index):  # export
     #    OLD: Старая версия кода:
 #    # local stress_regexp = "([abcdef][′']?[′']?)"
 #    # local stress_regexp2 = '(' + stress_regexp + '.*//.*' + stress_regexp + ')'
@@ -40,37 +42,41 @@ def extract_stress_type(rest_index):  # export
 
     # INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
     if stress_type and not _.equals(stress_type, allowed_stress_types):
+        _.ends(module, func)
         return stress_type, dict(error='Ошибка: Неправильная схема ударения: ' + stress_type)  # dict
     # end
+
+    _.ends(module, func)
     return stress_type, None  # INFO: `None` здесь -- признак, что нет ошибок
 # end
 
 
 
-def get_stress_schema(stress_type, adj, pronoun):  # export  # Пока не используется
-    _.log_func('stress', 'get_stress_schema')
-
+@a.starts(module)
+def get_stress_schema(func, stress_type, adj, pronoun):  # export  # Пока не используется
+    result = ''  # local
     if adj:
-        return adj_stress.get_adj_stress_schema(stress_type)
+        result = adj_stress.get_adj_stress_schema(stress_type)
     elif pronoun:
-        return pronoun_stress.get_pronoun_stress_schema(stress_type)
+        result = pronoun_stress.get_pronoun_stress_schema(stress_type)
     else:
-        return noun_stress.get_noun_stress_schema(stress_type)
+        result = noun_stress.get_noun_stress_schema(stress_type)
     # end
+
+    _.ends(module, func)
+    return result
 # end
 
 
 # TODO: вместо "endings" может передавать просто data
+@a.call(module)
 def add_stress(endings, case):
-    _.log_func('stress', 'add_stress')
-
     endings[case] = _.replaced(endings[case], '^({vowel})', '%1́ ')
 # end
 
 
-def apply_stress_type(data):  # export
-    _.log_func('stress', 'apply_stress_type')
-
+@a.starts(module)
+def apply_stress_type(func, data):  # export
     # If we have "ё" specific
     if _.contains(data.rest_index, 'ё') and data.stem_type != 'n-3rd':  # Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
         data.stem_stressed = _.replaced(data.stem_stressed, 'е́?([^е]*)$', 'ё%1')
@@ -180,6 +186,8 @@ def apply_stress_type(data):  # export
             add_stress(data.endings, 'srt_pl')
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 

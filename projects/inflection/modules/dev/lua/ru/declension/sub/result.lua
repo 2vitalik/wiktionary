@@ -7,9 +7,15 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local syllables = require("Модуль:слоги")
 
+
+local module = 'declension.result'
+
+
 -- Использование дефисов вместо подчёркивания
+-- @starts
 local function replace_underscore_with_hyphen(forms)
-	_.log_func('result', 'replace_underscore_with_hyphen')
+	func = "replace_underscore_with_hyphen"
+	_.starts(module, func)
 
 	local keys, old_key
 
@@ -33,12 +39,16 @@ local function replace_underscore_with_hyphen(forms)
 			forms[new_key] = forms[old_key]
 		end
 	end
+
+	_.ends(module, func)
 end
 
 
 -- Формирование параметров рода и одушевлённости для подстановки в шаблон
+-- @starts
 local function forward_gender_animacy(forms, data)
-	_.log_func('result', 'forward_gender_animacy')
+	func = "forward_gender_animacy"
+	_.starts(module, func)
 
 	local genders, animacies
 
@@ -65,11 +75,15 @@ local function forward_gender_animacy(forms, data)
 	else
 		forms['кат'] = animacies[data.animacy]
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function forward_args(forms, data)
-	_.log_func('result', 'forward_args')
+	func = "forward_args"
+	_.starts(module, func)
 
 	local keys, args
 
@@ -111,11 +125,15 @@ local function forward_args(forms, data)
 	else
 		forms['слоги'] = data.word
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function additional_arguments(forms, data)
-	_.log_func('result', 'additional_arguments')
+	func = "additional_arguments"
+	_.starts(module, func)
 
 	-- RU (склонение)
 	if _.contains(data.rest_index, '0') then
@@ -153,14 +171,18 @@ local function additional_arguments(forms, data)
 	else
 		-- pass  -- TODO
 	end
+
+	_.ends(module, func)
 end
 
 
 --------------------------------------------------------------------------------
 
 
+-- @starts
 function export.finalize(data, forms)
-	_.log_func('result', 'finalize')
+	func = "finalize"
+	_.starts(module, func)
 
 	forms['stem_type'] = data.stem_type  -- for testcases
 	forms['stress_type'] = data.stress_type  -- for categories   -- is really used?
@@ -183,6 +205,7 @@ function export.finalize(data, forms)
 		forms['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
 	end
 
+	_.ends(module, func)
 	return forms
 end
 

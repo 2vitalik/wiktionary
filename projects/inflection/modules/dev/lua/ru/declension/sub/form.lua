@@ -8,8 +8,13 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form')  -- '.'
 
 
+local module = 'declension.forms'
+
+
+-- @call
 local function init_forms(stems, endings)  -- Генерация словоформ
-	_.log_func('forms', 'init_forms')
+	func = "init_forms"
+	_.call(module, func)
 
 	return {
 		nom_sg = stems['nom_sg'] .. endings['nom_sg'],
@@ -29,14 +34,21 @@ local function init_forms(stems, endings)  -- Генерация словофо�
 end
 
 
+-- @starts
 local function init_srt_forms(forms, stems, endings)
+	func = "init_srt_forms"
+	_.starts(module, func)
+
 	forms['srt_sg'] = stems['srt_sg'] .. endings['srt_sg']
 	forms['srt_pl'] = stems['srt_pl'] .. endings['srt_pl']
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function fix_stress(forms)
-	_.log_func('forms', 'fix_stress')
+	func = "fix_stress"
+	_.starts(module, func)
 
 	-- Add stress if there is no one
 	if _.contains_several(forms['nom_sg'], '{vowel}') and not _.contains(forms['nom_sg'], '[́ ё]') then
@@ -46,12 +58,16 @@ local function fix_stress(forms)
 	if _.contains_several(forms['gen_pl'], '{vowel+ё}') and not _.contains(forms['gen_pl'], '[́ ё]') then
 		_.replace(forms, 'gen_pl', '({vowel})({consonant}*)$', '%1́ %2')
 	end
+
+	_.ends(module, func)
 end
 
 
 -- Выбор винительного падежа
+-- @starts
 local function choose_accusative_forms(forms, data)
-	_.log_func('forms', 'choose_accusative_forms')
+	func = "choose_accusative_forms"
+	_.starts(module, func)
 
 	forms['acc_sg_in'] = ''
 	forms['acc_sg_an'] = ''
@@ -85,11 +101,15 @@ local function choose_accusative_forms(forms, data)
 		forms['acc_pl_in'] = forms['nom_pl']
 		forms['acc_pl_an'] = forms['gen_pl']
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function second_ins_case(forms, gender)
-	_.log_func('forms', 'second_ins_case')
+	func = "second_ins_case"
+	_.starts(module, func)
 
 	local ins_sg2
 
@@ -100,11 +120,15 @@ local function second_ins_case(forms, gender)
 			forms['ins_sg2'] = ins_sg2
 		end
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.generate_forms(data)
-	_.log_func('forms', 'generate_forms')
+	func = "generate_forms"
+	_.starts(module, func)
 
 	local forms, keys
 
@@ -161,12 +185,15 @@ function export.generate_forms(data)
 		end
 	end
 
+	_.ends(module, func)
 	return forms
 end
 
 
+-- @starts
 function export.join_forms(forms1, forms2)
-	_.log_func('forms', 'join_forms')
+	func = "join_forms"
+	_.starts(module, func)
 
 	local keys, forms, delim
 
@@ -204,12 +231,16 @@ function export.join_forms(forms1, forms2)
 			forms[key] = ''
 		end
 	end
+
+	_.ends(module, func)
 	return forms
 end
 
 
+-- @starts
 function export.plus_forms(sub_forms)
-	_.log_func('forms', 'plus_forms')
+	func = "plus_forms"
+	_.starts(module, func)
 
 	local keys, forms, delim
 
@@ -239,6 +270,8 @@ function export.plus_forms(sub_forms)
 			end
 		end
 	end
+
+	_.ends(module, func)
 	return forms
 end
 

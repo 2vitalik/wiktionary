@@ -10,8 +10,13 @@ local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/adj/stress'
 local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/pronoun/stress')  -- '.'
 
 
+local module = 'declension.stress'
+
+
+-- @starts
 function export.extract_stress_type(rest_index)
-	_.log_func('stress', 'extract_stress_type')
+	func = "extract_stress_type"
+	_.starts(module, func)
 
 	--    OLD: Старая версия кода:
 --	local stress_regexp = "([abcdef][′']?[′']?)"
@@ -40,36 +45,49 @@ function export.extract_stress_type(rest_index)
 
 --	INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
 	if stress_type and not _.equals(stress_type, allowed_stress_types) then
+		_.ends(module, func)
 		return stress_type, {error='Ошибка: Неправильная схема ударения: ' .. stress_type}  -- dict
 	end
+
+	_.ends(module, func)
 	return stress_type, nil  -- INFO: `nil` здесь -- признак, что нет ошибок
 end
 
 
 
+-- @starts
 function export.get_stress_schema(stress_type, adj, pronoun)  -- Пока не используется
-	_.log_func('stress', 'get_stress_schema')
+	func = "get_stress_schema"
+	_.starts(module, func)
 
+	local result = ''
 	if adj then
-		return adj_stress.get_adj_stress_schema(stress_type)
+		result = adj_stress.get_adj_stress_schema(stress_type)
 	elseif pronoun then
-		return pronoun_stress.get_pronoun_stress_schema(stress_type)
+		result = pronoun_stress.get_pronoun_stress_schema(stress_type)
 	else
-		return noun_stress.get_noun_stress_schema(stress_type)
+		result = noun_stress.get_noun_stress_schema(stress_type)
 	end
+
+	_.ends(module, func)
+	return result
 end
 
 
 -- TODO: вместо "endings" может передавать просто data
+-- @call
 local function add_stress(endings, case)
-	_.log_func('stress', 'add_stress')
+	func = "add_stress"
+	_.call(module, func)
 
 	endings[case] = _.replaced(endings[case], '^({vowel})', '%1́ ')
 end
 
 
+-- @starts
 function export.apply_stress_type(data)
-	_.log_func('stress', 'apply_stress_type')
+	func = "apply_stress_type"
+	_.starts(module, func)
 
 	-- If we have "ё" specific
 	if _.contains(data.rest_index, 'ё') and data.stem_type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
@@ -180,6 +198,8 @@ function export.apply_stress_type(data)
 			add_stress(data.endings, 'srt_pl')
 		end
 	end
+
+	_.ends(module, func)
 end
 
 

@@ -5,8 +5,11 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'noun.form'
+
+
 function export.remove_stress_if_one_syllable(value)
-	-- _.log_func('forms', 'remove_stress_if_one_syllable')
+	-- _.call('noun.forms', 'remove_stress_if_one_syllable')
 
 	if _.contains_once(value, '{vowel+ё}') then
 		return _.replaced(value, '́ ', '')
@@ -15,17 +18,23 @@ function export.remove_stress_if_one_syllable(value)
 end
 
 
+-- @starts
 function export.apply_obelus(forms, rest_index)
-	_.log_func('forms', 'apply_obelus')
+	func = "apply_obelus"
+	_.starts(module, func)
 
 	if _.contains(rest_index, '÷') then
 		forms['obelus'] = '1'
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.apply_specific_3(forms, gender, rest_index)
-	_.log_func('forms', 'apply_specific_3')
+	func = "apply_specific_3"
+	_.starts(module, func)
 
 	-- Специфика по (3)
 	if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③') then
@@ -36,6 +45,8 @@ function export.apply_specific_3(forms, gender, rest_index)
 			forms['dat_sg'] = forms['dat_sg'] .. '&nbsp;//<br />' .. _.replaced(forms['dat_sg'], 'и$', 'е')
 		end
 	end
+
+	_.ends(module, func)
 end
 
 
@@ -43,8 +54,10 @@ end
 --------------------------------------------------------------------------------
 
 
+-- @starts
 local function prt_case(forms, args, index)  -- Разделительный падеж
-	_.log_func('forms', 'prt_case')
+	func = "prt_case"
+	_.starts(module, func)
 
 	if _.contains(index, 'Р2') or _.contains(index, 'Р₂') then
 		forms['prt_sg'] = forms['dat_sg']
@@ -52,11 +65,15 @@ local function prt_case(forms, args, index)  -- Разделительный п�
 	if _.has_value(args['Р']) then
 		forms['prt_sg'] = args['Р']
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function loc_case(forms, args, index)  -- Местный падеж
-	_.log_func('forms', 'loc_case')
+	func = "loc_case"
+	_.starts(module, func)
 
 	local loc, loc_prep
 
@@ -83,11 +100,15 @@ local function loc_case(forms, args, index)  -- Местный падеж
 	if _.has_value(args['М']) then
 		forms['loc_sg'] = args['М']
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function voc_case(forms, args, index, word)  -- Звательный падеж
-	_.log_func('forms', 'voc_case')
+	func = "voc_case"
+	_.starts(module, func)
 
 	if _.has_value(args['З']) then
 		forms['voc_sg'] = args['З']
@@ -98,15 +119,21 @@ local function voc_case(forms, args, index, word)  -- Звательный па�
 			forms['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
 		end
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.special_cases(forms, args, index, word)
-	_.log_func('forms', 'special_cases')
+	func = "special_cases"
+	_.starts(module, func)
 
 	prt_case(forms, args, index)
 	loc_case(forms, args, index)
 	voc_case(forms, args, index, word)
+
+	_.ends(module, func)
 end
 
 

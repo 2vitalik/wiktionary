@@ -8,8 +8,13 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local noun_parse_args = require('Module:' .. dev_prefix .. 'inflection/ru/noun/parse_args')  -- '.'
 
 
+local module = 'declension.parse_args'
+
+
+-- @starts
 local function init(data)
-	_.log_func('parse_args', 'init')
+	func = "init"
+	_.starts(module, func)
 
 	local several_vovwels, has_stress
 
@@ -43,16 +48,21 @@ local function init(data)
 	has_stress = _.contains(data.word_stressed, '[́ ё]')
 	if several_vovwels and not has_stress then
 		_.log_info('Ошибка: Не указано ударение в слове')
+		_.ends(module, func)
 		return {
 			error='Ошибка: Не указано ударение в слове',
 			error_category='Ошибка в шаблоне "сущ-ru": не указано ударение в слове',
 		}  -- dict
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function angle_brackets(data)
-	_.log_func('parse_args', 'angle_brackets')
+	func = "angle_brackets"
+	_.starts(module, func)
 
 	local another_index, pt, error
 
@@ -67,19 +77,29 @@ local function angle_brackets(data)
 		data.index = another_index
 		error = noun_parse_args.extract_gender_animacy(data)
 		data.pt = pt
-		if error then return error end
+		if error then
+			_.ends(module, func)
+			return error
+		end
 
 		_.log_value(data.adj, 'data.adj')
 		if data.adj then  -- Для прилагательных надо по-особенному?
 			error = init(data)
-			if error then return error end
+			if error then
+				_.ends(module, func)
+				return error
+			end
 		end
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.parse(base, args)
-	_.log_func('parse_args', 'parse')
+	func = "parse"
+	_.starts(module, func)
 
 	local data, error, parts, n_parts, data1, data2
 	local index_parts, words_parts, n_sub_parts, data_copy
@@ -109,7 +129,10 @@ function export.parse(base, args)
 
 	if data.noun then  -- fxime
 		error = noun_parse_args.extract_gender_animacy(data)
-		if error then return data, error end
+		if error then
+			_.ends(module, func)
+			return data, error
+		end
 
 		_.log_value(data.gender, 'data.gender')
 		_.log_value(data.animacy, 'data.animacy')
@@ -128,11 +151,15 @@ function export.parse(base, args)
 
 --	INFO: stem, stem_stressed, etc.
 	error = init(data)
-	if error then return data, error end
+	if error then
+		_.ends(module, func)
+		return data, error
+	end
 
 	if data.noun then
 --		INFO: Случай, если род или одушевлённость не указаны:
 		if (not data.gender or not data.animacy) and not data.pt then
+			_.ends(module, func)
 			return data, {}  -- dict -- INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
 		end
 	end
@@ -154,6 +181,7 @@ function export.parse(base, args)
 --			INFO: Заполняем атрибут с вариациями
 			data.sub_cases = {data1, data2}  -- list
 
+			_.ends(module, func)
 			return data, nil
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
@@ -170,23 +198,33 @@ function export.parse(base, args)
 				data_copy.word_stressed = words_parts[i]
 
 				error = init(data_copy)
-				if error then return data, error end
+				if error then
+					_.ends(module, func)
+					return data, error
+				end
 
 				data_copy.rest_index = index_parts[i]
 
 				if data.noun then
 					error = angle_brackets(data_copy)
-					if error then return data, error end
+					if error then
+						_.ends(module, func)
+						return data, error
+					end
 				end
 
 				table.insert(data.sub_parts, data_copy)
 			end
+			_.ends(module, func)
 			return data, nil
 		end
 
 		if data.noun then
 			error = angle_brackets(data)
-			if error then return data, error end
+			if error then
+				_.ends(module, func)
+				return data, error
+			end
 		end
 
 		if _.contains(data.rest_index, '%[%([12]%)%]') or _.contains(data.rest_index, '%[[①②]%]') then
@@ -206,6 +244,7 @@ function export.parse(base, args)
 --			INFO: Заполняем атрибут с вариациями
 			data.sub_cases = {data1, data2}  -- list
 
+			_.ends(module, func)
 			return data, nil
 		end
 
@@ -214,6 +253,7 @@ function export.parse(base, args)
 
 		if _.contains(data.animacy, '//') then
 --			INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
+			_.ends(module, func)
 			return data, {error='Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?'}  -- dict
 		end
 
@@ -240,6 +280,7 @@ function export.parse(base, args)
 
 --		INFO: Проверка на гипотетическую ошибку в алгоритме:
 		elseif not data2.gender and data2.animacy or data2.gender and not data2.animacy then
+			_.ends(module, func)
 			return data, {error='Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей' }  -- dict
 
 --		INFO: Если что-то изменилось, значит, прошёл один из случаев, и значит у нас "полная" вариация (затрагивающая род)
@@ -252,9 +293,11 @@ function export.parse(base, args)
 		data.sub_cases = {data1, data2}  -- list
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
+		_.ends(module, func)
 		return data, {error='Ошибка: Слишком много частей для "//"'}  -- dict
 	end
 
+	_.ends(module, func)
 	return data, nil  -- INFO: `nil` здесь -- признак, что нет ошибок
 end
 

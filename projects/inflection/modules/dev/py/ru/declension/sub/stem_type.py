@@ -1,13 +1,15 @@
-from projects.inflection.modules.dev.py import additional
+from projects.inflection.modules.dev.py import a
 from projects.inflection.modules.dev.py import mw
 from projects.inflection.modules.dev.py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-def get_base_stem_type(stem_type):
-    _.log_func('stem_type', 'get_base_stem_type')
+module = 'declension.stem_type'  # local
 
+
+@a.starts(module)
+def get_base_stem_type(func, stem_type):
     # local change_stem_type
 
     # INFO: Выбор подходящего из двух типов
@@ -28,13 +30,14 @@ def get_base_stem_type(stem_type):
     change_stem_type['f-3rd'] = 'soft'
     change_stem_type['f-3rd-sibilant'] = 'soft'
     change_stem_type['n-3rd'] = 'hard'
+
+    _.ends(module, func)
     return change_stem_type[stem_type]
 # end
 
 
-def get_stem_type(stem, word, gender, adj, rest_index):  # export  # INFO: Определение типа основы
-    _.log_func('stem_type', 'get_stem_type')
-
+@a.starts(module)
+def get_stem_type(func, stem, word, gender, adj, rest_index):  # export  # INFO: Определение типа основы
     # local stem_type
 
     if _.endswith(stem, '[гкх]'):
@@ -108,6 +111,7 @@ def get_stem_type(stem, word, gender, adj, rest_index):  # export  # INFO: Оп�
     # local base_stem_type
     base_stem_type = get_base_stem_type(stem_type)
 
+    _.ends(module, func)
     return stem_type, base_stem_type
 # end
 

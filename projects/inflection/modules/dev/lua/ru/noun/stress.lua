@@ -5,9 +5,14 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'noun.stress'
+
+
 -- Данные: ударность основы и окончания в зависимости от схемы ударения
+-- @starts
 function export.get_noun_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
-	_.log_func('stress', 'get_noun_stress_schema')
+	func = "get_noun_stress_schema"
+	_.starts(module, func)
 
 	local stress_schema, types, sg_value, pl_value
 
@@ -45,6 +50,7 @@ function export.get_noun_stress_schema(stress_type)  -- INFO: Вычислени
 		stress_schema[type]['prp_pl'] = pl_value
 	end
 
+	_.ends(module, func)
 	return stress_schema
 end
 
