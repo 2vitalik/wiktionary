@@ -14,12 +14,12 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 """,
     'py': """
-from projects.inflection.modules.{dev}.py import a
-from projects.inflection.modules.{dev}.py import mw
-from projects.inflection.modules.{dev}.py import tools as _
+from projects.inflection.modules.{dev}.{dev}_py import a
+from projects.inflection.modules.{dev}.{dev}_py import mw
+from projects.inflection.modules.{dev}.{dev}_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
-"""}  # todo: use `from ....py` here
+"""}  # todo: use `from ....py import ` here (relative path)
 
 string = '''('[^']*?'|"[^"]*?")'''
 
