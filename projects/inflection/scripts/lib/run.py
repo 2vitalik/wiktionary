@@ -14,6 +14,7 @@ def noun(word, index):
 
 def adj(word, index):
     # todo: only one argument separated by '|'
+    # todo: dev-параметр
     run('adj',  word, index)
 
 

@@ -155,3 +155,11 @@ def has_value(value, key=None):
 
 def empty(value):
     return not value
+
+
+# todo: log with colors (only for python)
+# todo: log to files also (only for python)
+# todo: create special short commands (like `u` and `pl`)
+#  and use them from command line instead of running them via PyCharm
+# todo: locally on python run all tests from lua tests data
+# todo: try to get more tetsts from udarenieru html dumps... or from some zaliznyak file `All_Forms.txt`?
