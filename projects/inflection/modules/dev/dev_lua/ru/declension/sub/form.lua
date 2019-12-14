@@ -137,8 +137,8 @@ function export.generate_forms(data)
 		init_srt_forms(forms, data.stems, data.endings)
 		if _.contains(data.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
 			forms['краткая'] = '⊠'
-		elseif _.contains(data.rest_index, {'×', 'x', 'х', 'X', 'Х'}) then
-			forms['краткая'] = '×'
+		elseif _.contains(data.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
+			forms['краткая'] = '✕'
 		elseif _.contains(data.rest_index, {'%-', '—', '−'}) then
 			forms['краткая'] = '−'
 		else

@@ -110,7 +110,7 @@ local function forward_args(forms, data)
 		'hide-text', 'зачин', 'слоги', 'дореф',
 		'скл', 'зализняк', 'зализняк1', 'чередование',
 		'pt', 'st', 'затрудн', 'клитика',
-		'коммент',
+		'коммент', 'тип', 'степень',
 	}  -- list
 	for i, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then

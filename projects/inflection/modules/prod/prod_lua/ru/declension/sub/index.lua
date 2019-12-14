@@ -40,8 +40,8 @@ function export.get_zaliznyak(stem_type, stress_type, rest_index)
 	index = index .. _.replaced(stress_type, "'", "&#39;")
 	if _.contains(rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
 		index = index .. '⊠'
-	elseif _.contains(rest_index, {'×', 'x', 'х', 'X', 'Х'}) then
-		index = index .. '×'
+	elseif _.contains(rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
+		index = index .. '✕'
 	end
 	if _.contains(rest_index, {'%(1%)', '①'}) then
 		index = index .. '①'
