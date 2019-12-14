@@ -115,34 +115,35 @@ end
 function export.log(value)
     local prefix = string.rep(' ', level)
     mw.log(prefix .. value)
+end
 
 function export.log_info(info)
-    log('# ' .. info)
+    export.log('# ' .. info)
 end
 
 function export.call(module, name)
-    log('@ ' .. module .. '.' .. name .. '()')
+    export.log('@ ' .. module .. '.' .. name .. '()')
 end
 
 function export.starts(module, name)
-    log('↘ @ ' .. module .. '.' .. name .. '():')
-    level += 4
+    export.log('↘ @ ' .. module .. '.' .. name .. '():')
+    level = level + 4
 end
 
 function export.ends(module, name)
-    level -= 4
+    level = level - 4
     -- log('↙ . ' .. module .. '.' .. name .. '()')
-    log('↙ . ')
+    export.log('↙ . ')
 end
 
 function export.log_value(value, name)
-    log('= ' .. name .. ': "' .. tostring(value) .. '"')
+    export.log('= ' .. name .. ': "' .. tostring(value) .. '"')
 end
 
 function export.log_table(t, name)
-	log('- ' .. name .. ':')
+	export.log('- ' .. name .. ':')
 	for key, value in pairs(t) do
-		log('  ["' .. tostring(key) .. '"] = "' .. tostring(value) .. '"')
+		export.log('  ["' .. tostring(key) .. '"] = "' .. tostring(value) .. '"')
 	end
 end
 
