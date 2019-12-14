@@ -6,14 +6,16 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 -- constants:
-local unstressed, stressed
-unstressed = 1
-stressed = 2
+local unstressed = 1
+local stressed = 2
+local module = 'noun.endings'
 
 
 -- Данные: все стандартные окончания для двух типов основ
+-- @call
 function export.get_standard_noun_endings()
-	_.log_func('endings', 'get_standard_noun_endings')
+	func = "get_standard_noun_endings"
+	_.call(module, func)
 
 	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
 	return {
@@ -92,10 +94,11 @@ function export.get_standard_noun_endings()
 end
 
 
-
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-function export.fix_noun_endendings(endings, gender, stem_type, stress_schema)
-	_.log_func('endings', 'fix_noun_endendings')
+-- @starts
+function export.fix_noun_endings(endings, gender, stem_type, stress_schema)
+	func = "fix_noun_endings"
+	_.starts(module, func)
 
 --	INFO: Replace "ы" to "и"
 	if _.equals(stem_type, {'velar', 'sibilant'}) then
@@ -167,10 +170,16 @@ function export.fix_noun_endendings(endings, gender, stem_type, stress_schema)
 		endings['ins_pl'] = 'ами'
 		endings['prp_pl'] = 'ах'
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index)
+	func = "apply_noun_specific_1_2"
+	_.starts(module, func)
+
 	if _.contains(rest_index, {'%(1%)', '①'}) then
 		if base_stem_type == 'hard' then
 			if gender == 'm' then endings['nom_pl'] = 'а' end
@@ -217,6 +226,8 @@ function export.apply_noun_specific_1_2(endings, gender, stem_type, base_stem_ty
 --			end
 --		--
 	end
+
+	_.ends(module, func)
 end
 
 

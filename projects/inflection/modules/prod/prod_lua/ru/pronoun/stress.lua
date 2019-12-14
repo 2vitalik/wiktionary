@@ -5,8 +5,13 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'pronoun.stress'
+
+
+-- @starts
 function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
-	_.log_func('stress', 'get_pronoun_stress_schema')
+	func = "get_pronoun_stress_schema"
+	_.starts(module, func)
 
 	-- TODO: Пока не используется
 
@@ -38,6 +43,7 @@ function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисле�
 		end
 	end
 
+	_.ends(module, func)
 	return stress_schema
 end
 

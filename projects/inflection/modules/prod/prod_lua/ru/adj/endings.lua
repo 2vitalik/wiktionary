@@ -6,14 +6,16 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 -- constants:
-local unstressed, stressed
-unstressed = 1
-stressed = 2
+local unstressed = 1
+local stressed = 2
+local module = 'adj.endings'
 
 
 -- Данные: все стандартные окончания для двух типов основ
+-- @call
 function export.get_standard_adj_endings()
-	_.log_func('endings', 'get_standard_adj_endings')
+	func = "get_standard_adj_endings"
+	_.call(module, func)
 
 	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
 	return {
@@ -97,8 +99,10 @@ end
 
 
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
+-- @starts
 function export.fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun)
-	_.log_func('endings', 'fix_adj_pronoun_endings')
+	func = "fix_adj_pronoun_endings"
+	_.starts(module, func)
 
 --	INFO: Replace "ы" to "и"
 	if _.equals(stem_type, {'velar', 'sibilant'}) then
@@ -167,12 +171,19 @@ function export.fix_adj_pronoun_endings(endings, gender, stem_type, stress_schem
 			end
 		end
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.apply_adj_specific_1_2(stems, gender, rest_index)
+	func = "apply_adj_specific_1_2"
+	_.starts(module, func)
+
 	if not _.endswith(stems['srt_sg'], 'нн') then
 		-- todo: log some error?
+		_.ends(module, func)
 		return
 	end
 	if _.contains(rest_index, {'%(1%)', '①'}) then
@@ -184,6 +195,8 @@ function export.apply_adj_specific_1_2(stems, gender, rest_index)
 		_.replace(stems, 'srt_sg', 'нн$', 'н')
 		_.replace(stems, 'srt_pl', 'нн$', 'н')
 	end
+
+	_.ends(module, func)
 end
 
 

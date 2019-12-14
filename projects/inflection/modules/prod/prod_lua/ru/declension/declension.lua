@@ -18,6 +18,9 @@ local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form') 
 local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/adj/endings')  -- ''
 
 
+local module = 'declension'
+
+
 local function prepare_stash()
 	_.clear_stash()
 	_.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
@@ -26,7 +29,11 @@ local function prepare_stash()
 end
 
 
+-- @starts
 local function main_sub_algorithm(data)
+	func = "main_sub_algorithm"
+	_.starts(module, func)
+
 	_.log_info('Вычисление схемы ударения')
 
 	local stem_stress_schema
@@ -95,11 +102,15 @@ local function main_sub_algorithm(data)
 		data.stems['gen_pl'] = _.replaced(data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
 		data.rest_index = data.rest_index .. 'ё'  -- ???
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 local function main_algorithm(data)
-	_.log_func('declension', 'main_algorithm')
+	func = "main_algorithm"
+	_.starts(module, func)
 
 	local error, keys, forms, orig_stem, for_category, old_value, cases
 
@@ -111,7 +122,10 @@ local function main_algorithm(data)
 
 	data.stress_type, error = stress.extract_stress_type(data.rest_index)
 
-	if error then return result.finalize(data, error) end
+	if error then
+		_.ends(module, func)
+		return result.finalize(data, error)
+	end
 
 	_.log_value(data.stress_type, 'data.stress_type')
 
@@ -130,14 +144,17 @@ local function main_algorithm(data)
 			for i, key in pairs(keys) do  -- list
 				forms[key] = data.word_stressed
 			end
+			_.ends(module, func)
 			return result.finalize(data, forms)
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
 		elseif _.has_value(data.rest_index) then
+			_.ends(module, func)
 			return result.finalize(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- b-dict
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:
 		else
+			_.ends(module, func)
 			return result.finalize(data, {})  -- b-dict
 		end
 	end
@@ -168,6 +185,7 @@ local function main_algorithm(data)
 	_.log_value(data.base_stem_type, 'data.base_stem_type')
 
 	if not data.stem_type then
+		_.ends(module, func)
 		return result.finalize(data, {error='Неизвестный тип основы'})  -- b-dict
 	end
 
@@ -221,13 +239,17 @@ local function main_algorithm(data)
 	for_category = _.replaced(for_category, '③', '(3)')
 	forms['зализняк'] = for_category
 
+	_.ends(module, func)
 	return forms
 end
 
 
+-- @starts
 function export.forms(base, args, frame)
-	mw.log('==================================================')
-	_.log_func('declension', 'forms')
+	func = "forms"
+	_.starts(module, func)
+
+	mw.log('=================================================================')  -- todo: move to another place
 
 	local data, error, forms
 	local data1, data2, forms1, forms2, sub_forms
@@ -244,7 +266,7 @@ function export.forms(base, args, frame)
 	data, error = parse_args.parse(base, args)
 	if error then
 		forms = result.finalize(data, error)
-		_.log_table(forms, "forms")
+		_.ends(module, func)
 		return forms
 	end
 
@@ -278,6 +300,7 @@ function export.forms(base, args, frame)
 	result.finalize(data, forms)
 
 	_.log_table(forms, "forms")
+	_.ends(module, func)
 	return forms
 end
 

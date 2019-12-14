@@ -5,8 +5,13 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local module = 'declension.stem_type'
+
+
+-- @starts
 local function get_base_stem_type(stem_type)
-	_.log_func('stem_type', 'get_base_stem_type')
+	func = "get_base_stem_type"
+	_.starts(module, func)
 
 	local change_stem_type
 
@@ -28,12 +33,16 @@ local function get_base_stem_type(stem_type)
 	change_stem_type['f-3rd'] = 'soft'
 	change_stem_type['f-3rd-sibilant'] = 'soft'
 	change_stem_type['n-3rd'] = 'hard'
+
+	_.ends(module, func)
 	return change_stem_type[stem_type]
 end
 
 
+-- @starts
 function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: Определение типа основы
-	_.log_func('stem_type', 'get_stem_type')
+	func = "get_stem_type"
+	_.starts(module, func)
 
 	local stem_type
 
@@ -108,6 +117,7 @@ function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: О�
 	local base_stem_type
 	base_stem_type = get_base_stem_type(stem_type)
 
+	_.ends(module, func)
 	return stem_type, base_stem_type
 end
 

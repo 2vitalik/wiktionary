@@ -11,14 +11,16 @@ local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/pronou
 
 
 -- constants:
-local unstressed, stressed
-unstressed = 1
-stressed = 2
+local unstressed = 1
+local stressed = 2
+local module = 'declension.endings'
 
 
 -- Схлопывание: Выбор окончаний в зависимости от рода и типа основы
+-- @starts
 local function get_base_endings(gender, base_stem_type, adj, pronoun)
-	_.log_func('endings', 'get_base_endings')
+	func = "get_base_endings"
+	_.starts(module, func)
 
 	local standard_endings, keys
 
@@ -36,6 +38,7 @@ local function get_base_endings(gender, base_stem_type, adj, pronoun)
 		for i, key in pairs(keys) do  -- list
 			standard_endings['common'][base_stem_type][key] = ''
 		end
+		_.ends(module, func)
 		return standard_endings['common'][base_stem_type]
 	end
 
@@ -45,13 +48,16 @@ local function get_base_endings(gender, base_stem_type, adj, pronoun)
 	end
 
 --	INFO: Возвращение соответствующих окончаний
+	_.ends(module, func)
 	return standard_endings[gender][base_stem_type]
 end
 
 
 -- Схлопывание: Выбор окончания среди двух вариантов в зависимости от схемы ударения
+-- @starts
 local function choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun)
-	_.log_func('endings', 'choose_endings_stress')
+	func = "choose_endings_stress"
+	_.starts(module, func)
 
 	local stress, keys
 
@@ -96,11 +102,15 @@ local function choose_endings_stress(endings, gender, base_stem_type, stress_sch
 
 		endings['gen_pl'] = endings['gen_pl'][stress]
 	end
+
+	_.ends(module, func)
 end
 
 
+-- @starts
 function export.get_endings(data)
-	_.log_func('endings', 'get_endings')
+	func = "get_endings"
+	_.starts(module, func)
 
 --	INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
 	local endings
@@ -113,7 +123,7 @@ function export.get_endings(data)
 	elseif data.pronoun then
 		pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
 	else
-		noun_endings.fix_noun_endendings(endings, data.gender, data.stem_type, data.stress_schema)
+		noun_endings.fix_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
 	end
 
 	-- apply special cases (1) or (2) in index
@@ -129,6 +139,7 @@ function export.get_endings(data)
 		endings['nom_sg'] = 'ё'
 	end
 
+	_.ends(module, func)
 	return endings
 end
 
