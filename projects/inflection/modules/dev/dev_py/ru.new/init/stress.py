@@ -51,7 +51,6 @@ def extract_stress_type(func, rest_index):  # export
 # end
 
 
-
 @a.starts(module)
 def get_stress_schema(func, stress_type, adj, pronoun):  # export  # Пока не используется
     result = ''  # local
