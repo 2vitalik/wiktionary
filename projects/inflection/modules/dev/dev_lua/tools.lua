@@ -9,6 +9,7 @@ local function trim_stress(str)
 end
 
 export.stash = {}
+level = 0
 
 function export.clear_stash()
 	export.stash = {}
@@ -111,22 +112,37 @@ end
 --	end
 --end
 
+function export.log(value)
+    local prefix = string.rep(' ', level)
+    mw.log(prefix .. value)
+
 function export.log_info(info)
-    mw.log('# ' .. info)
+    log('# ' .. info)
 end
 
-function export.log_func(module, name)
-    mw.log('> {' .. module .. '} ' .. name .. ':')
+function export.call(module, name)
+    log('@ ' .. module .. '.' .. name .. '()')
+end
+
+function export.starts(module, name)
+    log('↘ @ ' .. module .. '.' .. name .. '():')
+    level += 4
+end
+
+function export.ends(module, name)
+    level -= 4
+    -- log('↙ . ' .. module .. '.' .. name .. '()')
+    log('↙ . ')
 end
 
 function export.log_value(value, name)
-    mw.log('  - ' .. name .. ' = "' .. tostring(value) .. '"')
+    log('= ' .. name .. ': "' .. tostring(value) .. '"')
 end
 
 function export.log_table(t, name)
-	mw.log('  - ' .. name .. ':')
+	log('- ' .. name .. ':')
 	for key, value in pairs(t) do
-		mw.log('    - ["' .. tostring(key) .. '"] = "' .. tostring(value) .. '"')
+		log('  ["' .. tostring(key) .. '"] = "' .. tostring(value) .. '"')
 	end
 end
 
