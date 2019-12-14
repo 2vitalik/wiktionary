@@ -1,4 +1,4 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
@@ -8,9 +8,11 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ...noun import form as noun_form
 
 
-def init_forms(stems, endings):  # Генерация словоформ
-    _.log_func('forms', 'init_forms')
+module = 'declension.forms'  # local
 
+
+@a.call(module)
+def init_forms(stems, endings):  # Генерация словоформ
     return dict(
         nom_sg = stems['nom_sg'] + endings['nom_sg'],
         gen_sg = stems['gen_sg'] + endings['gen_sg'],
@@ -29,15 +31,16 @@ def init_forms(stems, endings):  # Генерация словоформ
 # end
 
 
-def init_srt_forms(forms, stems, endings):
+@a.starts(module)
+def init_srt_forms(func, forms, stems, endings):
     forms['srt_sg'] = stems['srt_sg'] + endings['srt_sg']
     forms['srt_pl'] = stems['srt_pl'] + endings['srt_pl']
+    _.ends(module, func)
 # end
 
 
-def fix_stress(forms):
-    _.log_func('forms', 'fix_stress')
-
+@a.starts(module)
+def fix_stress(func, forms):
     # Add stress if there is no one
     if _.contains_several(forms['nom_sg'], '{vowel}') and not _.contains(forms['nom_sg'], '[́ ё]'):
         # perhaps this is redundant for nom_sg?
@@ -46,13 +49,14 @@ def fix_stress(forms):
     if _.contains_several(forms['gen_pl'], '{vowel+ё}') and not _.contains(forms['gen_pl'], '[́ ё]'):
         _.replace(forms, 'gen_pl', '({vowel})({consonant}*)$', '%1́ %2')
     # end
+
+    _.ends(module, func)
 # end
 
 
 # Выбор винительного падежа
-def choose_accusative_forms(forms, data):
-    _.log_func('forms', 'choose_accusative_forms')
-
+@a.starts(module)
+def choose_accusative_forms(func, forms, data):
     forms['acc_sg_in'] = ''
     forms['acc_sg_an'] = ''
     forms['acc_pl_in'] = ''
@@ -85,12 +89,13 @@ def choose_accusative_forms(forms, data):
         forms['acc_pl_in'] = forms['nom_pl']
         forms['acc_pl_an'] = forms['gen_pl']
     # end
+
+    _.ends(module, func)
 # end
 
 
-def second_ins_case(forms, gender):
-    _.log_func('forms', 'second_ins_case')
-
+@a.starts(module)
+def second_ins_case(func, forms, gender):
     # local ins_sg2
 
     # Второй творительный
@@ -100,12 +105,13 @@ def second_ins_case(forms, gender):
             forms['ins_sg2'] = ins_sg2
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
-def generate_forms(data):  # export
-    _.log_func('forms', 'generate_forms')
-
+@a.starts(module)
+def generate_forms(func, data):  # export
     # local forms, keys
 
     forms = init_forms(data.stems, data.endings)
@@ -165,13 +171,13 @@ def generate_forms(data):  # export
         # end
     # end
 
+    _.ends(module, func)
     return forms
 # end
 
 
-def join_forms(forms1, forms2):  # export
-    _.log_func('forms', 'join_forms')
-
+@a.starts(module)
+def join_forms(func, forms1, forms2):  # export
     # local keys, forms, delim
 
     keys = [
@@ -208,13 +214,14 @@ def join_forms(forms1, forms2):  # export
             forms[key] = ''
         # end
     # end
+
+    _.ends(module, func)
     return forms
 # end
 
 
-def plus_forms(sub_forms):  # export
-    _.log_func('forms', 'plus_forms')
-
+@a.starts(module)
+def plus_forms(func, sub_forms):  # export
     # local keys, forms, delim
 
     keys = [
@@ -243,6 +250,8 @@ def plus_forms(sub_forms):  # export
             # end
         # end
     # end
+
+    _.ends(module, func)
     return forms
 # end
 

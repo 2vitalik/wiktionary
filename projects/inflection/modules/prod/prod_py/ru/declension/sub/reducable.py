@@ -1,13 +1,15 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-def apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data):  # export
-    _.log_func('reducable', 'apply_specific_degree')
+module = 'declension.reducable'  # local
 
+
+@a.starts(module)
+def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data):  # export
     # If degree sign °
 
     if _.contains(rest_index, '°') and _.endswith(word, '[ая]нин'):
@@ -15,6 +17,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_
         _.replace(stems, 'all_pl', '([ая]́ ?н)ин$', '%1')
         endings['nom_pl'] = 'е'
         endings['gen_pl'] = ''
+        _.ends(module, func)
         return rest_index
     # end
 
@@ -35,6 +38,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_
         endings['gen_pl'] = ''
 
         apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)  # export.
+        _.ends(module, func)
         return rest_index
     # end
 
@@ -51,6 +55,7 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_
 
         endings['gen_pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
 
+        _.ends(module, func)
         return rest_index
     # end
 
@@ -66,14 +71,14 @@ def apply_specific_degree(stems, endings, word, stem, stem_type, gender, stress_
         endings['prp_sg'] = 'и'
     # end
 
+    _.ends(module, func)
     return rest_index
 # end
 
 
 # Сложный алгоритм обработки всех случаев чередования
-def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data, only_sg):  # export
-    _.log_func('reducable', 'apply_specific_reducable')
-
+@a.starts(module)
+def apply_specific_reducable(func, stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data, only_sg):  # export
     # local reduced, reduced_letter, f_3rd, prev
     # local case_2_a, case_2_b, case_2_c, case_3_a, case_3_b
     # local skip_b_1, skip_b_2, skip_b_3, force_b
@@ -88,14 +93,14 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
                     if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь':  # fixme: temporary duplicated with the same code at the ending of function...
                         endings['srt_sg'] = ''  # вместо `ь` для `2*a`
                     # end
-                    return
+                    return _.ends(module, func)
                 # end
                 if _.contains(rest_index, ['%(2%)', '②']):
-                    return
+                    return _.ends(module, func)
                 # end
                 reduced = 'B'
             else:
-                return
+                return _.ends(module, func)
             # end
         elif gender == 'm' or data.pronoun:
             reduced = 'A'
@@ -187,7 +192,7 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
         # end  # reduced A
 
         if only_sg:
-            return  # ниже всё равно обрабатывается только множественное число уже
+            return _.ends(module, func) # ниже всё равно обрабатывается только множественное число уже
         # end
 
         # we should ignore asterix for 2*b and 2*f (so to process it just like 2b or 2f)
@@ -292,6 +297,8 @@ def apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stre
 #            # end
         # end  # reduced B
     # end  # specific *
+
+    _.ends(module, func)
 # end
 
 

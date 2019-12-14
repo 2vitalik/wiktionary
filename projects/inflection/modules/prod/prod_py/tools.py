@@ -8,6 +8,7 @@ def trim_stress(str):
 
 
 stash = {}
+level = 0
 
 
 def clear_stash():
@@ -102,22 +103,41 @@ def contains_several(str, values):
     return check(str, values, 'contains_several')
 
 
+def log(value):
+    global level
+    prefix = ' ' * level
+    mw.log(prefix + value)
+
+
 def log_info(info):
-    mw.log('# ' + info)
+    log('# ' + info)
 
 
-def log_func(module, name):
-    mw.log('> {' + module + '} ' + name + ':')
+def call(module, name):
+    log('@ ' + module + '.' + name + '()')
+
+
+def starts(module, name):
+    log('↘ @ ' + module + '.' + name + '():')
+    global level
+    level += 4
+
+
+def ends(module, name):
+    global level
+    level -= 4
+    # log('↙ . ' + module + '.' + name + '()')
+    log('↙ . ')
 
 
 def log_value(value, name):
-    mw.log('  - ' + name + ' = "' + str(value) + '"')
+    log('= ' + name + ': "' + str(value) + '"')
 
 
 def log_table(t, name):
-    mw.log('  - ' + name + ':')
+    log('- ' + name + ':')
     for key, value in t.items():
-        mw.log('    ["' + str(key) + '"] = "' + str(value) + '"')
+        log('  ["' + str(key) + '"] = "' + str(value) + '"')
 
 
 def has_key(value, key=None):
@@ -134,3 +154,11 @@ def has_value(value, key=None):
 
 def empty(value):
     return not value
+
+
+# todo: log with colors (only for python)
+# todo: log to files also (only for python)
+# todo: create special short commands (like `u` and `pl`)
+#  and use them from command line instead of running them via PyCharm
+# todo: locally on python run all tests from lua tests data
+# todo: try to get more tetsts from udarenieru html dumps... or from some zaliznyak file `All_Forms.txt`?

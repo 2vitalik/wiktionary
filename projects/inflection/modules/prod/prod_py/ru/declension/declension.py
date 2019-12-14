@@ -1,4 +1,4 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
@@ -18,6 +18,9 @@ from ..noun import form as noun_form
 from ..adj import endings as adj_endings
 
 
+module = 'declension'  # local
+
+
 def prepare_stash():
     _.clear_stash()
     _.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
@@ -26,7 +29,8 @@ def prepare_stash():
 # end
 
 
-def main_sub_algorithm(data):
+@a.starts(module)
+def main_sub_algorithm(func, data):
     _.log_info('Вычисление схемы ударения')
 
     # local stem_stress_schema
@@ -95,12 +99,13 @@ def main_sub_algorithm(data):
         data.stems['gen_pl'] = _.replaced(data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
         data.rest_index = data.rest_index + 'ё'  # ???
     # end
+
+    _.ends(module, func)
 # end
 
 
-def main_algorithm(data):
-    _.log_func('declension', 'main_algorithm')
-
+@a.starts(module)
+def main_algorithm(func, data):
     # local error, keys, forms, orig_stem, for_category, old_value, cases
 
     _.log_value(data.rest_index, 'data.rest_index')
@@ -111,7 +116,10 @@ def main_algorithm(data):
 
     data.stress_type, error = stress.extract_stress_type(data.rest_index)
 
-    if error: return result.finalize(data, error) # end
+    if error:
+        _.ends(module, func)
+        return result.finalize(data, error)
+    # end
 
     _.log_value(data.stress_type, 'data.stress_type')
 
@@ -130,14 +138,17 @@ def main_algorithm(data):
             for i, key in enumerate(keys):
                 forms[key] = data.word_stressed
             # end
+            _.ends(module, func)
             return result.finalize(data, forms)
 
         # INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
         elif _.has_value(data.rest_index):
+            _.ends(module, func)
             return result.finalize(data, dict(error='Нераспознанная часть индекса: ' + data.rest_index))  # b-dict
 
         # INFO: Если индекса вообще нет, то и формы просто не известны:
         else:
+            _.ends(module, func)
             return result.finalize(data, dict())  # b-dict
         # end
     # end
@@ -168,6 +179,7 @@ def main_algorithm(data):
     _.log_value(data.base_stem_type, 'data.base_stem_type')
 
     if not data.stem_type:
+        _.ends(module, func)
         return result.finalize(data, dict(error='Неизвестный тип основы'))  # b-dict
     # end
 
@@ -221,13 +233,14 @@ def main_algorithm(data):
     for_category = _.replaced(for_category, '③', '(3)')
     forms['зализняк'] = for_category
 
+    _.ends(module, func)
     return forms
 # end
 
 
-def forms(base, args, frame):  # export
-    mw.log('==================================================')
-    _.log_func('declension', 'forms')
+@a.starts(module)
+def forms(func, base, args, frame):  # export
+    mw.log('=================================================================')  # todo: move to another place
 
     # local data, error, forms
     # local data1, data2, forms1, forms2, sub_forms
@@ -244,7 +257,7 @@ def forms(base, args, frame):  # export
     data, error = parse_args.parse(base, args)
     if error:
         forms = result.finalize(data, error)
-        _.log_table(forms, "forms")
+        _.ends(module, func)
         return forms
     # end
 
@@ -278,6 +291,7 @@ def forms(base, args, frame):  # export
     result.finalize(data, forms)
 
     _.log_table(forms, "forms")
+    _.ends(module, func)
     return forms
 # end
 

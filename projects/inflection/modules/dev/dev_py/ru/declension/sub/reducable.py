@@ -90,7 +90,7 @@ def apply_specific_reducable(func, stems, endings, word, stem, stem_type, gender
         if data.adj:
             if gender == 'm':
                 if _.contains(rest_index, ['%(1%)', '①']):
-                    if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь':  # fixme: temporary duplicated with the same code at the ending of func...
+                    if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь':  # fixme: temporary duplicated with the same code at the ending of function...
                         endings['srt_sg'] = ''  # вместо `ь` для `2*a`
                     # end
                     return _.ends(module, func)

@@ -1,4 +1,4 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
@@ -8,9 +8,11 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ...noun import parse_args as noun_parse_args
 
 
-def init(data):
-    _.log_func('parse_args', 'init')
+module = 'declension.parse_args'  # local
 
+
+@a.starts(module)
+def init(func, data):
     # local several_vovwels, has_stress
 
     # INFO: Исходное слово без ударения:
@@ -43,17 +45,19 @@ def init(data):
     has_stress = _.contains(data.word_stressed, '[́ ё]')
     if several_vovwels and not has_stress:
         _.log_info('Ошибка: Не указано ударение в слове')
+        _.ends(module, func)
         return dict(
             error='Ошибка: Не указано ударение в слове',
             error_category='Ошибка в шаблоне "сущ-ru": не указано ударение в слове',
         )  # dict
     # end
+
+    _.ends(module, func)
 # end
 
 
-def angle_brackets(data):
-    _.log_func('parse_args', 'angle_brackets')
-
+@a.starts(module)
+def angle_brackets(func, data):
     # local another_index, pt, error
 
     another_index = _.extract(data.rest_index, '%<([^>]+)%>')
@@ -67,25 +71,32 @@ def angle_brackets(data):
         data.index = another_index
         error = noun_parse_args.extract_gender_animacy(data)
         data.pt = pt
-        if error: return error # end
+        if error:
+            _.ends(module, func)
+            return error
+        # end
 
         _.log_value(data.adj, 'data.adj')
         if data.adj:  # Для прилагательных надо по-особенному?
             error = init(data)
-            if error: return error # end
+            if error:
+                _.ends(module, func)
+                return error
+            # end
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
-def parse(base, args):  # export
-    _.log_func('parse_args', 'parse')
-
+@a.starts(module)
+def parse(func, base, args):  # export
     # local data, error, parts, n_parts, data1, data2
     # local index_parts, words_parts, n_sub_parts, data_copy
 
     # INFO: Достаём значения из параметров:
-    data = additional.AttrDict()  # AttrDict
+    data = a.AttrDict()  # AttrDict
     data.base = base
     data.args = args
     data.lang = mw.text.trim(args['lang'])
@@ -109,7 +120,10 @@ def parse(base, args):  # export
 
     if data.noun:  # fxime
         error = noun_parse_args.extract_gender_animacy(data)
-        if error: return data, error # end
+        if error:
+            _.ends(module, func)
+            return data, error
+        # end
 
         _.log_value(data.gender, 'data.gender')
         _.log_value(data.animacy, 'data.animacy')
@@ -128,18 +142,22 @@ def parse(base, args):  # export
 
     # INFO: stem, stem_stressed, etc.
     error = init(data)
-    if error: return data, error # end
+    if error:
+        _.ends(module, func)
+        return data, error
+    # end
 
     if data.noun:
         # INFO: Случай, если род или одушевлённость не указаны:
         if (not data.gender or not data.animacy) and not data.pt:
+            _.ends(module, func)
             return data, dict()  # dict # INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
         # end
     # end
 
     # INFO: Проверяем случай с вариациями:
     parts = mw.text.split(data.rest_index, '//')
-    n_parts = additional.table_len(parts)
+    n_parts = a.table_len(parts)
 
     if n_parts == 1:  # INFO: Дополнительных вариаций нет
         if _.contains(data.animacy, '//'):  # INFO: Случаи 'in//an' и 'an//in'
@@ -154,6 +172,7 @@ def parse(base, args):  # export
             # INFO: Заполняем атрибут с вариациями
             data.sub_cases = [data1, data2]  # list
 
+            _.ends(module, func)
             return data, None
             # TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
         # end
@@ -162,7 +181,7 @@ def parse(base, args):  # export
 
         index_parts = mw.text.split(data.rest_index, '%+')
         words_parts = mw.text.split(data.word_stressed, '-')
-        n_sub_parts = additional.table_len(index_parts)
+        n_sub_parts = a.table_len(index_parts)
         if n_sub_parts > 1:
             data.sub_parts = []  # list
             for i in range(1, n_sub_parts + 1):
@@ -170,23 +189,33 @@ def parse(base, args):  # export
                 data_copy.word_stressed = words_parts[i]
 
                 error = init(data_copy)
-                if error: return data, error # end
+                if error:
+                    _.ends(module, func)
+                    return data, error
+                # end
 
                 data_copy.rest_index = index_parts[i]
 
                 if data.noun:
                     error = angle_brackets(data_copy)
-                    if error: return data, error # end
+                    if error:
+                        _.ends(module, func)
+                        return data, error
+                    # end
                 # end
 
                 data.sub_parts.append(data_copy)
             # end
+            _.ends(module, func)
             return data, None
         # end
 
         if data.noun:
             error = angle_brackets(data)
-            if error: return data, error # end
+            if error:
+                _.ends(module, func)
+                return data, error
+            # end
         # end
 
         if _.contains(data.rest_index, '%[%([12]%)%]') or _.contains(data.rest_index, '%[[①②]%]'):
@@ -206,6 +235,7 @@ def parse(base, args):  # export
             # INFO: Заполняем атрибут с вариациями
             data.sub_cases = [data1, data2]  # list
 
+            _.ends(module, func)
             return data, None
         # end
 
@@ -214,6 +244,7 @@ def parse(base, args):  # export
 
         if _.contains(data.animacy, '//'):
             # INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
+            _.ends(module, func)
             return data, dict(error='Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?')  # dict
         # end
 
@@ -240,6 +271,7 @@ def parse(base, args):  # export
 
         # INFO: Проверка на гипотетическую ошибку в алгоритме:
         elif not data2.gender and data2.animacy or data2.gender and not data2.animacy:
+            _.ends(module, func)
             return data, dict(error='Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей' )  # dict
 
         # INFO: Если что-то изменилось, значит, прошёл один из случаев, и значит у нас "полная" вариация (затрагивающая род)
@@ -252,9 +284,11 @@ def parse(base, args):  # export
         data.sub_cases = [data1, data2]  # list
 
     else:  # INFO: Какая-то ошибка, слишком много "//" в индексе
+        _.ends(module, func)
         return data, dict(error='Ошибка: Слишком много частей для "//"')  # dict
     # end
 
+    _.ends(module, func)
     return data, None  # INFO: `None` здесь -- признак, что нет ошибок
 # end
 

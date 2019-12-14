@@ -1,13 +1,15 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-def get_pronoun_stress_schema(stress_type):  # export  # INFO: Вычисление схемы ударения
-    _.log_func('stress', 'get_pronoun_stress_schema')
+module = 'pronoun.stress'  # local
 
+
+@a.starts(module)
+def get_pronoun_stress_schema(func, stress_type):  # export  # INFO: Вычисление схемы ударения
     # TODO: Пока не используется
 
     # общий подход следующий:
@@ -38,6 +40,7 @@ def get_pronoun_stress_schema(stress_type):  # export  # INFO: Вычислен�
         # end
     # end
 
+    _.ends(module, func)
     return stress_schema
 # end
 

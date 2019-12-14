@@ -1,4 +1,4 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
@@ -6,15 +6,14 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 # constants:
-# local unstressed, stressed
-unstressed = 0
-stressed = 1
+unstressed = 0  # local
+stressed = 1  # local
+module = 'noun.endings'  # local
 
 
 # Данные: все стандартные окончания для двух типов основ
+@a.call(module)
 def get_standard_noun_endings():  # export
-    _.log_func('endings', 'get_standard_noun_endings')
-
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
     return dict(
         m = dict(  # стандартные окончания мужского рода
@@ -92,11 +91,9 @@ def get_standard_noun_endings():  # export
 # end
 
 
-
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-def fix_noun_endendings(endings, gender, stem_type, stress_schema):  # export
-    _.log_func('endings', 'fix_noun_endendings')
-
+@a.starts(module)
+def fix_noun_endings(func, endings, gender, stem_type, stress_schema):  # export
     # INFO: Replace "ы" to "и"
     if _.equals(stem_type, ['velar', 'sibilant']):
         if gender == 'f': endings['gen_sg'] = 'и' # end
@@ -167,10 +164,13 @@ def fix_noun_endendings(endings, gender, stem_type, stress_schema):  # export
         endings['ins_pl'] = 'ами'
         endings['prp_pl'] = 'ах'
     # end
+
+    _.ends(module, func)
 # end
 
 
-def apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_index):  # export
+@a.starts(module)
+def apply_noun_specific_1_2(func, endings, gender, stem_type, base_stem_type, rest_index):  # export
     if _.contains(rest_index, ['%(1%)', '①']):
         if base_stem_type == 'hard':
             if gender == 'm': endings['nom_pl'] = 'а' # end
@@ -217,6 +217,8 @@ def apply_noun_specific_1_2(endings, gender, stem_type, base_stem_type, rest_ind
 #            # end
 #        #
     # end
+
+    _.ends(module, func)
 # end
 
 

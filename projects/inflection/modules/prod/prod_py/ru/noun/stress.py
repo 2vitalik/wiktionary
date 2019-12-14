@@ -1,14 +1,16 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-# Данные: ударность основы и окончания в зависимости от схемы ударения
-def get_noun_stress_schema(stress_type):  # export  # INFO: Вычисление схемы ударения
-    _.log_func('stress', 'get_noun_stress_schema')
+module = 'noun.stress'  # local
 
+
+# Данные: ударность основы и окончания в зависимости от схемы ударения
+@a.starts(module)
+def get_noun_stress_schema(func, stress_type):  # export  # INFO: Вычисление схемы ударения
     # local stress_schema, types, sg_value, pl_value
 
     # общий подход следующий:
@@ -45,6 +47,7 @@ def get_noun_stress_schema(stress_type):  # export  # INFO: Вычисление
         stress_schema[type]['prp_pl'] = pl_value
     # end
 
+    _.ends(module, func)
     return stress_schema
 # end
 

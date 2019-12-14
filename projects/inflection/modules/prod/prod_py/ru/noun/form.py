@@ -1,12 +1,15 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
+module = 'noun.form'  # local
+
+
 def remove_stress_if_one_syllable(value):  # export
-    # _.log_func('forms', 'remove_stress_if_one_syllable')
+    # _.call('noun.forms', 'remove_stress_if_one_syllable')
 
     if _.contains_once(value, '{vowel+ё}'):
         return _.replaced(value, '́ ', '')
@@ -15,18 +18,18 @@ def remove_stress_if_one_syllable(value):  # export
 # end
 
 
-def apply_obelus(forms, rest_index):  # export
-    _.log_func('forms', 'apply_obelus')
-
+@a.starts(module)
+def apply_obelus(func, forms, rest_index):  # export
     if _.contains(rest_index, '÷'):
         forms['obelus'] = '1'
     # end
+
+    _.ends(module, func)
 # end
 
 
-def apply_specific_3(forms, gender, rest_index):  # export
-    _.log_func('forms', 'apply_specific_3')
-
+@a.starts(module)
+def apply_specific_3(func, forms, gender, rest_index):  # export
     # Специфика по (3)
     if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③'):
         if _.endswith(forms['prp_sg'], 'и'):
@@ -36,6 +39,8 @@ def apply_specific_3(forms, gender, rest_index):  # export
             forms['dat_sg'] = forms['dat_sg'] + '&nbsp;//<br />' + _.replaced(forms['dat_sg'], 'и$', 'е')
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
@@ -43,21 +48,21 @@ def apply_specific_3(forms, gender, rest_index):  # export
 #------------------------------------------------------------------------------
 
 
-def prt_case(forms, args, index):  # Разделительный падеж
-    _.log_func('forms', 'prt_case')
-
+@a.starts(module)
+def prt_case(func, forms, args, index):  # Разделительный падеж
     if _.contains(index, 'Р2') or _.contains(index, 'Р₂'):
         forms['prt_sg'] = forms['dat_sg']
     # end
     if _.has_value(args, 'Р'):
         forms['prt_sg'] = args['Р']
     # end
+
+    _.ends(module, func)
 # end
 
 
-def loc_case(forms, args, index):  # Местный падеж
-    _.log_func('forms', 'loc_case')
-
+@a.starts(module)
+def loc_case(func, forms, args, index):  # Местный падеж
     # local loc, loc_prep
 
     if _.contains(index, 'П2') or _.contains(index, 'П₂'):
@@ -83,12 +88,13 @@ def loc_case(forms, args, index):  # Местный падеж
     if _.has_value(args, 'М'):
         forms['loc_sg'] = args['М']
     # end
+
+    _.ends(module, func)
 # end
 
 
-def voc_case(forms, args, index, word):  # Звательный падеж
-    _.log_func('forms', 'voc_case')
-
+@a.starts(module)
+def voc_case(func, forms, args, index, word):  # Звательный падеж
     if _.has_value(args, 'З'):
         forms['voc_sg'] = args['З']
     elif _.contains(index, 'З'):
@@ -98,15 +104,18 @@ def voc_case(forms, args, index, word):  # Звательный падеж
             forms['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
-def special_cases(forms, args, index, word):  # export
-    _.log_func('forms', 'special_cases')
-
+@a.starts(module)
+def special_cases(func, forms, args, index, word):  # export
     prt_case(forms, args, index)
     loc_case(forms, args, index)
     voc_case(forms, args, index, word)
+
+    _.ends(module, func)
 # end
 
 

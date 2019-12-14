@@ -1,13 +1,15 @@
-from projects.inflection.modules.prod.prod_py import additional
+from projects.inflection.modules.prod.prod_py import a
 from projects.inflection.modules.prod.prod_py import mw
 from projects.inflection.modules.prod.prod_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-def get_standard_pronoun_endings():  # export
-    _.log_func('endings', 'get_standard_pronoun_endings')
+module = 'pronoun.endings'  # local
 
+
+@a.call(module)
+def get_standard_pronoun_endings():  # export
     # TODO: Пока что не используется
 
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
@@ -83,9 +85,8 @@ def get_standard_pronoun_endings():  # export
 # end
 
 
+@a.call(module)
 def get_standard_pronoun_noun_endings():  # export
-    _.log_func('endings', 'get_standard_pronoun_noun_endings')
-
     # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
     return dict(
         m = dict(
@@ -160,9 +161,8 @@ def get_standard_pronoun_noun_endings():  # export
 
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
-def fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema):  # export
-    _.log_func('endings', 'fix_pronoun_noun_endings')
-
+@a.starts(module)
+def fix_pronoun_noun_endings(func, endings, gender, stem_type, stress_schema):  # export
     # INFO: Replace "ы" to "и"
     if _.equals(stem_type, {'sibilant'}):
         if _.In(gender, ['m', 'n']):
@@ -200,6 +200,8 @@ def fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema):  # expo
             endings['dat_sg'] = 'ему'
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 

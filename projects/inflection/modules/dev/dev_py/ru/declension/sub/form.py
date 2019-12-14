@@ -117,8 +117,12 @@ def generate_forms(func, data):  # export
     forms = init_forms(data.stems, data.endings)
     if data.adj:
         init_srt_forms(forms, data.stems, data.endings)
-        if _.contains(data.rest_index, ['×', '⊠', 'x', 'х']):
-            forms['краткая'] = ''
+        if _.contains(data.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
+            forms['краткая'] = '⊠'
+        elif _.contains(data.rest_index, ['×', 'x', 'х', 'X', 'Х']):
+            forms['краткая'] = '×'
+        elif _.contains(data.rest_index, ['%-', '—', '−']):
+            forms['краткая'] = '−'
         else:
             forms['краткая'] = '1'
         # end
