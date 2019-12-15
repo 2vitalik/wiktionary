@@ -1,7 +1,7 @@
 import platform
 
 from libs.utils.parse import remove_stress
-from projects.inflection.modules.dev.dev_py.ru.declension import declension
+from projects.inflection.modules.dev.dev_py.ru import declension
 
 
 def replace_stress(value):
