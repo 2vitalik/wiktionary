@@ -14,7 +14,7 @@ from ..modify.circles import noun as noun_circles
 # constants:
 unstressed = 0  # local
 stressed = 1  # local
-module = 'declension.endings'  # local
+module = 'init.endings'  # local
 
 
 # Схлопывание: Выбор окончаний в зависимости от рода и типа основы

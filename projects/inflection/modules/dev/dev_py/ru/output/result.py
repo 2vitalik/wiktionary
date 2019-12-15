@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from projects.inflection.modules.dev.dev_py.a import syllables
 
 
-module = 'declension.result'  # local
+module = 'output.result'  # local
 
 
 # Использование дефисов вместо подчёркивания

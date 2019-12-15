@@ -10,7 +10,7 @@ from ..data.stress import pronoun as pronoun_stress
 from ..data.stress import noun as noun_stress
 
 
-module = 'declension.stress'  # local
+module = 'init.stress'  # local
 
 
 @a.starts(module)

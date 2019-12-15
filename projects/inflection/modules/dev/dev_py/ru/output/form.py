@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ..output import noun as noun_forms
 
 
-module = 'declension.forms'  # local
+module = 'output.forms'  # local
 
 
 @a.call(module)

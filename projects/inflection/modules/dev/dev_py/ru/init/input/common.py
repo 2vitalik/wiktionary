@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ...init.input import noun as noun_input
 
 
-module = 'declension.parse_args'  # local
+module = 'init.input.common'  # local
 
 
 @a.starts(module)

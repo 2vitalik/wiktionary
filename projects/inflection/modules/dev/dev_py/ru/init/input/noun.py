@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'noun.parse_args'  # local
+module = 'init.input.noun'  # local
 
 
 @a.call(module)

@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'adj.stress'  # local
+module = 'data.stress.adj'  # local
 
 
 # Данные: ударность основы и окончания в зависимости от схемы ударения

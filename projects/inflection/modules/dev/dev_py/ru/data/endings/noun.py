@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 # constants:
 unstressed = 0  # local
 stressed = 1  # local
-module = 'noun.endings'  # local
+module = 'data.endings.noun'  # local
 
 
 # Данные: все стандартные окончания для двух типов основ

@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'pronoun.endings'  # local
+module = 'data.endings.pronoun'  # local
 
 
 @a.call(module)
