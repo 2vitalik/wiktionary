@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'declension.stem_type'
+local module = 'init.stem_type'
 
 
 -- @starts

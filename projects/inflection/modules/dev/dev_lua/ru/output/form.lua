@@ -5,10 +5,10 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form')  -- '.'
+local noun = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- '.' = as noun_forms
 
 
-local module = 'declension.forms'
+local module = 'output.forms'
 
 
 -- @call
@@ -161,7 +161,7 @@ function export.generate_forms(data)
 	end
 
 	if data.noun then
-		noun_form.apply_obelus(forms, data.rest_index)
+		noun_forms.apply_obelus(forms, data.rest_index)
 	end
 
 	choose_accusative_forms(forms, data)
@@ -169,12 +169,12 @@ function export.generate_forms(data)
 	second_ins_case(forms, data.gender)
 
 	if data.noun then
-		noun_form.apply_specific_3(forms, data.gender, data.rest_index)
+		noun_forms.apply_specific_3(forms, data.gender, data.rest_index)
 	end
 
 	for key, value in pairs(forms) do
 --		INFO Удаляем ударение, если только один слог:
-		forms[key] = noun_form.remove_stress_if_one_syllable(value)
+		forms[key] = noun_forms.remove_stress_if_one_syllable(value)
 	end
 
 	if data.adj then

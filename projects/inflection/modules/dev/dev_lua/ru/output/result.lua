@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local syllables = require("Модуль:слоги")
 
 
-local module = 'declension.result'
+local module = 'output.result'
 
 
 -- Использование дефисов вместо подчёркивания

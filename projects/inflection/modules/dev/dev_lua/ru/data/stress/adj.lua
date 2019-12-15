@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'adj.stress'
+local module = 'data.stress.adj'
 
 
 -- Данные: ударность основы и окончания в зависимости от схемы ударения

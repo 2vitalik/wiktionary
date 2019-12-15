@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'pronoun.stress'
+local module = 'data.stress.pronoun'
 
 
 -- @starts

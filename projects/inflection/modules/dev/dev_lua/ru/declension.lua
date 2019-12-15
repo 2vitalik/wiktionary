@@ -5,17 +5,17 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local parse_args = require('Module:' .. dev_prefix .. 'inflection/ru/declension/parse_args')
-local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/stress')
-local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/stem_type')
-local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/endings')
-local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/reducable')
-local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/form')
-local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/index')
-local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/result')
-
-local noun_form = require('Module:' .. dev_prefix .. 'inflection/ru/noun/form')  -- ''
-local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/adj/endings')  -- ''
+local input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/input/common')  -- ''
+local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- '' =
+local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- '' =
+local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- '' =
+local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- ''
+local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/reducable')  -- '' =
+local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/degree')  -- '' =
+local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '' =
+local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/form')  -- '' =
+local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- '' =
+local noun = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- '' = as noun_forms
 
 
 local module = 'declension'
@@ -52,7 +52,7 @@ local function main_sub_algorithm(data)
 
 	-- apply special cases (1) or (2) in index
 	if data.adj then
-		adj_endings.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
+		adj_circles.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
 	end
 
 --	-- *** для случая с расстановкой ударения  (см. ниже)
@@ -63,7 +63,7 @@ local function main_sub_algorithm(data)
 --	end
 
 	-- reducable
-	data.rest_index = reducable.apply_specific_degree(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
+	data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
 	reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, false)
 
 	if not _.equals(data.stress_type, {"f", "f'"}) and _.contains(data.rest_index, '%*') then
@@ -263,7 +263,7 @@ function export.forms(base, args, frame)
 	prepare_stash()
 
 --	INFO: Достаём всю информацию из аргументов (args): основа, род, одушевлённость и т.п.
-	data, error = parse_args.parse(base, args)
+	data, error = input.parse(base, args)
 	if error then
 		forms = result.finalize(data, error)
 		_.ends(module, func)
@@ -294,7 +294,7 @@ function export.forms(base, args, frame)
 	end
 
 	if data.noun then
-		noun_form.special_cases(forms, args, data.index, data.word)
+		noun_forms.special_cases(forms, args, data.index, data.word)
 	end
 
 	result.finalize(data, forms)

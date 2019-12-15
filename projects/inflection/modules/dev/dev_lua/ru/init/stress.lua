@@ -5,12 +5,12 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/noun/stress')  -- '.'
-local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/adj/stress')  -- '.'
-local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/pronoun/stress')  -- '.'
+local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/adj')  -- '.'
+local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/pronoun')  -- '.'
+local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/noun')  -- '.'
 
 
-local module = 'declension.stress'
+local module = 'init.stress'
 
 
 -- @starts
@@ -52,7 +52,6 @@ function export.extract_stress_type(rest_index)
 	_.ends(module, func)
 	return stress_type, nil  -- INFO: `nil` здесь -- признак, что нет ошибок
 end
-
 
 
 -- @starts

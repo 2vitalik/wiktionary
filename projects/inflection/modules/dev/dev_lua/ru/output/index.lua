@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'declension.index'
+local module = 'output.index'
 
 
 -- Получение индекса Зализняка

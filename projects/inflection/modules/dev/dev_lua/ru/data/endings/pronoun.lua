@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'pronoun.endings'
+local module = 'data.endings.pronoun'
 
 
 -- @call

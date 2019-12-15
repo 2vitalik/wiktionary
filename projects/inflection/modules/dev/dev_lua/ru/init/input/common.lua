@@ -5,10 +5,10 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun_parse_args = require('Module:' .. dev_prefix .. 'inflection/ru/noun/parse_args')  -- '.'
+local noun_input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/input/noun')  -- '..'
 
 
-local module = 'declension.parse_args'
+local module = 'init.input.common'
 
 
 -- @starts
@@ -75,7 +75,7 @@ local function angle_brackets(data)
 		end
 		data.orig_index = data.index
 		data.index = another_index
-		error = noun_parse_args.extract_gender_animacy(data)
+		error = noun_input.extract_gender_animacy(data)
 		data.pt = pt
 		if error then
 			_.ends(module, func)
@@ -128,7 +128,7 @@ function export.parse(base, args)
 	_.log_info('Получение информации о роде и одушевлённости')
 
 	if data.noun then  -- fxime
-		error = noun_parse_args.extract_gender_animacy(data)
+		error = noun_input.extract_gender_animacy(data)
 		if error then
 			_.ends(module, func)
 			return data, error
@@ -268,7 +268,7 @@ function export.parse(base, args)
 		if data.noun then
 --			INFO: Проверяем, не находится ли род+одушевлённость во второй вариации
 			data2.index = parts[2]  -- INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
-			noun_parse_args.extract_gender_animacy(data2)
+			noun_input.extract_gender_animacy(data2)
 		end
 
 --		INFO: Если рода и одушевлённости во второй вариации нет (простой случай):

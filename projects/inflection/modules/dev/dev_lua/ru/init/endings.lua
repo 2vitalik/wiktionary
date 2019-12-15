@@ -5,15 +5,16 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/noun/endings')  -- '.'
-local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/adj/endings')  -- '.'
-local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/pronoun/endings')  -- '.'
+local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/adj')  -- '.'
+local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/pronoun')  -- '.'
+local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/noun')  -- '.'
+local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/noun')  -- '.'
 
 
 -- constants:
 local unstressed = 1
 local stressed = 2
-local module = 'declension.endings'
+local module = 'init.endings'
 
 
 -- Схлопывание: Выбор окончаний в зависимости от рода и типа основы
@@ -128,7 +129,7 @@ function export.get_endings(data)
 
 	-- apply special cases (1) or (2) in index
 	if not data.adj and not data.pronoun then
-		noun_endings.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
+		noun_circles.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
 	end
 
 	-- Resolve stressed/unstressed cases of endings
