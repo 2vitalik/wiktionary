@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...noun import form as noun_form
+from ..output import noun as noun_forms
 
 
 module = 'declension.forms'  # local
@@ -143,7 +143,7 @@ def generate_forms(func, data):  # export
     # end
 
     if data.noun:
-        noun_form.apply_obelus(forms, data.rest_index)
+        noun_forms.apply_obelus(forms, data.rest_index)
     # end
 
     choose_accusative_forms(forms, data)
@@ -151,12 +151,12 @@ def generate_forms(func, data):  # export
     second_ins_case(forms, data.gender)
 
     if data.noun:
-        noun_form.apply_specific_3(forms, data.gender, data.rest_index)
+        noun_forms.apply_specific_3(forms, data.gender, data.rest_index)
     # end
 
     for key, value in forms.items():
 #        INFO Удаляем ударение, если только один слог:
-        forms[key] = noun_form.remove_stress_if_one_syllable(value)
+        forms[key] = noun_forms.remove_stress_if_one_syllable(value)
     # end
 
     if data.adj:

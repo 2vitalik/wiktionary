@@ -5,17 +5,17 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ..declension.sub import parse_args
-from ..declension.sub import stress
-from ..declension.sub import stem_type
-from ..declension.sub import endings
-from ..declension.sub import reducable
-from ..declension.sub import form
-from ..declension.sub import index
-from ..declension.sub import result
-
-from ..noun import form as noun_form
-from ..adj import endings as adj_endings
+from .init.input import common as input
+from .init import stress
+from .init import endings
+from .init import stem_type
+from .modify.circles import adj as adj_circles
+from .modify import reducable
+from .modify import degree
+from .output import result
+from .output import form
+from .output import index
+from .output import noun as noun_forms
 
 
 module = 'declension'  # local
@@ -49,7 +49,7 @@ def main_sub_algorithm(func, data):
 
     # apply special cases (1) or (2) in index
     if data.adj:
-        adj_endings.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
+        adj_circles.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
     # end
 
 #    # *** для случая с расстановкой ударения  (см. ниже)
@@ -60,7 +60,7 @@ def main_sub_algorithm(func, data):
 #    # end
 
     # reducable
-    data.rest_index = reducable.apply_specific_degree(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
+    data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
     reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, False)
 
     if not _.equals(data.stress_type, ["f", "f'"]) and _.contains(data.rest_index, '%*'):
@@ -254,7 +254,7 @@ def forms(func, base, args, frame):  # export
     prepare_stash()
 
     # INFO: Достаём всю информацию из аргументов (args): основа, род, одушевлённость и т.п.
-    data, error = parse_args.parse(base, args)
+    data, error = input.parse(base, args)
     if error:
         forms = result.finalize(data, error)
         _.ends(module, func)
@@ -285,7 +285,7 @@ def forms(func, base, args, frame):  # export
     # end
 
     if data.noun:
-        noun_form.special_cases(forms, args, data.index, data.word)
+        noun_forms.special_cases(forms, args, data.index, data.word)
     # end
 
     result.finalize(data, forms)

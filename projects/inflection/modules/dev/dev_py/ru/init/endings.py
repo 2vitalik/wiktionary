@@ -5,9 +5,10 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...noun import endings as noun_endings
-from ...adj import endings as adj_endings
-from ...pronoun import endings as pronoun_endings
+from ..data.endings import adj as adj_endings
+from ..data.endings import pronoun as pronoun_endings
+from ..data.endings import noun as noun_endings
+from ..modify.circles import noun as noun_circles
 
 
 # constants:
@@ -119,7 +120,7 @@ def get_endings(func, data):  # export
 
     # apply special cases (1) or (2) in index
     if not data.adj and not data.pronoun:
-        noun_endings.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
+        noun_circles.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
     # end
 
     # Resolve stressed/unstressed cases of endings
