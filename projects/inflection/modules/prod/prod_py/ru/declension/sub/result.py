@@ -101,7 +101,7 @@ def forward_args(func, forms, data):
         'hide-text', 'зачин', 'слоги', 'дореф',
         'скл', 'зализняк', 'зализняк1', 'чередование',
         'pt', 'st', 'затрудн', 'клитика',
-        'коммент',
+        'коммент', 'тип', 'степень',
     ]  # list
     for i, key in enumerate(keys):
         if _.has_value(args, key):
