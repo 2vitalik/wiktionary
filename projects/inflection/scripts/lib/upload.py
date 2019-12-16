@@ -1,3 +1,5 @@
+from os.path import exists
+
 from libs.utils.dt import dt
 from libs.utils.io import append, read
 from libs.utils.wikibot import save_page
@@ -73,6 +75,9 @@ def upload_docs(version, desc, dev):
         title = get_docs_title(file, dev)
         print(f'- {title} - ', end='')
 
-        path = get_path(dev, 'docs', file, out=True)
+        path = get_path(dev, 'docs', file, out=False)
+        if not exists(path):
+            print('Not exist')
+            continue
         if save_page(title, read_file(dev, path), f'v{version}: {desc}'):
             print('OK')
