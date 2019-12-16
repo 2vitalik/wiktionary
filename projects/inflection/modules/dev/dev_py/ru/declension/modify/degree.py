@@ -77,3 +77,6 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
     _.ends(module, func)
     return rest_index
 # end
+
+
+# return export

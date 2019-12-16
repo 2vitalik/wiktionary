@@ -2,8 +2,8 @@ from projects.inflection.scripts.lib.upload import upload
 
 
 if __name__ == '__main__':
-    version = '4.0.7'
-    desc = 'Загрузка последних изменений из `prod` (от Cinemantique)'
+    version = '4.1.1'
+    desc = 'b'
 
     upload(version, desc, dev=True)
 

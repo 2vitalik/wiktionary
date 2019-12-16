@@ -80,3 +80,6 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 	_.ends(module, func)
 	return rest_index
 end
+
+
+return export

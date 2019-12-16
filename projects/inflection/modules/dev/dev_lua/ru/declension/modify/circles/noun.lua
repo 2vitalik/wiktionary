@@ -65,3 +65,6 @@ function export.apply_noun_specific_1_2(endings, gender, stem_type, base_stem_ty
 
 	_.ends(module, func)
 end
+
+
+return export
