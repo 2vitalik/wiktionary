@@ -43,7 +43,7 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		endings['nom_pl'] = 'а'
 		endings['gen_pl'] = ''
 
-		export.reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data, true)
+		reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data, true)
 		_.ends(module, func)
 		return rest_index
 	end
@@ -54,10 +54,10 @@ function export.apply_specific_degree(stems, endings, word, stem, stem_type, gen
 		_.replace(stems, 'all_pl', 'о́ночек$', 'а́тк')
 
 --		INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
-		export.reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data, false)
+		reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index .. '*', data, false)
 
 --		INFO: По сути должно примениться только к мн. формам (случай `B`)
-		export.reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index .. '*', data, false)
+		reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index .. '*', data, false)
 
 		endings['gen_pl'] = ''  -- INFO: Странный фикс, но он нужен.. <_<
 
