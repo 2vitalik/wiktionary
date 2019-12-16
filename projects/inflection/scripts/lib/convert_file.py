@@ -27,13 +27,13 @@ regexps_MULTILINE = {
         ('from projects.inflection.modules.{dev}.{dev}_py.a import syllables',
          'local syllables = require("Модуль:слоги")'),
 
-        (r'from \.(\.*)(\w+) import (\w+) as (\w+)',
+        (r'from \.((?:declension\.)?\.*)(\w+) import (\w+) as (\w+)',
          "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1'"),
 
-        (r'from \.(\.*)(\w+) import (\w+)',
+        (r'from \.((?:declension\.)?\.*)(\w+) import (\w+)',
          "local \\3 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1' ="),
 
-        (r'from \.(\.*)(\w+)\.(\w+) import (\w+) as (\w+)',
+        (r'from \.((?:declension\.)?\.*)(\w+)\.(\w+) import (\w+) as (\w+)',
          "local \\5 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4')  -- '\\1'"),
 
         # (r"\bmw\.text\.", 'mw.'),
@@ -157,13 +157,13 @@ regexps_MULTILINE = {
         ('local syllables = require\("Модуль:слоги"\)',
          'from projects.inflection.modules.{dev}.{dev}_py.a import syllables'),
 
-        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '(\.*)' =",
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)' =",
          'from .\\4\\2 import \\1'),
 
-        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '(\.*)'",
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)'",
          'from .\\4\\2 import \\3 as \\1'),
 
-        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)'\)  -- '(\.*)'",
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)'",
          'from .\\5\\2.\\3 import \\4 as \\1'),
 
         # (r"\bmw\.text\.", 'mw.'),

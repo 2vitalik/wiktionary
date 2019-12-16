@@ -17,8 +17,9 @@ declension_files = [
     'ru/declension/modify/circles/noun',
     'ru/declension/modify/degree',
     'ru/declension/modify/reducable',
-    'ru/declension/output/form',
-    'ru/declension/output/noun',
+    'ru/declension/output/forms/common',
+    'ru/declension/output/forms/noun',
+    'ru/declension/output/forms/adj',
     'ru/declension/output/index',
     'ru/declension/output/result',
 ]

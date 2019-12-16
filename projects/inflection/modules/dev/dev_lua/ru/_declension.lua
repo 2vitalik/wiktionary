@@ -5,18 +5,17 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/input/common')  -- ''
-local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- '' =
-local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- '' =
-local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- '' =
-local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- ''
-local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/reducable')  -- '' =
-local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/degree')  -- '' =
-local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '' =
-local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/form')  -- '' =
-local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- '' =
-local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- ''
-
+local input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/input/common')  -- 'declension.'
+local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- 'declension.' =
+local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
+local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- 'declension.' =
+local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- 'declension.'
+local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/reducable')  -- 'declension.' =
+local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/degree')  -- 'declension.' =
+local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- 'declension.' =
+local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/common')  -- 'declension.'
+local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/noun')  -- 'declension.'
+local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- 'declension.' =
 
 local module = 'declension'
 

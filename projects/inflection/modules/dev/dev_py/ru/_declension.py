@@ -5,18 +5,17 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from .init.input import common as input
-from .init import stress
-from .init import endings
-from .init import stem_type
-from .modify.circles import adj as adj_circles
-from .modify import reducable
-from .modify import degree
-from .output import result
-from .output import form
-from .output import index
-from .output import noun as noun_forms
-
+from .declension.init.input import common as input
+from .declension.init import stress
+from .declension.init import endings
+from .declension.init import stem_type
+from .declension.modify.circles import adj as adj_circles
+from .declension.modify import reducable
+from .declension.modify import degree
+from .declension.output import result
+from .declension.output.forms import common as form
+from .declension.output.forms import noun as noun_forms
+from .declension.output import index
 
 module = 'declension'  # local
 
