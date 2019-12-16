@@ -2,8 +2,8 @@ from projects.inflection.scripts.lib.upload import upload
 
 
 if __name__ == '__main__':
-    version = '4.1.2'
-    desc = 'b'
+    version = '4.1.3'
+    desc = 'Ещё немного реструктуризации'
 
     upload(version, desc, dev=True)
 
