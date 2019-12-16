@@ -1,6 +1,8 @@
+from os.path import exists
+
 from pywikibot import NoPage
 
-from libs.utils.io import write
+from libs.utils.io import write, read
 from libs.utils.wikibot import load_page
 from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.files import declension_files, \
@@ -17,8 +19,16 @@ def download_page(title, path):
         return
     content = content.replace("\n-- dev_prefix = 'User:Vitalik/'",
                               "\ndev_prefix = 'User:Vitalik/'")
-    write(path, content)
-    print(' - OK')
+    if exists(path):
+        old_content = read(path)
+        if old_content != content:
+            print(' - OK')
+        else:
+            write(path, content)
+            print(' - Not changed')
+    else:
+        write(path, content)
+        print(' - NEW')
 
 
 def download_lua(dev, testcases=False):
