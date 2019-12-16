@@ -6,7 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 function export.template(base, args)
-	return 'inflection/ru/noun'
+	return dev_prefix .. 'inflection/ru/noun'
 end
 
 

@@ -6,7 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 def template(base, args):  # export
-    return 'inflection/ru/adj'
+    return dev_prefix + 'inflection/ru/adj'
 # end
 
 
