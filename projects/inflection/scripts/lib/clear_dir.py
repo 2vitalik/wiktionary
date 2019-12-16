@@ -2,12 +2,13 @@ from shutil import copy
 
 from libs.utils.io import ensure_parent_dir
 from projects.inflection.scripts.lib.compare_dir import compare_dir
-from projects.inflection.scripts.lib.files import declension_files
+from projects.inflection.scripts.lib.files import declension_files, \
+    testcases_files
 from projects.inflection.scripts.lib.paths import get_path
 
 
 def clear_out_dir(dev, lang):
-    for file in declension_files:
+    for file in (declension_files + testcases_files):
         # Копирование результата в `ru.out`:
         out_file = get_path(dev, lang, file, out=True)
         ensure_parent_dir(out_file)
