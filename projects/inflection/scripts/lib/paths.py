@@ -10,6 +10,6 @@ def get_path(dev, lang, file, out=False, root=False):
     if root:
         return join(project_path, 'modules', dev_str, lang_dir)
 
-    out_str = '.out' if out else ''
-    return join(project_path, 'modules', dev_str, lang_dir, f'ru{out_str}',
-                f'{file}.{lang}')
+    out_str = '.out/' if out else ''
+    return join(project_path, 'modules', dev_str, lang_dir,
+                f'{out_str}{file}.{lang}')

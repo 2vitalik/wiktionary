@@ -1,0 +1,19 @@
+{{inflection-avoid-changing}}
+
+'''Базовый модуль:'''
+* [[Модуль:User:Vitalik/inflection]]
+'''Шаблоны:'''
+* {{шаблон|сущ-ru}}, [[User:Vitalik/сущ-ru|dev-версия]]
+* {{шаблон|прил-ru}}, [[User:Vitalik/прил-ru|dev-версия]]
+'''Тесты:'''
+* Массовые автоматические:
+** [[Модуль:User:Vitalik/inflection/ru/declension/testcases/noun]]
+** [[Модуль:User:Vitalik/inflection/ru/declension/testcases/adj]]
+* Ручные, постраничные:
+** [[Служебная:Указатель по началу названия/u:Vitalik/сущ-ru/tests/]]
+** [[Служебная:Указатель по началу названия/u:Vitalik/прил-ru/tests/]]
+* Ручные, старое:
+** [[u:Cinemantique/сущ+]]
+** [[u:Vitalik/test-inflection-ru]]
+'''Разное:'''
+* [[u:Vitalik/Зализняк]]

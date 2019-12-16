@@ -5,10 +5,10 @@ local inflection = require('Module:' .. dev_prefix .. 'inflection')
 local tests = require('Module:' .. dev_prefix .. 'inflection/UnitTests')
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
-local data_name = 'ru/noun'
+local data_name = 'ru/declension'
 local lang = require('Module:languages2').getByCode('ru')
 local wu = require('Module:wiki-utils')
-local test_data = require('Module:' .. dev_prefix .. 'inflection/ru/noun/testcases/data')
+local test_data = require('Module:' .. dev_prefix .. 'inflection/ru/declension/testcases/adj/data')
 
 local divider = '<span style="color:silver;font-family:Courier New,monospace;padding: 0 1px;">&#124;</span>'
 
@@ -29,14 +29,18 @@ function tests:check(word_stressed, index, expected, comment)
 	local base = mw.ustring.gsub(word_stressed, '́', '')
 
 	local args = {}
+	args["lang"] = 'ru'
+	args["unit"] = 'adj'
 	args["слово"] = word_stressed
 	args["индекс"] = index
 
 	local forms = inflection.test(data_name, base, args)
 	local forms_keys = {
-		'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
-		'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
-		'prt_sg', 'loc_sg', 'voc_sg',
+		'nom_sg_m', 'gen_sg_m', 'dat_sg_m', 'ins_sg_m', 'prp_sg_m',
+		'nom_sg_n',
+		'nom_sg_f', 'gen_sg_f', 'acc_sg_f', 'ins_sg2_f',
+		'nom_pl',   'gen_pl',   'ins_pl',
+		'srt_sg_m', 'srt_sg_n', 'srt_sg_f', 'srt_pl',
 	}
 	local expected_list = mw.text.split(expected, ' | ')
 
@@ -44,7 +48,7 @@ function tests:check(word_stressed, index, expected, comment)
 		local zero = i < 10 and '0' or ''
 		local text = ''
 		text = text .. 'align="center" | <small>' .. n .. '.' .. zero .. i .. '</small> || '
-		text = text .. '<span style="border:1px gray solid;padding:3px;"><small style="color:gray"><span style="padding: 0 1px;">{{</span>сущ ru+</small>'.. divider .. '<code>' .. index .. '</code>' .. divider .. title .. '<small style="color:gray; padding: 0 1px;">}}</span></span> '
+		text = text .. '<span style="border:1px gray solid;padding:3px;"><small style="color:gray"><span style="padding: 0 1px;">{{</span>прил-ru</small>'.. divider .. title .. divider .. '<code>' .. _.replaced(index, "'", "&apos;") .. '</code>' .. '<small style="color:gray; padding: 0 1px;">}}</span></span> '
 		if forms['stem_type'] then
 			text = text .. " — <small style='color: gray;'>'''" .. forms['stem_type'] .. "'''</small> "
 		end

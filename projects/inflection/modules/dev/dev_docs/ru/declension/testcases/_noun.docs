@@ -1,0 +1,17 @@
+== Тесты ==
+* Первые тесты ''(выборочное тестирование)''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/simple|Простые индексы]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/reduceables|С чередованием]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/other|С другими особенностями]]'''
+
+* Вторые тесты ''(на основе словаря)''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/simple|Простые индексы]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/reducable|Простое чередование]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/angled|Угловые скобки]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/variations|Вариации]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/other_cases|Дополнительные падежи]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/other_indexes|Остальные индексы, часть 1]]'''
+** '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/all/other_indexes2|Остальные индексы, часть 2]]'''
+
+<br/>
+Все данные для тестов находятся '''[[Module:User:Vitalik/inflection/ru/declension/testcases/noun/data|здесь]]'''.

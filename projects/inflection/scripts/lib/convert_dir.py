@@ -3,7 +3,7 @@ from shutil import copy
 from libs.utils.io import write
 from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.convert_file import convert_file
-from projects.inflection.scripts.lib.files import files
+from projects.inflection.scripts.lib.files import declension_files
 from projects.inflection.scripts.lib.paths import get_path
 
 
@@ -12,7 +12,7 @@ def convert_dir(dev, _from, _to):
         print(f'Ошибка: папки `{_to}` не синхронизированы до конвертации.')
         return
 
-    for file in files:
+    for file in declension_files:
         # Прямое преобразование:
         convert_file(dev, file, _from, _to, out=False)
 
