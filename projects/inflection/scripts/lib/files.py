@@ -24,7 +24,6 @@ declension_files = [
     'ru/declension/output/result',
 ]
 
-
 testcases_files = [
     'ru/declension/_testcases',
     'ru/declension/testcases/_adj',
@@ -47,18 +46,31 @@ testcases_files = [
     'ru/declension/testcases/noun/simple',
 ]
 
+tpl_files = [
+    'inflection/ru/adj',
+    'inflection/ru/noun',
+    'inflection/ru/noun/text',
+    'inflection/ru/noun/cat',
+]
 
-def get_module_title(file, dev=True):
-    dev_prefix = 'User:Vitalik/' if dev else ''
+
+def convert_path(file):
     path = file.replace('/_', '/')
     if path.startswith('_'):
         path = path[1:]
-    return f'Module:{dev_prefix}inflection/{path}'
+    return path
+
+
+def get_module_title(file, dev=True):
+    dev_prefix = 'User:Vitalik/' if dev else ''
+    return f'Module:{dev_prefix}inflection/{convert_path(file)}'
 
 
 def get_docs_title(file, dev=True):
     dev_prefix = 'User:Vitalik/' if dev else ''
-    path = file.replace('/_', '/')
-    if path.startswith('_'):
-        path = path[1:]
-    return f'Module:{dev_prefix}inflection/{path}/Документация'
+    return f'Module:{dev_prefix}inflection/{convert_path(file)}/Документация'
+
+
+def get_tpl_title(file, dev=True):
+    dev_prefix = 'User:Vitalik/' if dev else 'Шаблон:'
+    return f'{dev_prefix}{convert_path(file)}'

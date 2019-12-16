@@ -1,5 +1,5 @@
-from projects.inflection.scripts.lib.download import download
+from projects.inflection.scripts.lib.download import download_lua
 
 
 if __name__ == '__main__':
-    download(dev=True, testcases=True)
+    download_lua(dev=True, testcases=True)
