@@ -38,7 +38,7 @@ def read_file(dev, filename):
     return result
 
 
-def upload(version, desc, dev, testcases=False):
+def upload_lua(version, desc, dev, testcases=False):
     if not compare_dir(dev, 'lua'):
         print('Ошибка: папки `lua` не синхронизированы.')
         return
