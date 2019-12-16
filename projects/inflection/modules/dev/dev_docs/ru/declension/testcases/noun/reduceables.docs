@@ -1,1 +1,1 @@
-{{#invoke:User:Vitalik/inflection/ru/noun/testcases/reduceables|run_tests|differs_at=1}}
+{{#invoke:User:Vitalik/inflection/ru/declension/testcases/noun/reduceables|run_tests|differs_at=1}}

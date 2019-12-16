@@ -1,1 +1,1 @@
-{{#invoke:User:Vitalik/inflection/ru/noun/testcases/simple|run_tests|differs_at=1}}
+{{#invoke:User:Vitalik/inflection/ru/declension/testcases/noun/simple|run_tests|differs_at=1}}

@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local data_name = 'ru/declension'
 local lang = require('Module:languages2').getByCode('ru')
 local wu = require('Module:wiki-utils')
-local test_data = require('Module:' .. dev_prefix .. 'inflection/ru/noun/testcases/data')
+local test_data = require('Module:' .. dev_prefix .. 'inflection/ru/declension/testcases/noun/data')
 
 local divider = '<span style="color:silver;font-family:Courier New,monospace;padding: 0 1px;">&#124;</span>'
 
