@@ -3,7 +3,7 @@ from libs.utils.io import append, read
 from libs.utils.wikibot import save_page
 from projects.inflection.scripts.lib.compare_dir import compare_dir
 from projects.inflection.scripts.lib.files import declension_files, \
-    get_module_title, testcases_files
+    get_module_title, testcases_files, get_docs_title
 from projects.inflection.scripts.lib.paths import get_path
 
 
@@ -62,3 +62,17 @@ def upload_lua(version, desc, dev, testcases=False):
     # path = get_path('lua', root=True)  # todo: fixme
     # save_page(title, read_file(dev, f'{path}/tools.lua'),
     #           f'v{inflection_version}: {desc}')
+
+
+def upload_docs(version, desc, dev):
+    desc = process_desc(dev, version, desc)
+    print(f'Загружаю документацию в ВС:')
+
+    files = declension_files + testcases_files
+    for file in files:
+        title = get_docs_title(file, dev)
+        print(f'- {title} - ', end='')
+
+        path = get_path(dev, 'docs', file, out=True)
+        if save_page(title, read_file(dev, path), f'v{version}: {desc}'):
+            print('OK')

@@ -1,11 +1,6 @@
-from projects.inflection.scripts.lib.upload import upload_lua
 
-
-if __name__ == '__main__':
-    version = '4.1.4'
-    desc = 'Использование dev-шаблонов для dev-версии'
-
-    upload_lua(version, desc, dev=True)
+version = '4.1.5'
+desc = 'Тестовая заливка тестов))'
 
 
 # todo: почистить старые неиспользуемые модули на ВС (старые имена)
