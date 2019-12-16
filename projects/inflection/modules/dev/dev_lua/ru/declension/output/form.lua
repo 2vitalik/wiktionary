@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- '.' = as noun_forms
+local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- '.'
 
 
 local module = 'output.forms'

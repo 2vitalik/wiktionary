@@ -27,11 +27,11 @@ regexps_MULTILINE = {
         ('from projects.inflection.modules.{dev}.{dev}_py.a import syllables',
          'local syllables = require("Модуль:слоги")'),
 
-        (r'from \.(\.*)(\w+) import (\w+)',
-         "local \\3 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1' ="),
-
         (r'from \.(\.*)(\w+) import (\w+) as (\w+)',
          "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1'"),
+
+        (r'from \.(\.*)(\w+) import (\w+)',
+         "local \\3 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1' ="),
 
         (r'from \.(\.*)(\w+)\.(\w+) import (\w+) as (\w+)',
          "local \\5 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4')  -- '\\1'"),

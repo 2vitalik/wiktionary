@@ -2,7 +2,7 @@ from projects.inflection.scripts.lib.upload import upload
 
 
 if __name__ == '__main__':
-    version = '4.1.1'
+    version = '4.1.2'
     desc = 'b'
 
     upload(version, desc, dev=True)

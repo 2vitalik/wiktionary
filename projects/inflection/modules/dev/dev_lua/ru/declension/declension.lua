@@ -15,7 +15,7 @@ local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modi
 local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '' =
 local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/form')  -- '' =
 local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- '' =
-local noun = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- '' = as noun_forms
+local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/noun')  -- ''
 
 
 local module = 'declension'

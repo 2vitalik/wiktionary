@@ -78,7 +78,7 @@ function export.get(frame)
 
     local forms = declension_unit.forms(base, args, frame)
 
-    local template_unit = load_unit(lang .. '/' .. unit .. '/template')
+    local template_unit = load_unit(lang .. '/declension/data/template/' .. unit)
     local template = template_unit.template(base, args)
 
     local output = frame:expandTemplate{title=template, args=forms }
