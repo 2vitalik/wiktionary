@@ -1,5 +1,4 @@
 import re
-from os.path import join
 
 from libs.utils.io import read, write
 from projects.inflection.scripts.lib.paths import get_path
@@ -28,14 +27,14 @@ regexps_MULTILINE = {
         ('from projects.inflection.modules.{dev}.{dev}_py.a import syllables',
          'local syllables = require("Модуль:слоги")'),
 
-        (r'from .libs import (\w+)',
-         "local \\1 = require(parent_prefix .. '/\\1')"),
+        (r'from \.(\.*)(\w+) import (\w+)',
+         "local \\3 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1' ="),
 
-        (r'from \.\.declension.sub import (\w+)',
-         "local \\1 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\1')"),
+        (r'from \.(\.*)(\w+) import (\w+) as (\w+)',
+         "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1'"),
 
-        (r'from \.\.(\.)?(\w+) import (\w+) as (\w+)',
-         "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/\\2/\\3')  -- '\\1'"),
+        (r'from \.(\.*)(\w+)\.(\w+) import (\w+) as (\w+)',
+         "local \\5 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4')  -- '\\1'"),
 
         # (r"\bmw\.text\.", 'mw.'),
 
@@ -158,14 +157,14 @@ regexps_MULTILINE = {
         ('local syllables = require\("Модуль:слоги"\)',
          'from projects.inflection.modules.{dev}.{dev}_py.a import syllables'),
 
-        (r"^local (\w+) = require\(parent_prefix \.\. '/(\w+)'\)",
-         'from .libs import \\1'),
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '(\.*)' =",
+         'from .\\4\\2 import \\1'),
 
-        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)'\)",
-         'from ..declension.sub import \\1'),
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '(\.*)'",
+         'from .\\4\\2 import \\3 as \\1'),
 
-        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/(\w+)/(\w+)'\)  -- '(\.)?'",
-         'from ..\\4\\2 import \\3 as \\1'),
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)'\)  -- '(\.*)'",
+         'from .\\5\\2.\\3 import \\4 as \\1'),
 
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),
