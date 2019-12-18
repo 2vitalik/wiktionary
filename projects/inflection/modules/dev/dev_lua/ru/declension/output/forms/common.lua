@@ -150,7 +150,7 @@ function export.generate_forms(data)
 
 	for key, value in pairs(out_args) do
 		-- replace 'ё' with 'е' when unstressed
-		-- if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then  -- trying to bug-fix
+		-- if _.contains_once(data.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then  -- trying to bug-fix
 		if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then
 			if data.adj and _.contains(data.stress_type, "a'") and data.gender == 'f' and key == 'srt_sg' then
 				out_args[key] = _.replaced(value, 'ё', 'е') .. ' // ' .. _.replaced(value, '́', '')

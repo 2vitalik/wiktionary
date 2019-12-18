@@ -40,7 +40,7 @@ function export.extract_gender_animacy(info)
 
 	if _.startswith(info.index, 'п') then
 		info.adj = true
-	elseif _.extract(info.index, '^м//ж') or _.extract(info.index, '^m//f') then
+	elseif _.extract(info.index, '^м//ж') or _.extract(info.index, '^m//f') then  -- todo: info: похоже все такие случаи либо 0, либо <...>
 		info.gender = 'mf'
 		info.animacy = 'in'
 	elseif _.extract(info.index, '^м//с') or _.extract(info.index, '^m//n') then

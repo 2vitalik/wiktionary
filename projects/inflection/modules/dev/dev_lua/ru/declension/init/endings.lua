@@ -136,7 +136,7 @@ function export.get_endings(data)
 	choose_endings_stress(endings, data.gender, data.base_stem_type, data.stress_schema, data.adj, data.pronoun)
 
 --	INFO: Особые случаи: `копьё с d*` и `питьё с b*`
-	if data.gender == 'n' and data.base_stem_type == 'soft' and _.endswith(data.word, 'ё') then
+	if data.gender == 'n' and data.base_stem_type == 'soft' and _.endswith(data.word.unstressed, 'ё') then
 		endings['nom_sg'] = 'ё'
 	end
 

@@ -55,19 +55,19 @@ local function main_sub_algorithm(data)
 	end
 
 --	-- *** для случая с расстановкой ударения  (см. ниже)
---	local orig_stem = data.stem
+--	local orig_stem = data.stem.unstressed
 --	if _.contains(data.rest_index, {'%(2%)', '②'}) then
 --		orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
 --		mw.log('> Another `orig_stem`: ' .. tostring(orig_stem))
 --	end
 
 	-- reducable
-	data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
-	reducable.apply_specific_reducable(data.stems, data.endings, data.word, data.stem, data.stem_type, data.gender, data.stress_type, data.rest_index, data, false)
+	data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
+	reducable.apply_specific_reducable(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem_type, data.gender, data.stress_type, data.rest_index, data, false)
 
 	if not _.equals(data.stress_type, {"f", "f'"}) and _.contains(data.rest_index, '%*') then
 		mw.log('# Обработка случая на препоследний слог основы при чередовании')
-		orig_stem = data.stem
+		orig_stem = data.stem.unstressed
 		if data.forced_stem then
 			orig_stem = data.forced_stem
 		end
@@ -141,7 +141,7 @@ local function main_algorithm(data)
 			out_args['зализняк'] = '0'
 			out_args['скл'] = 'не'
 			for i, key in pairs(keys) do  -- list
-				out_args[key] = data.word_stressed
+				out_args[key] = data.word.stressed
 			end
 			_.ends(module, func)
 			return result.finalize(data, out_args)
@@ -160,25 +160,25 @@ local function main_algorithm(data)
 
 --	INFO: Итак, ударение мы получили.
 
---	INFO: Добавление ударения для `stem_stressed` (если его не было)
+--	INFO: Добавление ударения для `stem.stressed` (если его не было)
 --	INFO: Например, в слове только один слог, или ударение было на окончание
-	if not _.contains(data.stem_stressed, '[́ ё]') then  -- and not data.absent_stress ??
+	if not _.contains(data.stem.stressed, '[́ ё]') then  -- and not data.absent_stress ??
 		if _.equals(data.stress_type, {"f", "f'"}) then
-			data.stem_stressed = _.replaced(data.stem_stressed, '^({consonant}*)({vowel})', '%1%2́ ')
+			data.stem.stressed = _.replaced(data.stem.stressed, '^({consonant}*)({vowel})', '%1%2́ ')
 		elseif _.contains(data.rest_index, '%*') then
 			-- pass  -- *** поставим ударение ниже, после чередования
 		else
-			data.stem_stressed = _.replaced(data.stem_stressed, '({vowel})({consonant}*)$', '%1́ %2')
+			data.stem.stressed = _.replaced(data.stem.stressed, '({vowel})({consonant}*)$', '%1́ %2')
 		end
 	end
 
-	_.log_value(data.stem_stressed, 'data.stem_stressed')
+	_.log_value(data.stem.stressed, 'data.stem.stressed')
 
 	-- -------------------------------------------------------------------------
 
 	_.log_info('Определение типа основы')
 
-	data.stem_type, data.base_stem_type = stem_type.get_stem_type(data.stem, data.word, data.gender, data.adj, data.rest_index)
+	data.stem_type, data.base_stem_type = stem_type.get_stem_type(data.stem.unstressed, data.word.unstressed, data.gender, data.adj, data.rest_index)
 
 	_.log_value(data.stem_type, 'data.stem_type')
 	_.log_value(data.base_stem_type, 'data.base_stem_type')
@@ -290,7 +290,7 @@ function export.forms(base, args, frame)
 	end
 
 	if info.noun then
-		noun_forms.special_cases(out_args, args, info.index, info.word)
+		noun_forms.special_cases(out_args, args, info.index, info.word.unstressed)
 	end
 
 	result.finalize(info, out_args)

@@ -16,33 +16,33 @@ def init(func, info):
     # local several_vovwels, has_stress
 
     # INFO: Исходное слово без ударения:
-    info.word = _.replaced(info.word_stressed, '́ ', '')
+    info.word.unstressed = _.replaced(info.word.stressed, '́ ', '')
 
     # INFO: Исходное слово вообще без ударений (в т.ч. без грависа):
-    info.word_cleared = _.replaced(_.replaced(_.replaced(info.word, '̀', ''), 'ѐ', 'е'), 'ѝ', 'и')
+    info.word.cleared = _.replaced(_.replaced(_.replaced(info.word.unstressed, '̀', ''), 'ѐ', 'е'), 'ѝ', 'и')
 
     if info.adj:
-        if _.endswith(info.word_stressed, 'ся'):
+        if _.endswith(info.word.stressed, 'ся'):
             info.postfix = True
-            info.stem = _.replaced(info.word, '{vowel}[йяе]ся$', '')
-            info.stem_stressed = _.replaced(info.word_stressed, '{vowel}́ ?[йяе]ся$', '')
+            info.stem.unstressed = _.replaced(info.word.unstressed, '{vowel}[йяе]ся$', '')
+            info.stem.stressed = _.replaced(info.word.stressed, '{vowel}́ ?[йяе]ся$', '')
         else:
-            info.stem = _.replaced(info.word, '{vowel}[йяе]$', '')
-            info.stem_stressed = _.replaced(info.word_stressed, '{vowel}́ ?[йяе]$', '')
+            info.stem.unstressed = _.replaced(info.word.unstressed, '{vowel}[йяе]$', '')
+            info.stem.stressed = _.replaced(info.word.stressed, '{vowel}́ ?[йяе]$', '')
         # end
     else:
         # INFO: Удаляем окончания (-а, -е, -ё, -о, -я, -й, -ь), чтобы получить основу:
-        info.stem = _.replaced(info.word, '[аеёийоьыя]$', '')
-        info.stem_stressed = _.replaced(info.word_stressed, '[аеёийоьыя]́ ?$', '')
+        info.stem.unstressed = _.replaced(info.word.unstressed, '[аеёийоьыя]$', '')
+        info.stem.stressed = _.replaced(info.word.stressed, '[аеёийоьыя]́ ?$', '')
     # end
 
-    _.log_value(info.word, 'info.word')
-    _.log_value(info.stem, 'info.stem')
-    _.log_value(info.stem_stressed, 'info.stem_stressed')
+    _.log_value(info.word.unstressed, 'info.word.unstressed')
+    _.log_value(info.stem.unstressed, 'info.stem.unstressed')
+    _.log_value(info.stem.stressed, 'info.stem.stressed')
 
 #  INFO: Случай, когда не указано ударение у слова:
-    several_vovwels = _.contains_several(info.word_stressed, '{vowel+ё}')
-    has_stress = _.contains(info.word_stressed, '[́ ё]')
+    several_vovwels = _.contains_several(info.word.stressed, '{vowel+ё}')
+    has_stress = _.contains(info.word.stressed, '[́ ё]')
     if several_vovwels and not has_stress:
         _.log_info('Ошибка: Не указано ударение в слове')
         _.ends(module, func)
@@ -102,16 +102,20 @@ def parse(func, base, args):  # export
     info.lang = mw.text.trim(args['lang'])
     info.unit = mw.text.trim(args['unit'])
     info.index = mw.text.trim(args['индекс'])
-    info.word_stressed = mw.text.trim(args['слово'])
+
+    info.word = a.AttrDict()  # AttrDict
+    info.stem = a.AttrDict()  # AttrDict
+
+    info.word.stressed = mw.text.trim(args['слово'])
 
     info.noun = (info.unit == 'noun')
 
     _.log_value(info.index, 'info.index')
-    _.log_value(info.word_stressed, 'info.word_stressed')
+    _.log_value(info.word.stressed, 'info.word.stressed')
 
     # mw.log('')
     # mw.log('==================================================')
-    # mw.log('args: ' + str(info.index) + ' | ' + str(info.word_stressed))
+    # mw.log('args: ' + str(info.index) + ' | ' + str(info.word.stressed))
     # mw.log('--------------------------------------------------')
 
     # -------------------------------------------------------------------------
@@ -140,7 +144,7 @@ def parse(func, base, args):  # export
     _.log_value(info.pt, 'info.pt')
     _.log_value(info.rest_index, 'info.rest_index')
 
-    # INFO: stem, stem_stressed, etc.
+    # INFO: stem, stem.stressed, etc.
     error = init(info)
     if error:
         _.ends(module, func)
@@ -180,13 +184,13 @@ def parse(func, base, args):  # export
         # _.log_info('Случай с "+" (несколько составных частей слова через дефис)')
 
         index_parts = mw.text.split(info.rest_index, '%+')
-        words_parts = mw.text.split(info.word_stressed, '-')
+        words_parts = mw.text.split(info.word.stressed, '-')
         n_sub_parts = a.table_len(index_parts)
         if n_sub_parts > 1:
             info.plus = []  # list
             for i in range(1, n_sub_parts + 1):
                 data_copy = mw.clone(info)
-                data_copy.word_stressed = words_parts[i]
+                data_copy.word.stressed = words_parts[i]
 
                 error = init(data_copy)
                 if error:

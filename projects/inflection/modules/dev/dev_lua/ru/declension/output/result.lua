@@ -123,7 +123,7 @@ local function forward_args(out_args, data)
 			out_args['слоги'] = syllables.get_syllables(out_args['слоги'])
 		end
 	else
-		out_args['слоги'] = data.word
+		out_args['слоги'] = data.word.unstressed  -- fixme: может всё-таки stressed?
 	end
 
 	_.ends(module, func)
@@ -142,7 +142,7 @@ local function additional_arguments(out_args, data)
 		out_args['скл'] = 'а'
 	elseif data.pronoun then
 		out_args['скл'] = 'мс'
-	elseif _.endswith(data.word, '[ая]') then
+	elseif _.endswith(data.word.unstressed, '[ая]') then
 		out_args['скл'] = '1'
 	else
 		if data.gender == 'm' or data.gender == 'n' then

@@ -203,7 +203,7 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 						end
 						if e then
 							mw.log('  -- в `' .. case .. '` ударение на окончание')
-							stems[case] = data.stem
+							stems[case] = data.stem.unstressed
 							if _.contains(prev, '[жшчщ]') then
 								mw.log('  -- предыдущая [жшчщ]')
 								_.replace(stems, case, '(.)({consonant})$', '%1о́%2')

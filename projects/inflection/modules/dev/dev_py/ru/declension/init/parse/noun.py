@@ -34,7 +34,7 @@ def extract_gender_animacy(func, info):  # export
 
     if _.startswith(info.index, 'п'):
         info.adj = True
-    elif _.extract(info.index, '^м//ж') or _.extract(info.index, '^m//f'):
+    elif _.extract(info.index, '^м//ж') or _.extract(info.index, '^m//f'):  # todo: info: похоже все такие случаи либо 0, либо <...>
         info.gender = 'mf'
         info.animacy = 'in'
     elif _.extract(info.index, '^м//с') or _.extract(info.index, '^m//n'):

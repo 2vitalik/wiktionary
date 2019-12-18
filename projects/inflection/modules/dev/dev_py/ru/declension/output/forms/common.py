@@ -132,7 +132,7 @@ def generate_forms(func, data):  # export
 
     for key, value in out_args.items():
         # replace 'ё' with 'е' when unstressed
-        # if _.contains_once(data.stem, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё'):  -- trying to bug-fix
+        # if _.contains_once(data.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё'):  -- trying to bug-fix
         if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё'):
             if data.adj and _.contains(data.stress_type, "a'") and data.gender == 'f' and key == 'srt_sg':
                 out_args[key] = _.replaced(value, 'ё', 'е') + ' // ' + _.replaced(value, '́', '')
