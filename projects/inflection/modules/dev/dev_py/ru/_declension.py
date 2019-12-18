@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from .declension.init.input import common as input
+from .declension.init.parse import common as input
 from .declension.init import stress
 from .declension.init import endings
 from .declension.init import stem_type

@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/input/common')  -- 'declension.'
+local input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
 local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- 'declension.' =
 local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
 local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- 'declension.' =
