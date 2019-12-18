@@ -89,7 +89,7 @@ function export.apply_stress_type(data)
 	_.starts(module, func)
 
 	-- If we have "ё" specific
-	if _.contains(data.rest_index, 'ё') and data.stem_type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
+	if _.contains(data.rest_index, 'ё') and data.stem.type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
 		data.stem.stressed = _.replaced(data.stem.stressed, 'е́?([^е]*)$', 'ё%1')
 	end
 
@@ -102,8 +102,8 @@ function export.apply_stress_type(data)
 
 	-- TODO: Remove redundant duplicated code (with above)
 	-- If we have "ё" specific
-	-- _.log_value(data.stem_type, 'data.stem_type')
-	-- if _.contains(data.rest_index, 'ё') and data.stem_type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
+	-- _.log_value(data.stem.type, 'data.stem.type')
+	-- if _.contains(data.rest_index, 'ё') and data.stem.type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
 	--     data.stem.stressed = _.replaced(data.stem.stressed, 'е́?([^е]*)$', 'ё%1')
 	-- end
 

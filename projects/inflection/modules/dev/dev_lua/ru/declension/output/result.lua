@@ -184,7 +184,7 @@ function export.finalize(data, out_args)
 	func = "finalize"
 	_.starts(module, func)
 
-	out_args['stem_type'] = data.stem_type  -- for testcases
+	out_args['stem_type'] = data.stem.type  -- for testcases
 	out_args['stress_type'] = data.stress_type  -- for categories   -- is really used?
 	out_args['dev'] = dev_prefix
 

@@ -19,7 +19,7 @@ local module = 'init.endings'
 
 -- Схлопывание: Выбор окончаний в зависимости от рода и типа основы
 -- @starts
-local function get_base_endings(gender, base_stem_type, adj, pronoun)
+local function get_base_endings(gender, stem_base_type, adj, pronoun)
 	func = "get_base_endings"
 	_.starts(module, func)
 
@@ -37,26 +37,26 @@ local function get_base_endings(gender, base_stem_type, adj, pronoun)
 	if adj and gender == '' then  -- INFO: Случай с множественным числом
 		keys = {'nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg', 'srt_sg'}
 		for i, key in pairs(keys) do  -- list
-			standard_endings['common'][base_stem_type][key] = ''
+			standard_endings['common'][stem_base_type][key] = ''
 		end
 		_.ends(module, func)
-		return standard_endings['common'][base_stem_type]
+		return standard_endings['common'][stem_base_type]
 	end
 
 --	INFO: Заполнение из общих данных для всех родов:
-	for key, value in pairs(standard_endings['common'][base_stem_type]) do
-		standard_endings[gender][base_stem_type][key] = value
+	for key, value in pairs(standard_endings['common'][stem_base_type]) do
+		standard_endings[gender][stem_base_type][key] = value
 	end
 
 --	INFO: Возвращение соответствующих окончаний
 	_.ends(module, func)
-	return standard_endings[gender][base_stem_type]
+	return standard_endings[gender][stem_base_type]
 end
 
 
 -- Схлопывание: Выбор окончания среди двух вариантов в зависимости от схемы ударения
 -- @starts
-local function choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun)
+local function choose_endings_stress(endings, gender, stem_base_type, stress_schema, adj, pronoun)
 	func = "choose_endings_stress"
 	_.starts(module, func)
 
@@ -65,13 +65,13 @@ local function choose_endings_stress(endings, gender, base_stem_type, stress_sch
 	if adj then
 		stress = stress_schema['ending']['nom_sg'] and stressed or unstressed
 
-		if gender == 'm' and base_stem_type == 'hard' then
+		if gender == 'm' and stem_base_type == 'hard' then
 			endings['nom_sg'] = endings['nom_sg'][stress]
 		end
 
 		stress = stress_schema['ending']['srt_sg_n'] and stressed or unstressed
 
-		if gender == 'n' and base_stem_type == 'soft' then
+		if gender == 'n' and stem_base_type == 'soft' then
 			endings['srt_sg'] = endings['srt_sg'][stress]
 		end
 	elseif pronoun then  -- TODO: может применить такой подход для всех случаев вообще?
@@ -85,7 +85,7 @@ local function choose_endings_stress(endings, gender, base_stem_type, stress_sch
 	else
 		stress = stress_schema['ending']['dat_sg'] and stressed or unstressed
 
-		if gender == 'f' and base_stem_type == 'soft' then
+		if gender == 'f' and stem_base_type == 'soft' then
 			endings['dat_sg'] = endings['dat_sg'][stress]
 		end
 
@@ -95,7 +95,7 @@ local function choose_endings_stress(endings, gender, base_stem_type, stress_sch
 
 		stress = stress_schema['ending']['ins_sg'] and stressed or unstressed
 
-		if base_stem_type == 'soft' then
+		if stem_base_type == 'soft' then
 			endings['ins_sg'] = endings['ins_sg'][stress]
 		end
 
@@ -116,27 +116,27 @@ function export.get_endings(data)
 --	INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
 	local endings
 
-	endings = get_base_endings(data.gender, data.base_stem_type, data.adj, data.pronoun)
+	endings = get_base_endings(data.gender, data.stem.base_type, data.adj, data.pronoun)
 
 --	INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
 	if data.adj then  -- or data.pronoun
-		adj_endings.fix_adj_pronoun_endings(endings, data.gender, data.stem_type, data.stress_schema, data.adj, false)
+		adj_endings.fix_adj_pronoun_endings(endings, data.gender, data.stem.type, data.stress_schema, data.adj, false)
 	elseif data.pronoun then
-		pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
+		pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem.type, data.stress_schema)
 	else
-		noun_endings.fix_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
+		noun_endings.fix_noun_endings(endings, data.gender, data.stem.type, data.stress_schema)
 	end
 
 	-- apply special cases (1) or (2) in index
 	if not data.adj and not data.pronoun then
-		noun_circles.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
+		noun_circles.apply_noun_specific_1_2(endings, data.gender, data.stem.type, data.stem.base_type, data.rest_index)
 	end
 
 	-- Resolve stressed/unstressed cases of endings
-	choose_endings_stress(endings, data.gender, data.base_stem_type, data.stress_schema, data.adj, data.pronoun)
+	choose_endings_stress(endings, data.gender, data.stem.base_type, data.stress_schema, data.adj, data.pronoun)
 
 --	INFO: Особые случаи: `копьё с d*` и `питьё с b*`
-	if data.gender == 'n' and data.base_stem_type == 'soft' and _.endswith(data.word.unstressed, 'ё') then
+	if data.gender == 'n' and data.stem.base_type == 'soft' and _.endswith(data.word.unstressed, 'ё') then
 		endings['nom_sg'] = 'ё'
 	end
 

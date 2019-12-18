@@ -9,33 +9,33 @@ local module = 'init.stem_type'
 
 
 -- @starts
-local function get_base_stem_type(stem_type)
-	func = "get_base_stem_type"
+local function get_stem_base_type(stem_type)
+	func = "get_stem_base_type"
 	_.starts(module, func)
 
-	local change_stem_type
+	local stem_base_types
 
 --	INFO: Выбор подходящего из двух типов
 
 --	TODO: make one big dict?
 
-	change_stem_type = {}  -- dict
+	stem_base_types = {}  -- dict
 	-- hard
-	change_stem_type['hard']  = 'hard'
-	change_stem_type['velar'] = 'hard'
-	change_stem_type['sibilant'] = 'hard'
-	change_stem_type['letter-ц'] = 'hard'
+	stem_base_types['hard']  = 'hard'
+	stem_base_types['velar'] = 'hard'
+	stem_base_types['sibilant'] = 'hard'
+	stem_base_types['letter-ц'] = 'hard'
 	-- soft
-	change_stem_type['soft']  = 'soft'
-	change_stem_type['vowel'] = 'soft'
-	change_stem_type['letter-и'] = 'soft'
-	change_stem_type['m-3rd'] = 'soft'
-	change_stem_type['f-3rd'] = 'soft'
-	change_stem_type['f-3rd-sibilant'] = 'soft'
-	change_stem_type['n-3rd'] = 'hard'
+	stem_base_types['soft']  = 'soft'
+	stem_base_types['vowel'] = 'soft'
+	stem_base_types['letter-и'] = 'soft'
+	stem_base_types['m-3rd'] = 'soft'
+	stem_base_types['f-3rd'] = 'soft'
+	stem_base_types['f-3rd-sibilant'] = 'soft'
+	stem_base_types['n-3rd'] = 'hard'
 
 	_.ends(module, func)
-	return change_stem_type[stem_type]
+	return stem_base_types[stem_type]
 end
 
 
@@ -114,11 +114,11 @@ function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: О�
 	end
 
 --	INFO: Выбор подходящего `stem_type` из двух базовых типов: 'hard' и 'soft'
-	local base_stem_type
-	base_stem_type = get_base_stem_type(stem_type)
+	local stem_base_type
+	stem_base_type = get_stem_base_type(stem_type)
 
 	_.ends(module, func)
-	return stem_type, base_stem_type
+	return stem_type, stem_base_type
 end
 
 return export

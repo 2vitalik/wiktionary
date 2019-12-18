@@ -12,13 +12,13 @@ module = 'modify.circles.noun'  # local
 
 
 @a.starts(module)
-def apply_noun_specific_1_2(func, endings, gender, stem_type, base_stem_type, rest_index):  # export
+def apply_noun_specific_1_2(func, endings, gender, stem_type, stem_base_type, rest_index):  # export
     if _.contains(rest_index, ['%(1%)', '①']):
-        if base_stem_type == 'hard':
+        if stem_base_type == 'hard':
             if gender == 'm': endings['nom_pl'] = 'а' # end
             if gender == 'n': endings['nom_pl'] = 'ы' # end
         # end
-        if base_stem_type == 'soft':
+        if stem_base_type == 'soft':
             if gender == 'm': endings['nom_pl'] = 'я' # end
             if gender == 'n': endings['nom_pl'] = 'и' # end
         # end
@@ -28,12 +28,12 @@ def apply_noun_specific_1_2(func, endings, gender, stem_type, base_stem_type, re
     # end
 
     if _.contains(rest_index, ['%(2%)', '②']):
-        if base_stem_type == 'hard':
+        if stem_base_type == 'hard':
             if gender == 'm': endings['gen_pl'] = ['', ''] # end
             if gender == 'n': endings['gen_pl'] = ['ов', 'ов'] # end
             if gender == 'f': endings['gen_pl'] = {'ей', 'ей' } # end
         # end
-        if base_stem_type == 'soft':
+        if stem_base_type == 'soft':
             if gender == 'm': endings['gen_pl'] = ['ь', 'ь'] # end
             if gender == 'n': endings['gen_pl'] = ['ев', 'ёв']  # end
             if gender == 'f': endings['gen_pl'] = {'ей', 'ей' } # end

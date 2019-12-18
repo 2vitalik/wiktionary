@@ -62,8 +62,8 @@ local function main_sub_algorithm(data)
 --	end
 
 	-- reducable
-	data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem_type, data.gender, data.stress_type, data.rest_index, data)
-	reducable.apply_specific_reducable(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem_type, data.gender, data.stress_type, data.rest_index, data, false)
+	data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem.type, data.gender, data.stress_type, data.rest_index, data)
+	reducable.apply_specific_reducable(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem.type, data.gender, data.stress_type, data.rest_index, data, false)
 
 	if not _.equals(data.stress_type, {"f", "f'"}) and _.contains(data.rest_index, '%*') then
 		mw.log('# Обработка случая на препоследний слог основы при чередовании')
@@ -178,12 +178,12 @@ local function main_algorithm(data)
 
 	_.log_info('Определение типа основы')
 
-	data.stem_type, data.base_stem_type = stem_type.get_stem_type(data.stem.unstressed, data.word.unstressed, data.gender, data.adj, data.rest_index)
+	data.stem.type, data.stem.base_type = stem_type.get_stem_type(data.stem.unstressed, data.word.unstressed, data.gender, data.adj, data.rest_index)
 
-	_.log_value(data.stem_type, 'data.stem_type')
-	_.log_value(data.base_stem_type, 'data.base_stem_type')
+	_.log_value(data.stem.type, 'data.stem.type')
+	_.log_value(data.stem.base_type, 'data.stem.base_type')
 
-	if not data.stem_type then
+	if not data.stem.type then
 		_.ends(module, func)
 		return result.finalize(data, {error='Неизвестный тип основы'})  -- b-dict
 	end
@@ -230,7 +230,7 @@ local function main_algorithm(data)
 		data.gender = ''  -- redundant?
 	end
 
-	out_args['зализняк1'] = index.get_zaliznyak(data.stem_type, data.stress_type, data.rest_index)
+	out_args['зализняк1'] = index.get_zaliznyak(data.stem.type, data.stress_type, data.rest_index)
 
 	for_category = out_args['зализняк1']
 	for_category = _.replaced(for_category, '①', '(1)')

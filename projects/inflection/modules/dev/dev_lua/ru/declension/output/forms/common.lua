@@ -84,7 +84,7 @@ local function choose_accusative_forms(out_args, data)
 			out_args['acc_sg_an'] = out_args['gen_sg']
 		end
 	elseif data.gender == 'f' then
-		if _.equals(data.stem_type, {'f-3rd', 'f-3rd-sibilant'}) then
+		if _.equals(data.stem.type, {'f-3rd', 'f-3rd-sibilant'}) then
 			out_args['acc_sg'] = out_args['nom_sg']
 		else
 			out_args['acc_sg'] = data.stems['acc_sg'] .. data.endings['acc_sg']

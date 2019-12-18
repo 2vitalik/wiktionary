@@ -169,7 +169,7 @@ def additional_arguments(func, out_args, data):
 
 @a.starts(module)
 def finalize(func, data, out_args):  # export
-    out_args['stem_type'] = data.stem_type  # for testcases
+    out_args['stem_type'] = data.stem.type  # for testcases
     out_args['stress_type'] = data.stress_type  # for categories   -- is really used?
     out_args['dev'] = dev_prefix
 
