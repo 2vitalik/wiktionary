@@ -248,59 +248,56 @@ function export.forms(base, args, frame)
 	func = "forms"
 	_.starts(module, func)
 
-	mw.log('=================================================================')  -- todo: move to another place
+--	INFO: `base` здесь нигде не используется,
+	--  но теоретически может понадобиться для других языков
 
-	local data, error, forms
-	local data1, data2, forms1, forms2, sub_forms
+	-- todo: move this to another place?
+	mw.log('=================================================================')
 
---	INFO: `base` здесь нигде не используется, но теоретически может понадобиться для других языков
+	prepare_stash()  -- INFO: Заполняем шаблоны для регулярок
 
---	INFO: Для отладки:
---	if true then return '`forms` executed' end
-
---	INFO: Заполняем шаблоны для регулярок
-	prepare_stash()
-
---	INFO: Достаём всю информацию из аргументов (args): основа, род, одушевлённость и т.п.
+--	INFO: Достаём всю информацию из аргументов (args):
+	--   основа, род, одушевлённость и т.п.
+	local data, error
 	data, error = input.parse(base, args)
 	if error then
-		forms = result.finalize(data, error)
+		out_args = result.finalize(data, error)
 		_.ends(module, func)
-		return forms
+		return out_args
 	end
 
 	data.frame = frame
 
 --	INFO: Запуск основного алгоритма и получение результирующих словоформ:
-	forms = {}  -- dict
+	local out_args = {}  -- dict
 	if data.sub_cases then
 		_.log_info("Случай с вариациями '//'")
-		data1 = data.sub_cases[1]
-		data2 = data.sub_cases[2]
-		forms1 = main_algorithm(data1)
-		forms2 = main_algorithm(data2)
-		forms = form.join_forms(forms1, forms2)
+		local data1 = data.sub_cases[1]
+		local data2 = data.sub_cases[2]
+		local forms1 = main_algorithm(data1)
+		local forms2 = main_algorithm(data2)
+		out_args = form.join_forms(forms1, forms2)
 	elseif data.sub_parts then
 		_.log_info("Случай с '+'")
-		sub_forms = {}  -- list
+		local sub_forms = {}  -- list
 		for i, sub_part in pairs(data.sub_parts) do
 			table.insert(sub_forms, main_algorithm(sub_part))
 		end
-		forms = form.plus_forms(sub_forms)
+		out_args = form.plus_forms(sub_forms)
 	else
 		_.log_info('Стандартный случай без вариаций')
-		forms = main_algorithm(data)
+		out_args = main_algorithm(data)
 	end
 
 	if data.noun then
-		noun_forms.special_cases(forms, args, data.index, data.word)
+		noun_forms.special_cases(out_args, args, data.index, data.word)
 	end
 
-	result.finalize(data, forms)
+	result.finalize(data, out_args)
 
-	_.log_table(forms, "forms")
+	_.log_table(out_args, "out_args")
 	_.ends(module, func)
-	return forms
+	return out_args
 end
 
 
