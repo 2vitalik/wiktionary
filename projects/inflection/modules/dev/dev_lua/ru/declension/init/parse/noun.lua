@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'init.input.noun'
+local module = 'init.parse.noun'
 
 
 -- @call

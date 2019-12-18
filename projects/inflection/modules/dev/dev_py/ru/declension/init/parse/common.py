@@ -5,10 +5,10 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...init.parse import noun as noun_input
+from ...init.parse import noun as noun_parse
 
 
-module = 'init.input.common'  # local
+module = 'init.parse.common'  # local
 
 
 @a.starts(module)
@@ -69,7 +69,7 @@ def angle_brackets(func, data):
         # end
         data.orig_index = data.index
         data.index = another_index
-        error = noun_input.extract_gender_animacy(data)
+        error = noun_parse.extract_gender_animacy(data)
         data.pt = pt
         if error:
             _.ends(module, func)
@@ -119,7 +119,7 @@ def parse(func, base, args):  # export
     _.log_info('Получение информации о роде и одушевлённости')
 
     if data.noun:  # fxime
-        error = noun_input.extract_gender_animacy(data)
+        error = noun_parse.extract_gender_animacy(data)
         if error:
             _.ends(module, func)
             return data, error
@@ -259,7 +259,7 @@ def parse(func, base, args):  # export
         if data.noun:
             # INFO: Проверяем, не находится ли род+одушевлённость во второй вариации
             data2.index = parts[1]  # INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
-            noun_input.extract_gender_animacy(data2)
+            noun_parse.extract_gender_animacy(data2)
         # end
 
         # INFO: Если рода и одушевлённости во второй вариации нет (простой случай):

@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from .declension.init.parse import common as input
+from .declension.init.parse import common as parse
 from .declension.init import stress
 from .declension.init import endings
 from .declension.init import stem_type
@@ -250,7 +250,7 @@ def forms(func, base, args, frame):  # export
     # INFO: Достаём всю информацию из аргументов (args):
     #   основа, род, одушевлённость и т.п.
     # local data, error
-    data, error = input.parse(base, args)
+    data, error = parse.parse(base, args)
     if error:
         out_args = result.finalize(data, error)
         _.ends(module, func)

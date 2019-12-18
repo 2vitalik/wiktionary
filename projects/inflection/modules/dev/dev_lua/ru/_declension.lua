@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local input = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
+local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
 local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- 'declension.' =
 local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
 local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- 'declension.' =
@@ -259,7 +259,7 @@ function export.forms(base, args, frame)
 --	INFO: Достаём всю информацию из аргументов (args):
 	--   основа, род, одушевлённость и т.п.
 	local data, error
-	data, error = input.parse(base, args)
+	data, error = parse.parse(base, args)
 	if error then
 		out_args = result.finalize(data, error)
 		_.ends(module, func)
@@ -272,11 +272,11 @@ function export.forms(base, args, frame)
 	local out_args = {}  -- dict
 	if data.sub_cases then
 		_.log_info("Случай с вариациями '//'")
-		local data1 = data.sub_cases[1]
-		local data2 = data.sub_cases[2]
-		local forms1 = main_algorithm(data1)
-		local forms2 = main_algorithm(data2)
-		out_args = form.join_forms(forms1, forms2)
+		local data_1 = data.sub_cases[1]
+		local data_2 = data.sub_cases[2]
+		local forms_1 = main_algorithm(data_1)
+		local forms_2 = main_algorithm(data_2)
+		out_args = form.join_forms(forms_1, forms_2)
 	elseif data.sub_parts then
 		_.log_info("Случай с '+'")
 		local sub_forms = {}  -- list
