@@ -13,7 +13,7 @@ local module = 'output.result'
 
 -- Использование дефисов вместо подчёркивания
 -- @starts
-local function replace_underscore_with_hyphen(forms)
+local function replace_underscore_with_hyphen(out_args)
 	func = "replace_underscore_with_hyphen"
 	_.starts(module, func)
 
@@ -35,8 +35,8 @@ local function replace_underscore_with_hyphen(forms)
 	}  -- list
 	for i, new_key in pairs(keys) do  -- list
 		old_key = mw.ustring.gsub(new_key, '-', '_')
-		if _.has_key(forms[old_key]) then
-			forms[new_key] = forms[old_key]
+		if _.has_key(out_args[old_key]) then
+			out_args[new_key] = out_args[old_key]
 		end
 	end
 
@@ -46,7 +46,7 @@ end
 
 -- Формирование параметров рода и одушевлённости для подстановки в шаблон
 -- @starts
-local function forward_gender_animacy(forms, data)
+local function forward_gender_animacy(out_args, data)
 	func = "forward_gender_animacy"
 	_.starts(module, func)
 
@@ -55,11 +55,11 @@ local function forward_gender_animacy(forms, data)
 	-- Род:
 	genders = {m='муж', f='жен', n='ср', mf='мж', mn='мс', fm='жм', fn='жс', nm='см', nf='сж' }  -- dict
 	if data.common_gender then
-		forms['род'] = 'общ'
+		out_args['род'] = 'общ'
 	elseif data.output_gender then
-		forms['род'] = genders[data.output_gender]
+		out_args['род'] = genders[data.output_gender]
 	elseif data.gender then
-		forms['род'] = genders[data.gender]
+		out_args['род'] = genders[data.gender]
 	else
 		-- pass
 	end
@@ -71,9 +71,9 @@ local function forward_gender_animacy(forms, data)
 	animacies['in//an'] = 'неодуш-одуш'
 	animacies['an//in'] = 'одуш-неодуш'
 	if data.output_animacy then
-		forms['кат'] = animacies[data.output_animacy]
+		out_args['кат'] = animacies[data.output_animacy]
 	else
-		forms['кат'] = animacies[data.animacy]
+		out_args['кат'] = animacies[data.animacy]
 	end
 
 	_.ends(module, func)
@@ -81,7 +81,7 @@ end
 
 
 -- @starts
-local function forward_args(forms, data)
+local function forward_args(out_args, data)
 	func = "forward_args"
 	_.starts(module, func)
 
@@ -98,9 +98,9 @@ local function forward_args(forms, data)
 	for i, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
 			if args[key] == '-' then
-				forms[key] = args[key]
+				out_args[key] = args[key]
 			else
-				forms[key] = args[key] .. '<sup>△</sup>'
+				out_args[key] = args[key] .. '<sup>△</sup>'
 			end
 		end
 	end
@@ -114,16 +114,16 @@ local function forward_args(forms, data)
 	}  -- list
 	for i, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
-			forms[key] = args[key]
+			out_args[key] = args[key]
 		end
 	end
 
-	if _.has_key(forms['слоги']) then
-		if not _.contains(forms['слоги'], '%<') then
-			forms['слоги'] = syllables.get_syllables(forms['слоги'])
+	if _.has_key(out_args['слоги']) then
+		if not _.contains(out_args['слоги'], '%<') then
+			out_args['слоги'] = syllables.get_syllables(out_args['слоги'])
 		end
 	else
-		forms['слоги'] = data.word
+		out_args['слоги'] = data.word
 	end
 
 	_.ends(module, func)
@@ -131,42 +131,42 @@ end
 
 
 -- @starts
-local function additional_arguments(forms, data)
+local function additional_arguments(out_args, data)
 	func = "additional_arguments"
 	_.starts(module, func)
 
 	-- RU (склонение)
 	if _.contains(data.rest_index, '0') then
-		forms['скл'] = 'не'
+		out_args['скл'] = 'не'
 	elseif data.adj then
-		forms['скл'] = 'а'
+		out_args['скл'] = 'а'
 	elseif data.pronoun then
-		forms['скл'] = 'мс'
+		out_args['скл'] = 'мс'
 	elseif _.endswith(data.word, '[ая]') then
-		forms['скл'] = '1'
+		out_args['скл'] = '1'
 	else
 		if data.gender == 'm' or data.gender == 'n' then
-			forms['скл'] = '2'
+			out_args['скл'] = '2'
 		else
-			forms['скл'] = '3'
+			out_args['скл'] = '3'
 		end
 	end
 
 	-- RU (чередование)
 	if _.contains(data.index, '%*') then
-		forms['чередование'] = '1'
+		out_args['чередование'] = '1'
 	end
 
 	if data.pt then
-		forms['pt'] = '1'
+		out_args['pt'] = '1'
 	end
 
 	-- RU ("-" в индексе)
 	-- TODO: Здесь может быть глюк, если случай глобального `//` и `rest_index` пуст (а исходный `index` не подходит, т.к. там может быть не тот дефис -- в роде)
 	if data.rest_index then
 		if _.contains(data.rest_index, {'%-', '—', '−'}) then
-			forms['st'] = '1'
-			forms['затрудн'] = '1'
+			out_args['st'] = '1'
+			out_args['затрудн'] = '1'
 		end
 	else
 		-- pass  -- TODO
@@ -180,33 +180,33 @@ end
 
 
 -- @starts
-function export.finalize(data, forms)
+function export.finalize(data, out_args)
 	func = "finalize"
 	_.starts(module, func)
 
-	forms['stem_type'] = data.stem_type  -- for testcases
-	forms['stress_type'] = data.stress_type  -- for categories   -- is really used?
-	forms['dev'] = dev_prefix
+	out_args['stem_type'] = data.stem_type  -- for testcases
+	out_args['stress_type'] = data.stress_type  -- for categories   -- is really used?
+	out_args['dev'] = dev_prefix
 
-	additional_arguments(forms, data)
-	replace_underscore_with_hyphen(forms)
+	additional_arguments(out_args, data)
+	replace_underscore_with_hyphen(out_args)
 
 	if data.noun then
-		forward_gender_animacy(forms, data)
+		forward_gender_animacy(out_args, data)
 	end
 
-	forward_args(forms, data)
+	forward_args(out_args, data)
 
-	if not _.has_key(forms['зализняк']) then
-		forms['зализняк'] = '??'
+	if not _.has_key(out_args['зализняк']) then
+		out_args['зализняк'] = '??'
 	end
 
-	if not _.has_key(forms['error_category']) and data.word_cleared ~= data.base then
-		forms['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
+	if not _.has_key(out_args['error_category']) and data.word_cleared ~= data.base then
+		out_args['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
 	end
 
 	_.ends(module, func)
-	return forms
+	return out_args
 end
 
 

@@ -111,7 +111,7 @@ local function main_algorithm(data)
 	func = "main_algorithm"
 	_.starts(module, func)
 
-	local error, keys, forms, orig_stem, for_category, old_value, cases
+	local error, keys, out_args, orig_stem, for_category, old_value, cases
 
 	_.log_value(data.rest_index, 'data.rest_index')
 
@@ -137,14 +137,14 @@ local function main_algorithm(data)
 				'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
 				'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
 			}  -- list
-			forms = {}  -- dict
-			forms['зализняк'] = '0'
-			forms['скл'] = 'не'
+			out_args = {}  -- dict
+			out_args['зализняк'] = '0'
+			out_args['скл'] = 'не'
 			for i, key in pairs(keys) do  -- list
-				forms[key] = data.word_stressed
+				out_args[key] = data.word_stressed
 			end
 			_.ends(module, func)
-			return result.finalize(data, forms)
+			return result.finalize(data, out_args)
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
 		elseif _.has_value(data.rest_index) then
@@ -192,10 +192,10 @@ local function main_algorithm(data)
 
 	if data.noun then
 		main_sub_algorithm(data)
-		forms = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
+		out_args = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
 
 	elseif data.adj then
-		forms = {}
+		out_args = {}
 		cases = {
 			'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
 			'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
@@ -210,36 +210,36 @@ local function main_algorithm(data)
 			main_sub_algorithm(data)
 
 			if gender == '' then
-				forms = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
+				out_args = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
 			else
 				sub_forms = form.generate_forms(data)
 				for i, case in pairs(cases) do  -- list
 					key = case .. '_' .. gender
-					forms[key] = sub_forms[case]
+					out_args[key] = sub_forms[case]
 				end
 				if gender == 'f' then
-					forms['ins_sg2_f'] = sub_forms['ins_sg2']
+					out_args['ins_sg2_f'] = sub_forms['ins_sg2']
 				end
 			end
 		end
-		forms['acc_sg_m_a'] = forms['gen_sg_m']
-		forms['acc_sg_m_n'] = forms['nom_sg_m']
-		forms['acc_pl_a'] = forms['gen_pl']
-		forms['acc_pl_n'] = forms['nom_pl']
+		out_args['acc_sg_m_a'] = out_args['gen_sg_m']
+		out_args['acc_sg_m_n'] = out_args['nom_sg_m']
+		out_args['acc_pl_a'] = out_args['gen_pl']
+		out_args['acc_pl_n'] = out_args['nom_pl']
 
 		data.gender = ''  -- redundant?
 	end
 
-	forms['зализняк1'] = index.get_zaliznyak(data.stem_type, data.stress_type, data.rest_index)
+	out_args['зализняк1'] = index.get_zaliznyak(data.stem_type, data.stress_type, data.rest_index)
 
-	for_category = forms['зализняк1']
+	for_category = out_args['зализняк1']
 	for_category = _.replaced(for_category, '①', '(1)')
 	for_category = _.replaced(for_category, '②', '(2)')
 	for_category = _.replaced(for_category, '③', '(3)')
-	forms['зализняк'] = for_category
+	out_args['зализняк'] = for_category
 
 	_.ends(module, func)
-	return forms
+	return out_args
 end
 
 
@@ -258,42 +258,42 @@ function export.forms(base, args, frame)
 
 --	INFO: Достаём всю информацию из аргументов (args):
 	--   основа, род, одушевлённость и т.п.
-	local data, error
-	data, error = parse.parse(base, args)
+	local info, error
+	info, error = parse.parse(base, args)
 	if error then
-		out_args = result.finalize(data, error)
+		out_args = result.finalize(info, error)
 		_.ends(module, func)
 		return out_args
 	end
 
-	data.frame = frame
+	info.frame = frame
 
 --	INFO: Запуск основного алгоритма и получение результирующих словоформ:
 	local out_args = {}  -- dict
-	if data.sub_cases then
+	if info.sub_cases then  -- todo: rename to `variations`
 		_.log_info("Случай с вариациями '//'")
-		local data_1 = data.sub_cases[1]
-		local data_2 = data.sub_cases[2]
-		local forms_1 = main_algorithm(data_1)
-		local forms_2 = main_algorithm(data_2)
-		out_args = form.join_forms(forms_1, forms_2)
-	elseif data.sub_parts then
+		local info_1 = info.sub_cases[1]
+		local info_2 = info.sub_cases[2]
+		local out_args_1 = main_algorithm(info_1)
+		local out_args_2 = main_algorithm(info_2)
+		out_args = form.join_forms(out_args_1, out_args_2)
+	elseif info.sub_parts then  -- todo: rename to `plus`
 		_.log_info("Случай с '+'")
-		local sub_forms = {}  -- list
-		for i, sub_part in pairs(data.sub_parts) do
-			table.insert(sub_forms, main_algorithm(sub_part))
+		local out_args_plus = {}  -- list
+		for i, sub_info in pairs(info.sub_parts) do
+			table.insert(out_args_plus, main_algorithm(sub_info))
 		end
-		out_args = form.plus_forms(sub_forms)
+		out_args = form.plus_forms(out_args_plus)
 	else
 		_.log_info('Стандартный случай без вариаций')
-		out_args = main_algorithm(data)
+		out_args = main_algorithm(info)
 	end
 
-	if data.noun then
-		noun_forms.special_cases(out_args, args, data.index, data.word)
+	if info.noun then
+		noun_forms.special_cases(out_args, args, info.index, info.word)
 	end
 
-	result.finalize(data, out_args)
+	result.finalize(info, out_args)
 
 	_.log_table(out_args, "out_args")
 	_.ends(module, func)
