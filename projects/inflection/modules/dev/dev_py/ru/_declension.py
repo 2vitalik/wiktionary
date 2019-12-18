@@ -261,17 +261,17 @@ def forms(func, base, args, frame):  # export
 
     # INFO: Запуск основного алгоритма и получение результирующих словоформ:
     out_args = dict()  # dict  # local
-    if info.sub_cases:  # todo: rename to `variations`
+    if info.variations:
         _.log_info("Случай с вариациями '//'")
-        info_1 = info.sub_cases[0]  # local
-        info_2 = info.sub_cases[1]  # local
+        info_1 = info.variations[0]  # local
+        info_2 = info.variations[1]  # local
         out_args_1 = main_algorithm(info_1)  # local
         out_args_2 = main_algorithm(info_2)  # local
         out_args = form.join_forms(out_args_1, out_args_2)
-    elif info.sub_parts:  # todo: rename to `plus`
+    elif info.plus:
         _.log_info("Случай с '+'")
         out_args_plus = []  # list  # local
-        for i, sub_info in info.sub_parts.items():
+        for i, sub_info in info.plus.items():
             out_args_plus.append(main_algorithm(sub_info))
         # end
         out_args = form.plus_forms(out_args_plus)

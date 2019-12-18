@@ -179,7 +179,7 @@ function export.parse(base, args)
 			data2.animacy = mw.ustring.sub(info.animacy, 5, 6)
 
 --			INFO: Заполняем атрибут с вариациями
-			info.sub_cases = {data1, data2}  -- list
+			info.variations = {data1, data2}  -- list
 
 			_.ends(module, func)
 			return info, nil
@@ -192,7 +192,7 @@ function export.parse(base, args)
 		words_parts = mw.text.split(info.word_stressed, '-')
 		n_sub_parts = table.getn(index_parts)
 		if n_sub_parts > 1 then
-			info.sub_parts = {}  -- list
+			info.plus = {}  -- list
 			for i = 1, n_sub_parts do
 				data_copy = mw.clone(info)
 				data_copy.word_stressed = words_parts[i]
@@ -213,7 +213,7 @@ function export.parse(base, args)
 					end
 				end
 
-				table.insert(info.sub_parts, data_copy)
+				table.insert(info.plus, data_copy)
 			end
 			_.ends(module, func)
 			return info, nil
@@ -242,7 +242,7 @@ function export.parse(base, args)
 			data2.rest_index = _.replaced(data2.rest_index, '%*', '')
 
 --			INFO: Заполняем атрибут с вариациями
-			info.sub_cases = {data1, data2}  -- list
+			info.variations = {data1, data2}  -- list
 
 			_.ends(module, func)
 			return info, nil
@@ -290,7 +290,7 @@ function export.parse(base, args)
 		data2.index = info.index  -- INFO: Возвращаем исходное значение `index`; инвариант: оно всегда будет равно исходному индексу
 
 --		INFO: Заполняем атрибут с вариациями
-		info.sub_cases = {data1, data2}  -- list
+		info.variations = {data1, data2}  -- list
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
 		_.ends(module, func)

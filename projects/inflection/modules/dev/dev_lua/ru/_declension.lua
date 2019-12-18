@@ -270,17 +270,17 @@ function export.forms(base, args, frame)
 
 --	INFO: Запуск основного алгоритма и получение результирующих словоформ:
 	local out_args = {}  -- dict
-	if info.sub_cases then  -- todo: rename to `variations`
+	if info.variations then
 		_.log_info("Случай с вариациями '//'")
-		local info_1 = info.sub_cases[1]
-		local info_2 = info.sub_cases[2]
+		local info_1 = info.variations[1]
+		local info_2 = info.variations[2]
 		local out_args_1 = main_algorithm(info_1)
 		local out_args_2 = main_algorithm(info_2)
 		out_args = form.join_forms(out_args_1, out_args_2)
-	elseif info.sub_parts then  -- todo: rename to `plus`
+	elseif info.plus then
 		_.log_info("Случай с '+'")
 		local out_args_plus = {}  -- list
-		for i, sub_info in pairs(info.sub_parts) do
+		for i, sub_info in pairs(info.plus) do
 			table.insert(out_args_plus, main_algorithm(sub_info))
 		end
 		out_args = form.plus_forms(out_args_plus)
