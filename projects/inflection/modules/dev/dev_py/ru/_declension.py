@@ -112,12 +112,12 @@ def main_algorithm(func, data):
     # -------------------------------------------------------------------------
 
     _.log_info('Извлечение информации об ударении')
-
     data.stress_type, error = stress.extract_stress_type(data.rest_index)
 
     if error:
+        out_args = result.finalize(data, error)
         _.ends(module, func)
-        return result.finalize(data, error)
+        return out_args
     # end
 
     _.log_value(data.stress_type, 'data.stress_type')
@@ -171,9 +171,7 @@ def main_algorithm(func, data):
     # -------------------------------------------------------------------------
 
     _.log_info('Определение типа основы')
-
     data.stem.type, data.stem.base_type = stem_type.get_stem_type(data.stem.unstressed, data.word.unstressed, data.gender, data.adj, data.rest_index)
-
     _.log_value(data.stem.type, 'data.stem.type')
     _.log_value(data.stem.base_type, 'data.stem.base_type')
 
