@@ -6,10 +6,10 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
-local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- 'declension.' =
+local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/prepare/stress')  -- 'declension.'
+local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/prepare/stem_type')  -- 'declension.'
 local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress_apply')  -- 'declension.' =
 local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
-local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- 'declension.' =
 local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- 'declension.'
 local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/reducable')  -- 'declension.' =
 local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/degree')  -- 'declension.' =

@@ -5,9 +5,9 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ..data.stress import adj as adj_stress
-from ..data.stress import pronoun as pronoun_stress
-from ..data.stress import noun as noun_stress
+from ...data.stress import adj as adj_stress
+from ...data.stress import pronoun as pronoun_stress
+from ...data.stress import noun as noun_stress
 
 
 module = 'init.stress'  # local

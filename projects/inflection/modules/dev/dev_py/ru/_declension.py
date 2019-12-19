@@ -6,10 +6,10 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .declension.init.parse import common as parse
-from .declension.init import stress
+from .declension.init.prepare import stress as stress
+from .declension.init.prepare import stem_type as stem_type
 from .declension.init import stress_apply
 from .declension.init import endings
-from .declension.init import stem_type
 from .declension.modify.circles import adj as adj_circles
 from .declension.modify import reducable
 from .declension.modify import degree
