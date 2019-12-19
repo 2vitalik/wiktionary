@@ -13,6 +13,7 @@ declension_files = [
     'ru/declension/init/endings',
     'ru/declension/init/stem_type',
     'ru/declension/init/stress',
+    'ru/declension/init/stress_apply',
     'ru/declension/modify/circles/adj',
     'ru/declension/modify/circles/noun',
     'ru/declension/modify/degree',

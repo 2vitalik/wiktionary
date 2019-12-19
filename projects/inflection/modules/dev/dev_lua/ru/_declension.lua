@@ -7,6 +7,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
 local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress')  -- 'declension.' =
+local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress_apply')  -- 'declension.' =
 local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
 local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stem_type')  -- 'declension.' =
 local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- 'declension.'
@@ -45,7 +46,7 @@ local function main_sub_algorithm(data)
 	data.endings = endings.get_endings(data)
 
 	data.stems = {}  -- dict
-	stress.apply_stress_type(data)
+	stress_apply.apply_stress_type(data)
 	_.log_table(data.stems, 'data.stems')
 	_.log_table(data.endings, 'data.endings')
 

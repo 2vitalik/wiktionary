@@ -7,6 +7,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 from .declension.init.parse import common as parse
 from .declension.init import stress
+from .declension.init import stress_apply
 from .declension.init import endings
 from .declension.init import stem_type
 from .declension.modify.circles import adj as adj_circles
@@ -42,7 +43,7 @@ def main_sub_algorithm(func, data):
     data.endings = endings.get_endings(data)
 
     data.stems = dict()  # dict
-    stress.apply_stress_type(data)
+    stress_apply.apply_stress_type(data)
     _.log_table(data.stems, 'data.stems')
     _.log_table(data.endings, 'data.endings')
 

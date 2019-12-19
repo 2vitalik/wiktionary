@@ -119,7 +119,7 @@ def get_endings(func, data):  # export
     # end
 
     # apply special cases (1) or (2) in index
-    if not data.adj and not data.pronoun:
+    if not data.adj and not data.pronoun:  # todo: move outside here (into `modify` package)
         noun_circles.apply_noun_specific_1_2(endings, data.gender, data.stem.type, data.stem.base_type, data.rest_index)
     # end
 
