@@ -101,22 +101,17 @@ function export.parse(base, args)
 	func = "parse"
 	_.starts(module, func)
 
-	local info, error, parts, n_parts, data1, data2
-	local index_parts, words_parts, n_sub_parts, data_copy
+	local info = {}  -- AttrDict
+	info.word = {}  -- AttrDict
+	info.stem = {}  -- AttrDict
 
 --	INFO: Достаём значения из параметров:
-	info = {}  -- AttrDict
 	info.base = base
 	info.args = args
 	info.lang = mw.text.trim(args['lang'])
 	info.unit = mw.text.trim(args['unit'])
 	info.index = mw.text.trim(args['индекс'])
-
-	info.word = {}  -- AttrDict
-	info.stem = {}  -- AttrDict
-
 	info.word.stressed = mw.text.trim(args['слово'])
-
 	info.noun = (info.unit == 'noun')
 
 	_.log_value(info.index, 'info.index')
@@ -127,12 +122,10 @@ function export.parse(base, args)
 	-- mw.log('args: ' .. tostring(info.index) .. ' | ' .. tostring(info.word.stressed))
 	-- mw.log('--------------------------------------------------')
 
-	-- -------------------------------------------------------------------------
-
 	_.log_info('Получение информации о роде и одушевлённости')
 
 	if info.noun then  -- fxime
-		error = noun_parse.extract_gender_animacy(info)
+		local error = noun_parse.extract_gender_animacy(info)
 		if error then
 			_.ends(module, func)
 			return info, error
@@ -154,7 +147,7 @@ function export.parse(base, args)
 	_.log_value(info.rest_index, 'info.rest_index')
 
 --	INFO: stem, stem.stressed, etc.
-	error = init(info)
+	local error = init(info)
 	if error then
 		_.ends(module, func)
 		return info, error
@@ -169,21 +162,21 @@ function export.parse(base, args)
 	end
 
 --	INFO: Проверяем случай с вариациями:
-	parts = mw.text.split(info.rest_index, '//')
-	n_parts = table.getn(parts)
+	local parts = mw.text.split(info.rest_index, '//')
+	local n_parts = table.getn(parts)
 
 	if n_parts == 1 then  -- INFO: Дополнительных вариаций нет
 		if _.contains(info.animacy, '//') then  -- INFO: Случаи 'in//an' и 'an//in'
 --			INFO: Клонируем две вариации на основании текущих данных
-			data1 = mw.clone(info)
-			data2 = mw.clone(info)
+			local info_1 = mw.clone(info)
+			local info_2 = mw.clone(info)
 
 --			INFO: Устанавливаем для них соответствующую вариацию одушевлённости
-			data1.animacy = mw.ustring.sub(info.animacy, 1, 2)
-			data2.animacy = mw.ustring.sub(info.animacy, 5, 6)
+			info_1.animacy = mw.ustring.sub(info.animacy, 1, 2)
+			info_2.animacy = mw.ustring.sub(info.animacy, 5, 6)
 
 --			INFO: Заполняем атрибут с вариациями
-			info.variations = {data1, data2}  -- list
+			info.variations = {info_1, info_2}  -- list
 
 			_.ends(module, func)
 			return info, nil
@@ -192,32 +185,32 @@ function export.parse(base, args)
 
 		-- _.log_info('Случай с "+" (несколько составных частей слова через дефис)')
 
-		index_parts = mw.text.split(info.rest_index, '%+')
-		words_parts = mw.text.split(info.word.stressed, '-')
-		n_sub_parts = table.getn(index_parts)
+		local index_parts = mw.text.split(info.rest_index, '%+')
+		local words_parts = mw.text.split(info.word.stressed, '-')
+		local n_sub_parts = table.getn(index_parts)
 		if n_sub_parts > 1 then
 			info.plus = {}  -- list
 			for i = 1, n_sub_parts do
-				data_copy = mw.clone(info)
-				data_copy.word.stressed = words_parts[i]
+				local info_copy = mw.clone(info)
+				info_copy.word.stressed = words_parts[i]
 
-				error = init(data_copy)
+				error = init(info_copy)
 				if error then
 					_.ends(module, func)
 					return info, error
 				end
 
-				data_copy.rest_index = index_parts[i]
+				info_copy.rest_index = index_parts[i]
 
 				if info.noun then
-					error = angle_brackets(data_copy)
+					error = angle_brackets(info_copy)
 					if error then
 						_.ends(module, func)
 						return info, error
 					end
 				end
 
-				table.insert(info.plus, data_copy)
+				table.insert(info.plus, info_copy)
 			end
 			_.ends(module, func)
 			return info, nil
@@ -233,20 +226,20 @@ function export.parse(base, args)
 
 		if _.contains(info.rest_index, '%[%([12]%)%]') or _.contains(info.rest_index, '%[[①②]%]') then
 --			INFO: Клонируем две вариации на основании текущих данных
-			data1 = mw.clone(info)
-			data2 = mw.clone(info)
+			local info_1 = mw.clone(info)
+			local info_2 = mw.clone(info)
 
 --			INFO: Устанавливаем факультативность (первый случай):
-			data1.rest_index = _.replaced(data1.rest_index, '%[(%([12]%))%]', '')
-			data1.rest_index = _.replaced(data1.rest_index, '%[([①②])%]', '')
+			info_1.rest_index = _.replaced(info_1.rest_index, '%[(%([12]%))%]', '')
+			info_1.rest_index = _.replaced(info_1.rest_index, '%[([①②])%]', '')
 
 --			INFO: Устанавливаем факультативность (второй случай):
-			data2.rest_index = _.replaced(data2.rest_index, '%[(%([12]%))%]', '%1')
-			data2.rest_index = _.replaced(data2.rest_index, '%[([①②])%]', '%1')
-			data2.rest_index = _.replaced(data2.rest_index, '%*', '')
+			info_2.rest_index = _.replaced(info_2.rest_index, '%[(%([12]%))%]', '%1')
+			info_2.rest_index = _.replaced(info_2.rest_index, '%[([①②])%]', '%1')
+			info_2.rest_index = _.replaced(info_2.rest_index, '%*', '')
 
 --			INFO: Заполняем атрибут с вариациями
-			info.variations = {data1, data2}  -- list
+			info.variations = {info_1, info_2}  -- list
 
 			_.ends(module, func)
 			return info, nil
@@ -262,39 +255,39 @@ function export.parse(base, args)
 		end
 
 --		INFO: Клонируем две вариации на основании текущих данных
-		data1 = mw.clone(info)
-		data2 = mw.clone(info)
+		local info_1 = mw.clone(info)
+		local info_2 = mw.clone(info)
 
 --		INFO: Предпогалаем, что у нас пока не "полная" вариация (не затрагивающая род)
-		data1.rest_index = parts[1]
-		data2.rest_index = parts[2]
+		info_1.rest_index = parts[1]
+		info_2.rest_index = parts[2]
 
 		if info.noun then
 --			INFO: Проверяем, не находится ли род+одушевлённость во второй вариации
-			data2.index = parts[2]  -- INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
-			noun_parse.extract_gender_animacy(data2)
+			info_2.index = parts[2]  -- INFO: Для этого инициируем `.index`, чтобы его обработала функция `extract_gender_animacy`
+			noun_parse.extract_gender_animacy(info_2)
 		end
 
 --		INFO: Если рода и одушевлённости во второй вариации нет (простой случай):
-		if not data2.gender and not data2.animacy then
+		if not info_2.gender and not info_2.animacy then
 --			INFO: Восстанавливаем прежние общие значения:
-			data2.gender = info.gender
-			data2.animacy = info.animacy
-			data2.common_gender = info.common_gender
+			info_2.gender = info.gender
+			info_2.animacy = info.animacy
+			info_2.common_gender = info.common_gender
 
 --		INFO: Проверка на гипотетическую ошибку в алгоритме:
-		elseif not data2.gender and data2.animacy or data2.gender and not data2.animacy then
+		elseif not info_2.gender and info_2.animacy or info_2.gender and not info_2.animacy then
 			_.ends(module, func)
 			return info, {error='Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей' }  -- dict
 
 --		INFO: Если что-то изменилось, значит, прошёл один из случаев, и значит у нас "полная" вариация (затрагивающая род)
-		elseif info.gender ~= data2.gender or info.animacy ~= data2.animacy or info.common_gender ~= data2.common_gender then
+		elseif info.gender ~= info_2.gender or info.animacy ~= info_2.animacy or info.common_gender ~= info_2.common_gender then
 			info.rest_index = nil  -- INFO: Для случая "полной" вариации понятие `rest_index`, наверное, не определено
 		end
-		data2.index = info.index  -- INFO: Возвращаем исходное значение `index`; инвариант: оно всегда будет равно исходному индексу
+		info_2.index = info.index  -- INFO: Возвращаем исходное значение `index`; инвариант: оно всегда будет равно исходному индексу
 
 --		INFO: Заполняем атрибут с вариациями
-		info.variations = {data1, data2}  -- list
+		info.variations = {info_1, info_2}  -- list
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
 		_.ends(module, func)
