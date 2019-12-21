@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'init.stem_type'  # local
+module = 'init.process.stem_type'  # local
 
 
 @a.starts(module)

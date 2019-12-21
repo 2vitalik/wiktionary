@@ -6,8 +6,6 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
-local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/prepare/stress')  -- 'declension.'
-local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/prepare/stem_type')  -- 'declension.'
 local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress_apply')  -- 'declension.' =
 local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
 local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- 'declension.'
@@ -114,20 +112,14 @@ local function main_algorithm(data)
 
 	local error, keys, out_args, orig_stem, for_category, old_value, cases
 
-	_.log_value(data.rest_index, 'data.rest_index')
+	-- todo: Инициализировать `forms` прямо здесь, чтобы не вызывать потом постоянно finalize...
 
-	-- -------------------------------------------------------------------------
-
-	_.log_info('Извлечение информации об ударении')
-	data.stress_type, error = stress.extract_stress_type(data.rest_index)
-
-	if error then
-		out_args = result.finalize(data, error)
-		_.ends(module, func)
-		return out_args
-	end
-
-	_.log_value(data.stress_type, 'data.stress_type')
+	-- ... = extract_stress_type(...)
+	-- if error then
+	--     out_args = result.finalize(data, error)
+	--     _.ends(module, func)
+	--     return out_args
+	-- end
 
 --	INFO: Если ударение не указано:
 	if not data.stress_type then
@@ -177,10 +169,7 @@ local function main_algorithm(data)
 
 	-- -------------------------------------------------------------------------
 
-	_.log_info('Определение типа основы')
-	data.stem.type, data.stem.base_type = stem_type.get_stem_type(data.stem.unstressed, data.word.unstressed, data.gender, data.adj, data.rest_index)
-	_.log_value(data.stem.type, 'data.stem.type')
-	_.log_value(data.stem.base_type, 'data.stem.base_type')
+	-- fixme: Здесь раньше было определение типа основы
 
 	if not data.stem.type then
 		_.ends(module, func)

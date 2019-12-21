@@ -6,8 +6,6 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .declension.init.parse import common as parse
-from .declension.init.prepare import stress as stress
-from .declension.init.prepare import stem_type as stem_type
 from .declension.init import stress_apply
 from .declension.init import endings
 from .declension.modify.circles import adj as adj_circles
@@ -108,20 +106,14 @@ def main_sub_algorithm(func, data):
 def main_algorithm(func, data):
     # local error, keys, out_args, orig_stem, for_category, old_value, cases
 
-    _.log_value(data.rest_index, 'data.rest_index')
+    # todo: Инициализировать `forms` прямо здесь, чтобы не вызывать потом постоянно finalize...
 
-    # -------------------------------------------------------------------------
-
-    _.log_info('Извлечение информации об ударении')
-    data.stress_type, error = stress.extract_stress_type(data.rest_index)
-
-    if error:
-        out_args = result.finalize(data, error)
-        _.ends(module, func)
-        return out_args
-    # end
-
-    _.log_value(data.stress_type, 'data.stress_type')
+    # ... = extract_stress_type(...)
+    # if error:
+    #     out_args = result.finalize(data, error)
+    #     _.ends(module, func)
+    #     return out_args
+    # # end
 
     # INFO: Если ударение не указано:
     if not data.stress_type:
@@ -171,10 +163,7 @@ def main_algorithm(func, data):
 
     # -------------------------------------------------------------------------
 
-    _.log_info('Определение типа основы')
-    data.stem.type, data.stem.base_type = stem_type.get_stem_type(data.stem.unstressed, data.word.unstressed, data.gender, data.adj, data.rest_index)
-    _.log_value(data.stem.type, 'data.stem.type')
-    _.log_value(data.stem.base_type, 'data.stem.base_type')
+    # fixme: Здесь раньше было определение типа основы
 
     if not data.stem.type:
         _.ends(module, func)

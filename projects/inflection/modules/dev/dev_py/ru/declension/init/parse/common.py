@@ -6,6 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from ...init.parse import noun as noun_parse
+from ...init import _process as p
 
 
 module = 'init.parse.common'  # local
@@ -167,10 +168,10 @@ def parse(func, base, args):  # export
             info_2.animacy = mw.ustring.sub(info.animacy, 5, 6)
 
             # INFO: Заполняем атрибут с вариациями
-            info.variations = [info_1, info_2]  # list
+            info.variations = [p.process(info_1), p.process(info_2)]  # list
 
             _.ends(module, func)
-            return info, None
+            return p.process(info), None
             # TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
         # end
 
@@ -204,7 +205,7 @@ def parse(func, base, args):  # export
                 info.plus.append(info_copy)
             # end
             _.ends(module, func)
-            return info, None
+            return p.process(info), None
         # end
 
         if info.noun:
@@ -230,10 +231,10 @@ def parse(func, base, args):  # export
             info_2.rest_index = _.replaced(info_2.rest_index, '%*', '')
 
             # INFO: Заполняем атрибут с вариациями
-            info.variations = [info_1, info_2]  # list
+            info.variations = [p.process(info_1), p.process(info_2)]  # list
 
             _.ends(module, func)
-            return info, None
+            return p.process(info), None
         # end
 
     elif n_parts == 2:  # INFO: Вариации "//" для ударения (и прочего индекса)
@@ -278,7 +279,7 @@ def parse(func, base, args):  # export
         info_2.index = info.index  # INFO: Возвращаем исходное значение `index`; инвариант: оно всегда будет равно исходному индексу
 
         # INFO: Заполняем атрибут с вариациями
-        info.variations = [info_1, info_2]  # list
+        info.variations = [p.process(info_1), p.process(info_2)]  # list
 
     else:  # INFO: Какая-то ошибка, слишком много "//" в индексе
         _.ends(module, func)
@@ -286,7 +287,7 @@ def parse(func, base, args):  # export
     # end
 
     _.ends(module, func)
-    return info, None  # INFO: `None` здесь -- признак, что нет ошибок
+    return p.process(info), None  # INFO: `None` здесь -- признак, что нет ошибок
 # end
 
 

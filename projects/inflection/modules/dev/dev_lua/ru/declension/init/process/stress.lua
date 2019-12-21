@@ -10,7 +10,7 @@ local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declens
 local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/noun')  -- '..'
 
 
-local module = 'init.stress'
+local module = 'init.process.stress'
 
 
 -- @starts

@@ -6,6 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local noun_parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/noun')  -- '..'
+local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/_process')  -- '..'
 
 
 local module = 'init.parse.common'
@@ -176,10 +177,10 @@ function export.parse(base, args)
 			info_2.animacy = mw.ustring.sub(info.animacy, 5, 6)
 
 --			INFO: Заполняем атрибут с вариациями
-			info.variations = {info_1, info_2}  -- list
+			info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 			_.ends(module, func)
-			return info, nil
+			return p.process(info), nil
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
 
@@ -213,7 +214,7 @@ function export.parse(base, args)
 				table.insert(info.plus, info_copy)
 			end
 			_.ends(module, func)
-			return info, nil
+			return p.process(info), nil
 		end
 
 		if info.noun then
@@ -239,10 +240,10 @@ function export.parse(base, args)
 			info_2.rest_index = _.replaced(info_2.rest_index, '%*', '')
 
 --			INFO: Заполняем атрибут с вариациями
-			info.variations = {info_1, info_2}  -- list
+			info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 			_.ends(module, func)
-			return info, nil
+			return p.process(info), nil
 		end
 
 	elseif n_parts == 2 then  -- INFO: Вариации "//" для ударения (и прочего индекса)
@@ -287,7 +288,7 @@ function export.parse(base, args)
 		info_2.index = info.index  -- INFO: Возвращаем исходное значение `index`; инвариант: оно всегда будет равно исходному индексу
 
 --		INFO: Заполняем атрибут с вариациями
-		info.variations = {info_1, info_2}  -- list
+		info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
 		_.ends(module, func)
@@ -295,7 +296,7 @@ function export.parse(base, args)
 	end
 
 	_.ends(module, func)
-	return info, nil  -- INFO: `nil` здесь -- признак, что нет ошибок
+	return p.process(info), nil  -- INFO: `nil` здесь -- признак, что нет ошибок
 end
 
 
