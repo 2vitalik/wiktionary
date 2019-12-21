@@ -6,11 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
-local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/stress_apply')  -- 'declension.' =
-local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/endings')  -- 'declension.' =
-local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/adj')  -- 'declension.'
-local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/reducable')  -- 'declension.' =
-local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/degree')  -- 'declension.' =
+local m = require('Module:' .. dev_prefix .. 'inflection/ru/declension/declension/_modify')  -- ''
 local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- 'declension.' =
 local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/common')  -- 'declension.'
 local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/noun')  -- 'declension.'
@@ -24,84 +20,6 @@ local function prepare_stash()
 	_.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
 	_.add_stash('{vowel+ё}', '[аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
 	_.add_stash('{consonant}', '[^аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
-end
-
-
--- @starts
-local function main_sub_algorithm(data)
-	func = "main_sub_algorithm"
-	_.starts(module, func)
-
-	_.log_info('Вычисление схемы ударения')
-
-	local stem_stress_schema
-
-	data.stress_schema = stress.get_stress_schema(data.stress_type, data.adj, data.pronoun)
-
-	_.log_table(data.stress_schema['stem'], "data.stress_schema['stem']")
-	_.log_table(data.stress_schema['ending'], "data.stress_schema['ending']")
-
-	data.endings = endings.get_endings(data)
-
-	data.stems = {}  -- dict
-	stress_apply.apply_stress_type(data)
-	_.log_table(data.stems, 'data.stems')
-	_.log_table(data.endings, 'data.endings')
-
-	-- apply special cases (1) or (2) in index
-	if data.adj then
-		adj_circles.apply_adj_specific_1_2(data.stems, data.gender, data.rest_index)
-	end
-
---	-- *** для случая с расстановкой ударения  (см. ниже)
---	local orig_stem = data.stem.unstressed
---	if _.contains(data.rest_index, {'%(2%)', '②'}) then
---		orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
---		mw.log('> Another `orig_stem`: ' .. tostring(orig_stem))
---	end
-
-	-- reducable
-	data.rest_index = degree.apply_specific_degree(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem.type, data.gender, data.stress_type, data.rest_index, data)
-	reducable.apply_specific_reducable(data.stems, data.endings, data.word.unstressed, data.stem.unstressed, data.stem.type, data.gender, data.stress_type, data.rest_index, data, false)
-
-	if not _.equals(data.stress_type, {"f", "f'"}) and _.contains(data.rest_index, '%*') then
-		mw.log('# Обработка случая на препоследний слог основы при чередовании')
-		orig_stem = data.stem.unstressed
-		if data.forced_stem then
-			orig_stem = data.forced_stem
-		end
-		for key, stem in pairs(data.stems) do
---			mw.log(' - ' .. key .. ' -> ' .. stem)
---			mw.log('Ударение на основу?')
---			mw.log(data.stress_schema['stem'][key])
-			stem_stress_schema = data.stress_schema['stem']
-			if not _.contains(stem, '[́ ё]') and _.has_key(stem_stress_schema[key]) and stem_stress_schema[key] then
-				-- *** случай с расстановкой ударения  (см. выше)
-				-- "Дополнительные правила об ударении", стр. 34
-				old_value = data.stems[key]
-				-- mw.log('> ' .. key .. ' (old): ' .. tostring(old_value))
-				if data.stems[key] ~= orig_stem then  -- попытка обработать наличие беглой гласной (не знаю, сработает ли всегда)
-					data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)({vowel})({consonant}*)$', '%1́ %2%3%4')
-					if not _.contains(data.stems[key], '[́ ё]') then -- если предпоследнего слога попросту нет
-						-- сделаем хоть последний ударным
-						data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)$', '%1́ %2')
-					end
-				else
-					data.stems[key] = _.replaced(stem, '({vowel})({consonant}*)$', '%1́ %2')
-				end
-				-- mw.log('> ' .. key .. ' (new): ' .. tostring(data.stems[key]))
-				mw.log('  - [' .. key .. '] = "' .. tostring(old_value) .. '" -> "' .. tostring(data.stems[key]) .. '"')
-			end
-		end
-	end
-
-	-- Специфика по "ё"
-	if _.contains(data.rest_index, 'ё') and not _.contains(data.endings['gen_pl'], '{vowel+ё}') and not _.contains(data.stems['gen_pl'], 'ё') then
-		data.stems['gen_pl'] = _.replaced(data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
-		data.rest_index = data.rest_index .. 'ё'  -- ???
-	end
-
-	_.ends(module, func)
 end
 
 
@@ -179,7 +97,7 @@ local function main_algorithm(data)
 	-- -------------------------------------------------------------------------
 
 	if data.noun then
-		main_sub_algorithm(data)
+		m.modify(data)
 		out_args = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
 
 	elseif data.adj then
@@ -195,7 +113,7 @@ local function main_algorithm(data)
 			data.gender = gender
 			_.log_value(data.gender, 'data.gender')
 
-			main_sub_algorithm(data)
+			m.modify(data)
 
 			if gender == '' then
 				out_args = form.generate_forms(data)  -- TODO: Rename to `out_args` ?

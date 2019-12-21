@@ -5,10 +5,10 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ..modify import reducable
+from ...modify.transform import reducable as reducable
 
 
-module = 'modify.degree'  # local
+module = 'modify.transform.degree'  # local
 
 
 @a.starts(module)

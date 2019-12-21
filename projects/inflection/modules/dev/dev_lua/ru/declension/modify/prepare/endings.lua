@@ -5,16 +5,16 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/adj')  -- '.'
-local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/pronoun')  -- '.'
-local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/noun')  -- '.'
-local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/circles/noun')  -- '.'
+local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/adj')  -- '..'
+local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/pronoun')  -- '..'
+local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/noun')  -- '..'
+local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/transform/circles/noun')  -- '..'
 
 
 -- constants:
 local unstressed = 1
 local stressed = 2
-local module = 'init.endings'
+local module = 'modify.prepare.endings'
 
 
 -- Схлопывание: Выбор окончаний в зависимости от рода и типа основы

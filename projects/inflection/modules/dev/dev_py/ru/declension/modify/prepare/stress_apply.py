@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'init.stress_apply'  # local
+module = 'modify.prepare.stress_apply'  # local
 
 
 # TODO: вместо "endings" может передавать просто data

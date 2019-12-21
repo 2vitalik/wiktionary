@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'modify.reducable'
+local module = 'modify.transform.reducable'
 
 
 -- Сложный алгоритм обработки всех случаев чередования

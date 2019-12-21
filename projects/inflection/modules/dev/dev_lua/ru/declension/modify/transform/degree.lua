@@ -5,10 +5,10 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/reducable')  -- '.' =
+local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/transform/reducable')  -- '..'
 
 
-local module = 'modify.degree'
+local module = 'modify.transform.degree'
 
 
 -- @starts

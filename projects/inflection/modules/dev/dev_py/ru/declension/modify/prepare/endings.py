@@ -5,16 +5,16 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ..data.endings import adj as adj_endings
-from ..data.endings import pronoun as pronoun_endings
-from ..data.endings import noun as noun_endings
-from ..modify.circles import noun as noun_circles
+from ...data.endings import adj as adj_endings
+from ...data.endings import pronoun as pronoun_endings
+from ...data.endings import noun as noun_endings
+from ...modify.transform.circles import noun as noun_circles
 
 
 # constants:
 unstressed = 0  # local
 stressed = 1  # local
-module = 'init.endings'  # local
+module = 'modify.prepare.endings'  # local
 
 
 # Схлопывание: Выбор окончаний в зависимости от рода и типа основы

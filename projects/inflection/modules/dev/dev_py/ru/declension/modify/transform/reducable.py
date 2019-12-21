@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'modify.reducable'  # local
+module = 'modify.transform.reducable'  # local
 
 
 # Сложный алгоритм обработки всех случаев чередования

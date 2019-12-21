@@ -36,6 +36,9 @@ regexps_MULTILINE = {
         (r'from \.((?:declension\.)?\.*)(\w+)\.(\w+) import (\w+) as (\w+)',
          "local \\5 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4')  -- '\\1'"),
 
+        (r'from \.((?:declension\.)?\.*)(\w+)\.(\w+)\.(\w+) import (\w+) as (\w+)',
+         "local \\6 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4/\\5')  -- '\\1'"),
+
         # (r"\bmw\.text\.", 'mw.'),
 
         (r'stressed = 1',
@@ -165,6 +168,9 @@ regexps_MULTILINE = {
 
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)'",
          'from .\\5\\2.\\3 import \\4 as \\1'),
+
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)'",
+         'from .\\6\\2.\\3.\\4 import \\5 as \\1'),
 
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),
