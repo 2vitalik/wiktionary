@@ -39,6 +39,7 @@ def run(unit, word, index):
             ('Тв2', '',           '',         'ins-sg2-f', ''),
             ('Пр.', 'prp-sg-m',   'prp-sg-n', 'prp-sg-f',  'prp-pl'),
             ('Кр.', 'srt-sg-m',   'srt-sg-n', 'srt-sg-f',  'srt-pl'),
+            ('Ср.', 'comparative', 'comparative2',   '',   ''),
         ]
         lens = [0] * 4
     else:

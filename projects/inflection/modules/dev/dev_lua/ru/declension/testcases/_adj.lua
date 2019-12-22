@@ -41,6 +41,7 @@ function tests:check(word_stressed, index, expected, comment)
 		'nom_sg_f', 'gen_sg_f', 'acc_sg_f', 'ins_sg2_f',
 		'nom_pl',   'gen_pl',   'ins_pl',
 		'srt_sg_m', 'srt_sg_n', 'srt_sg_f', 'srt_pl',
+		'comparative',
 	}
 	local expected_list = mw.text.split(expected, ' | ')
 

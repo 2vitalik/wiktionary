@@ -6,6 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/noun')  -- '..'
+local adj_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/adj')  -- '..'
 
 
 local module = 'output.forms.common'
@@ -170,6 +171,10 @@ function export.generate_forms(data)  -- todo: rename to `out_args`
 
 	if data.noun then
 		noun_forms.apply_specific_3(out_args, data.gender, data.rest_index)
+	end
+
+	if data.adj then
+		adj_forms.add_comparative(out_args, data.rest_index, data.stress_type, data.stem.type, data.stem)
 	end
 
 	for key, value in pairs(out_args) do

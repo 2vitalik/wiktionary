@@ -6,6 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from ...output.forms import noun as noun_forms
+from ...output.forms import adj as adj_forms
 
 
 module = 'output.forms.common'  # local
@@ -152,6 +153,10 @@ def generate_forms(func, data):  # export
 
     if data.noun:
         noun_forms.apply_specific_3(out_args, data.gender, data.rest_index)
+    # end
+
+    if data.adj:
+        adj_forms.add_comparative(out_args, data.rest_index, data.stress_type, data.stem.type, data.stem)
     # end
 
     for key, value in out_args.items():
