@@ -180,7 +180,7 @@ def forms(func, base, args, frame):  # export
     elif info.plus:
         _.log_info("Случай с '+'")
         out_args_plus = []  # list  # local
-        for i, sub_info in info.plus.items():
+        for i, sub_info in enumerate(info.plus):
             out_args_plus.append(main_algorithm(sub_info))
         # end
         out_args = form.plus_forms(out_args_plus)

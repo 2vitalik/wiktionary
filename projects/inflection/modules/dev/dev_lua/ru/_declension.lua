@@ -190,7 +190,7 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	elseif info.plus then
 		_.log_info("Случай с '+'")
 		local out_args_plus = {}  -- list
-		for i, sub_info in pairs(info.plus) do
+		for i, sub_info in pairs(info.plus) do  -- list
 			table.insert(out_args_plus, main_algorithm(sub_info))
 		end
 		out_args = form.plus_forms(out_args_plus)

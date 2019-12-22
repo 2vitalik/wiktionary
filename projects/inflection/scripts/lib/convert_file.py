@@ -107,10 +107,10 @@ regexps_MULTILINE = {
         (r'\bNone\b',
          'nil'),
 
-        (r'for (\w+) in range\((\w+), (\w+) \+ 1\):',
-         'for \\1 = \\2, \\3 do'),
+        (r'for (\w+) in range\((\w+)\):',
+         'for \\1 = 1, \\2 do'),
 
-        (r'for (\w+), (\w+) in enumerate\((\w+)\):',
+        (r'for (\w+), (\w+) in enumerate\(([\w\.]+)\):',
          'for \\1, \\2 in pairs(\\3) do  -- list'),
 
         (r'for (\w+), (\w+) in (.+).items\(\):',
@@ -253,8 +253,8 @@ regexps_MULTILINE = {
         (r'\bnil\b',
          'None'),
 
-        (r'for (\w+) = (\w+), (\w+) do',
-         'for \\1 in range(\\2, \\3 + 1):'),
+        (r'for (\w+) = 1, (\w+) do',
+         'for \\1 in range(\\2):'),
 
         (r'for (\w+), (\w+) in pairs\((.*)\) do  -- list',
          'for \\1, \\2 in enumerate(\\3):'),

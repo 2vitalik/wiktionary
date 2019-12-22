@@ -181,7 +181,7 @@ function export.parse(base, args)
 			info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 			_.ends(module, func)
-			return p.process(info), nil
+			return info, nil
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
 
@@ -212,10 +212,10 @@ function export.parse(base, args)
 					end
 				end
 
-				table.insert(info.plus, info_copy)
+				table.insert(info.plus, p.process(info_copy))
 			end
 			_.ends(module, func)
-			return p.process(info), nil
+			return info, nil
 		end
 
 		if info.noun then
@@ -244,7 +244,7 @@ function export.parse(base, args)
 			info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 			_.ends(module, func)
-			return p.process(info), nil
+			return info, nil
 		end
 
 	elseif n_parts == 2 then  -- INFO: Вариации "//" для ударения (и прочего индекса)
@@ -290,6 +290,9 @@ function export.parse(base, args)
 
 --		INFO: Заполняем атрибут с вариациями
 		info.variations = {p.process(info_1), p.process(info_2)}  -- list
+
+		_.ends(module, func)
+		return info, nil
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
 		_.ends(module, func)

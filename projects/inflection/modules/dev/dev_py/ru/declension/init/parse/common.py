@@ -171,7 +171,7 @@ def parse(func, base, args):  # export
             info.variations = [p.process(info_1), p.process(info_2)]  # list
 
             _.ends(module, func)
-            return p.process(info), None
+            return info, None
             # TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
         # end
 
@@ -182,7 +182,7 @@ def parse(func, base, args):  # export
         n_sub_parts = a.table_len(index_parts)  # local
         if n_sub_parts > 1:
             info.plus = []  # list
-            for i in range(1, n_sub_parts + 1):
+            for i in range(n_sub_parts):
                 info_copy = mw.clone(info)  # local
                 info_copy.word.stressed = words_parts[i]
 
@@ -202,10 +202,10 @@ def parse(func, base, args):  # export
                     # end
                 # end
 
-                info.plus.append(info_copy)
+                info.plus.append(p.process(info_copy))
             # end
             _.ends(module, func)
-            return p.process(info), None
+            return info, None
         # end
 
         if info.noun:
@@ -234,7 +234,7 @@ def parse(func, base, args):  # export
             info.variations = [p.process(info_1), p.process(info_2)]  # list
 
             _.ends(module, func)
-            return p.process(info), None
+            return info, None
         # end
 
     elif n_parts == 2:  # INFO: Вариации "//" для ударения (и прочего индекса)
@@ -280,6 +280,9 @@ def parse(func, base, args):  # export
 
         # INFO: Заполняем атрибут с вариациями
         info.variations = [p.process(info_1), p.process(info_2)]  # list
+
+        _.ends(module, func)
+        return info, None
 
     else:  # INFO: Какая-то ошибка, слишком много "//" в индексе
         _.ends(module, func)
