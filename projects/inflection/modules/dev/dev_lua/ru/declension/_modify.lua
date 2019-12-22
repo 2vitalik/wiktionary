@@ -12,8 +12,11 @@ local _transform = require('Module:' .. dev_prefix .. 'inflection/ru/declension/
 local module = 'modify'
 
 
-@a.starts(module)                                                             --
-function export.modify(func, data)                                             --
+-- @starts
+function export.modify(data)                                             --
+	func = "modify"
+	_.starts(module, func)
+
 	_prepare.prepare(data)                                                    --
 	_transform.transform(data)                                                --
 									                                          --

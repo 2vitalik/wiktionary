@@ -103,8 +103,8 @@ function export.parse(base, args)
 	_.starts(module, func)
 
 	local info = {}  -- AttrDict
-	info.word = {}  -- AttrDict
-	info.stem = {}  -- AttrDict
+	info.word = {}  -- AttrDict                                      --
+	info.stem = {}  -- AttrDict                                      --
 
 --	INFO: Достаём значения из параметров:
 	info.base = base
@@ -148,6 +148,7 @@ function export.parse(base, args)
 	_.log_value(info.rest_index, 'info.rest_index')
 
 --	INFO: stem, stem.stressed, etc.
+	-- todo: rename to `create_info`:
 	local error = init(info)
 	if error then
 		_.ends(module, func)

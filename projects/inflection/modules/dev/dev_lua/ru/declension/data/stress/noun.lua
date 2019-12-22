@@ -16,6 +16,8 @@ function export.get_noun_stress_schema(stress_type)  -- INFO: Вычислени
 
 	local stress_schema, types, sg_value, pl_value
 
+	-- todo: Сгенерировать все `stress_schema` для всех видов `stress_type` заранее и потом просто использовать/загружать их
+
 	-- общий подход следующий:
 	-- если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
 	stress_schema = {  -- dict

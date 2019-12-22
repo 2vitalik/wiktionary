@@ -23,7 +23,7 @@ function export.apply_stress_type(data)
 	func = "apply_stress_type"
 	_.starts(module, func)
 
-	-- If we have "ё" specific
+	-- If we have "ё" specific    -- fixme: ???
 	if _.contains(data.rest_index, 'ё') and data.stem.type ~= 'n-3rd' then  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
 		data.stem.stressed = _.replaced(data.stem.stressed, 'е́?([^е]*)$', 'ё%1')
 	end
@@ -42,7 +42,7 @@ function export.apply_stress_type(data)
 	--     data.stem.stressed = _.replaced(data.stem.stressed, 'е́?([^е]*)$', 'ё%1')
 	-- end
 
-	-- TODO: process this individually !!!
+	-- TODO: process this individually !!!!
 	if data.stress_schema['stem']['sg'] then
 		data.stems['gen_sg'] = data.stem.stressed
 		data.stems['dat_sg'] = data.stem.stressed
@@ -79,6 +79,7 @@ function export.apply_stress_type(data)
 		add_stress(data.endings, 'nom_pl')
 	end
 
+	-- TODO: process this individually !!!! and just in the common loop for all cases :)
 	if data.stress_schema['stem']['pl'] then
 		data.stems['gen_pl'] = data.stem.stressed
 		data.stems['dat_pl'] = data.stem.stressed

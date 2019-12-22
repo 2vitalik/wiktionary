@@ -43,7 +43,7 @@ local function main_algorithm(data)
 	if not data.stress_type then
 
 --		INFO: Может быть это просто несклоняемая схема:
-		if _.contains(data.rest_index, '^0') then
+		if _.contains(data.rest_index, '^0') then  -- todo: put this somewhere upper? before checking stress? or inside sub-algorithm?
 			keys = {
 				'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
 				'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
@@ -63,7 +63,7 @@ local function main_algorithm(data)
 			return result.finalize(data, {error='Нераспознанная часть индекса: ' .. data.rest_index})  -- b-dict
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:
-		else
+		else  -- todo: put this somewhere upper?
 			_.ends(module, func)
 			return result.finalize(data, {})  -- b-dict
 		end
@@ -96,6 +96,8 @@ local function main_algorithm(data)
 
 	-- -------------------------------------------------------------------------
 
+	-- todo: `main_algo` will have only further lines?
+
 	if data.noun then
 		m.modify(data)
 		out_args = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
@@ -110,18 +112,19 @@ local function main_algorithm(data)
 
 		genders = {'', 'm', 'n', 'f'}
 		for i, gender in pairs(genders) do  -- list
+			-- todo: copy data?
 			data.gender = gender
 			_.log_value(data.gender, 'data.gender')
 
 			m.modify(data)
 
-			if gender == '' then
+			if gender == '' then  -- todo: move all this logic inside `generate_forms` ?
 				out_args = form.generate_forms(data)  -- TODO: Rename to `out_args` ?
 			else
 				sub_forms = form.generate_forms(data)
 				for i, case in pairs(cases) do  -- list
 					key = case .. '_' .. gender
-					out_args[key] = sub_forms[case]
+					out_args[key] = sub_forms[case]  -- todo: rename to `out_args`
 				end
 				if gender == 'f' then
 					out_args['ins_sg2_f'] = sub_forms['ins_sg2']
@@ -150,7 +153,7 @@ end
 
 
 -- @starts
-function export.forms(base, args, frame)
+function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	func = "forms"
 	_.starts(module, func)
 
@@ -180,6 +183,7 @@ function export.forms(base, args, frame)
 		_.log_info("Случай с вариациями '//'")
 		local info_1 = info.variations[1]
 		local info_2 = info.variations[2]
+		-- todo: ... = o.output(m.modify(info_1))
 		local out_args_1 = main_algorithm(info_1)
 		local out_args_2 = main_algorithm(info_2)
 		out_args = form.join_forms(out_args_1, out_args_2)

@@ -126,7 +126,7 @@ end
 
 
 -- @starts
-function export.generate_forms(data)
+function export.generate_forms(data)  -- todo: rename to `out_args`
 	func = "generate_forms"
 	_.starts(module, func)
 
@@ -195,7 +195,7 @@ end
 
 
 -- @starts
-function export.join_forms(out_args_1, out_args_2)
+function export.join_forms(out_args_1, out_args_2)  -- todo: rename to `out_args`
 	func = "join_forms"
 	_.starts(module, func)
 
@@ -242,7 +242,7 @@ end
 
 
 -- @starts
-function export.plus_forms(sub_forms)
+function export.plus_forms(sub_forms)  -- todo: rename to `out_args`
 	func = "plus_forms"
 	_.starts(module, func)
 
@@ -255,8 +255,8 @@ function export.plus_forms(sub_forms)
 		'зализняк1', 'зализняк',
 		'error',
 	}  -- list
-	out_args = sub_forms[1]
-	for i, forms2 in pairs(sub_forms) do  -- list
+	out_args = sub_forms[1]  -- todo: rename to `out_args`
+	for i, forms2 in pairs(sub_forms) do  -- list  -- todo: rename to `out_args`
 		if i ~= 1 then
 			for j, key in pairs(keys) do  -- list
 				if not out_args[key] and forms2[key] then  -- INFO: Если out_args[key] == nil

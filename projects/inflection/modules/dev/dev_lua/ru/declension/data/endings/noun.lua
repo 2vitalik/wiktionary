@@ -18,7 +18,7 @@ function export.get_standard_noun_endings()
 	_.call(module, func)
 
 	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
-	return {
+	return {  -- todo: перенести в data-модуль?
 		m = {  -- стандартные окончания мужского рода
 			hard = {
 				nom_sg = '',

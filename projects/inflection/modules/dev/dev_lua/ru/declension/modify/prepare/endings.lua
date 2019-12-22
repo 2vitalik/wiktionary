@@ -62,6 +62,8 @@ local function choose_endings_stress(endings, gender, stem_base_type, stress_sch
 
 	local stress, keys
 
+	-- todo: we can generate one table for all genders only once at the beginning !!! and just use/load it here
+
 	if adj then
 		stress = stress_schema['ending']['nom_sg'] and stressed or unstressed
 
