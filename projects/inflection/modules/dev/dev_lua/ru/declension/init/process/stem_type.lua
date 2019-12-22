@@ -71,10 +71,10 @@ function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: О�
 			elseif _.endswith(word, 'ь') or _.endswith(word, 'и') then
 				stem_type = 'soft'
 			elseif _.endswith(word, 'а') then
---				data.gender = 'f'
+--				info.gender = 'f'
 				stem_type = 'hard'
 			elseif _.endswith(word, 'я') then
---				data.gender = 'f'
+--				info.gender = 'f'
 				stem_type = 'soft'
 			end
 		elseif gender == 'f' then
@@ -102,7 +102,7 @@ function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: О�
 
 --	if gender == 'm' then
 --		if _.endswith(word, {'а', 'я'}) then
---			data.gender = 'f'
+--			info.gender = 'f'
 --		end
 --	end
 

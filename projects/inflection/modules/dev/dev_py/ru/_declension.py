@@ -173,8 +173,8 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
         info_1 = info.variations[0]  # local
         info_2 = info.variations[1]  # local
         # todo: ... = o.output(m.modify(info_1))
-        main_algorithm(info_1)  # local
-        main_algorithm(info_2)  # local
+        main_algorithm(info_1)
+        main_algorithm(info_2)
         info.out_args = form.join_forms(info_1.out_args, info_2.out_args)
     elif info.plus:
         _.log_info("Случай с '+'")

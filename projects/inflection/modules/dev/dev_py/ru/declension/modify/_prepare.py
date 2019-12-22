@@ -19,13 +19,13 @@ def prepare(func, info):  # export
     # todo: create info.data.* !!!
 
     # todo: logging info
-    info.endings = endings.get_endings(info)
+    info.data.endings = endings.get_endings(info)
 
     # todo: logging info
-    info.stems = dict()  # dict
+    info.data.stems = dict()  # dict
     stress_apply.apply_stress_type(info)
-    _.log_table(info.stems, 'info.stems')
-    _.log_table(info.endings, 'info.endings')
+    _.log_table(info.data.stems, 'info.data.stems')
+    _.log_table(info.data.endings, 'info.data.endings')
 
     _.ends(module, func)
 # end

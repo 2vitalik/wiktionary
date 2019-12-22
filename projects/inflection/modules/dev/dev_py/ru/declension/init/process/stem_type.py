@@ -65,10 +65,10 @@ def get_stem_type(func, stem, word, gender, adj, rest_index):  # export  # INFO:
             elif _.endswith(word, 'ь') or _.endswith(word, 'и'):
                 stem_type = 'soft'
             elif _.endswith(word, 'а'):
-#                data.gender = 'f'
+#                info.gender = 'f'
                 stem_type = 'hard'
             elif _.endswith(word, 'я'):
-#                data.gender = 'f'
+#                info.gender = 'f'
                 stem_type = 'soft'
             # end
         elif gender == 'f':
@@ -96,7 +96,7 @@ def get_stem_type(func, stem, word, gender, adj, rest_index):  # export  # INFO:
 
 #    if gender == 'm':
 #        if _.endswith(word, ['а', 'я']):
-#            data.gender = 'f'
+#            info.gender = 'f'
 #        # end
 #    # end
 

@@ -56,34 +56,37 @@ def fix_stress(func, out_args):
 
 # Выбор винительного падежа
 @a.starts(module)
-def choose_accusative_forms(func, out_args, data):
+def choose_accusative_forms(func, info):
+    out_args = info.out_args  # local
+    data = info.data  # local
+
     out_args['acc_sg_in'] = ''
     out_args['acc_sg_an'] = ''
     out_args['acc_pl_in'] = ''
     out_args['acc_pl_an'] = ''
 
-    if data.gender == 'm' or (data.gender == 'n' and data.output_gender == 'm'):
-        if data.animacy == 'in':
+    if info.gender == 'm' or (info.gender == 'n' and info.output_gender == 'm'):
+        if info.animacy == 'in':
             out_args['acc_sg'] = out_args['nom_sg']
-        elif data.animacy == 'an':
+        elif info.animacy == 'an':
             out_args['acc_sg'] = out_args['gen_sg']
         else:
             out_args['acc_sg_in'] = out_args['nom_sg']
             out_args['acc_sg_an'] = out_args['gen_sg']
         # end
-    elif data.gender == 'f':
-        if _.equals(data.stem.type, ['f-3rd', 'f-3rd-sibilant']):
+    elif info.gender == 'f':
+        if _.equals(info.stem.type, ['f-3rd', 'f-3rd-sibilant']):
             out_args['acc_sg'] = out_args['nom_sg']
         else:
-            out_args['acc_sg'] = data.stems['acc_sg'] + data.endings['acc_sg']
+            out_args['acc_sg'] = data.stems['acc_sg'] + data.endings['acc_sg']  # todo: don't use `data` here?
         # end
-    elif data.gender == 'n':
+    elif info.gender == 'n':
         out_args['acc_sg'] = out_args['nom_sg']
     # end
 
-    if data.animacy == 'in':
+    if info.animacy == 'in':
         out_args['acc_pl'] = out_args['nom_pl']
-    elif data.animacy == 'an':
+    elif info.animacy == 'an':
         out_args['acc_pl'] = out_args['gen_pl']
     else:
         out_args['acc_pl_in'] = out_args['nom_pl']
@@ -114,9 +117,9 @@ def second_ins_case(func, out_args, gender):
 def generate_out_args(func, info):  # export
     # local keys
 
-    init_forms(info, info.stems, info.endings)
+    init_forms(info, info.data.stems, info.data.endings)
     if info.adj:
-        init_srt_forms(info.out_args, info.stems, info.endings)
+        init_srt_forms(info.out_args, info.data.stems, info.data.endings)
         if _.contains(info.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
             info.out_args['краткая'] = '⊠'
         elif _.contains(info.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
@@ -146,7 +149,7 @@ def generate_out_args(func, info):  # export
         noun_forms.apply_obelus(info.out_args, info.rest_index)
     # end
 
-    choose_accusative_forms(info.out_args, info)
+    choose_accusative_forms(info)
 
     second_ins_case(info.out_args, info.gender)
 

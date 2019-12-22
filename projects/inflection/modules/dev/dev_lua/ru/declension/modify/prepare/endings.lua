@@ -111,34 +111,34 @@ end
 
 
 -- @starts
-function export.get_endings(data)
+function export.get_endings(info)
 	func = "get_endings"
 	_.starts(module, func)
 
 --	INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
 	local endings
 
-	endings = get_base_endings(data.gender, data.stem.base_type, data.adj, data.pronoun)
+	endings = get_base_endings(info.gender, info.stem.base_type, info.adj, info.pronoun)
 
 --	INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
-	if data.adj then  -- or info.pronoun
-		adj_endings.fix_adj_pronoun_endings(endings, data.gender, data.stem.type, data.stress_schema, data.adj, false)
-	elseif data.pronoun then
-		pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem.type, data.stress_schema)
+	if info.adj then  -- or info.pronoun
+		adj_endings.fix_adj_pronoun_endings(endings, info.gender, info.stem.type, info.stress_schema, info.adj, false)
+	elseif info.pronoun then
+		pronoun_endings.fix_pronoun_noun_endings(endings, info.gender, info.stem.type, info.stress_schema)
 	else
-		noun_endings.fix_noun_endings(endings, data.gender, data.stem.type, data.stress_schema)
+		noun_endings.fix_noun_endings(endings, info.gender, info.stem.type, info.stress_schema)
 	end
 
 	-- apply special cases (1) or (2) in index
-	if not data.adj and not data.pronoun then  -- todo: move outside here (into `modify` package)
-		noun_circles.apply_noun_specific_1_2(endings, data.gender, data.stem.type, data.stem.base_type, data.rest_index)
+	if not info.adj and not info.pronoun then  -- todo: move outside here (into `modify` package)
+		noun_circles.apply_noun_specific_1_2(endings, info.gender, info.stem.type, info.stem.base_type, info.rest_index)
 	end
 
 	-- Resolve stressed/unstressed cases of endings
-	choose_endings_stress(endings, data.gender, data.stem.base_type, data.stress_schema, data.adj, data.pronoun)
+	choose_endings_stress(endings, info.gender, info.stem.base_type, info.stress_schema, info.adj, info.pronoun)
 
 --	INFO: Особые случаи: `копьё с d*` и `питьё с b*`
-	if data.gender == 'n' and data.stem.base_type == 'soft' and _.endswith(data.word.unstressed, 'ё') then
+	if info.gender == 'n' and info.stem.base_type == 'soft' and _.endswith(info.word.unstressed, 'ё') then
 		endings['nom_sg'] = 'ё'
 	end
 
