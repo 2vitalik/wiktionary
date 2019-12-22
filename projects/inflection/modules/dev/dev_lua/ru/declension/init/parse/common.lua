@@ -116,7 +116,7 @@ function export.parse(base, args)
 	info.noun = (info.unit == 'noun')
 
 	info.errors = {}  -- list
-	info.data = {}  -- AttrDict
+	info.data = {}  -- AttrDict  -- todo
 	info.out_args = {}  -- dict
 
 	_.log_value(info.index, 'info.index')

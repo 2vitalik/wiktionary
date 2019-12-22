@@ -23,7 +23,7 @@ function export.process(info)
 	_.log_value(info.stress_type, 'info.stress_type')
 
 	if error then
-		-- out_args = result.finalize(data, error)
+		-- out_args = result.finalize(info, error)
 		-- todo: save error somewhere in `info` !!!
 		_.ends(module, func)
 		return info

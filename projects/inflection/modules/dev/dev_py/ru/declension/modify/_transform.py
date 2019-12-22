@@ -23,9 +23,9 @@ def transform(func, data):  # export
     # end
 
     #    *** для случая с расстановкой ударения  (см. ниже)
-    #    # local orig_stem = data.stem.unstressed
-    #    if _.contains(data.rest_index, ['%(2%)', '②']):
-    #        orig_stem = _.replaced(data.stems['gen_pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
+    #    # local orig_stem = info.stem.unstressed
+    #    if _.contains(info.rest_index, ['%(2%)', '②']):
+    #        orig_stem = _.replaced(info.stems['gen_pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
     #        mw.log('> Another `orig_stem`: ' + str(orig_stem))
     #    # end
 
@@ -40,7 +40,7 @@ def transform(func, data):  # export
         for key, stem in data.stems.items():
             #            mw.log(' - ' + key + ' -> ' + stem)
             #            mw.log('Ударение на основу?')
-            #            mw.log(data.stress_schema['stem'][key])
+            #            mw.log(info.stress_schema['stem'][key])
             stem_stress_schema = data.stress_schema['stem']
             if not _.contains(stem, '[́ ё]') and _.has_key(stem_stress_schema, key) and stem_stress_schema[key]:
                 # *** случай с расстановкой ударения  (см. выше)

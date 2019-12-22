@@ -94,8 +94,8 @@ def angle_brackets(func, info):
 @a.starts(module)
 def parse(func, base, args):  # export
     info = a.AttrDict()  # AttrDict  # local
-    info.word = a.AttrDict()  # AttrDict
-    info.stem = a.AttrDict()  # AttrDict
+    info.word = a.AttrDict()  # AttrDict                                      #
+    info.stem = a.AttrDict()  # AttrDict                                      #
 
     # INFO: Достаём значения из параметров:
     info.base = base

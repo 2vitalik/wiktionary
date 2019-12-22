@@ -13,24 +13,23 @@ local module = 'output.forms.common'
 
 
 -- @call
-local function init_forms(stems, endings)  -- Генерация словоформ
+local function init_forms(info, stems, endings)  -- Генерация словоформ
 	func = "init_forms"
 	_.call(module, func)
 
-	return {
-		nom_sg = stems['nom_sg'] .. endings['nom_sg'],
-		gen_sg = stems['gen_sg'] .. endings['gen_sg'],
-		dat_sg = stems['dat_sg'] .. endings['dat_sg'],
-		acc_sg = '',
-		ins_sg = stems['ins_sg'] .. endings['ins_sg'],
-		prp_sg = stems['prp_sg'] .. endings['prp_sg'],
-		nom_pl = stems['nom_pl'] .. endings['nom_pl'],
-		gen_pl = stems['gen_pl'] .. endings['gen_pl'],
-		dat_pl = stems['dat_pl'] .. endings['dat_pl'],
-		acc_pl = '',
-		ins_pl = stems['ins_pl'] .. endings['ins_pl'],
-		prp_pl = stems['prp_pl'] .. endings['prp_pl'],
-	}  -- dict
+	info.out_args['nom_sg'] = stems['nom_sg'] .. endings['nom_sg']
+	info.out_args['gen_sg'] = stems['gen_sg'] .. endings['gen_sg']
+	info.out_args['dat_sg'] = stems['dat_sg'] .. endings['dat_sg']
+	info.out_args['acc_sg'] = ''
+	info.out_args['ins_sg'] = stems['ins_sg'] .. endings['ins_sg']
+	info.out_args['prp_sg'] = stems['prp_sg'] .. endings['prp_sg']
+	info.out_args['nom_pl'] = stems['nom_pl'] .. endings['nom_pl']
+	info.out_args['gen_pl'] = stems['gen_pl'] .. endings['gen_pl']
+	info.out_args['dat_pl'] = stems['dat_pl'] .. endings['dat_pl']
+	info.out_args['acc_pl'] = ''
+	info.out_args['ins_pl'] = stems['ins_pl'] .. endings['ins_pl']
+	info.out_args['prp_pl'] = stems['prp_pl'] .. endings['prp_pl']
+
 	-- TODO: может инициировать и вообще везде работать уже с дефисами? Например, функцией сразу же преобразовывать
 end
 
@@ -127,75 +126,74 @@ end
 
 
 -- @starts
-function export.generate_forms(data)  -- todo: rename to `out_args`
-	func = "generate_forms"
+function export.generate_out_args(info)
+	func = "generate_out_args"
 	_.starts(module, func)
 
 	local out_args, keys
 
-	out_args = init_forms(data.stems, data.endings)
-	if data.adj then
-		init_srt_forms(out_args, data.stems, data.endings)
-		if _.contains(data.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
-			out_args['краткая'] = '⊠'
-		elseif _.contains(data.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
-			out_args['краткая'] = '✕'
-		elseif _.contains(data.rest_index, {'%-', '—', '−'}) then
-			out_args['краткая'] = '−'
+	init_forms(info, info.stems, info.endings)
+	if info.adj then
+		init_srt_forms(info.out_args, info.stems, info.endings)
+		if _.contains(info.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
+			info.out_args['краткая'] = '⊠'
+		elseif _.contains(info.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
+			info.out_args['краткая'] = '✕'
+		elseif _.contains(info.rest_index, {'%-', '—', '−'}) then
+			info.out_args['краткая'] = '−'
 		else
-			out_args['краткая'] = '1'
+			info.out_args['краткая'] = '1'
 		end
 	end
 
-	fix_stress(out_args)
+	fix_stress(info.out_args)
 
-	for key, value in pairs(out_args) do
+	for key, value in pairs(info.out_args) do
 		-- replace 'ё' with 'е' when unstressed
-		-- if _.contains_once(data.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then  -- trying to bug-fix
-		if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(data.rest_index, 'ё') then
-			if data.adj and _.contains(data.stress_type, "a'") and data.gender == 'f' and key == 'srt_sg' then
-				out_args[key] = _.replaced(value, 'ё', 'е') .. ' // ' .. _.replaced(value, '́', '')
+		-- if _.contains_once(info.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(info.rest_index, 'ё') then  -- trying to bug-fix
+		if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(info.rest_index, 'ё') then
+			if info.adj and _.contains(info.stress_type, "a'") and info.gender == 'f' and key == 'srt_sg' then
+				info.out_args[key] = _.replaced(value, 'ё', 'е') .. ' // ' .. _.replaced(value, '́', '')
 			else
-				out_args[key] = _.replaced(value, 'ё', 'е')  -- обычный случай
+				info.out_args[key] = _.replaced(value, 'ё', 'е')  -- обычный случай
 			end
 		end
 	end
 
-	if data.noun then
-		noun_forms.apply_obelus(out_args, data.rest_index)
+	if info.noun then
+		noun_forms.apply_obelus(info.out_args, info.rest_index)
 	end
 
-	choose_accusative_forms(out_args, data)
+	choose_accusative_forms(info.out_args, info)
 
-	second_ins_case(out_args, data.gender)
+	second_ins_case(info.out_args, info.gender)
 
-	if data.noun then
-		noun_forms.apply_specific_3(out_args, data.gender, data.rest_index)
+	if info.noun then
+		noun_forms.apply_specific_3(info.out_args, info.gender, info.rest_index)
 	end
 
-	if data.adj then
-		adj_forms.add_comparative(out_args, data.rest_index, data.stress_type, data.stem.type, data.stem)
+	if info.adj then
+		adj_forms.add_comparative(info.out_args, info.rest_index, info.stress_type, info.stem.type, info.stem)
 	end
 
-	for key, value in pairs(out_args) do
+	for key, value in pairs(info.out_args) do
 --		INFO Удаляем ударение, если только один слог:
-		out_args[key] = noun_forms.remove_stress_if_one_syllable(value)
+		info.out_args[key] = noun_forms.remove_stress_if_one_syllable(value)
 	end
 
-	if data.adj then
-		if data.postfix then
+	if info.adj then
+		if info.postfix then
 			keys = {
 				'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
 				'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
 			}  -- list
 			for i, key in pairs(keys) do  -- list
-				out_args[key] = out_args[key] .. 'ся'
+				info.out_args[key] = info.out_args[key] .. 'ся'
 			end
 		end
 	end
 
 	_.ends(module, func)
-	return out_args
 end
 
 

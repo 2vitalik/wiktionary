@@ -110,7 +110,7 @@ def get_endings(func, data):  # export
     endings = get_base_endings(data.gender, data.stem.base_type, data.adj, data.pronoun)
 
     # INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
-    if data.adj:  # or data.pronoun
+    if data.adj:  # or info.pronoun
         adj_endings.fix_adj_pronoun_endings(endings, data.gender, data.stem.type, data.stress_schema, data.adj, False)
     elif data.pronoun:
         pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem.type, data.stress_schema)

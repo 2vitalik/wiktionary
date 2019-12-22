@@ -22,9 +22,9 @@ function export.extract_stress_type(rest_index)
 --	local stress_regexp = "([abcdef][′']?[′']?)"
 --	local stress_regexp2 = '(' .. stress_regexp .. '.*//.*' .. stress_regexp .. ')'
 --	stress_regexp = '(' .. stress_regexp .. '(% ?.*))'
---	data.stress_type = _.extract(rest_index, stress_regexp2)
---	if not data.stress_type then
---		data.stress_type = _.extract(rest_index, stress_regexp)
+--	info.stress_type = _.extract(rest_index, stress_regexp2)
+--	if not info.stress_type then
+--		info.stress_type = _.extract(rest_index, stress_regexp)
 --	end
 	local stress_type, allowed_stress_types
 
