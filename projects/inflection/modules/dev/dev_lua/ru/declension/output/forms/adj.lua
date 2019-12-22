@@ -37,7 +37,7 @@ function export.add_comparative(out_args, rest_index, stress_type, stem_type, st
 
 		out_args['comparative'] = new_stem .. 'е'
 	else
-		if stress_type == 'a' or _.startswith(stress_type, 'a/') then
+		if _.equals(stress_type, {'a', 'a/a'}) then
 			out_args['comparative'] = stem.stressed .. 'ее'
 			out_args['comparative2'] = stem.stressed .. 'ей'
 		else
@@ -45,6 +45,8 @@ function export.add_comparative(out_args, rest_index, stress_type, stem_type, st
 			out_args['comparative2'] = stem.unstressed .. 'е́й'
 		end
 	end
+
+	_.ends(module, func)
 end
 
 

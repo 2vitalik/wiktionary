@@ -34,7 +34,7 @@ def add_comparative(func, out_args, rest_index, stress_type, stem_type, stem):  
 
         out_args['comparative'] = new_stem + 'е'
     else:
-        if stress_type == 'a' or _.startswith(stress_type, 'a/'):
+        if _.equals(stress_type, ['a', 'a/a']):
             out_args['comparative'] = stem.stressed + 'ее'
             out_args['comparative2'] = stem.stressed + 'ей'
         else:
@@ -42,6 +42,8 @@ def add_comparative(func, out_args, rest_index, stress_type, stem_type, stem):  
             out_args['comparative2'] = stem.unstressed + 'е́й'
         # end
     # end
+
+    _.ends(module, func)
 # end
 
 
