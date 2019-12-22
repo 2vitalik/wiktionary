@@ -115,6 +115,10 @@ function export.parse(base, args)
 	info.word.stressed = mw.text.trim(args['слово'])
 	info.noun = (info.unit == 'noun')
 
+	info.errors = {}  -- list
+	info.data = {}  -- AttrDict
+	info.out_args = {}  -- dict
+
 	_.log_value(info.index, 'info.index')
 	_.log_value(info.word.stressed, 'info.word.stressed')
 

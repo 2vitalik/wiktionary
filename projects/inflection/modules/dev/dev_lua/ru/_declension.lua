@@ -157,9 +157,6 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	func = "forms"
 	_.starts(module, func)
 
---	INFO: `base` здесь нигде не используется,
-	--  но теоретически может понадобиться для других языков
-
 	-- todo: move this to another place?
 	mw.log('=================================================================')
 
@@ -204,6 +201,7 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	end
 
 	result.finalize(info, out_args)
+	-- todo: put `forward_args` here instead of `finalize`
 
 	_.log_table(out_args, "out_args")
 	_.ends(module, func)

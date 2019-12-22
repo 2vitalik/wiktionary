@@ -7,6 +7,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stem_type')  -- '.'
 local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stress')  -- '.'
+local o = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/init_out_args')  -- '.'
 
 
 local module = 'init.process'
@@ -38,6 +39,9 @@ function export.process(info)
 	info.stem.type, info.stem.base_type = stem_type.get_stem_type(info.stem.unstressed, info.word.unstressed, info.gender, info.adj, info.rest_index)
 	_.log_value(info.stem.type, 'info.stem.type')
 	_.log_value(info.stem.base_type, 'info.stem.base_type')
+
+	_.log_info('Инициализируем `info.out_args`')
+	o.init_out_args(info)
 
 	_.ends(module, func)
 	return info

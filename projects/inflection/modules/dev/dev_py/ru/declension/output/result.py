@@ -41,39 +41,6 @@ def replace_underscore_with_hyphen(func, out_args):
 # end
 
 
-# Формирование параметров рода и одушевлённости для подстановки в шаблон
-@a.starts(module)
-def forward_gender_animacy(func, out_args, data):
-    # local genders, animacies
-
-    # Род:
-    genders = dict(m='муж', f='жен', n='ср', mf='мж', mn='мс', fm='жм', fn='жс', nm='см', nf='сж' )  # dict
-    if data.common_gender:
-        out_args['род'] = 'общ'
-    elif data.output_gender:
-        out_args['род'] = genders[data.output_gender]
-    elif data.gender:
-        out_args['род'] = genders[data.gender]
-    else:
-        pass
-    # end
-
-    # Одушевлённость:
-    animacies = dict()  # dict
-    animacies['in'] = 'неодуш'
-    animacies['an'] = 'одуш'
-    animacies['in//an'] = 'неодуш-одуш'
-    animacies['an//in'] = 'одуш-неодуш'
-    if data.output_animacy:
-        out_args['кат'] = animacies[data.output_animacy]
-    else:
-        out_args['кат'] = animacies[data.animacy]
-    # end
-
-    _.ends(module, func)
-# end
-
-
 @a.starts(module)
 def forward_args(func, out_args, data):
     # local keys, args
@@ -122,73 +89,9 @@ def forward_args(func, out_args, data):
 
 
 @a.starts(module)
-def additional_arguments(func, out_args, data):
-    # RU (склонение)
-    if _.contains(data.rest_index, '0'):
-        out_args['скл'] = 'не'
-    elif data.adj:
-        out_args['скл'] = 'а'
-    elif data.pronoun:
-        out_args['скл'] = 'мс'
-    elif _.endswith(data.word.unstressed, '[ая]'):
-        out_args['скл'] = '1'
-    else:
-        if data.gender == 'm' or data.gender == 'n':
-            out_args['скл'] = '2'
-        else:
-            out_args['скл'] = '3'
-        # end
-    # end
-
-    # RU (чередование)
-    if _.contains(data.index, '%*'):
-        out_args['чередование'] = '1'
-    # end
-
-    if data.pt:
-        out_args['pt'] = '1'
-    # end
-
-    # RU ("-" в индексе)
-    # TODO: Здесь может быть глюк, если случай глобального `//` и `rest_index` пуст (а исходный `index` не подходит, т.к. там может быть не тот дефис -- в роде)
-    if data.rest_index:
-        if _.contains(data.rest_index, ['%-', '—', '−']):
-            out_args['st'] = '1'
-            out_args['затрудн'] = '1'
-        # end
-    else:
-        pass  # TODO
-    # end
-
-    _.ends(module, func)
-# end
-
-
-#------------------------------------------------------------------------------
-
-
-@a.starts(module)
 def finalize(func, data, out_args):  # export
-    out_args['stem_type'] = data.stem.type  # for testcases
-    out_args['stress_type'] = data.stress_type  # for categories   -- is really used?
-    out_args['dev'] = dev_prefix
-
-    additional_arguments(out_args, data)
-    replace_underscore_with_hyphen(out_args)
-
-    if data.noun:
-        forward_gender_animacy(out_args, data)
-    # end
-
-    forward_args(out_args, data)
-
-    if not _.has_key(out_args, 'зализняк'):
-        out_args['зализняк'] = '??'
-    # end
-
-    if not _.has_key(out_args, 'error_category') and data.word_cleared != data.base:
-        out_args['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
-    # end
+    replace_underscore_with_hyphen(out_args)  # fixme: this will be redundant soon
+    forward_args(out_args, data)  # fixme: move this to the ending of the main function
 
     _.ends(module, func)
     return out_args

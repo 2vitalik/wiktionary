@@ -26,6 +26,7 @@ declension_files = [
     'ru/declension/output/forms/noun',
     'ru/declension/output/forms/adj',
     'ru/declension/output/index',
+    'ru/declension/output/init_out_args',
     'ru/declension/output/result',
 ]
 

@@ -7,6 +7,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 from ..init.process import stem_type as stem_type
 from ..init.process import stress as stress
+from ..output import init_out_args as o
 
 
 module = 'init.process'  # local
@@ -36,6 +37,9 @@ def process(func, info):  # export
     info.stem.type, info.stem.base_type = stem_type.get_stem_type(info.stem.unstressed, info.word.unstressed, info.gender, info.adj, info.rest_index)
     _.log_value(info.stem.type, 'info.stem.type')
     _.log_value(info.stem.base_type, 'info.stem.base_type')
+
+    _.log_info('Инициализируем `info.out_args`')
+    o.init_out_args(info)
 
     _.ends(module, func)
     return info
