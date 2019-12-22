@@ -27,6 +27,9 @@ regexps_MULTILINE = {
         ('from projects.inflection.modules.{dev}.{dev}_py.a import syllables',
          'local syllables = require("Модуль:слоги")'),
 
+        (r'from \.declension import (\w+) as (\w+)',
+         "local \\2 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\1')"),
+
         (r'from \.((?:declension\.)?\.*)(\w+) import (\w+) as (\w+)',
          "local \\4 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3')  -- '\\1'"),
 
@@ -38,6 +41,9 @@ regexps_MULTILINE = {
 
         (r'from \.((?:declension\.)?\.*)(\w+)\.(\w+)\.(\w+) import (\w+) as (\w+)',
          "local \\6 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4/\\5')  -- '\\1'"),
+
+        (r"local ([^=]+) = require\('Module:' .. dev_prefix .. 'inflection/ru/([^']*)/_(\w+)'\)([^\n]*)\n",
+         "local \\1 = require('Module:' .. dev_prefix .. 'inflection/ru/\\2/\\3')\\4  -- '_' /\\3\n"),
 
         # (r"\bmw\.text\.", 'mw.'),
 
@@ -159,6 +165,12 @@ regexps_MULTILINE = {
     'lua': [
         ('local syllables = require\("Модуль:слоги"\)',
          'from projects.inflection.modules.{dev}.{dev}_py.a import syllables'),
+
+        (r"local ([^=]+) = require\('Module:' .. dev_prefix .. 'inflection/ru/([^'\n]*)/(\w+)'\)([^\n]*)  -- '_' /(\w+)\n",
+         "local \\1 = require('Module:' .. dev_prefix .. 'inflection/ru/\\2/_\\3')\\4\n"),
+
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)'\)",
+         'from .declension import \\2 as \\1'),
 
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)' =",
          'from .\\4\\2 import \\1'),

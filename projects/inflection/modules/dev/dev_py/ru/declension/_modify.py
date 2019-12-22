@@ -12,7 +12,7 @@ from .modify import _transform
 module = 'modify'  # local
 
 
-@a.starts(module)                                                             #
+@a.starts(module)
 def modify(func, data):  # export                                             #
     _prepare.prepare(data)                                                    #
     _transform.transform(data)                                                #

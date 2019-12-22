@@ -5,7 +5,8 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from .process import stem_type, stress
+from ..init.process import stem_type as stem_type
+from ..init.process import stress as stress
 
 
 module = 'init.process'  # local

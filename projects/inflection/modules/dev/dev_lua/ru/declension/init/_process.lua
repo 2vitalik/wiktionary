@@ -5,7 +5,8 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/process/stem_type')  -- '' =, stress
+local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stem_type')  -- '.'
+local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stress')  -- '.'
 
 
 local module = 'init.process'
