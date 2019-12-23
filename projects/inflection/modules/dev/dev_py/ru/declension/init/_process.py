@@ -26,12 +26,12 @@ def process(func, i):  # export
     # end
 
     _.log_info('Вычисление схемы ударения')
-    i.stress_schema = stress.get_stress_schema(i.stress_type, i.adj, i.pronoun)
+    stress.get_stress_schema(i)
     _.log_table(i.stress_schema['stem'], "info.stress_schema['stem']")
     _.log_table(i.stress_schema['ending'], "info.stress_schema['ending']")
 
     _.log_info('Определение типа основы (stem_type)')
-    i.stem.type, i.stem.base_type = stem_type.get_stem_type(i.stem.unstressed, i.word.unstressed, i.gender, i.adj, i.rest_index)
+    stem_type.get_stem_type(i)
     _.log_value(i.stem.type, 'info.stem.type')
     _.log_value(i.stem.base_type, 'info.stem.base_type')
 

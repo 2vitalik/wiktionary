@@ -40,85 +40,86 @@ end
 
 
 -- @starts
-function export.get_stem_type(stem, word, gender, adj, rest_index)  -- INFO: Определение типа основы
+function export.get_stem_type(i)  -- INFO: Определение типа основы
 	func = "get_stem_type"
 	_.starts(module, func)
 
-	local stem_type
+	local word = i.word.unstressed
+	local stem = i.stem.unstressed
+
+	i.stem.type = ''
 
 	if _.endswith(stem, '[гкх]') then
-		stem_type = 'velar'  -- todo: '3-velar'
+		i.stem.type = 'velar'  -- todo: '3-velar'
 	elseif _.endswith(stem, '[жчшщ]') then
-		stem_type = 'sibilant'
+		i.stem.type = 'sibilant'
 	elseif _.endswith(stem, 'ц') then
-		stem_type = 'letter-ц'
+		i.stem.type = 'letter-ц'
 	elseif _.endswith(stem, {'[йь]', '[аоеёуыэюя]'}) then
-		stem_type = 'vowel'
+		i.stem.type = 'vowel'
 	elseif _.endswith(stem, 'и') then
-		stem_type = 'letter-и'
+		i.stem.type = 'letter-и'
 	else
-		if adj then
+		if i.adj then
 			if _.endswith(word, {'ый', 'ой', 'ая', 'ое', 'ые'}) then
-				stem_type = 'hard'
+				i.stem.type = 'hard'
 			elseif _.endswith(word, {'ий', 'яя', 'ее', 'ие'}) then
-				stem_type = 'soft'
+				i.stem.type = 'soft'
 			end
-		elseif gender == 'm' then
+		elseif i.gender == 'm' then
 			if stem == word or _.endswith(word, 'ы') then
-				stem_type = 'hard'
+				i.stem.type = 'hard'
 			elseif _.endswith(word, 'путь') then
-				stem_type = 'm-3rd'
+				i.stem.type = 'm-3rd'
 			elseif _.endswith(word, 'ь') or _.endswith(word, 'и') then
-				stem_type = 'soft'
+				i.stem.type = 'soft'
 			elseif _.endswith(word, 'а') then
---				info.gender = 'f'
-				stem_type = 'hard'
+--				i.gender = 'f'
+				i.stem.type = 'hard'
 			elseif _.endswith(word, 'я') then
---				info.gender = 'f'
-				stem_type = 'soft'
+--				i.gender = 'f'
+				i.stem.type = 'soft'
 			end
-		elseif gender == 'f' then
+		elseif i.gender == 'f' then
 			if _.endswith(word, 'а') or _.endswith(word, 'ы') then
-				stem_type = 'hard'
+				i.stem.type = 'hard'
 			elseif _.endswith(word, 'я') then
-				stem_type = 'soft'
-			elseif _.endswith(word, 'и') and _.contains(rest_index, '2') then  -- todo: а что если нет индекса??
-				stem_type = 'soft'
-			elseif _.endswith(word, 'и') and _.contains(rest_index, '8') then
-				stem_type = 'f-3rd'
+				i.stem.type = 'soft'
+			elseif _.endswith(word, 'и') and _.contains(i.rest_index, '2') then  -- todo: а что если нет индекса??
+				i.stem.type = 'soft'
+			elseif _.endswith(word, 'и') and _.contains(i.rest_index, '8') then
+				i.stem.type = 'f-3rd'
 			elseif _.endswith(word, 'ь') then  -- conflict in pl
-				stem_type = 'f-3rd'
+				i.stem.type = 'f-3rd'
 			end
-		elseif gender == 'n' then
+		elseif i.gender == 'n' then
 			if _.endswith(word, 'о') or _.endswith(word, 'а') then
-				stem_type = 'hard'
+				i.stem.type = 'hard'
 			elseif _.endswith(word, 'мя')  or _.endswith(word, 'мена') then
-				stem_type = 'n-3rd'
+				i.stem.type = 'n-3rd'
 			elseif _.endswith(word, 'е') or _.endswith(word, 'я') then
-				stem_type = 'soft'
+				i.stem.type = 'soft'
 			end
 		end
 	end
 
 --	if gender == 'm' then
 --		if _.endswith(word, {'а', 'я'}) then
---			info.gender = 'f'
+--			i.gender = 'f'
 --		end
 --	end
 
-	if gender == 'f' and stem_type == 'sibilant' and _.endswith(word, 'ь') then
-		stem_type = 'f-3rd-sibilant'
+	if i.gender == 'f' and i.stem.type == 'sibilant' and _.endswith(word, 'ь') then
+		i.stem.type = 'f-3rd-sibilant'
 	end
-	if stem_type == '' then
-		stem_type = 'hard'
+	if i.stem.type == '' then
+		i.stem.type = 'hard'
 	end
 
 --	INFO: Выбор подходящего `stem_type` из двух базовых типов: 'hard' и 'soft'
-	local stem_base_type
-	stem_base_type = get_stem_base_type(stem_type)
+	i.stem.base_type = get_stem_base_type(i.stem.type)
 
 	_.ends(module, func)
-	return stem_type, stem_base_type
 end
 
 return export

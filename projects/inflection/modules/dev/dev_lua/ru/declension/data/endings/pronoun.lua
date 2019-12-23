@@ -138,45 +138,47 @@ end
 
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 -- @starts
-function export.fix_pronoun_noun_endings(endings, gender, stem_type, stress_schema)
+function export.fix_pronoun_noun_endings(i)
 	func = "fix_pronoun_noun_endings"
 	_.starts(module, func)
 
+	local d = i.data
+
 --	INFO: Replace "ы" to "и"
-	if _.equals(stem_type, {'sibilant'}) then
-		if _.In(gender, {'m', 'n'}) then
-			endings['ins-sg'] = 'им'
+	if _.equals(i.stem.type, {'sibilant'}) then
+		if _.In(i.gender, {'m', 'n'}) then
+			d.endings['ins-sg'] = 'им'
 		end
 
-		endings['nom-pl'] = 'и'
-		endings['gen-pl'] = 'их'
-		endings['dat-pl'] = 'им'
-		endings['ins-pl'] = 'ими'
-		endings['prp-pl'] = 'их'
+		d.endings['nom-pl'] = 'и'
+		d.endings['gen-pl'] = 'их'
+		d.endings['dat-pl'] = 'им'
+		d.endings['ins-pl'] = 'ими'
+		d.endings['prp-pl'] = 'их'
 	end
 
 --	INFO: Other Replace
-	if _.equals(stem_type, {'sibilant'}) then
-		if gender == 'n' then
-			endings['nom-sg'] = {'е', 'о' }
+	if _.equals(i.stem.type, {'sibilant'}) then
+		if i.gender == 'n' then
+			d.endings['nom-sg'] = {'е', 'о' }
 		end
-		if _.In(gender, {'m', 'n'}) then
-			endings['gen-sg'] = {'его', 'ого'}
-			endings['dat-sg'] = {'ему', 'ому'}
-			endings['prp-sg'] = {'ем', 'ом'}
+		if _.In(i.gender, {'m', 'n'}) then
+			d.endings['gen-sg'] = {'его', 'ого'}
+			d.endings['dat-sg'] = {'ему', 'ому'}
+			d.endings['prp-sg'] = {'ем', 'ом'}
 		end
-		if gender == 'f' then
-			endings['gen-sg'] = {'ей', 'ой'}
-			endings['dat-sg'] = {'ей', 'ой'}
-			endings['ins-sg'] = {'ей', 'ой'}
-			endings['prp-sg'] = {'ей', 'ой'}
+		if i.gender == 'f' then
+			d.endings['gen-sg'] = {'ей', 'ой'}
+			d.endings['dat-sg'] = {'ей', 'ой'}
+			d.endings['ins-sg'] = {'ей', 'ой'}
+			d.endings['prp-sg'] = {'ей', 'ой'}
 		end
 	end
 
-	if _.equals(stem_type, {'vowel'}) then
-		if _.In(gender, {'m', 'n'}) then
-			endings['gen-sg'] = 'его'
-			endings['dat-sg'] = 'ему'
+	if _.equals(i.stem.type, {'vowel'}) then
+		if _.In(i.gender, {'m', 'n'}) then
+			d.endings['gen-sg'] = 'его'
+			d.endings['dat-sg'] = 'ему'
 		end
 	end
 

@@ -13,12 +13,12 @@ local module = 'modify'
 
 
 -- @starts
-function export.modify(info)                                             --
+function export.modify(i)                                             --
 	func = "modify"
 	_.starts(module, func)
 
-	_prepare.prepare(info)                                                    --
-	_transform.transform(info)                                                --
+	_prepare.prepare(i)                                                    --
+	_transform.transform(i)                                                --
 									                                          --
 	_.ends(module, func)                                                      --
 end                                                                         --

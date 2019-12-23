@@ -11,8 +11,6 @@ module = 'data.stress.adj'  # local
 # Данные: ударность основы и окончания в зависимости от схемы ударения
 @a.starts(module)
 def get_adj_stress_schema(func, stress_type):  # export  # INFO: Вычисление схемы ударения
-    # local stress_schema, types, cases, sg_value
-
     # todo: Сгенерировать все `stress_schema` для всех видов `stress_type` заранее и потом просто использовать/загружать их
 
     # общий подход следующий:
@@ -31,15 +29,16 @@ def get_adj_stress_schema(func, stress_type):  # export  # INFO: Вычисле�
     stress_schema.ending['srt-sg-n'] = _.endswith(stress_type, ["/b", "/b'", "/c''"]) or _.equals(stress_type, ['b', "b'"])
     stress_schema.ending['srt-pl'] = _.endswith(stress_type, ["/b", "/b'", "/c'", "/c''"]) or _.equals(stress_type, ['b', "b'"])
 
-    types = ['stem', 'ending']
+    types = ['stem', 'ending']  # local
+    # local cases
     cases = [
         'sg', 'pl',
         'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
         'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
     ]  # list
     for i, type in enumerate(types):
-        sg_value = stress_schema[type]['full']
-        for i, case in enumerate(cases):
+        sg_value = stress_schema[type]['full']  # local
+        for j, case in enumerate(cases):
             stress_schema[type][case] = sg_value
         # end
     # end

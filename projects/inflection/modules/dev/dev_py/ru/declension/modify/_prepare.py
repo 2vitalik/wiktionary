@@ -13,19 +13,19 @@ module = 'modify.prepare'  # local
 
 
 @a.starts(module)
-def prepare(func, info):  # export
+def prepare(func, i):  # export
     # INFO: Generates `.endings` and `.stems`
 
     # todo: create info.data.* !!!
 
     # todo: logging info
-    info.data.endings = endings.get_endings(info)
+    endings.get_endings(i)
 
     # todo: logging info
-    info.data.stems = dict()  # dict
-    stress_apply.apply_stress_type(info)
-    _.log_table(info.data.stems, 'info.data.stems')
-    _.log_table(info.data.endings, 'info.data.endings')
+    i.data.stems = dict()  # dict
+    stress_apply.apply_stress_type(i)
+    _.log_table(i.data.stems, 'info.data.stems')
+    _.log_table(i.data.endings, 'info.data.endings')
 
     _.ends(module, func)
 # end

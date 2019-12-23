@@ -20,9 +20,9 @@ def extract_stress_type(func, i):  # export
 #    # local stress_regexp = "([abcdef][′']?[′']?)"
 #    # local stress_regexp2 = '(' + stress_regexp + '.*//.*' + stress_regexp + ')'
 #    stress_regexp = '(' + stress_regexp + '(% ?.*))'
-#    info.stress_type = _.extract(rest_index, stress_regexp2)
-#    if not info.stress_type:
-#        info.stress_type = _.extract(rest_index, stress_regexp)
+#    i.stress_type = _.extract(i.rest_index, stress_regexp2)
+#    if not i.stress_type:
+#        i.stress_type = _.extract(i.rest_index, stress_regexp)
 #    # end
     # local stress_type, allowed_stress_types
 
@@ -51,18 +51,16 @@ def extract_stress_type(func, i):  # export
 
 
 @a.starts(module)
-def get_stress_schema(func, stress_type, adj, pronoun):  # export
-    result = ''  # local
-    if adj:
-        result = adj_stress.get_adj_stress_schema(stress_type)
-    elif pronoun:
-        result = pronoun_stress.get_pronoun_stress_schema(stress_type)
+def get_stress_schema(func, i):  # export
+    if i.adj:
+        i.stress_schema = adj_stress.get_adj_stress_schema(i.stress_type)
+    elif i.pronoun:
+        i.stress_schema = pronoun_stress.get_pronoun_stress_schema(i.stress_type)
     else:
-        result = noun_stress.get_noun_stress_schema(stress_type)
+        i.stress_schema = noun_stress.get_noun_stress_schema(i.stress_type)
     # end
 
     _.ends(module, func)
-    return result
 # end
 
 

@@ -33,10 +33,10 @@ function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисле�
 	for i, type in pairs(types) do  -- list
 		sg_value = stress_schema[type]['sg']
 		pl_value = stress_schema[type]['pl']
-		for i, case in pairs(sg_cases) do  -- list
+		for j, case in pairs(sg_cases) do  -- list
 			stress_schema[type][case] = sg_value
 		end
-		for i, case in pairs(pl_cases) do  -- list
+		for j, case in pairs(pl_cases) do  -- list
 			stress_schema[type][case] = pl_value
 		end
 	end

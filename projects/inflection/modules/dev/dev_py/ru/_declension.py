@@ -16,7 +16,7 @@ from .declension.output import result as r
 module = 'declension'  # local
 
 
-def prepare_stash():  # todo rename to `prepare_regexp_templates`
+def prepare_stash():  # todo rename to `prepare_regexp_templates` or patterns
     _.clear_stash()
     _.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
     _.add_stash('{vowel+ё}', '[аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
@@ -25,28 +25,29 @@ def prepare_stash():  # todo rename to `prepare_regexp_templates`
 
 
 @a.starts(module)
-def main_algorithm(func, info):
-    # local keys, for_category, cases
+def main_algorithm(func, i):
+    o = i.out_args  # local
 
     # INFO: Если ударение не указано:
-    if not info.stress_type:
+    if not i.stress_type:
 
         # INFO: Может быть это просто несклоняемая схема:
-        if _.contains(info.rest_index, '^0'):  # todo: put this somewhere upper? before checking stress? or inside sub-algorithm?
+        if _.contains(i.rest_index, '^0'):  # todo: put this somewhere upper? before checking stress? or inside sub-algorithm?
+            # local keys
             keys = [
                 'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
                 'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
             ]  # list
-            info.out_args['зализняк'] = '0'
-            info.out_args['скл'] = 'не'
-            for i, key in enumerate(keys):
-                info.out_args[key] = info.word.stressed
+            o['зализняк'] = '0'
+            o['скл'] = 'не'
+            for j, key in enumerate(keys):
+                o[key] = i.word.stressed
             # end
             return _.ends(module, func)
 
         # INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
-        elif _.has_value(info.rest_index):
-            r.add_error(info, 'Нераспознанная часть индекса: ' + info.rest_index)
+        elif _.has_value(i.rest_index):
+            r.add_error(i, 'Нераспознанная часть индекса: ' + i.rest_index)
             return _.ends(module, func)
 
         # INFO: Если индекса вообще нет, то и формы просто не известны:
@@ -59,24 +60,24 @@ def main_algorithm(func, info):
 
     # INFO: Добавление ударения для `stem.stressed` (если его не было)
     # INFO: Например, в слове только один слог, или ударение было на окончание
-    if not _.contains(info.stem.stressed, '[́ ё]'):  # and not info.absent_stress ??
-        if _.equals(info.stress_type, ["f", "f'"]):
-            info.stem.stressed = _.replaced(info.stem.stressed, '^({consonant}*)({vowel})', '%1%2́ ')
-        elif _.contains(info.rest_index, '%*'):
+    if not _.contains(i.stem.stressed, '[́ ё]'):  # and not info.absent_stress ??
+        if _.equals(i.stress_type, ["f", "f'"]):
+            i.stem.stressed = _.replaced(i.stem.stressed, '^({consonant}*)({vowel})', '%1%2́ ')
+        elif _.contains(i.rest_index, '%*'):
             pass  # *** поставим ударение ниже, после чередования
         else:
-            info.stem.stressed = _.replaced(info.stem.stressed, '({vowel})({consonant}*)$', '%1́ %2')
+            i.stem.stressed = _.replaced(i.stem.stressed, '({vowel})({consonant}*)$', '%1́ %2')
         # end
     # end
 
-    _.log_value(info.stem.stressed, 'info.stem.stressed')
+    _.log_value(i.stem.stressed, 'info.stem.stressed')
 
     # -------------------------------------------------------------------------
 
     # fixme: Здесь раньше было определение типа основы
 
-    if not info.stem.type:
-        r.add_error(info, 'Неизвестный тип основы')
+    if not i.stem.type:
+        r.add_error(i, 'Неизвестный тип основы')
         return _.ends(module, func)
     # end
 
@@ -84,11 +85,12 @@ def main_algorithm(func, info):
 
     # todo: `main_algo` will have only further lines?
 
-    if info.noun:
-        m.modify(info)
-        form.generate_out_args(info)
+    if i.noun:
+        m.modify(i)
+        form.generate_out_args(i)
 
-    elif info.adj:
+    elif i.adj:
+        # local cases
         cases = [
             'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
             'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
@@ -96,42 +98,42 @@ def main_algorithm(func, info):
         ]  # list
 
         genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
-        for i, gender in enumerate(genders):
+        for j, gender in enumerate(genders):
             # todo: copy info?
-            info.gender = gender
-            _.log_value(info.gender, 'info.gender')
+            i.gender = gender
+            _.log_value(i.gender, 'info.gender')
 
-            m.modify(info)
+            m.modify(i)
 
             if gender == '':  # todo: move all this logic inside `generate_out_args` ?
-                form.generate_out_args(info)
+                form.generate_out_args(i)
             else:
-                form.generate_out_args(info)
-                for i, case in enumerate(cases):
+                form.generate_out_args(i)
+                for c, case in enumerate(cases):
                     key = case + '-' + gender
-                    info.out_args[key] = info.out_args[case]
+                    o[key] = o[case]
                 # end
                 if gender == 'f':
-                    info.out_args['ins-sg2-f'] = info.out_args['ins-sg2']
+                    o['ins-sg2-f'] = o['ins-sg2']
                 # end
             # end
         # end
 
-        info.out_args['acc-sg-m-a'] = info.out_args['gen-sg-m']
-        info.out_args['acc-sg-m-n'] = info.out_args['nom-sg-m']
-        info.out_args['acc-pl-a'] = info.out_args['gen-pl']
-        info.out_args['acc-pl-n'] = info.out_args['nom-pl']
+        o['acc-sg-m-a'] = o['gen-sg-m']
+        o['acc-sg-m-n'] = o['nom-sg-m']
+        o['acc-pl-a'] = o['gen-pl']
+        o['acc-pl-n'] = o['nom-pl']
 
-        info.gender = ''  # redundant?
+        i.gender = ''  # redundant?
     # end
 
-    info.out_args['зализняк1'] = index.get_zaliznyak(info.stem.type, info.stress_type, info.rest_index)
+    o['зализняк1'] = index.get_zaliznyak(i)
 
-    for_category = info.out_args['зализняк1']
-    for_category = _.replaced(for_category, '①', '(1)')
-    for_category = _.replaced(for_category, '②', '(2)')
-    for_category = _.replaced(for_category, '③', '(3)')
-    info.out_args['зализняк'] = for_category
+    value = o['зализняк1']  # local  # for category
+    value = _.replaced(value, '①', '(1)')
+    value = _.replaced(value, '②', '(2)')
+    value = _.replaced(value, '③', '(3)')
+    o['зализняк'] = value
 
     _.ends(module, func)
 # end

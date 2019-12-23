@@ -37,82 +37,83 @@ def get_stem_base_type(func, stem_type):
 
 
 @a.starts(module)
-def get_stem_type(func, stem, word, gender, adj, rest_index):  # export  # INFO: Определение типа основы
-    # local stem_type
+def get_stem_type(func, i):  # export  # INFO: Определение типа основы
+    word = i.word.unstressed  # local
+    stem = i.stem.unstressed  # local
+
+    i.stem.type = ''
 
     if _.endswith(stem, '[гкх]'):
-        stem_type = 'velar'  # todo: '3-velar'
+        i.stem.type = 'velar'  # todo: '3-velar'
     elif _.endswith(stem, '[жчшщ]'):
-        stem_type = 'sibilant'
+        i.stem.type = 'sibilant'
     elif _.endswith(stem, 'ц'):
-        stem_type = 'letter-ц'
+        i.stem.type = 'letter-ц'
     elif _.endswith(stem, ['[йь]', '[аоеёуыэюя]']):
-        stem_type = 'vowel'
+        i.stem.type = 'vowel'
     elif _.endswith(stem, 'и'):
-        stem_type = 'letter-и'
+        i.stem.type = 'letter-и'
     else:
-        if adj:
+        if i.adj:
             if _.endswith(word, ['ый', 'ой', 'ая', 'ое', 'ые']):
-                stem_type = 'hard'
+                i.stem.type = 'hard'
             elif _.endswith(word, ['ий', 'яя', 'ее', 'ие']):
-                stem_type = 'soft'
+                i.stem.type = 'soft'
             # end
-        elif gender == 'm':
+        elif i.gender == 'm':
             if stem == word or _.endswith(word, 'ы'):
-                stem_type = 'hard'
+                i.stem.type = 'hard'
             elif _.endswith(word, 'путь'):
-                stem_type = 'm-3rd'
+                i.stem.type = 'm-3rd'
             elif _.endswith(word, 'ь') or _.endswith(word, 'и'):
-                stem_type = 'soft'
+                i.stem.type = 'soft'
             elif _.endswith(word, 'а'):
-#                info.gender = 'f'
-                stem_type = 'hard'
+#                i.gender = 'f'
+                i.stem.type = 'hard'
             elif _.endswith(word, 'я'):
-#                info.gender = 'f'
-                stem_type = 'soft'
+#                i.gender = 'f'
+                i.stem.type = 'soft'
             # end
-        elif gender == 'f':
+        elif i.gender == 'f':
             if _.endswith(word, 'а') or _.endswith(word, 'ы'):
-                stem_type = 'hard'
+                i.stem.type = 'hard'
             elif _.endswith(word, 'я'):
-                stem_type = 'soft'
-            elif _.endswith(word, 'и') and _.contains(rest_index, '2'):  # todo: а что если нет индекса??
-                stem_type = 'soft'
-            elif _.endswith(word, 'и') and _.contains(rest_index, '8'):
-                stem_type = 'f-3rd'
+                i.stem.type = 'soft'
+            elif _.endswith(word, 'и') and _.contains(i.rest_index, '2'):  # todo: а что если нет индекса??
+                i.stem.type = 'soft'
+            elif _.endswith(word, 'и') and _.contains(i.rest_index, '8'):
+                i.stem.type = 'f-3rd'
             elif _.endswith(word, 'ь'):  # conflict in pl
-                stem_type = 'f-3rd'
+                i.stem.type = 'f-3rd'
             # end
-        elif gender == 'n':
+        elif i.gender == 'n':
             if _.endswith(word, 'о') or _.endswith(word, 'а'):
-                stem_type = 'hard'
+                i.stem.type = 'hard'
             elif _.endswith(word, 'мя')  or _.endswith(word, 'мена'):
-                stem_type = 'n-3rd'
+                i.stem.type = 'n-3rd'
             elif _.endswith(word, 'е') or _.endswith(word, 'я'):
-                stem_type = 'soft'
+                i.stem.type = 'soft'
             # end
         # end
     # end
 
 #    if gender == 'm':
 #        if _.endswith(word, ['а', 'я']):
-#            info.gender = 'f'
+#            i.gender = 'f'
 #        # end
 #    # end
 
-    if gender == 'f' and stem_type == 'sibilant' and _.endswith(word, 'ь'):
-        stem_type = 'f-3rd-sibilant'
+    if i.gender == 'f' and i.stem.type == 'sibilant' and _.endswith(word, 'ь'):
+        i.stem.type = 'f-3rd-sibilant'
     # end
-    if stem_type == '':
-        stem_type = 'hard'
+    if i.stem.type == '':
+        i.stem.type = 'hard'
     # end
 
     # INFO: Выбор подходящего `stem_type` из двух базовых типов: 'hard' и 'soft'
-    # local stem_base_type
-    stem_base_type = get_stem_base_type(stem_type)
+    i.stem.base_type = get_stem_base_type(i.stem.type)
 
     _.ends(module, func)
-    return stem_type, stem_base_type
 # end
 
 # return export

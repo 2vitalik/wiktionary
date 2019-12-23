@@ -12,50 +12,52 @@ module = 'modify.transform.circles.noun'  # local
 
 
 @a.starts(module)
-def apply_noun_specific_1_2(func, endings, gender, stem_type, stem_base_type, rest_index):  # export
-    if _.contains(rest_index, ['%(1%)', '①']):
-        if stem_base_type == 'hard':
-            if gender == 'm': endings['nom-pl'] = 'а' # end
-            if gender == 'n': endings['nom-pl'] = 'ы' # end
+def apply_noun_specific_1_2(func, i):  # export
+    d = i.data  # local
+
+    if _.contains(i.rest_index, ['%(1%)', '①']):
+        if i.stem.base_type == 'hard':
+            if i.gender == 'm': d.endings['nom-pl'] = 'а' # end
+            if i.gender == 'n': d.endings['nom-pl'] = 'ы' # end
         # end
-        if stem_base_type == 'soft':
-            if gender == 'm': endings['nom-pl'] = 'я' # end
-            if gender == 'n': endings['nom-pl'] = 'и' # end
+        if i.stem.base_type == 'soft':
+            if i.gender == 'm': d.endings['nom-pl'] = 'я' # end
+            if i.gender == 'n': d.endings['nom-pl'] = 'и' # end
         # end
-        if _.equals(stem_type, ['velar', 'sibilant']):  # Replace "ы" to "и"
-            if gender == 'n': endings['nom-pl'] = 'и' # end
+        if _.equals(i.stem.type, ['velar', 'sibilant']):  # Replace "ы" to "и"
+            if i.gender == 'n': d.endings['nom-pl'] = 'и' # end
         # end
     # end
 
-    if _.contains(rest_index, ['%(2%)', '②']):
-        if stem_base_type == 'hard':
-            if gender == 'm': endings['gen-pl'] = ['', ''] # end
-            if gender == 'n': endings['gen-pl'] = ['ов', 'ов'] # end
-            if gender == 'f': endings['gen-pl'] = {'ей', 'ей' } # end
+    if _.contains(i.rest_index, ['%(2%)', '②']):
+        if i.stem.base_type == 'hard':
+            if i.gender == 'm': d.endings['gen-pl'] = ['', ''] # end
+            if i.gender == 'n': d.endings['gen-pl'] = ['ов', 'ов'] # end
+            if i.gender == 'f': d.endings['gen-pl'] = {'ей', 'ей' } # end
         # end
-        if stem_base_type == 'soft':
-            if gender == 'm': endings['gen-pl'] = ['ь', 'ь'] # end
-            if gender == 'n': endings['gen-pl'] = ['ев', 'ёв']  # end
-            if gender == 'f': endings['gen-pl'] = {'ей', 'ей' } # end
+        if i.stem.base_type == 'soft':
+            if i.gender == 'm': d.endings['gen-pl'] = ['ь', 'ь'] # end
+            if i.gender == 'n': d.endings['gen-pl'] = ['ев', 'ёв']  # end
+            if i.gender == 'f': d.endings['gen-pl'] = {'ей', 'ей' } # end
         # end
-        if _.equals(stem_type, ['sibilant', 'letter-ц']):  # Replace unstressed "о" to "е"
-            if gender == 'n': endings['gen-pl'][unstressed] = 'ев' # end
+        if _.equals(i.stem.type, ['sibilant', 'letter-ц']):  # Replace unstressed "о" to "е"
+            if i.gender == 'n': d.endings['gen-pl'][unstressed] = 'ев' # end
         # end
 
 #        # Possibly we don't need this:
 #            # Replace "ов", "ев", "ёв" and null to "ей"
-#            if stem_type = {'sibilant'}}
-#                if gender == 'n': endings['gen-pl'] = ['ей', 'ей']
-#                if gender == 'm': endings['gen-pl'][stressed] = 'ей'
+#            if i.stem.type = {'sibilant'}}
+#                if i.gender == 'n': d.endings['gen-pl'] = ['ей', 'ей']
+#                if i.gender == 'm': d.endings['gen-pl'][stressed] = 'ей'
 #            # end
 #            # Replace "ь" to "й"
-#            if stem_type = ['vowel', 'letter-и']}
-#                if gender == 'm': endings['gen-pl'][stressed] = ['й', 'й']
+#            if i.stem.type = ['vowel', 'letter-и']}
+#                if i.gender == 'm': d.endings['gen-pl'][stressed] = ['й', 'й']
 #            # end
 #            # Replace "ей" to "ев/ёв", and "ь,ей" to "й"
-#            if stem_type = ['vowel', 'letter-и']}
-#                if gender == 'f': endings['gen-pl'][unstressed] = ['ев', 'ёв']
-#                if gender == 'm': endings['gen-pl'][stressed] = ['й', 'й']
+#            if i.stem.type = ['vowel', 'letter-и']}
+#                if i.gender == 'f': d.endings['gen-pl'][unstressed] = ['ев', 'ёв']
+#                if i.gender == 'm': d.endings['gen-pl'][stressed] = ['й', 'й']
 #            # end
 #        #
     # end

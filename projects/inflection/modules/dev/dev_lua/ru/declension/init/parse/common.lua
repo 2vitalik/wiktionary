@@ -14,44 +14,44 @@ local module = 'init.parse.common'
 
 
 -- @starts
-local function init_info(info)
+local function init_info(i)
 	func = "init_info"
 	_.starts(module, func)
 
 	local several_vowels, has_stress
 
 --	INFO: Исходное слово без ударения:
-	info.word.unstressed = _.replaced(info.word.stressed, '́ ', '')
+	i.word.unstressed = _.replaced(i.word.stressed, '́ ', '')
 
 --	INFO: Исходное слово вообще без ударений (в т.ч. без грависа):
-	info.word.cleared = _.replaced(_.replaced(_.replaced(info.word.unstressed, '̀', ''), 'ѐ', 'е'), 'ѝ', 'и')
+	i.word.cleared = _.replaced(_.replaced(_.replaced(i.word.unstressed, '̀', ''), 'ѐ', 'е'), 'ѝ', 'и')
 
-	if info.adj then
-		if _.endswith(info.word.stressed, 'ся') then
-			info.postfix = true
-			info.stem.unstressed = _.replaced(info.word.unstressed, '{vowel}[йяе]ся$', '')
-			info.stem.stressed = _.replaced(info.word.stressed, '{vowel}́ ?[йяе]ся$', '')
+	if i.adj then
+		if _.endswith(i.word.stressed, 'ся') then
+			i.postfix = true
+			i.stem.unstressed = _.replaced(i.word.unstressed, '{vowel}[йяе]ся$', '')
+			i.stem.stressed = _.replaced(i.word.stressed, '{vowel}́ ?[йяе]ся$', '')
 		else
-			info.stem.unstressed = _.replaced(info.word.unstressed, '{vowel}[йяе]$', '')
-			info.stem.stressed = _.replaced(info.word.stressed, '{vowel}́ ?[йяе]$', '')
+			i.stem.unstressed = _.replaced(i.word.unstressed, '{vowel}[йяе]$', '')
+			i.stem.stressed = _.replaced(i.word.stressed, '{vowel}́ ?[йяе]$', '')
 		end
 	else
 --		INFO: Удаляем окончания (-а, -е, -ё, -о, -я, -й, -ь), чтобы получить основу:
-		info.stem.unstressed = _.replaced(info.word.unstressed, '[аеёийоьыя]$', '')
-		info.stem.stressed = _.replaced(info.word.stressed, '[аеёийоьыя]́ ?$', '')
+		i.stem.unstressed = _.replaced(i.word.unstressed, '[аеёийоьыя]$', '')
+		i.stem.stressed = _.replaced(i.word.stressed, '[аеёийоьыя]́ ?$', '')
 	end
 
-	_.log_value(info.word.unstressed, 'info.word.unstressed')
-	_.log_value(info.stem.unstressed, 'info.stem.unstressed')
-	_.log_value(info.stem.stressed, 'info.stem.stressed')
+	_.log_value(i.word.unstressed, 'info.word.unstressed')
+	_.log_value(i.stem.unstressed, 'info.stem.unstressed')
+	_.log_value(i.stem.stressed, 'info.stem.stressed')
 
 --  INFO: Случай, когда не указано ударение у слова:
-	several_vowels = _.contains_several(info.word.stressed, '{vowel+ё}')
-	has_stress = _.contains(info.word.stressed, '[́ ё]')
+	several_vowels = _.contains_several(i.word.stressed, '{vowel+ё}')
+	has_stress = _.contains(i.word.stressed, '[́ ё]')
 	if several_vowels and not has_stress then
 		_.log_info('Ошибка: Не указано ударение в слове')
-		r.add_error(info, 'Ошибка: Не указано ударение в слове')
-		info.out_args.error_category = 'Ошибка в шаблоне "сущ-ru": не указано ударение в слове'
+		r.add_error(i, 'Ошибка: Не указано ударение в слове')
+		i.out_args.error_category = 'Ошибка в шаблоне "сущ-ru": не указано ударение в слове'
 	end
 
 	_.ends(module, func)
@@ -59,29 +59,29 @@ end
 
 
 -- @starts
-local function angle_brackets(info)
+local function angle_brackets(i)
 	func = "angle_brackets"
 	_.starts(module, func)
 
-	local another_index = _.extract(info.rest_index, '%<([^>]+)%>')
+	local another_index = _.extract(i.rest_index, '%<([^>]+)%>')
 	if another_index then
-		local pt = info.pt
+		local pt = i.pt
 		if not pt then
-			info.output_gender = info.gender
-			info.output_animacy = info.animacy
+			i.output_gender = i.gender
+			i.output_animacy = i.animacy
 		end
-		info.orig_index = info.index
-		info.index = another_index
-		noun_parse.extract_gender_animacy(info)
-		info.pt = pt
-		if r.has_error(info) then
+		i.orig_index = i.index
+		i.index = another_index
+		noun_parse.extract_gender_animacy(i)
+		i.pt = pt
+		if r.has_error(i) then
 			return _.ends(module, func)
 		end
 
-		_.log_value(info.adj, 'info.adj')
-		if info.adj then  -- fixme: Для прилагательных надо по-особенному?
-			init_info(info)
-			if r.has_error(info) then
+		_.log_value(i.adj, 'info.adj')
+		if i.adj then  -- fixme: Для прилагательных надо по-особенному?
+			init_info(i)
+			if r.has_error(i) then
 				return _.ends(module, func)
 			end
 		end

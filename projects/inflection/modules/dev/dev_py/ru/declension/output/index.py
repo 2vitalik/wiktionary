@@ -10,11 +10,10 @@ module = 'output.index'  # local
 
 # Получение индекса Зализняка
 @a.starts(module)
-def get_zaliznyak(func, stem_type, stress_type, rest_index):  # export
-    # local stem_types, index
-
+def get_zaliznyak(func, i):  # export
     # TODO: process <...> cases properly
 
+    # local stem_types
     stem_types = {
         'hard': '1',
         'soft': '2',
@@ -28,34 +27,34 @@ def get_zaliznyak(func, stem_type, stress_type, rest_index):  # export
         'f-3rd-sibilant': '8',
         'n-3rd': '8',
     }
-    index = stem_types[stem_type]
-    if _.contains(rest_index, '°'):
+    index = stem_types[i.stem.type]  # local
+    if _.contains(i.rest_index, '°'):
         index = index + '°'
-    elif _.contains(rest_index, '%*'):
+    elif _.contains(i.rest_index, '%*'):
         index = index + '*'
     # end
-    index = index + _.replaced(stress_type, "'", "&#39;")
-    if _.contains(rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
+    index = index + _.replaced(i.stress_type, "'", "&#39;")
+    if _.contains(i.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
         index = index + '⊠'
-    elif _.contains(rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
+    elif _.contains(i.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
         index = index + '✕'
     # end
-    if _.contains(rest_index, ['%(1%)', '①']):
+    if _.contains(i.rest_index, ['%(1%)', '①']):
         index = index + '①'
     # end
-    if _.contains(rest_index, ['%(2%)', '②']):
+    if _.contains(i.rest_index, ['%(2%)', '②']):
         index = index + '②'
     # end
-    if _.contains(rest_index, ['%(3%)', '③']):
+    if _.contains(i.rest_index, ['%(3%)', '③']):
         index = index + '③'
     # end
-    if _.contains(rest_index, '÷'):
+    if _.contains(i.rest_index, '÷'):
         index = index + '÷'
     # end
-    if _.contains(rest_index, ['%-', '—', '−']):
+    if _.contains(i.rest_index, ['%-', '—', '−']):
         index = index + '−'
     # end
-    if _.contains(rest_index, 'ё'):
+    if _.contains(i.rest_index, 'ё'):
         index = index + ', ё'
     # end
 

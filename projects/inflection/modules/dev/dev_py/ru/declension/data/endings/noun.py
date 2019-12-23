@@ -79,76 +79,78 @@ def get_standard_noun_endings():  # export
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 @a.starts(module)
-def fix_noun_endings(func, endings, gender, stem_type, stress_schema):  # export
+def fix_noun_endings(func, i):  # export
+    d = i.data  # local
+
     # INFO: Replace "ы" to "и"
-    if _.equals(stem_type, ['velar', 'sibilant']):
-        if gender == 'f': endings['gen-sg'] = 'и' # end
-        if gender == 'm': endings['nom-pl'] = 'и' # end
-        if gender == 'f': endings['nom-pl'] = 'и' # end
+    if _.equals(i.stem.type, ['velar', 'sibilant']):
+        if i.gender == 'f': d.endings['gen-sg'] = 'и' # end
+        if i.gender == 'm': d.endings['nom-pl'] = 'и' # end
+        if i.gender == 'f': d.endings['nom-pl'] = 'и' # end
     # end
 
     # INFO: Replace unstressed "о" to "е"
-    if _.equals(stem_type, ['sibilant', 'letter-ц']):
-        if not stress_schema['ending']['nom-sg']:
-            if gender == 'n': endings['nom-sg'] = 'е' # end # ???
+    if _.equals(i.stem.type, ['sibilant', 'letter-ц']):
+        if not i.stress_schema['ending']['nom-sg']:
+            if i.gender == 'n': d.endings['nom-sg'] = 'е' # end # ???
         # end
-        if not stress_schema['ending']['ins-sg']:
-            if gender == 'm': endings['ins-sg'] = 'ем' # end
-            if gender == 'n': endings['ins-sg'] = 'ем' # end
-            if gender == 'f': endings['ins-sg'] = 'ей' # end
+        if not i.stress_schema['ending']['ins-sg']:
+            if i.gender == 'm': d.endings['ins-sg'] = 'ем' # end
+            if i.gender == 'n': d.endings['ins-sg'] = 'ем' # end
+            if i.gender == 'f': d.endings['ins-sg'] = 'ей' # end
         # end
-        if not stress_schema['ending']['gen-pl']:
-            if gender == 'm': endings['gen-pl'] = ['ев', 'ев'] # end  # TODO: should we change stressed value here?
+        if not i.stress_schema['ending']['gen-pl']:
+            if i.gender == 'm': d.endings['gen-pl'] = ['ев', 'ев'] # end  # TODO: should we change stressed value here?
         # end
     # end
 
-    if _.equals(stem_type, 'sibilant'):
+    if _.equals(i.stem.type, 'sibilant'):
         # Replace "ов", "ев", "ёв" and null to "ей"
-        if gender == 'm': endings['gen-pl'] = ['ей', 'ей']   # end
-        if gender == 'n': endings['gen-pl'][stressed] = 'ей' # end
-#        if gender == 'n': endings['gen-pl'][unstressed] = '' # end # this is just don't changed
-        if gender == 'f': endings['gen-pl'][stressed] = 'ей' # end
-#        if gender == 'f': endings['gen-pl'][unstressed] = '' # end # this is just don't changed
+        if i.gender == 'm': d.endings['gen-pl'] = ['ей', 'ей']   # end
+        if i.gender == 'n': d.endings['gen-pl'][stressed] = 'ей' # end
+#        if i.gender == 'n': d.endings['gen-pl'][unstressed] = '' # end # this is just don't changed
+        if i.gender == 'f': d.endings['gen-pl'][stressed] = 'ей' # end
+#        if i.gender == 'f': d.endings['gen-pl'][unstressed] = '' # end # this is just don't changed
     # end
 
     # INFO: Replace "ь" to "й"
-    if _.equals(stem_type, ['vowel', 'letter-и']):
-        if gender == 'm': endings['nom-sg'] = 'й'             # end # ???
-        if gender == 'n': endings['gen-pl'][unstressed] = 'й' # end
-        if gender == 'f': endings['gen-pl'][unstressed] = 'й' # end
+    if _.equals(i.stem.type, ['vowel', 'letter-и']):
+        if i.gender == 'm': d.endings['nom-sg'] = 'й'             # end # ???
+        if i.gender == 'n': d.endings['gen-pl'][unstressed] = 'й' # end
+        if i.gender == 'f': d.endings['gen-pl'][unstressed] = 'й' # end
     # end
 
     # INFO: Replace "ей" to "ев/ёв", and "ь,ей" to "й"
-    if _.equals(stem_type, ['vowel', 'letter-и']):
-        if gender == 'm': endings['gen-pl'] = ['ев', 'ёв'] # end
-        if gender == 'n': endings['gen-pl'] = ['й', 'й']   # end
-        if gender == 'f': endings['gen-pl'] = ['й', 'й']   # end
+    if _.equals(i.stem.type, ['vowel', 'letter-и']):
+        if i.gender == 'm': d.endings['gen-pl'] = ['ев', 'ёв'] # end
+        if i.gender == 'n': d.endings['gen-pl'] = ['й', 'й']   # end
+        if i.gender == 'f': d.endings['gen-pl'] = ['й', 'й']   # end
     # end
 
-    if _.equals(stem_type, 'letter-и'):
-        if gender == 'f': endings['dat-sg'][unstressed] = 'и' # end
-        endings['prp-sg'][unstressed] = 'и'
+    if _.equals(i.stem.type, 'letter-и'):
+        if i.gender == 'f': d.endings['dat-sg'][unstressed] = 'и' # end
+        d.endings['prp-sg'][unstressed] = 'и'
     # end
 
-    if _.equals(stem_type, 'm-3rd'):
-        if gender == 'm': endings['gen-sg'] = 'и' # end
-        if gender == 'm': endings['dat-sg'] = 'и' # end
-        endings['prp-sg'] = ['и', 'и']
+    if _.equals(i.stem.type, 'm-3rd'):
+        if i.gender == 'm': d.endings['gen-sg'] = 'и' # end
+        if i.gender == 'm': d.endings['dat-sg'] = 'и' # end
+        d.endings['prp-sg'] = ['и', 'и']
     # end
 
-    if _.equals(stem_type, ['f-3rd', 'f-3rd-sibilant']):
-        if gender == 'f': endings['nom-sg'] = 'ь' # end
-        if gender == 'f': endings['dat-sg'] = ['и', 'и'] # end
-        if gender == 'f': endings['acc-sg'] = 'ь' # end
-        if gender == 'f': endings['ins-sg'] = ['ью', 'ью'] # end
-        endings['prp-sg'] = ['и', 'и']
-        if gender == 'f': endings['gen-pl'] = ['ей', 'ей'] # end
+    if _.equals(i.stem.type, ['f-3rd', 'f-3rd-sibilant']):
+        if i.gender == 'f': d.endings['nom-sg'] = 'ь' # end
+        if i.gender == 'f': d.endings['dat-sg'] = ['и', 'и'] # end
+        if i.gender == 'f': d.endings['acc-sg'] = 'ь' # end
+        if i.gender == 'f': d.endings['ins-sg'] = ['ью', 'ью'] # end
+        d.endings['prp-sg'] = ['и', 'и']
+        if i.gender == 'f': d.endings['gen-pl'] = ['ей', 'ей'] # end
     # end
 
-    if _.equals(stem_type, 'f-3rd-sibilant'):
-        endings['dat-pl'] = 'ам'
-        endings['ins-pl'] = 'ами'
-        endings['prp-pl'] = 'ах'
+    if _.equals(i.stem.type, 'f-3rd-sibilant'):
+        d.endings['dat-pl'] = 'ам'
+        d.endings['ins-pl'] = 'ами'
+        d.endings['prp-pl'] = 'ах'
     # end
 
     _.ends(module, func)

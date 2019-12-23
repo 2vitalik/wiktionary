@@ -13,7 +13,7 @@ local module = 'modify.prepare'
 
 
 -- @starts
-function export.prepare(info)
+function export.prepare(i)
 	func = "prepare"
 	_.starts(module, func)
 
@@ -22,13 +22,13 @@ function export.prepare(info)
 	-- todo: create info.data.* !!!
 
 	-- todo: logging info
-	info.data.endings = endings.get_endings(info)
+	endings.get_endings(i)
 
 	-- todo: logging info
-	info.data.stems = {}  -- dict
-	stress_apply.apply_stress_type(info)
-	_.log_table(info.data.stems, 'info.data.stems')
-	_.log_table(info.data.endings, 'info.data.endings')
+	i.data.stems = {}  -- dict
+	stress_apply.apply_stress_type(i)
+	_.log_table(i.data.stems, 'info.data.stems')
+	_.log_table(i.data.endings, 'info.data.endings')
 
 	_.ends(module, func)
 end

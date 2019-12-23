@@ -14,8 +14,6 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 	func = "get_adj_stress_schema"
 	_.starts(module, func)
 
-	local stress_schema, types, cases, sg_value
-
 	-- todo: Сгенерировать все `stress_schema` для всех видов `stress_type` заранее и потом просто использовать/загружать их
 
 	-- общий подход следующий:
@@ -34,15 +32,16 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 	stress_schema.ending['srt-sg-n'] = _.endswith(stress_type, {"/b", "/b'", "/c''"}) or _.equals(stress_type, {'b', "b'"})
 	stress_schema.ending['srt-pl'] = _.endswith(stress_type, {"/b", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "b'"})
 
-	types = {'stem', 'ending'}
+	local types = {'stem', 'ending'}
+	local cases
 	cases = {
 		'sg', 'pl',
 		'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
 		'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
 	}  -- list
 	for i, type in pairs(types) do  -- list
-		sg_value = stress_schema[type]['full']
-		for i, case in pairs(cases) do  -- list
+		local sg_value = stress_schema[type]['full']
+		for j, case in pairs(cases) do  -- list
 			stress_schema[type][case] = sg_value
 		end
 	end

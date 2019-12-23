@@ -86,74 +86,76 @@ end
 
 -- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 -- @starts
-function export.fix_adj_pronoun_endings(endings, gender, stem_type, stress_schema, adj, pronoun)
+function export.fix_adj_pronoun_endings(i, pronoun)
 	func = "fix_adj_pronoun_endings"
 	_.starts(module, func)
 
+	local d = i.data
+
 --	INFO: Replace "ы" to "и"
-	if _.equals(stem_type, {'velar', 'sibilant'}) then
-		if gender == 'm' then
-			if adj then
-				endings['nom-sg'][unstressed] = 'ий'
+	if _.equals(i.stem.type, {'velar', 'sibilant'}) then
+		if i.gender == 'm' then
+			if i.adj then
+				d.endings['nom-sg'][unstressed] = 'ий'
 			end
-			endings['ins-sg'] = 'им'
+			d.endings['ins-sg'] = 'им'
 		end
-		if gender == 'n' then
-			endings['ins-sg'] = 'им'
+		if i.gender == 'n' then
+			d.endings['ins-sg'] = 'им'
 		end
 
-		if adj then
-			endings['nom-pl'] = 'ие'
+		if i.adj then
+			d.endings['nom-pl'] = 'ие'
 		elseif pronoun then
-			endings['nom-pl'] = 'и'
+			d.endings['nom-pl'] = 'и'
 		end
-		endings['gen-pl'] = 'их'
-		endings['dat-pl'] = 'им'
-		endings['ins-pl'] = 'ими'
-		endings['prp-pl'] = 'их'
-		if adj then
-			endings['srt-pl'] = 'и'
+		d.endings['gen-pl'] = 'их'
+		d.endings['dat-pl'] = 'им'
+		d.endings['ins-pl'] = 'ими'
+		d.endings['prp-pl'] = 'их'
+		if i.adj then
+			d.endings['srt-pl'] = 'и'
 		end
 	end
 
 --	INFO: Replace unstressed "о" to "е"
-	if _.equals(stem_type, {'sibilant', 'letter-ц'}) then
-		if not stress_schema['ending']['sg'] then
-			if gender == 'm' then
-				if adj then
-					endings['nom-sg'][stressed] = 'ей'
+	if _.equals(i.stem.type, {'sibilant', 'letter-ц'}) then
+		if not i.stress_schema['ending']['sg'] then
+			if i.gender == 'm' then
+				if i.adj then
+					d.endings['nom-sg'][stressed] = 'ей'
 				end
-				endings['gen-sg'] = 'его'
-				endings['dat-sg'] = 'ему'
-				endings['prp-sg'] = 'ем'
+				d.endings['gen-sg'] = 'его'
+				d.endings['dat-sg'] = 'ему'
+				d.endings['prp-sg'] = 'ем'
 			end
-			if gender == 'n' then
-				endings['nom-sg'] = 'ее'
-				endings['gen-sg'] = 'его'
-				endings['dat-sg'] = 'ему'
-				endings['prp-sg'] = 'ем'
+			if i.gender == 'n' then
+				d.endings['nom-sg'] = 'ее'
+				d.endings['gen-sg'] = 'его'
+				d.endings['dat-sg'] = 'ему'
+				d.endings['prp-sg'] = 'ем'
 			end
-			if gender == 'f' then
-				endings['gen-sg'] = 'ей'
-				endings['dat-sg'] = 'ей'
-				endings['ins-sg'] = 'ей'
-				endings['prp-sg'] = 'ей'
+			if i.gender == 'f' then
+				d.endings['gen-sg'] = 'ей'
+				d.endings['dat-sg'] = 'ей'
+				d.endings['ins-sg'] = 'ей'
+				d.endings['prp-sg'] = 'ей'
 			end
 		end
-		if not stress_schema['ending']['srt-sg-n'] then
-			if gender == 'n' then
-				if adj then
-					endings['srt-sg'] = 'е'
+		if not i.stress_schema['ending']['srt-sg-n'] then
+			if i.gender == 'n' then
+				if i.adj then
+					d.endings['srt-sg'] = 'е'
 				end
 			end
 		end
 	end
 
 --	INFO: Replace "ь" to "й"
-	if _.equals(stem_type, {'vowel'}) then
-		if gender == 'm' then
-			if adj then
-				endings['srt-sg'] = 'й'
+	if _.equals(i.stem.type, {'vowel'}) then
+		if i.gender == 'm' then
+			if i.adj then
+				d.endings['srt-sg'] = 'й'
 			end
 		end
 	end

@@ -10,14 +10,13 @@ local module = 'output.index'
 
 -- Получение индекса Зализняка
 -- @starts
-function export.get_zaliznyak(stem_type, stress_type, rest_index)
+function export.get_zaliznyak(i)
 	func = "get_zaliznyak"
 	_.starts(module, func)
 
-	local stem_types, index
-
 	-- TODO: process <...> cases properly
 
+	local stem_types
 	stem_types = {
 		['hard'] = '1',
 		['soft'] = '2',
@@ -31,34 +30,34 @@ function export.get_zaliznyak(stem_type, stress_type, rest_index)
 		['f-3rd-sibilant'] = '8',
 		['n-3rd'] = '8',
 	}
-	index = stem_types[stem_type]
-	if _.contains(rest_index, '°') then
+	local index = stem_types[i.stem.type]
+	if _.contains(i.rest_index, '°') then
 		index = index .. '°'
-	elseif _.contains(rest_index, '%*') then
+	elseif _.contains(i.rest_index, '%*') then
 		index = index .. '*'
 	end
-	index = index .. _.replaced(stress_type, "'", "&#39;")
-	if _.contains(rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
+	index = index .. _.replaced(i.stress_type, "'", "&#39;")
+	if _.contains(i.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
 		index = index .. '⊠'
-	elseif _.contains(rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
+	elseif _.contains(i.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
 		index = index .. '✕'
 	end
-	if _.contains(rest_index, {'%(1%)', '①'}) then
+	if _.contains(i.rest_index, {'%(1%)', '①'}) then
 		index = index .. '①'
 	end
-	if _.contains(rest_index, {'%(2%)', '②'}) then
+	if _.contains(i.rest_index, {'%(2%)', '②'}) then
 		index = index .. '②'
 	end
-	if _.contains(rest_index, {'%(3%)', '③'}) then
+	if _.contains(i.rest_index, {'%(3%)', '③'}) then
 		index = index .. '③'
 	end
-	if _.contains(rest_index, '÷') then
+	if _.contains(i.rest_index, '÷') then
 		index = index .. '÷'
 	end
-	if _.contains(rest_index, {'%-', '—', '−'}) then
+	if _.contains(i.rest_index, {'%-', '—', '−'}) then
 		index = index .. '−'
 	end
-	if _.contains(rest_index, 'ё') then
+	if _.contains(i.rest_index, 'ё') then
 		index = index .. ', ё'
 	end
 

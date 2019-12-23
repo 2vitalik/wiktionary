@@ -30,10 +30,10 @@ def get_pronoun_stress_schema(func, stress_type):  # export  # INFO: Вычис�
     for i, type in enumerate(types):
         sg_value = stress_schema[type]['sg']
         pl_value = stress_schema[type]['pl']
-        for i, case in enumerate(sg_cases):
+        for j, case in enumerate(sg_cases):
             stress_schema[type][case] = sg_value
         # end
-        for i, case in enumerate(pl_cases):
+        for j, case in enumerate(pl_cases):
             stress_schema[type][case] = pl_value
         # end
     # end

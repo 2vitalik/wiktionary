@@ -23,9 +23,9 @@ function export.extract_stress_type(i)
 --	local stress_regexp = "([abcdef][′']?[′']?)"
 --	local stress_regexp2 = '(' .. stress_regexp .. '.*//.*' .. stress_regexp .. ')'
 --	stress_regexp = '(' .. stress_regexp .. '(% ?.*))'
---	info.stress_type = _.extract(rest_index, stress_regexp2)
---	if not info.stress_type then
---		info.stress_type = _.extract(rest_index, stress_regexp)
+--	i.stress_type = _.extract(i.rest_index, stress_regexp2)
+--	if not i.stress_type then
+--		i.stress_type = _.extract(i.rest_index, stress_regexp)
 --	end
 	local stress_type, allowed_stress_types
 
@@ -54,21 +54,19 @@ end
 
 
 -- @starts
-function export.get_stress_schema(stress_type, adj, pronoun)
+function export.get_stress_schema(i)
 	func = "get_stress_schema"
 	_.starts(module, func)
 
-	local result = ''
-	if adj then
-		result = adj_stress.get_adj_stress_schema(stress_type)
-	elseif pronoun then
-		result = pronoun_stress.get_pronoun_stress_schema(stress_type)
+	if i.adj then
+		i.stress_schema = adj_stress.get_adj_stress_schema(i.stress_type)
+	elseif i.pronoun then
+		i.stress_schema = pronoun_stress.get_pronoun_stress_schema(i.stress_type)
 	else
-		result = noun_stress.get_noun_stress_schema(stress_type)
+		i.stress_schema = noun_stress.get_noun_stress_schema(i.stress_type)
 	end
 
 	_.ends(module, func)
-	return result
 end
 
 

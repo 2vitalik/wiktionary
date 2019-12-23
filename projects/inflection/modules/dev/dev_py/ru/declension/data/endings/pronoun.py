@@ -132,42 +132,44 @@ def get_standard_pronoun_noun_endings():  # export
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 @a.starts(module)
-def fix_pronoun_noun_endings(func, endings, gender, stem_type, stress_schema):  # export
+def fix_pronoun_noun_endings(func, i):  # export
+    d = i.data  # local
+
     # INFO: Replace "ы" to "и"
-    if _.equals(stem_type, {'sibilant'}):
-        if _.In(gender, ['m', 'n']):
-            endings['ins-sg'] = 'им'
+    if _.equals(i.stem.type, {'sibilant'}):
+        if _.In(i.gender, ['m', 'n']):
+            d.endings['ins-sg'] = 'им'
         # end
 
-        endings['nom-pl'] = 'и'
-        endings['gen-pl'] = 'их'
-        endings['dat-pl'] = 'им'
-        endings['ins-pl'] = 'ими'
-        endings['prp-pl'] = 'их'
+        d.endings['nom-pl'] = 'и'
+        d.endings['gen-pl'] = 'их'
+        d.endings['dat-pl'] = 'им'
+        d.endings['ins-pl'] = 'ими'
+        d.endings['prp-pl'] = 'их'
     # end
 
     # INFO: Other Replace
-    if _.equals(stem_type, {'sibilant'}):
-        if gender == 'n':
-            endings['nom-sg'] = {'е', 'о' }
+    if _.equals(i.stem.type, {'sibilant'}):
+        if i.gender == 'n':
+            d.endings['nom-sg'] = {'е', 'о' }
         # end
-        if _.In(gender, ['m', 'n']):
-            endings['gen-sg'] = ['его', 'ого']
-            endings['dat-sg'] = ['ему', 'ому']
-            endings['prp-sg'] = ['ем', 'ом']
+        if _.In(i.gender, ['m', 'n']):
+            d.endings['gen-sg'] = ['его', 'ого']
+            d.endings['dat-sg'] = ['ему', 'ому']
+            d.endings['prp-sg'] = ['ем', 'ом']
         # end
-        if gender == 'f':
-            endings['gen-sg'] = ['ей', 'ой']
-            endings['dat-sg'] = ['ей', 'ой']
-            endings['ins-sg'] = ['ей', 'ой']
-            endings['prp-sg'] = ['ей', 'ой']
+        if i.gender == 'f':
+            d.endings['gen-sg'] = ['ей', 'ой']
+            d.endings['dat-sg'] = ['ей', 'ой']
+            d.endings['ins-sg'] = ['ей', 'ой']
+            d.endings['prp-sg'] = ['ей', 'ой']
         # end
     # end
 
-    if _.equals(stem_type, {'vowel'}):
-        if _.In(gender, ['m', 'n']):
-            endings['gen-sg'] = 'его'
-            endings['dat-sg'] = 'ему'
+    if _.equals(i.stem.type, {'vowel'}):
+        if _.In(i.gender, ['m', 'n']):
+            d.endings['gen-sg'] = 'его'
+            d.endings['dat-sg'] = 'ему'
         # end
     # end
 
