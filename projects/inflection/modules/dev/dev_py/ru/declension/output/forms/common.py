@@ -17,18 +17,18 @@ def init_forms(i):  # Генерация словоформ
     o = i.out_args  # local
     d = i.data  # local
 
-    o['nom_sg'] = d.stems['nom_sg'] + d.endings['nom_sg']
-    o['gen_sg'] = d.stems['gen_sg'] + d.endings['gen_sg']
-    o['dat_sg'] = d.stems['dat_sg'] + d.endings['dat_sg']
-    o['acc_sg'] = ''
-    o['ins_sg'] = d.stems['ins_sg'] + d.endings['ins_sg']
-    o['prp_sg'] = d.stems['prp_sg'] + d.endings['prp_sg']
-    o['nom_pl'] = d.stems['nom_pl'] + d.endings['nom_pl']
-    o['gen_pl'] = d.stems['gen_pl'] + d.endings['gen_pl']
-    o['dat_pl'] = d.stems['dat_pl'] + d.endings['dat_pl']
-    o['acc_pl'] = ''
-    o['ins_pl'] = d.stems['ins_pl'] + d.endings['ins_pl']
-    o['prp_pl'] = d.stems['prp_pl'] + d.endings['prp_pl']
+    o['nom-sg'] = d.stems['nom-sg'] + d.endings['nom-sg']
+    o['gen-sg'] = d.stems['gen-sg'] + d.endings['gen-sg']
+    o['dat-sg'] = d.stems['dat-sg'] + d.endings['dat-sg']
+    o['acc-sg'] = ''
+    o['ins-sg'] = d.stems['ins-sg'] + d.endings['ins-sg']
+    o['prp-sg'] = d.stems['prp-sg'] + d.endings['prp-sg']
+    o['nom-pl'] = d.stems['nom-pl'] + d.endings['nom-pl']
+    o['gen-pl'] = d.stems['gen-pl'] + d.endings['gen-pl']
+    o['dat-pl'] = d.stems['dat-pl'] + d.endings['dat-pl']
+    o['acc-pl'] = ''
+    o['ins-pl'] = d.stems['ins-pl'] + d.endings['ins-pl']
+    o['prp-pl'] = d.stems['prp-pl'] + d.endings['prp-pl']
 
     # TODO: может инициировать и вообще везде работать уже с дефисами? Например, функцией сразу же преобразовывать
 # end
@@ -36,8 +36,8 @@ def init_forms(i):  # Генерация словоформ
 
 @a.starts(module)
 def init_srt_forms(func, o, stems, endings):  # todo move to `init_forms` (with if i.adj) ?
-    o['srt_sg'] = stems['srt_sg'] + endings['srt_sg']
-    o['srt_pl'] = stems['srt_pl'] + endings['srt_pl']
+    o['srt-sg'] = stems['srt-sg'] + endings['srt-sg']
+    o['srt-pl'] = stems['srt-pl'] + endings['srt-pl']
     _.ends(module, func)
 # end
 
@@ -45,12 +45,12 @@ def init_srt_forms(func, o, stems, endings):  # todo move to `init_forms` (with 
 @a.starts(module)
 def fix_stress(func, o):
     # Add stress if there is no one
-    if _.contains_several(o['nom_sg'], '{vowel}') and not _.contains(o['nom_sg'], '[́ ё]'):
-        # perhaps this is redundant for nom_sg?
-        _.replace(o, 'nom_sg', '({vowel})({consonant}*)$', '%1́ %2')
+    if _.contains_several(o['nom-sg'], '{vowel}') and not _.contains(o['nom-sg'], '[́ ё]'):
+        # perhaps this is redundant for nom-sg?
+        _.replace(o, 'nom-sg', '({vowel})({consonant}*)$', '%1́ %2')
     # end
-    if _.contains_several(o['gen_pl'], '{vowel+ё}') and not _.contains(o['gen_pl'], '[́ ё]'):
-        _.replace(o, 'gen_pl', '({vowel})({consonant}*)$', '%1́ %2')
+    if _.contains_several(o['gen-pl'], '{vowel+ё}') and not _.contains(o['gen-pl'], '[́ ё]'):
+        _.replace(o, 'gen-pl', '({vowel})({consonant}*)$', '%1́ %2')
     # end
 
     _.ends(module, func)
@@ -63,37 +63,37 @@ def choose_accusative_forms(func, i):
     o = i.out_args  # local
     d = i.data  # local
 
-    o['acc_sg_in'] = ''
-    o['acc_sg_an'] = ''
-    o['acc_pl_in'] = ''
-    o['acc_pl_an'] = ''
+    o['acc-sg-in'] = ''
+    o['acc-sg-an'] = ''
+    o['acc-pl-in'] = ''
+    o['acc-pl-an'] = ''
 
     if i.gender == 'm' or (i.gender == 'n' and i.output_gender == 'm'):
         if i.animacy == 'in':
-            o['acc_sg'] = o['nom_sg']
+            o['acc-sg'] = o['nom-sg']
         elif i.animacy == 'an':
-            o['acc_sg'] = o['gen_sg']
+            o['acc-sg'] = o['gen-sg']
         else:
-            o['acc_sg_in'] = o['nom_sg']
-            o['acc_sg_an'] = o['gen_sg']
+            o['acc-sg-in'] = o['nom-sg']
+            o['acc-sg-an'] = o['gen-sg']
         # end
     elif i.gender == 'f':
         if _.equals(i.stem.type, ['f-3rd', 'f-3rd-sibilant']):
-            o['acc_sg'] = o['nom_sg']
+            o['acc-sg'] = o['nom-sg']
         else:
-            o['acc_sg'] = d.stems['acc_sg'] + d.endings['acc_sg']  # todo: don't use `data` here?
+            o['acc-sg'] = d.stems['acc-sg'] + d.endings['acc-sg']  # todo: don't use `data` here?
         # end
     elif i.gender == 'n':
-        o['acc_sg'] = o['nom_sg']
+        o['acc-sg'] = o['nom-sg']
     # end
 
     if i.animacy == 'in':
-        o['acc_pl'] = o['nom_pl']
+        o['acc-pl'] = o['nom-pl']
     elif i.animacy == 'an':
-        o['acc_pl'] = o['gen_pl']
+        o['acc-pl'] = o['gen-pl']
     else:
-        o['acc_pl_in'] = o['nom_pl']
-        o['acc_pl_an'] = o['gen_pl']
+        o['acc-pl-in'] = o['nom-pl']
+        o['acc-pl-an'] = o['gen-pl']
     # end
 
     _.ends(module, func)
@@ -106,9 +106,9 @@ def second_ins_case(func, out_args, gender):
 
     # Второй творительный
     if gender == 'f':
-        ins_sg2 = _.replaced(out_args['ins_sg'], 'й$', 'ю')
-        if ins_sg2 != out_args['ins_sg']:
-            out_args['ins_sg2'] = ins_sg2
+        ins_sg2 = _.replaced(out_args['ins-sg'], 'й$', 'ю')
+        if ins_sg2 != out_args['ins-sg']:
+            out_args['ins-sg2'] = ins_sg2
         # end
     # end
 
@@ -140,7 +140,7 @@ def generate_out_args(func, i):  # export
         # replace 'ё' with 'е' when unstressed
         # if _.contains_once(info.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(info.rest_index, 'ё'):  -- trying to bug-fix
         if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(i.rest_index, 'ё'):
-            if i.adj and _.contains(i.stress_type, "a'") and i.gender == 'f' and key == 'srt_sg':
+            if i.adj and _.contains(i.stress_type, "a'") and i.gender == 'f' and key == 'srt-sg':
                 o[key] = _.replaced(value, 'ё', 'е') + ' // ' + _.replaced(value, '́', '')
             else:
                 o[key] = _.replaced(value, 'ё', 'е')  # обычный случай
@@ -173,8 +173,8 @@ def generate_out_args(func, i):  # export
         if i.postfix:
             # local keys
             keys = [
-                'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
-                'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
+                'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+                'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
             ]  # list
             for j, key in enumerate(keys):
                 o[key] = o[key] + 'ся'
@@ -191,15 +191,15 @@ def join_forms(func, out_args_1, out_args_2):  # export  # todo: rename to `out_
     # local keys, out_args, delim
 
     keys = [
-        'nom_sg',  'gen_sg',  'dat_sg',  'acc_sg',  'ins_sg',  'prp_sg',
-        'nom_pl',  'gen_pl',  'dat_pl',  'acc_pl',  'ins_pl',  'prp_pl',
-        'nom_sg_m', 'gen_sg_m', 'dat_sg_m', 'acc_sg_m', 'ins_sg_m', 'prp_sg_m',
-        'nom_sg_n', 'gen_sg_n', 'dat_sg_n', 'acc_sg_n', 'ins_sg_n', 'prp_sg_n',
-        'nom_sg_f', 'gen_sg_f', 'dat_sg_f', 'acc_sg_f', 'ins_sg_f', 'prp_sg_f',
-        'srt_sg',  'srt_sg_m',  'srt_sg_n',  'srt_sg_f',  'srt_pl',
-        'acc_sg_m_a', 'acc_sg_m_n', 'acc_pl_a', 'acc_pl_n',
-        'ins_sg2',
-        'ins_sg2_f',
+        'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
+        'nom-pl',  'gen-pl',  'dat-pl',  'acc-pl',  'ins-pl',  'prp-pl',
+        'nom-sg-m', 'gen-sg-m', 'dat-sg-m', 'acc-sg-m', 'ins-sg-m', 'prp-sg-m',
+        'nom-sg-n', 'gen-sg-n', 'dat-sg-n', 'acc-sg-n', 'ins-sg-n', 'prp-sg-n',
+        'nom-sg-f', 'gen-sg-f', 'dat-sg-f', 'acc-sg-f', 'ins-sg-f', 'prp-sg-f',
+        'srt-sg',  'srt-sg-m',  'srt-sg-n',  'srt-sg-f',  'srt-pl',
+        'acc-sg-m-a', 'acc-sg-m-n', 'acc-pl-a', 'acc-pl-n',
+        'ins-sg2',
+        'ins-sg2-f',
         'зализняк1', 'зализняк',
         'error',
     ]  # list
@@ -235,9 +235,9 @@ def plus_forms(func, sub_forms):  # export  # todo: rename to `out_args`
     # local keys, out_args, delim
 
     keys = [
-        'nom_sg',  'gen_sg',  'dat_sg',  'acc_sg',  'ins_sg',  'prp_sg',
-        'nom_pl',  'gen_pl',  'dat_pl',  'acc_pl',  'ins_pl',  'prp_pl',
-        # 'ins_sg2',
+        'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
+        'nom-pl',  'gen-pl',  'dat-pl',  'acc-pl',  'ins-pl',  'prp-pl',
+        # 'ins-sg2',
         'зализняк1', 'зализняк',
         'error',
     ]  # list

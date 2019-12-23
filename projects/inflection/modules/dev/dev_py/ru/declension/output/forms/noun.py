@@ -32,11 +32,11 @@ def apply_obelus(func, out_args, rest_index):  # export
 def apply_specific_3(func, out_args, gender, rest_index):  # export
     # Специфика по (3)
     if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③'):
-        if _.endswith(out_args['prp_sg'], 'и'):
-            out_args['prp_sg'] = out_args['prp_sg'] + '&nbsp;//<br />' + _.replaced(out_args['prp_sg'], 'и$', 'е')
+        if _.endswith(out_args['prp-sg'], 'и'):
+            out_args['prp-sg'] = out_args['prp-sg'] + '&nbsp;//<br />' + _.replaced(out_args['prp-sg'], 'и$', 'е')
         # end
-        if gender == 'f' and _.endswith(out_args['dat_sg'], 'и'):
-            out_args['dat_sg'] = out_args['dat_sg'] + '&nbsp;//<br />' + _.replaced(out_args['dat_sg'], 'и$', 'е')
+        if gender == 'f' and _.endswith(out_args['dat-sg'], 'и'):
+            out_args['dat-sg'] = out_args['dat-sg'] + '&nbsp;//<br />' + _.replaced(out_args['dat-sg'], 'и$', 'е')
         # end
     # end
 
@@ -51,10 +51,10 @@ def apply_specific_3(func, out_args, gender, rest_index):  # export
 @a.starts(module)
 def prt_case(func, out_args, args, index):  # Разделительный падеж
     if _.contains(index, 'Р2') or _.contains(index, 'Р₂'):
-        out_args['prt_sg'] = out_args['dat_sg']
+        out_args['prt-sg'] = out_args['dat-sg']
     # end
     if _.has_value(args, 'Р'):
-        out_args['prt_sg'] = args['Р']
+        out_args['prt-sg'] = args['Р']
     # end
 
     _.ends(module, func)
@@ -66,12 +66,12 @@ def loc_case(func, out_args, args, index):  # Местный падеж
     # local loc, loc_prep
 
     if _.contains(index, 'П2') or _.contains(index, 'П₂'):
-        loc = out_args['dat_sg']
+        loc = out_args['dat-sg']
         loc = _.replaced(loc, '́ ', '')
         loc = _.replaced(loc, 'ё', 'е')
         loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
         loc = remove_stress_if_one_syllable(loc)  # = export.
-        out_args['loc_sg'] = loc
+        out_args['loc-sg'] = loc
         loc_prep = '?'
         loc_prep = _.extract(index, 'П2%((.+)%)')
         if not loc_prep:
@@ -80,13 +80,13 @@ def loc_case(func, out_args, args, index):  # Местный падеж
         if not loc_prep:
             loc_prep = 'в, на'
         # end
-        out_args['loc_sg'] = '(' + loc_prep + ') ' + out_args['loc_sg']
+        out_args['loc-sg'] = '(' + loc_prep + ') ' + out_args['loc-sg']
         if _.contains(index, '%[П'):
-            out_args['loc_sg'] = out_args['loc_sg'] + '&nbsp;//<br />' + out_args['prp_sg']
+            out_args['loc-sg'] = out_args['loc-sg'] + '&nbsp;//<br />' + out_args['prp-sg']
         # end
     # end
     if _.has_value(args, 'М'):
-        out_args['loc_sg'] = args['М']
+        out_args['loc-sg'] = args['М']
     # end
 
     _.ends(module, func)
@@ -96,10 +96,10 @@ def loc_case(func, out_args, args, index):  # Местный падеж
 @a.starts(module)
 def voc_case(func, out_args, args, index, word):  # Звательный падеж
     if _.has_value(args, 'З'):
-        out_args['voc_sg'] = args['З']
+        out_args['voc-sg'] = args['З']
     elif _.contains(index, 'З'):
         if _.endswith(word, ['а', 'я']):
-            out_args['voc_sg'] = out_args['gen_pl']
+            out_args['voc-sg'] = out_args['gen-pl']
         else:
             out_args['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
         # end

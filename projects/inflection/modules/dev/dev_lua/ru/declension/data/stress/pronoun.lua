@@ -19,20 +19,17 @@ function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисле�
 	-- общий подход следующий:
 	-- если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
 	local stress_schema
-	stress_schema = {  -- dict
-		stem = {  -- dict
-			sg = _.equals(stress_type, "a"),
-			pl = _.equals(stress_type, "a"),
-		},  -- dict
-		ending = {  -- dict
-			sg = _.equals(stress_type, "b"),
-			pl = _.equals(stress_type, "b"),
-		},  -- dict
-	}  -- dict
+	local stress_schema = {}  -- AttrDict
+	stress_schema.stem = {}  -- dict
+	stress_schema.ending = {}  -- dict
+	stress_schema.stem['sg'] = _.equals(stress_type, "a")
+	stress_schema.stem['pl'] = _.equals(stress_type, "a")
+	stress_schema.ending['sg'] = _.equals(stress_type, "b")
+	stress_schema.ending['pl'] = _.equals(stress_type, "b")
 
 	types = {'stem', 'ending'}
-	sg_cases = {'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg'}  -- list
-	pl_cases = {'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl'}  -- list
+	sg_cases = {'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg'}  -- list
+	pl_cases = {'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl'}  -- list
 	for i, type in pairs(types) do  -- list
 		sg_value = stress_schema[type]['sg']
 		pl_value = stress_schema[type]['pl']

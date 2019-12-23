@@ -20,36 +20,33 @@ function export.get_noun_stress_schema(stress_type)  -- INFO: Вычислени
 
 	-- общий подход следующий:
 	-- если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
-	stress_schema = {  -- dict
-		stem = {  -- dict
-			sg     = _.equals(stress_type, {"a", "c", "e"}),
-			acc_sg = _.equals(stress_type, {"a", "c", "e", "d'", "f'"}),
-			ins_sg = _.equals(stress_type, {"a", "c", "e", "b'", "f''"}),
-			pl     = _.equals(stress_type, {"a", "d", "d'"}),
-			nom_pl = _.equals(stress_type, {"a", "d", "d'", "e", "f", "f'", "f''"}),
-		},  -- dict
-		ending = {  -- dict
-			sg     = _.equals(stress_type, {"b", "b'", "d", "d'", "f", "f'", "f''"}),
-			acc_sg = _.equals(stress_type, {"b", "b'", "d", "f", "f''"}),
-			ins_sg = _.equals(stress_type, {"b", "d", "d'", "f", "f'"}),
-			pl     = _.equals(stress_type, {"b", "b'", "c", "e", "f", "f'", "f''"}),
-			nom_pl = _.equals(stress_type, {"b", "b'", "c"}),
-		},  -- dict
-	}  -- dict
+	local stress_schema = {}  -- AttrDict
+	stress_schema.stem = {}  -- dict
+	stress_schema.ending = {}  -- dict
+	stress_schema.stem['sg']     = _.equals(stress_type, {"a", "c", "e"})
+	stress_schema.stem['acc-sg'] = _.equals(stress_type, {"a", "c", "e", "d'", "f'"})
+	stress_schema.stem['ins-sg'] = _.equals(stress_type, {"a", "c", "e", "b'", "f''"})
+	stress_schema.stem['pl']     = _.equals(stress_type, {"a", "d", "d'"})
+	stress_schema.stem['nom-pl'] = _.equals(stress_type, {"a", "d", "d'", "e", "f", "f'", "f''"})
+	stress_schema.ending['sg']     = _.equals(stress_type, {"b", "b'", "d", "d'", "f", "f'", "f''"})
+	stress_schema.ending['acc-sg'] = _.equals(stress_type, {"b", "b'", "d", "f", "f''"})
+	stress_schema.ending['ins-sg'] = _.equals(stress_type, {"b", "d", "d'", "f", "f'"})
+	stress_schema.ending['pl']     = _.equals(stress_type, {"b", "b'", "c", "e", "f", "f'", "f''"})
+	stress_schema.ending['nom-pl'] = _.equals(stress_type, {"b", "b'", "c"})
 
 	types = {'stem', 'ending'}
 	for i, type in pairs(types) do  -- list
 		sg_value = stress_schema[type]['sg']
-		stress_schema[type]['nom_sg'] = sg_value
-		stress_schema[type]['gen_sg'] = sg_value
-		stress_schema[type]['dat_sg'] = sg_value
-		stress_schema[type]['prp_sg'] = sg_value
+		stress_schema[type]['nom-sg'] = sg_value
+		stress_schema[type]['gen-sg'] = sg_value
+		stress_schema[type]['dat-sg'] = sg_value
+		stress_schema[type]['prp-sg'] = sg_value
 
 		pl_value = stress_schema[type]['pl']
-		stress_schema[type]['gen_pl'] = pl_value
-		stress_schema[type]['dat_pl'] = pl_value
-		stress_schema[type]['ins_pl'] = pl_value
-		stress_schema[type]['prp_pl'] = pl_value
+		stress_schema[type]['gen-pl'] = pl_value
+		stress_schema[type]['dat-pl'] = pl_value
+		stress_schema[type]['ins-pl'] = pl_value
+		stress_schema[type]['prp-pl'] = pl_value
 	end
 
 	_.ends(module, func)

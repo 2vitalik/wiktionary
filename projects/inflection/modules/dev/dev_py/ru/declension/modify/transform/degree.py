@@ -16,29 +16,29 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
     # If degree sign °
 
     if _.contains(rest_index, '°') and _.endswith(word, '[ая]нин'):
-        _.replace(stems, 'all_pl', '([ая])ни́ н$', '%1́ н')
-        _.replace(stems, 'all_pl', '([ая]́ ?н)ин$', '%1')
-        endings['nom_pl'] = 'е'
-        endings['gen_pl'] = ''
+        _.replace(stems, 'all-pl', '([ая])ни́ н$', '%1́ н')
+        _.replace(stems, 'all-pl', '([ая]́ ?н)ин$', '%1')
+        endings['nom-pl'] = 'е'
+        endings['gen-pl'] = ''
         _.ends(module, func)
         return rest_index
     # end
 
     if _.contains(rest_index, '°') and _.endswith(word, 'ин'):
-        _.replace(stems, 'all_pl', 'и́ ?н$', '')
+        _.replace(stems, 'all-pl', 'и́ ?н$', '')
         if not _.contains(rest_index, ['%(1%)', '①']):
-            endings['nom_pl'] = 'е'
+            endings['nom-pl'] = 'е'
         # end
-        endings['gen_pl'] = ''
+        endings['gen-pl'] = ''
     # end
 
     if _.contains(rest_index, '°') and _.endswith(word, ['ёнок', 'онок']):
-        _.replace(stems, 'all_pl', 'ёнок$', 'я́т')
-        _.replace(stems, 'all_pl', 'о́нок$', 'а́т')
+        _.replace(stems, 'all-pl', 'ёнок$', 'я́т')
+        _.replace(stems, 'all-pl', 'о́нок$', 'а́т')
 
         # INFO: Эмуляция среднего рода `1a` для форм мн. числа
-        endings['nom_pl'] = 'а'
-        endings['gen_pl'] = ''
+        endings['nom-pl'] = 'а'
+        endings['gen-pl'] = ''
 
         reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)
         _.ends(module, func)
@@ -47,8 +47,8 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
 
     if _.contains(rest_index, '°') and _.endswith(word, ['ёночек', 'оночек']):
 
-        _.replace(stems, 'all_pl', 'ёночек$', 'я́тк')
-        _.replace(stems, 'all_pl', 'о́ночек$', 'а́тк')
+        _.replace(stems, 'all-pl', 'ёночек$', 'я́тк')
+        _.replace(stems, 'all-pl', 'о́ночек$', 'а́тк')
 
         # INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
         reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, False)
@@ -56,22 +56,22 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
         # INFO: По сути должно примениться только к мн. формам (случай `B`)
         reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index + '*', data, False)
 
-        endings['gen_pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
+        endings['gen-pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
 
         _.ends(module, func)
         return rest_index
     # end
 
     if _.contains(rest_index, '°') and gender == 'n' and _.endswith(word, 'мя'):
-        _.replace(stems, 'all_sg', 'м$', 'мен')
-        _.replace(stems, 'ins_sg', 'м$', 'мен')
-        _.replace(stems, 'all_pl', 'м$', 'мен')
+        _.replace(stems, 'all-sg', 'м$', 'мен')
+        _.replace(stems, 'ins-sg', 'м$', 'мен')
+        _.replace(stems, 'all-pl', 'м$', 'мен')
 
-        endings['nom_sg'] = 'я'
-        endings['gen_sg'] = 'и'
-        endings['dat_sg'] = 'и'
-        endings['ins_sg'] = 'ем'
-        endings['prp_sg'] = 'и'
+        endings['nom-sg'] = 'я'
+        endings['gen-sg'] = 'и'
+        endings['dat-sg'] = 'и'
+        endings['ins-sg'] = 'ем'
+        endings['prp-sg'] = 'и'
     # end
 
     _.ends(module, func)

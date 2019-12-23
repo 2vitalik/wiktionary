@@ -6,7 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 def template(base, args):  # export
-    return dev_prefix + 'inflection/ru/noun'
+    return dev_prefix + 'inflection/ru/noun'  # перенести в data-модуль?
 # end
 
 

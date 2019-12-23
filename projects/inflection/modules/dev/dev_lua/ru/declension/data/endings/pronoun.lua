@@ -13,78 +13,62 @@ function export.get_standard_pronoun_endings()
 	func = "get_standard_pronoun_endings"
 	_.call(module, func)
 
-	-- TODO: Пока что не используется
-
-	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
-	return {
-		m = {
-			hard = {
-				nom_sg = '',
-				gen_sg = 'ого',
-				dat_sg = 'ому',
-				ins_sg = 'ым',
-				prp_sg = 'ом',
-			},  -- dict
-			soft = {
-				nom_sg = 'ь',
-				gen_sg = 'его',
-				dat_sg = 'ему',
-				ins_sg = 'им',
-				prp_sg = {'ем', 'ём'},
-			},  -- dict
-		},  -- dict
-		f = {
-			hard = {
-				nom_sg = 'а',
-				gen_sg = 'ой',
-				dat_sg = 'ой',
-				acc_sg = 'у',
-				ins_sg = 'ой',
-				prp_sg = 'ой',
-			},  -- dict
-			soft = {
-				nom_sg = 'я',
-				gen_sg = 'ей',
-				dat_sg = 'ей',
-				acc_sg = 'ю',
-				ins_sg = 'ей',
-				prp_sg = 'ей',
-			},  -- dict
-		},  -- dict
-		n = {
-			hard = {
-				nom_sg = 'о',
-				gen_sg = 'ого',
-				dat_sg = 'ому',
-				ins_sg = 'ым',
-				prp_sg = 'ом',
-			},  -- dict
-			soft = {
-				nom_sg = {'е', 'ё'},
-				gen_sg = 'его',
-				dat_sg = 'ему',
-				ins_sg = 'им',
-				prp_sg = 'ем',
-			},  -- dict
-		},  -- dict
-		common = {  -- common endings
-			hard = {
-				nom_pl = 'ы',
-				gen_pl = 'ых',
-				dat_pl = 'ым',
-				ins_pl = 'ыми',
-				prp_pl = 'ых',
-			},  -- dict
-			soft = {
-				nom_pl = 'и',
-				gen_pl = 'их',
-				dat_pl = 'им',
-				ins_pl = 'ими',
-				prp_pl = 'их',
-			},  -- dict
-		},  -- dict
-	}  -- dict
-	-- todo: сразу преобразовать в дефисы
+	local e = {}  -- AttrDict
+	e.m = {}  -- AttrDict
+	e.f = {}  -- AttrDict
+	e.n = {}  -- AttrDict
+	e.common = {}  -- AttrDict
+	e.m.hard = {}  -- dict
+	e.m.soft = {}  -- dict
+	e.f.hard = {}  -- dict
+	e.f.soft = {}  -- dict
+	e.n.hard = {}  -- dict
+	e.n.soft = {}  -- dict
+	e.common.hard = {}  -- dict
+	e.common.soft = {}  -- dict
+	e.m.hard['nom-sg'] = ''
+	e.m.hard['gen-sg'] = 'ого'
+	e.m.hard['dat-sg'] = 'ому'
+	e.m.hard['ins-sg'] = 'ым'
+	e.m.hard['prp-sg'] = 'ом'
+	e.m.soft['nom-sg'] = 'ь'
+	e.m.soft['gen-sg'] = 'его'
+	e.m.soft['dat-sg'] = 'ему'
+	e.m.soft['ins-sg'] = 'им'
+	e.m.soft['prp-sg'] = {'ем', 'ём'}
+	e.f.hard['nom-sg'] = 'а'
+	e.f.hard['gen-sg'] = 'ой'
+	e.f.hard['dat-sg'] = 'ой'
+	e.f.hard['acc-sg'] = 'у'
+	e.f.hard['ins-sg'] = 'ой'
+	e.f.hard['prp-sg'] = 'ой'
+	e.f.soft['nom-sg'] = 'я'
+	e.f.soft['gen-sg'] = 'ей'
+	e.f.soft['dat-sg'] = 'ей'
+	e.f.soft['acc-sg'] = 'ю'
+	e.f.soft['ins-sg'] = 'ей'
+	e.f.soft['prp-sg'] = 'ей'
+	e.n.hard['nom-sg'] = 'о'
+	e.n.hard['gen-sg'] = 'ого'
+	e.n.hard['dat-sg'] = 'ому'
+	e.n.hard['ins-sg'] = 'ым'
+	e.n.hard['prp-sg'] = 'ом'
+	e.n.soft['nom-sg'] = {'е', 'ё'}
+	e.n.soft['gen-sg'] = 'его'
+	e.n.soft['dat-sg'] = 'ему'
+	e.n.soft['ins-sg'] = 'им'
+	e.n.soft['prp-sg'] = 'ем'
+	e.common.hard['nom-pl'] = 'ы'
+	e.common.hard['gen-pl'] = 'ых'
+	e.common.hard['dat-pl'] = 'ым'
+	e.common.hard['ins-pl'] = 'ыми'
+	e.common.hard['prp-pl'] = 'ых'
+	e.common.soft['nom-pl'] = 'и'
+	e.common.soft['gen-pl'] = 'их'
+	e.common.soft['dat-pl'] = 'им'
+	e.common.soft['ins-pl'] = 'ими'
+	e.common.soft['prp-pl'] = 'их'
+	return e
 end
 
 
@@ -93,76 +77,62 @@ function export.get_standard_pronoun_noun_endings()
 	func = "get_standard_pronoun_noun_endings"
 	_.call(module, func)
 
-	-- TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
-	return {
-		m = {
-			hard = {
-				nom_sg = '',
-				gen_sg = 'а',
-				dat_sg = 'у',
-				ins_sg = 'ым',
-				prp_sg = 'е',
-			},  -- dict
-			soft = {
-				nom_sg = 'ь',
-				gen_sg = 'я',
-				dat_sg = 'ю',
-				ins_sg = 'им',
-				prp_sg = {'ем', 'ём'},
-			},  -- dict
-		},  -- dict
-		f = {
-			hard = {
-				nom_sg = 'а',
-				gen_sg = 'а',
-				dat_sg = 'ой',
-				acc_sg = 'у',
-				ins_sg = 'ой',
-				prp_sg = 'ой',
-			},  -- dict
-			soft = {
-				nom_sg = 'я',
-				gen_sg = 'ей',
-				dat_sg = 'ей',
-				acc_sg = 'ю',
-				ins_sg = 'ей',
-				prp_sg = 'ей',
-			},  -- dict
-		},  -- dict
-		n = {
-			hard = {
-				nom_sg = 'о',
-				gen_sg = 'а',
-				dat_sg = 'у',
-				ins_sg = 'ым',
-				prp_sg = 'е',
-			},  -- dict
-			soft = {
-				nom_sg = {'е', 'ё'},
-				gen_sg = 'я',
-				dat_sg = 'ю',
-				ins_sg = 'им',
-				prp_sg = {'ем', 'ём'},
-			},  -- dict
-		},  -- dict
-		common = {  -- common endings
-			hard = {
-				nom_pl = 'ы',
-				gen_pl = 'ых',
-				dat_pl = 'ым',
-				ins_pl = 'ыми',
-				prp_pl = 'ых',
-			},  -- dict
-			soft = {
-				nom_pl = 'и',
-				gen_pl = 'их',
-				dat_pl = 'им',
-				ins_pl = 'ими',
-				prp_pl = 'их',
-			},  -- dict
-		},  -- dict
-	}  -- dict
-	-- todo: сразу преобразовать в дефисы
+	local e = {}  -- AttrDict
+	e.m = {}  -- AttrDict
+	e.f = {}  -- AttrDict
+	e.n = {}  -- AttrDict
+	e.common = {}  -- AttrDict
+	e.m.hard = {}  -- dict
+	e.m.soft = {}  -- dict
+	e.f.hard = {}  -- dict
+	e.f.soft = {}  -- dict
+	e.n.hard = {}  -- dict
+	e.n.soft = {}  -- dict
+	e.common.hard = {}  -- dict
+	e.common.soft = {}  -- dict
+	e.m.hard['nom-sg'] = ''
+	e.m.hard['gen-sg'] = 'а'
+	e.m.hard['dat-sg'] = 'у'
+	e.m.hard['ins-sg'] = 'ым'
+	e.m.hard['prp-sg'] = 'е'
+	e.m.soft['nom-sg'] = 'ь'
+	e.m.soft['gen-sg'] = 'я'
+	e.m.soft['dat-sg'] = 'ю'
+	e.m.soft['ins-sg'] = 'им'
+	e.m.soft['prp-sg'] = {'ем', 'ём'}
+	e.f.hard['nom-sg'] = 'а'
+	e.f.hard['gen-sg'] = 'а'
+	e.f.hard['dat-sg'] = 'ой'
+	e.f.hard['acc-sg'] = 'у'
+	e.f.hard['ins-sg'] = 'ой'
+	e.f.hard['prp-sg'] = 'ой'
+	e.f.soft['nom-sg'] = 'я'
+	e.f.soft['gen-sg'] = 'ей'
+	e.f.soft['dat-sg'] = 'ей'
+	e.f.soft['acc-sg'] = 'ю'
+	e.f.soft['ins-sg'] = 'ей'
+	e.f.soft['prp-sg'] = 'ей'
+	e.n.hard['nom-sg'] = 'о'
+	e.n.hard['gen-sg'] = 'а'
+	e.n.hard['dat-sg'] = 'у'
+	e.n.hard['ins-sg'] = 'ым'
+	e.n.hard['prp-sg'] = 'е'
+	e.n.soft['nom-sg'] = {'е', 'ё'}
+	e.n.soft['gen-sg'] = 'я'
+	e.n.soft['dat-sg'] = 'ю'
+	e.n.soft['ins-sg'] = 'им'
+	e.n.soft['prp-sg'] = {'ем', 'ём'}
+	e.common.hard['nom-pl'] = 'ы'
+	e.common.hard['gen-pl'] = 'ых'
+	e.common.hard['dat-pl'] = 'ым'
+	e.common.hard['ins-pl'] = 'ыми'
+	e.common.hard['prp-pl'] = 'ых'
+	e.common.soft['nom-pl'] = 'и'
+	e.common.soft['gen-pl'] = 'их'
+	e.common.soft['dat-pl'] = 'им'
+	e.common.soft['ins-pl'] = 'ими'
+	e.common.soft['prp-pl'] = 'их'
+	return e
 end
 
 
@@ -175,38 +145,38 @@ function export.fix_pronoun_noun_endings(endings, gender, stem_type, stress_sche
 --	INFO: Replace "ы" to "и"
 	if _.equals(stem_type, {'sibilant'}) then
 		if _.In(gender, {'m', 'n'}) then
-			endings['ins_sg'] = 'им'
+			endings['ins-sg'] = 'им'
 		end
 
-		endings['nom_pl'] = 'и'
-		endings['gen_pl'] = 'их'
-		endings['dat_pl'] = 'им'
-		endings['ins_pl'] = 'ими'
-		endings['prp_pl'] = 'их'
+		endings['nom-pl'] = 'и'
+		endings['gen-pl'] = 'их'
+		endings['dat-pl'] = 'им'
+		endings['ins-pl'] = 'ими'
+		endings['prp-pl'] = 'их'
 	end
 
 --	INFO: Other Replace
 	if _.equals(stem_type, {'sibilant'}) then
 		if gender == 'n' then
-			endings['nom_sg'] = {'е', 'о' }
+			endings['nom-sg'] = {'е', 'о' }
 		end
 		if _.In(gender, {'m', 'n'}) then
-			endings['gen_sg'] = {'его', 'ого'}
-			endings['dat_sg'] = {'ему', 'ому'}
-			endings['prp_sg'] = {'ем', 'ом'}
+			endings['gen-sg'] = {'его', 'ого'}
+			endings['dat-sg'] = {'ему', 'ому'}
+			endings['prp-sg'] = {'ем', 'ом'}
 		end
 		if gender == 'f' then
-			endings['gen_sg'] = {'ей', 'ой'}
-			endings['dat_sg'] = {'ей', 'ой'}
-			endings['ins_sg'] = {'ей', 'ой'}
-			endings['prp_sg'] = {'ей', 'ой'}
+			endings['gen-sg'] = {'ей', 'ой'}
+			endings['dat-sg'] = {'ей', 'ой'}
+			endings['ins-sg'] = {'ей', 'ой'}
+			endings['prp-sg'] = {'ей', 'ой'}
 		end
 	end
 
 	if _.equals(stem_type, {'vowel'}) then
 		if _.In(gender, {'m', 'n'}) then
-			endings['gen_sg'] = 'его'
-			endings['dat_sg'] = 'ему'
+			endings['gen-sg'] = 'его'
+			endings['dat-sg'] = 'ему'
 		end
 	end
 

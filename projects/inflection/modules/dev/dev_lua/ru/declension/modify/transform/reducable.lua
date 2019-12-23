@@ -25,8 +25,8 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 		if data.adj then
 			if gender == 'm' then
 				if _.contains(rest_index, {'%(1%)', '①'}) then
-					if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь' then  -- fixme: temporary duplicated with the same code at the ending of function...
-						endings['srt_sg'] = ''  -- вместо `ь` для `2*a`
+					if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt-sg'] == 'ь' then  -- fixme: temporary duplicated with the same code at the ending of function...
+						endings['srt-sg'] = ''  -- вместо `ь` для `2*a`
 					end
 					return _.ends(module, func)
 				end
@@ -58,31 +58,31 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 			_.log_value(reduced_letter, 'reduced_letter')
 
 			if reduced_letter == 'о' then
-				_.replace(stems, 'all_sg', '(.)о́ ?([^о]+)$', '%1%2')
+				_.replace(stems, 'all-sg', '(.)о́ ?([^о]+)$', '%1%2')
 
 --				local stem_gen_pl
 --				-- У этих имён последняя гласная основы исходной формы заменяется на нуль, о или й во всех формах, не совпадающих с исходной (кроме Т. ед. на -ью).
---				-- if endings['gen_pl'] == '' then  -- ботинок, глазок
+--				-- if endings['gen-pl'] == '' then  -- ботинок, глазок
 --				if _.contains(rest_index, {'%(2%)', '②'}) then
---					stem_gen_pl = stems['gen_pl']
+--					stem_gen_pl = stems['gen-pl']
 --				end
 
 				if not only_sg then
-					_.replace(stems, 'all_pl', '(.)о́ ?([^о]+)$', '%1%2')
+					_.replace(stems, 'all-pl', '(.)о́ ?([^о]+)$', '%1%2')
 				end
 
 --				if stem_gen_pl then  -- ботинок, глазок
---					stems['gen_pl'] = stem_gen_pl
+--					stems['gen-pl'] = stem_gen_pl
 --				end
 
 				if not f_3rd then
-					_.replace(stems, 'ins_sg', '(.)о́ ?([^о]+)$', '%1%2')
+					_.replace(stems, 'ins-sg', '(.)о́ ?([^о]+)$', '%1%2')
 				end
 
 			elseif reduced_letter == 'и' then  -- бывает только в подтипе мс 6*
-				_.replace(stems, 'all_sg', '(.)и́ ?([^и]+)$', '%1ь%2')
+				_.replace(stems, 'all-sg', '(.)и́ ?([^и]+)$', '%1ь%2')
 				if not only_sg then
-					_.replace(stems, 'all_pl', '(.)и́ ?([^и]+)$', '%1ь%2')
+					_.replace(stems, 'all-pl', '(.)и́ ?([^и]+)$', '%1ь%2')
 				end
 
 			elseif _.In(reduced_letter, {'е', 'ё'}) then
@@ -94,33 +94,33 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 
 				if _.contains(prev, '{vowel+ё}') then  -- 1).
 					mw.log('  -- Подслучай A.1).')
-					_.replace(stems, 'all_sg', '[её]́ ?([^её]+)$', 'й%1')
+					_.replace(stems, 'all-sg', '[её]́ ?([^её]+)$', 'й%1')
 					if not f_3rd then
-						_.replace(stems, 'ins_sg', '[её]́ ?([^её]+)$', 'й%1')
+						_.replace(stems, 'ins-sg', '[её]́ ?([^её]+)$', 'й%1')
 					end
 					if not only_sg then
-						_.replace(stems, 'all_pl', '[её]́ ?([^её]+)$', 'й%1')
+						_.replace(stems, 'all-pl', '[её]́ ?([^её]+)$', 'й%1')
 					end
 
 				elseif case_2_a or case_2_b or case_2_c then  -- 2).
 
 					mw.log('  -- Подслучай A.2).')
-					_.replace(stems, 'all_sg', '[её]́ ?([^её]*)$', 'ь%1')
+					_.replace(stems, 'all-sg', '[её]́ ?([^её]*)$', 'ь%1')
 					if not f_3rd then
-						_.replace(stems, 'ins_sg', '[её]́ ?([^её]*)$', 'ь%1')
+						_.replace(stems, 'ins-sg', '[её]́ ?([^её]*)$', 'ь%1')
 					end
 					if not only_sg then
-						_.replace(stems, 'all_pl', '[её]́ ?([^её]*)$', 'ь%1')
+						_.replace(stems, 'all-pl', '[её]́ ?([^её]*)$', 'ь%1')
 					end
 
 				else  -- 3).
 					mw.log('  -- Подслучай A.3).')
-					_.replace(stems, 'all_sg', '[её]́ ?([^её]*)$', '%1')
+					_.replace(stems, 'all-sg', '[её]́ ?([^её]*)$', '%1')
 					if not f_3rd then
-						_.replace(stems, 'ins_sg', '[её]́ ?([^её]*)$', '%1')
+						_.replace(stems, 'ins-sg', '[её]́ ?([^её]*)$', '%1')
 					end
 					if not only_sg then
-						_.replace(stems, 'all_pl', '[её]́ ?([^её]*)$', '%1')
+						_.replace(stems, 'all-pl', '[её]́ ?([^её]*)$', '%1')
 					end
 				end
 			end
@@ -147,9 +147,9 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 		force_b = false
 		if _.contains(rest_index, {'%(2%)', '②'}) then
 			gender = 'n'
-			data.forced_stem = stems['gen_pl']
-			stem = stems['gen_pl']
-			mw.log('  -- New force stem (gen_pl): ' .. tostring(stem))
+			data.forced_stem = stems['gen-pl']
+			stem = stems['gen-pl']
+			mw.log('  -- New force stem (gen-pl): ' .. tostring(stem))
 			force_b = true
 		end
 
@@ -158,15 +158,15 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 
 		if (reduced == 'B' or force_b) and not skip_b_1 and not skip_b_2 and not skip_b_3 then
 			if data.adj then
-				case = 'srt_sg'
+				case = 'srt-sg'
 			else
-				case = 'gen_pl'
+				case = 'gen-pl'
 			end
 
 			mw.log('  -- Зашли в случай чередования B')
 			if stem_type == 'vowel' then  -- 1).
 				mw.log('  -- Подслучай B.1).')
-				if _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" }) then  -- gen_pl ending stressed  -- TODO: special vars for that
+				if _.In(stress_type, {'b', 'c', 'e', 'f', "f'", "b'" }) then  -- gen-pl ending stressed  -- TODO: special vars for that
 					_.replace(stems, case, 'ь$', 'е́')
 				else
 					_.replace(stems, case, 'ь$', 'и')
@@ -218,16 +218,16 @@ function export.apply_specific_reducable(stems, endings, word, stem, stem_type, 
 					end
 				end
 			end
-			if stem_type == 'soft' and _.endswith(word, 'ня') and stress_type == 'a' and endings['gen_pl'] == 'ь' then
-				endings['gen_pl'] = ''  -- вместо `ь` для `2*a`
+			if stem_type == 'soft' and _.endswith(word, 'ня') and stress_type == 'a' and endings['gen-pl'] == 'ь' then
+				endings['gen-pl'] = ''  -- вместо `ь` для `2*a`
 			end
-			if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt_sg'] == 'ь' then
-				endings['srt_sg'] = ''  -- вместо `ь` для `2*a`
+			if gender == 'm' and data.adj and _.endswith(word, 'ний') and endings['srt-sg'] == 'ь' then
+				endings['srt-sg'] = ''  -- вместо `ь` для `2*a`
 			end
 --			if _.contains(rest_index, 'ё') then
---				if _.contains(stems['gen_pl'], 'ё.*е') then
+--				if _.contains(stems['gen-pl'], 'ё.*е') then
 --					mw.log('% Специальный случай-исправление типа "сёстер" -> "сестёр"')
---					_.replace(stems, 'gen_pl', 'ё(.*)е([^е]*)$', 'е%1ё%2')
+--					_.replace(stems, 'gen-pl', 'ё(.*)е([^е]*)$', 'е%1ё%2')
 --				end
 --			end
 		end  -- reduced B

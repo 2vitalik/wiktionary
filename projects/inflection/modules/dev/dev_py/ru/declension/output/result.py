@@ -11,41 +11,11 @@ from projects.inflection.modules.dev.dev_py.a import syllables
 module = 'output.result'  # local
 
 
-# Использование дефисов вместо подчёркивания
 @a.starts(module)
-def replace_underscore_with_hyphen(func, out_args):
-    # local keys, old_key
-
-    keys = [
-        'nom-sg',   'gen-sg',   'dat-sg',   'acc-sg',   'ins-sg',   'prp-sg',
-        'nom-sg-m', 'gen-sg-m', 'dat-sg-m', 'acc-sg-m', 'ins-sg-m', 'prp-sg-m',
-        'nom-sg-n', 'gen-sg-n', 'dat-sg-n', 'acc-sg-n', 'ins-sg-n', 'prp-sg-n',
-        'nom-sg-f', 'gen-sg-f', 'dat-sg-f', 'acc-sg-f', 'ins-sg-f', 'prp-sg-f',
-        'nom-pl',   'gen-pl',   'dat-pl',   'acc-pl',   'ins-pl',   'prp-pl',
-#        'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
-#        'nom-pl2', 'gen-pl2', 'dat-pl2', 'acc-pl2', 'ins-pl2', 'prp-pl2',
-        'voc-sg',  'loc-sg',  'prt-sg',
-        'srt-sg',  'srt-sg-m',  'srt-sg-n',  'srt-sg-f',  'srt-pl',
-        'acc-sg-m-a', 'acc-sg-m-n', 'acc-pl-a', 'acc-pl-n',
-        'ins-sg2',  # temp?
-        'ins-sg2-f',
-    ]  # list
-    for i, new_key in enumerate(keys):
-        old_key = mw.ustring.gsub(new_key, '-', '_')
-        if _.has_key(out_args, old_key):
-            out_args[new_key] = out_args[old_key]
-        # end
-    # end
-
-    _.ends(module, func)
-# end
-
-
-@a.starts(module)
-def forward_args(func, out_args, data):
+def forward_args(func, out_args, info):
     # local keys, args
 
-    args = data.args
+    args = info.args
     keys = [
         'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
         'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
@@ -81,7 +51,7 @@ def forward_args(func, out_args, data):
             out_args['слоги'] = syllables.get_syllables(out_args['слоги'])
         # end
     else:
-        out_args['слоги'] = data.word.unstressed  # fixme: может всё-таки stressed?
+        out_args['слоги'] = info.word.unstressed  # fixme: может всё-таки stressed?
     # end
 
     _.ends(module, func)
@@ -89,9 +59,8 @@ def forward_args(func, out_args, data):
 
 
 @a.starts(module)
-def finalize(func, data, out_args):  # export
-    replace_underscore_with_hyphen(out_args)  # fixme: this will be redundant soon
-    forward_args(out_args, data)  # fixme: move this to the ending of the main function
+def finalize(func, info, out_args):  # export
+    forward_args(out_args, info)  # fixme: move this to the ending of the main function
 
     _.ends(module, func)
     return out_args

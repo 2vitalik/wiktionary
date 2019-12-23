@@ -42,8 +42,8 @@ def main_algorithm(func, info):
         # INFO: Может быть это просто несклоняемая схема:
         if _.contains(info.rest_index, '^0'):  # todo: put this somewhere upper? before checking stress? or inside sub-algorithm?
             keys = [
-                'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
-                'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
+                'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+                'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
             ]  # list
             out_args = dict()  # dict
             out_args['зализняк'] = '0'
@@ -101,9 +101,9 @@ def main_algorithm(func, info):
 
     elif info.adj:
         cases = [
-            'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
-            'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
-            'srt_sg', 'srt_pl',
+            'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+            'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
+            'srt-sg', 'srt-pl',
         ]  # list
 
         genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
@@ -119,19 +119,19 @@ def main_algorithm(func, info):
             else:
                 form.generate_out_args(info)
                 for i, case in enumerate(cases):
-                    key = case + '_' + gender
+                    key = case + '-' + gender
                     info.out_args[key] = info.out_args[case]
                 # end
                 if gender == 'f':
-                    info.out_args['ins_sg2_f'] = info.out_args['ins_sg2']
+                    info.out_args['ins-sg2-f'] = info.out_args['ins-sg2']
                 # end
             # end
         # end
 
-        info.out_args['acc_sg_m_a'] = info.out_args['gen_sg_m']
-        info.out_args['acc_sg_m_n'] = info.out_args['nom_sg_m']
-        info.out_args['acc_pl_a'] = info.out_args['gen_pl']
-        info.out_args['acc_pl_n'] = info.out_args['nom_pl']
+        info.out_args['acc-sg-m-a'] = info.out_args['gen-sg-m']
+        info.out_args['acc-sg-m-n'] = info.out_args['nom-sg-m']
+        info.out_args['acc-pl-a'] = info.out_args['gen-pl']
+        info.out_args['acc-pl-n'] = info.out_args['nom-pl']
 
         info.gender = ''  # redundant?
     # end

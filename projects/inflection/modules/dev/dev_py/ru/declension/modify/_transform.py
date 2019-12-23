@@ -25,7 +25,7 @@ def transform(func, info):  # export
     #    *** для случая с расстановкой ударения  (см. ниже)
     #    # local orig_stem = info.stem.unstressed
     #    if _.contains(info.rest_index, ['%(2%)', '②']):
-    #        orig_stem = _.replaced(info.data.stems['gen_pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
+    #        orig_stem = _.replaced(info.data.stems['gen-pl'], '́ ', '')  -- удаляем ударение для случая "сапожок *d(2)"
     #        mw.log('> Another `orig_stem`: ' + str(orig_stem))
     #    # end
 
@@ -63,8 +63,8 @@ def transform(func, info):  # export
     # end
 
     # Специфика по "ё"
-    if _.contains(info.rest_index, 'ё') and not _.contains(info.data.endings['gen_pl'], '{vowel+ё}') and not _.contains(info.data.stems['gen_pl'], 'ё'):
-        info.data.stems['gen_pl'] = _.replaced(info.data.stems['gen_pl'], 'е́?([^е]*)$', 'ё%1')
+    if _.contains(info.rest_index, 'ё') and not _.contains(info.data.endings['gen-pl'], '{vowel+ё}') and not _.contains(info.data.stems['gen-pl'], 'ё'):
+        info.data.stems['gen-pl'] = _.replaced(info.data.stems['gen-pl'], 'е́?([^е]*)$', 'ё%1')
         info.rest_index = info.rest_index + 'ё'  # ???
     # end
 

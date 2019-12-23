@@ -35,7 +35,7 @@ local function get_base_endings(gender, stem_base_type, adj, pronoun)
 	end
 
 	if adj and gender == '' then  -- INFO: Случай с множественным числом
-		keys = {'nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg', 'srt_sg'}
+		keys = {'nom-sg', 'gen-sg', 'dat-sg', 'ins-sg', 'prp-sg', 'srt-sg'}
 		for i, key in pairs(keys) do  -- list
 			standard_endings['common'][stem_base_type][key] = ''
 		end
@@ -65,19 +65,19 @@ local function choose_endings_stress(endings, gender, stem_base_type, stress_sch
 	-- todo: we can generate one table for all genders only once at the beginning !!! and just use/load it here
 
 	if adj then
-		stress = stress_schema['ending']['nom_sg'] and stressed or unstressed
+		stress = stress_schema['ending']['nom-sg'] and stressed or unstressed
 
 		if gender == 'm' and stem_base_type == 'hard' then
-			endings['nom_sg'] = endings['nom_sg'][stress]
+			endings['nom-sg'] = endings['nom-sg'][stress]
 		end
 
-		stress = stress_schema['ending']['srt_sg_n'] and stressed or unstressed
+		stress = stress_schema['ending']['srt-sg-n'] and stressed or unstressed
 
 		if gender == 'n' and stem_base_type == 'soft' then
-			endings['srt_sg'] = endings['srt_sg'][stress]
+			endings['srt-sg'] = endings['srt-sg'][stress]
 		end
 	elseif pronoun then  -- TODO: может применить такой подход для всех случаев вообще?
-		keys = {'nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg'}  -- list
+		keys = {'nom-sg', 'gen-sg', 'dat-sg', 'ins-sg', 'prp-sg'}  -- list
 		for i, key in pairs(keys) do  -- list
 			if type(endings[key]) == 'table' then
 				stress = stress_schema['ending'][key] and stressed or unstressed
@@ -85,25 +85,25 @@ local function choose_endings_stress(endings, gender, stem_base_type, stress_sch
 			end
 		end
 	else
-		stress = stress_schema['ending']['dat_sg'] and stressed or unstressed
+		stress = stress_schema['ending']['dat-sg'] and stressed or unstressed
 
 		if gender == 'f' and stem_base_type == 'soft' then
-			endings['dat_sg'] = endings['dat_sg'][stress]
+			endings['dat-sg'] = endings['dat-sg'][stress]
 		end
 
-		stress = stress_schema['ending']['prp_sg'] and stressed or unstressed
+		stress = stress_schema['ending']['prp-sg'] and stressed or unstressed
 
-		endings['prp_sg'] = endings['prp_sg'][stress]
+		endings['prp-sg'] = endings['prp-sg'][stress]
 
-		stress = stress_schema['ending']['ins_sg'] and stressed or unstressed
+		stress = stress_schema['ending']['ins-sg'] and stressed or unstressed
 
 		if stem_base_type == 'soft' then
-			endings['ins_sg'] = endings['ins_sg'][stress]
+			endings['ins-sg'] = endings['ins-sg'][stress]
 		end
 
-		stress = stress_schema['ending']['gen_pl'] and stressed or unstressed
+		stress = stress_schema['ending']['gen-pl'] and stressed or unstressed
 
-		endings['gen_pl'] = endings['gen_pl'][stress]
+		endings['gen-pl'] = endings['gen-pl'][stress]
 	end
 
 	_.ends(module, func)
@@ -139,7 +139,7 @@ function export.get_endings(info)
 
 --	INFO: Особые случаи: `копьё с d*` и `питьё с b*`
 	if info.gender == 'n' and info.stem.base_type == 'soft' and _.endswith(info.word.unstressed, 'ё') then
-		endings['nom_sg'] = 'ё'
+		endings['nom-sg'] = 'ё'
 	end
 
 	_.ends(module, func)

@@ -15,47 +15,47 @@ module = 'modify.transform.circles.noun'  # local
 def apply_noun_specific_1_2(func, endings, gender, stem_type, stem_base_type, rest_index):  # export
     if _.contains(rest_index, ['%(1%)', '①']):
         if stem_base_type == 'hard':
-            if gender == 'm': endings['nom_pl'] = 'а' # end
-            if gender == 'n': endings['nom_pl'] = 'ы' # end
+            if gender == 'm': endings['nom-pl'] = 'а' # end
+            if gender == 'n': endings['nom-pl'] = 'ы' # end
         # end
         if stem_base_type == 'soft':
-            if gender == 'm': endings['nom_pl'] = 'я' # end
-            if gender == 'n': endings['nom_pl'] = 'и' # end
+            if gender == 'm': endings['nom-pl'] = 'я' # end
+            if gender == 'n': endings['nom-pl'] = 'и' # end
         # end
         if _.equals(stem_type, ['velar', 'sibilant']):  # Replace "ы" to "и"
-            if gender == 'n': endings['nom_pl'] = 'и' # end
+            if gender == 'n': endings['nom-pl'] = 'и' # end
         # end
     # end
 
     if _.contains(rest_index, ['%(2%)', '②']):
         if stem_base_type == 'hard':
-            if gender == 'm': endings['gen_pl'] = ['', ''] # end
-            if gender == 'n': endings['gen_pl'] = ['ов', 'ов'] # end
-            if gender == 'f': endings['gen_pl'] = {'ей', 'ей' } # end
+            if gender == 'm': endings['gen-pl'] = ['', ''] # end
+            if gender == 'n': endings['gen-pl'] = ['ов', 'ов'] # end
+            if gender == 'f': endings['gen-pl'] = {'ей', 'ей' } # end
         # end
         if stem_base_type == 'soft':
-            if gender == 'm': endings['gen_pl'] = ['ь', 'ь'] # end
-            if gender == 'n': endings['gen_pl'] = ['ев', 'ёв']  # end
-            if gender == 'f': endings['gen_pl'] = {'ей', 'ей' } # end
+            if gender == 'm': endings['gen-pl'] = ['ь', 'ь'] # end
+            if gender == 'n': endings['gen-pl'] = ['ев', 'ёв']  # end
+            if gender == 'f': endings['gen-pl'] = {'ей', 'ей' } # end
         # end
         if _.equals(stem_type, ['sibilant', 'letter-ц']):  # Replace unstressed "о" to "е"
-            if gender == 'n': endings['gen_pl'][unstressed] = 'ев' # end
+            if gender == 'n': endings['gen-pl'][unstressed] = 'ев' # end
         # end
 
 #        # Possibly we don't need this:
 #            # Replace "ов", "ев", "ёв" and null to "ей"
 #            if stem_type = {'sibilant'}}
-#                if gender == 'n': endings['gen_pl'] = ['ей', 'ей']
-#                if gender == 'm': endings['gen_pl'][stressed] = 'ей'
+#                if gender == 'n': endings['gen-pl'] = ['ей', 'ей']
+#                if gender == 'm': endings['gen-pl'][stressed] = 'ей'
 #            # end
 #            # Replace "ь" to "й"
 #            if stem_type = ['vowel', 'letter-и']}
-#                if gender == 'm': endings['gen_pl'][stressed] = ['й', 'й']
+#                if gender == 'm': endings['gen-pl'][stressed] = ['й', 'й']
 #            # end
 #            # Replace "ей" to "ев/ёв", and "ь,ей" to "й"
 #            if stem_type = ['vowel', 'letter-и']}
-#                if gender == 'f': endings['gen_pl'][unstressed] = ['ев', 'ёв']
-#                if gender == 'm': endings['gen_pl'][stressed] = ['й', 'й']
+#                if gender == 'f': endings['gen-pl'][unstressed] = ['ев', 'ёв']
+#                if gender == 'm': endings['gen-pl'][stressed] = ['й', 'й']
 #            # end
 #        #
     # end

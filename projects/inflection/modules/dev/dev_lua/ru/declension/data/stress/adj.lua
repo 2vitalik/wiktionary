@@ -20,29 +20,25 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 
 	-- общий подход следующий:
 	-- если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
-	local stress_schema
-	stress_schema = {  -- dict
-		stem = {  -- dict
-			full = _.startswith(stress_type, {"a", "a/"}),
-			srt_sg_m = true,
-			srt_sg_f = _.endswith(stress_type, {"/a", "/a'"}) or _.equals(stress_type, {'a', "a'"}),
-			srt_sg_n = _.endswith(stress_type, {"/a", "/c", "/a'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'"}),
-			srt_pl = _.endswith(stress_type, {"/a", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'", "b'"}),
-		},  -- dict
-		ending = {  -- dict
-			full = _.startswith(stress_type, {"b", "b/"}),
-			srt_sg_m = false,
-			srt_sg_f = _.endswith(stress_type, {"/b", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "a'", "b'"}),
-			srt_sg_n = _.endswith(stress_type, {"/b", "/b'", "/c''"}) or _.equals(stress_type, {'b', "b'"}),
-			srt_pl = _.endswith(stress_type, {"/b", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "b'"}),
-		},  -- dict
-	}  -- dict
+	local stress_schema = {}  -- AttrDict
+	stress_schema.stem = {}  -- dict
+	stress_schema.ending = {}  -- dict
+	stress_schema.stem['full'] = _.startswith(stress_type, {"a", "a/"})
+	stress_schema.stem['srt-sg-m'] = true
+	stress_schema.stem['srt-sg-f'] = _.endswith(stress_type, {"/a", "/a'"}) or _.equals(stress_type, {'a', "a'"})
+	stress_schema.stem['srt-sg-n'] = _.endswith(stress_type, {"/a", "/c", "/a'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'"})
+	stress_schema.stem['srt-pl'] = _.endswith(stress_type, {"/a", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'", "b'"})
+	stress_schema.ending['full'] = _.startswith(stress_type, {"b", "b/"})
+	stress_schema.ending['srt-sg-m'] = false
+	stress_schema.ending['srt-sg-f'] = _.endswith(stress_type, {"/b", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "a'", "b'"})
+	stress_schema.ending['srt-sg-n'] = _.endswith(stress_type, {"/b", "/b'", "/c''"}) or _.equals(stress_type, {'b', "b'"})
+	stress_schema.ending['srt-pl'] = _.endswith(stress_type, {"/b", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "b'"})
 
 	types = {'stem', 'ending'}
 	cases = {
 		'sg', 'pl',
-		'nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg',
-		'nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl',
+		'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+		'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
 	}  -- list
 	for i, type in pairs(types) do  -- list
 		sg_value = stress_schema[type]['full']

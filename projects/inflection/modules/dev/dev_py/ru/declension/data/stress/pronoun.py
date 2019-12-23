@@ -10,25 +10,23 @@ module = 'data.stress.pronoun'  # local
 
 @a.starts(module)
 def get_pronoun_stress_schema(func, stress_type):  # export  # INFO: Вычисление схемы ударения
-    # TODO: Пока не используется
+
+    # todo: Сгенерировать все `stress_schema` для всех видов `stress_type` заранее и потом просто использовать/загружать их
 
     # общий подход следующий:
     # если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
     # local stress_schema
-    stress_schema = dict(  # dict
-        stem = dict(  # dict
-            sg = _.equals(stress_type, "a"),
-            pl = _.equals(stress_type, "a"),
-        ),  # dict
-        ending = dict(  # dict
-            sg = _.equals(stress_type, "b"),
-            pl = _.equals(stress_type, "b"),
-        ),  # dict
-    )  # dict
+    stress_schema = a.AttrDict()  # AttrDict  # local
+    stress_schema.stem = dict()  # dict
+    stress_schema.ending = dict()  # dict
+    stress_schema.stem['sg'] = _.equals(stress_type, "a")
+    stress_schema.stem['pl'] = _.equals(stress_type, "a")
+    stress_schema.ending['sg'] = _.equals(stress_type, "b")
+    stress_schema.ending['pl'] = _.equals(stress_type, "b")
 
     types = ['stem', 'ending']
-    sg_cases = ['nom_sg', 'gen_sg', 'dat_sg', 'acc_sg', 'ins_sg', 'prp_sg']  # list
-    pl_cases = ['nom_pl', 'gen_pl', 'dat_pl', 'acc_pl', 'ins_pl', 'prp_pl']  # list
+    sg_cases = ['nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg']  # list
+    pl_cases = ['nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl']  # list
     for i, type in enumerate(types):
         sg_value = stress_schema[type]['sg']
         pl_value = stress_schema[type]['pl']
