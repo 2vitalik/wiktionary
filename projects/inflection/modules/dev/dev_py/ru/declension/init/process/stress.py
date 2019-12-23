@@ -8,13 +8,14 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ...data.stress import adj as adj_stress
 from ...data.stress import pronoun as pronoun_stress
 from ...data.stress import noun as noun_stress
+from ...output import result as r
 
 
 module = 'init.process.stress'  # local
 
 
 @a.starts(module)
-def extract_stress_type(func, rest_index):  # export
+def extract_stress_type(func, i):  # export
     #    OLD: Старая версия кода:
 #    # local stress_regexp = "([abcdef][′']?[′']?)"
 #    # local stress_regexp2 = '(' + stress_regexp + '.*//.*' + stress_regexp + ')'
@@ -26,11 +27,11 @@ def extract_stress_type(func, rest_index):  # export
     # local stress_type, allowed_stress_types
 
     # INFO: Извлечение ударения из оставшейся части индекса:
-    stress_type = _.extract(rest_index, "([abcdef][′']?[′']?[/]?[abc]?[′']?[′']?)")
+    i.stress_type = _.extract(i.rest_index, "([abcdef][′']?[′']?[/]?[abc]?[′']?[′']?)")
 
     # INFO: Замена особых апострофов в ударении на обычные:
-    if stress_type:
-        stress_type = _.replaced(stress_type, '′', "'")
+    if i.stress_type:
+        i.stress_type = _.replaced(i.stress_type, '′', "'")
     # end
 
     # INFO: Список допустимых схем ударений:
@@ -41,13 +42,11 @@ def extract_stress_type(func, rest_index):  # export
     }
 
     # INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
-    if stress_type and not _.equals(stress_type, allowed_stress_types):
-        _.ends(module, func)
-        return stress_type, dict(error='Ошибка: Неправильная схема ударения: ' + stress_type)  # dict
+    if i.stress_type and not _.equals(i.stress_type, allowed_stress_types):
+        r.add_error(i, 'Ошибка: Неправильная схема ударения: ' + i.stress_type)
     # end
 
     _.ends(module, func)
-    return stress_type, None  # INFO: `None` здесь -- признак, что нет ошибок
 # end
 
 

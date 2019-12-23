@@ -7,17 +7,18 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local noun_parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/noun')  -- '..'
 local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process')  -- '..'  -- '_' /process
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '..'
 
 
 local module = 'init.parse.common'
 
 
 -- @starts
-local function init(info)
-	func = "init"
+local function init_info(info)
+	func = "init_info"
 	_.starts(module, func)
 
-	local several_vovwels, has_stress
+	local several_vowels, has_stress
 
 --	INFO: Исходное слово без ударения:
 	info.word.unstressed = _.replaced(info.word.stressed, '́ ', '')
@@ -45,15 +46,12 @@ local function init(info)
 	_.log_value(info.stem.stressed, 'info.stem.stressed')
 
 --  INFO: Случай, когда не указано ударение у слова:
-	several_vovwels = _.contains_several(info.word.stressed, '{vowel+ё}')
+	several_vowels = _.contains_several(info.word.stressed, '{vowel+ё}')
 	has_stress = _.contains(info.word.stressed, '[́ ё]')
-	if several_vovwels and not has_stress then
+	if several_vowels and not has_stress then
 		_.log_info('Ошибка: Не указано ударение в слове')
-		_.ends(module, func)
-		return {
-			error='Ошибка: Не указано ударение в слове',
-			error_category='Ошибка в шаблоне "сущ-ru": не указано ударение в слове',
-		}  -- dict
+		r.add_error(info, 'Ошибка: Не указано ударение в слове')
+		info.out_args.error_category = 'Ошибка в шаблоне "сущ-ru": не указано ударение в слове'
 	end
 
 	_.ends(module, func)
@@ -65,30 +63,26 @@ local function angle_brackets(info)
 	func = "angle_brackets"
 	_.starts(module, func)
 
-	local another_index, pt, error
-
-	another_index = _.extract(info.rest_index, '%<([^>]+)%>')
+	local another_index = _.extract(info.rest_index, '%<([^>]+)%>')
 	if another_index then
-		pt = info.pt
+		local pt = info.pt
 		if not pt then
 			info.output_gender = info.gender
 			info.output_animacy = info.animacy
 		end
 		info.orig_index = info.index
 		info.index = another_index
-		error = noun_parse.extract_gender_animacy(info)
+		noun_parse.extract_gender_animacy(info)
 		info.pt = pt
-		if error then
-			_.ends(module, func)
-			return error
+		if r.has_error(info) then
+			return _.ends(module, func)
 		end
 
 		_.log_value(info.adj, 'info.adj')
-		if info.adj then  -- Для прилагательных надо по-особенному?
-			error = init(info)
-			if error then
-				_.ends(module, func)
-				return error
+		if info.adj then  -- fixme: Для прилагательных надо по-особенному?
+			init_info(info)
+			if r.has_error(info) then
+				return _.ends(module, func)
 			end
 		end
 	end
@@ -115,9 +109,9 @@ function export.parse(base, args)
 	info.word.stressed = mw.text.trim(args['слово'])
 	info.noun = (info.unit == 'noun')
 
-	info.errors = {}  -- list
-	info.data = {}  -- AttrDict  -- todo
-	info.out_args = {}  -- dict
+	info.data = {}  -- AttrDict
+	info.out_args = {}  -- AttrDict
+	info.out_args.error = ''
 
 	_.log_value(info.index, 'info.index')
 	_.log_value(info.word.stressed, 'info.word.stressed')
@@ -130,10 +124,10 @@ function export.parse(base, args)
 	_.log_info('Получение информации о роде и одушевлённости')
 
 	if info.noun then  -- fxime
-		local error = noun_parse.extract_gender_animacy(info)
-		if error then
+		noun_parse.extract_gender_animacy(info)
+		if r.has_error(info) then
 			_.ends(module, func)
-			return info, error
+			return info
 		end
 
 		_.log_value(info.gender, 'info.gender')
@@ -152,18 +146,18 @@ function export.parse(base, args)
 	_.log_value(info.rest_index, 'info.rest_index')
 
 --	INFO: stem, stem.stressed, etc.
-	-- todo: rename to `create_info`:
-	local error = init(info)
-	if error then
+	init_info(info)
+	if r.has_error(info) then
 		_.ends(module, func)
-		return info, error
+		return info
 	end
 
 	if info.noun then
 --		INFO: Случай, если род или одушевлённость не указаны:
 		if (not info.gender or not info.animacy) and not info.pt then
+--			INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
 			_.ends(module, func)
-			return info, {}  -- dict -- INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
+			return info
 		end
 	end
 
@@ -185,7 +179,7 @@ function export.parse(base, args)
 			info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 			_.ends(module, func)
-			return info, nil
+			return info
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
 
@@ -200,33 +194,35 @@ function export.parse(base, args)
 				local info_copy = mw.clone(info)
 				info_copy.word.stressed = words_parts[i]
 
-				error = init(info_copy)
-				if error then
+				init_info(info_copy)
+				if r.has_error(info_copy) then
+					r.add_error(info, info_copy.out_args.error)
 					_.ends(module, func)
-					return info, error
+					return info
 				end
 
 				info_copy.rest_index = index_parts[i]
 
 				if info.noun then
-					error = angle_brackets(info_copy)
-					if error then
+					angle_brackets(info_copy)
+					if r.has_error(info_copy) then
+						r.add_error(info, info_copy.out_args.error)
 						_.ends(module, func)
-						return info, error
+						return info
 					end
 				end
 
 				table.insert(info.plus, p.process(info_copy))
 			end
 			_.ends(module, func)
-			return info, nil
+			return info
 		end
 
 		if info.noun then
-			error = angle_brackets(info)
-			if error then
+			angle_brackets(info)
+			if r.has_error(info) then
 				_.ends(module, func)
-				return info, error
+				return info
 			end
 		end
 
@@ -248,7 +244,7 @@ function export.parse(base, args)
 			info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 			_.ends(module, func)
-			return info, nil
+			return info
 		end
 
 	elseif n_parts == 2 then  -- INFO: Вариации "//" для ударения (и прочего индекса)
@@ -256,8 +252,9 @@ function export.parse(base, args)
 
 		if _.contains(info.animacy, '//') then
 --			INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
+			r.add_error(info, 'Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?')
 			_.ends(module, func)
-			return info, {error='Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?'}  -- dict
+			return info
 		end
 
 --		INFO: Клонируем две вариации на основании текущих данных
@@ -283,8 +280,9 @@ function export.parse(base, args)
 
 --		INFO: Проверка на гипотетическую ошибку в алгоритме:
 		elseif not info_2.gender and info_2.animacy or info_2.gender and not info_2.animacy then
+			r.add_error(info, 'Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей')
 			_.ends(module, func)
-			return info, {error='Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей' }  -- dict
+			return info
 
 --		INFO: Если что-то изменилось, значит, прошёл один из случаев, и значит у нас "полная" вариация (затрагивающая род)
 		elseif info.gender ~= info_2.gender or info.animacy ~= info_2.animacy or info.common_gender ~= info_2.common_gender then
@@ -296,15 +294,16 @@ function export.parse(base, args)
 		info.variations = {p.process(info_1), p.process(info_2)}  -- list
 
 		_.ends(module, func)
-		return info, nil
+		return info
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
+		r.add_error(info, 'Ошибка: Слишком много частей для "//"')
 		_.ends(module, func)
-		return info, {error='Ошибка: Слишком много частей для "//"'}  -- dict
+		return info
 	end
 
 	_.ends(module, func)
-	return p.process(info), nil  -- INFO: `nil` здесь -- признак, что нет ошибок
+	return p.process(info)
 end
 
 

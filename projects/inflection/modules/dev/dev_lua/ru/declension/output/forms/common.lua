@@ -38,12 +38,15 @@ end
 
 
 -- @starts
-local function init_srt_forms(o, stems, endings)  -- todo move to `init_forms` (with if i.adj) ?
+local function init_srt_forms(i)  -- todo move to `init_forms` (with if i.adj) ?
 	func = "init_srt_forms"
 	_.starts(module, func)
 
-	o['srt-sg'] = stems['srt-sg'] .. endings['srt-sg']
-	o['srt-pl'] = stems['srt-pl'] .. endings['srt-pl']
+	local o = i.out_args
+	local d = i.data
+
+	o['srt-sg'] = d.stems['srt-sg'] .. d.endings['srt-sg']
+	o['srt-pl'] = d.stems['srt-pl'] .. d.endings['srt-pl']
 	_.ends(module, func)
 end
 
@@ -113,17 +116,17 @@ end
 
 
 -- @starts
-local function second_ins_case(out_args, gender)
+local function second_ins_case(i)
 	func = "second_ins_case"
 	_.starts(module, func)
 
-	local ins_sg2
+	local o = i.out_args
 
 	-- Второй творительный
-	if gender == 'f' then
-		ins_sg2 = _.replaced(out_args['ins-sg'], 'й$', 'ю')
-		if ins_sg2 ~= out_args['ins-sg'] then
-			out_args['ins-sg2'] = ins_sg2
+	if i.gender == 'f' then
+		local ins_sg2 = _.replaced(o['ins-sg'], 'й$', 'ю')
+		if ins_sg2 ~= o['ins-sg'] then
+			o['ins-sg2'] = ins_sg2
 		end
 	end
 
@@ -140,7 +143,7 @@ function export.generate_out_args(i)
 
 	init_forms(i)
 	if i.adj then
-		init_srt_forms(o, i.data.stems, i.data.endings)
+		init_srt_forms(i)
 		if _.contains(i.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
 			o['краткая'] = '⊠'
 		elseif _.contains(i.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
@@ -167,19 +170,19 @@ function export.generate_out_args(i)
 	end
 
 	if i.noun then
-		noun_forms.apply_obelus(o, i.rest_index)
+		noun_forms.apply_obelus(i)
 	end
 
 	choose_accusative_forms(i)
 
-	second_ins_case(o, i.gender)
+	second_ins_case(i)
 
 	if i.noun then
-		noun_forms.apply_specific_3(o, i.gender, i.rest_index)
+		noun_forms.apply_specific_3(i)
 	end
 
 	if i.adj then
-		adj_forms.add_comparative(o, i.rest_index, i.stress_type, i.stem.type, i.stem)
+		adj_forms.add_comparative(i)
 	end
 
 	for key, value in pairs(o) do

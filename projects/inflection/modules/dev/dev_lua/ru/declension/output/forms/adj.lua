@@ -9,19 +9,20 @@ module = 'output.forms.adj'
 
 
 -- @starts
-function export.add_comparative(out_args, rest_index, stress_type, stem_type, stem)
+function export.add_comparative(i)
 	func = "add_comparative"
 	_.starts(module, func)
 
 	-- todo: move to `modify` (и сделать через основы и окончания)
+	local o = i.out_args
 
-	if _.contains(rest_index, '~') then
-		out_args['comparative'] = '-'
+	if _.contains(i.rest_index, '~') then
+		o['comparative'] = '-'
 		return _.ends(module, func)
 	end
 
-	if stem_type == 'velar' then
-		new_stem = stem.unstressed
+	if i.stem.type == 'velar' then
+		new_stem = i.stem.unstressed
 		if _.endswith(new_stem, 'к') then
 			new_stem = _.replaced(new_stem, 'к$', 'ч')
 		elseif _.endswith(new_stem, 'г') then
@@ -35,14 +36,14 @@ function export.add_comparative(out_args, rest_index, stress_type, stem_type, st
 		-- ударение на предпоследний слог:
 		new_stem = _.replaced(new_stem, '({vowel})({consonant}*)$', '%1́ %2')
 
-		out_args['comparative'] = new_stem .. 'е'
+		o['comparative'] = new_stem .. 'е'
 	else
-		if _.equals(stress_type, {'a', 'a/a'}) then
-			out_args['comparative'] = stem.stressed .. 'ее'
-			out_args['comparative2'] = stem.stressed .. 'ей'
+		if _.equals(i.stress_type, {'a', 'a/a'}) then
+			o['comparative'] = i.stem.stressed .. 'ее'
+			o['comparative2'] = i.stem.stressed .. 'ей'
 		else
-			out_args['comparative'] = stem.unstressed .. 'е́е'
-			out_args['comparative2'] = stem.unstressed .. 'е́й'
+			o['comparative'] = i.stem.unstressed .. 'е́е'
+			o['comparative2'] = i.stem.unstressed .. 'е́й'
 		end
 	end
 

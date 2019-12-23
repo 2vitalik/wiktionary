@@ -64,4 +64,23 @@ local function forward_args(i)
 end
 
 
+local function has_error(i)
+	return i.out_args.error
+end
+
+
+-- @call
+local function add_error(i, error)
+	func = "add_error"
+	_.call(module, func)
+
+	local o = i.out_args
+
+	if o.error then
+		o.error = o.error .. '<br/>'
+	end
+	o.error = o.error .. error
+end
+
+
 return export

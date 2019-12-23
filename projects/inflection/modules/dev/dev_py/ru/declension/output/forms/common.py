@@ -35,9 +35,12 @@ def init_forms(i):  # Генерация словоформ
 
 
 @a.starts(module)
-def init_srt_forms(func, o, stems, endings):  # todo move to `init_forms` (with if i.adj) ?
-    o['srt-sg'] = stems['srt-sg'] + endings['srt-sg']
-    o['srt-pl'] = stems['srt-pl'] + endings['srt-pl']
+def init_srt_forms(func, i):  # todo move to `init_forms` (with if i.adj) ?
+    o = i.out_args  # local
+    d = i.data  # local
+
+    o['srt-sg'] = d.stems['srt-sg'] + d.endings['srt-sg']
+    o['srt-pl'] = d.stems['srt-pl'] + d.endings['srt-pl']
     _.ends(module, func)
 # end
 
@@ -101,14 +104,14 @@ def choose_accusative_forms(func, i):
 
 
 @a.starts(module)
-def second_ins_case(func, out_args, gender):
-    # local ins_sg2
+def second_ins_case(func, i):
+    o = i.out_args  # local
 
     # Второй творительный
-    if gender == 'f':
-        ins_sg2 = _.replaced(out_args['ins-sg'], 'й$', 'ю')
-        if ins_sg2 != out_args['ins-sg']:
-            out_args['ins-sg2'] = ins_sg2
+    if i.gender == 'f':
+        ins_sg2 = _.replaced(o['ins-sg'], 'й$', 'ю')  # local
+        if ins_sg2 != o['ins-sg']:
+            o['ins-sg2'] = ins_sg2
         # end
     # end
 
@@ -122,7 +125,7 @@ def generate_out_args(func, i):  # export
 
     init_forms(i)
     if i.adj:
-        init_srt_forms(o, i.data.stems, i.data.endings)
+        init_srt_forms(i)
         if _.contains(i.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
             o['краткая'] = '⊠'
         elif _.contains(i.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
@@ -149,19 +152,19 @@ def generate_out_args(func, i):  # export
     # end
 
     if i.noun:
-        noun_forms.apply_obelus(o, i.rest_index)
+        noun_forms.apply_obelus(i)
     # end
 
     choose_accusative_forms(i)
 
-    second_ins_case(o, i.gender)
+    second_ins_case(i)
 
     if i.noun:
-        noun_forms.apply_specific_3(o, i.gender, i.rest_index)
+        noun_forms.apply_specific_3(i)
     # end
 
     if i.adj:
-        adj_forms.add_comparative(o, i.rest_index, i.stress_type, i.stem.type, i.stem)
+        adj_forms.add_comparative(i)
     # end
 
     for key, value in o.items():

@@ -61,4 +61,20 @@ def forward_args(func, i):
 # end
 
 
+def has_error(i):
+    return i.out_args.error
+# end
+
+
+@a.call(module)
+def add_error(i, error):
+    o = i.out_args  # local
+
+    if o.error:
+        o.error = o.error + '<br/>'
+    # end
+    o.error = o.error + error
+# end
+
+
 # return export

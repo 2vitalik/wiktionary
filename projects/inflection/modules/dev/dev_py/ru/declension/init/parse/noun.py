@@ -5,6 +5,9 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
+from ...output import result as r
+
+
 module = 'init.parse.noun'  # local
 
 
@@ -169,7 +172,8 @@ def extract_gender_animacy(func, info):  # export
             _.log_value(info.rest_index, 'info.rest_index')
             return _.ends(module, func)
         # end
-        return dict(error = 'TODO')  # dict # TODO: process such errors
+        r.add_error(info, 'TODO: process such errors')
+        return _.ends(module, func)
     elif info.adj:
         _.log_value(info.index, 'info.index (п)')
         orig_index = mw.text.trim(info.index)

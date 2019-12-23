@@ -11,11 +11,12 @@ local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/outp
 local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/common')  -- 'declension.'
 local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/noun')  -- 'declension.'
 local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- 'declension.' =
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- 'declension.'
 
 local module = 'declension'
 
 
-local function prepare_stash()
+local function prepare_stash()  -- todo rename to `prepare_regexp_templates`
 	_.clear_stash()
 	_.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
 	_.add_stash('{vowel+ё}', '[аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
@@ -28,16 +29,7 @@ local function main_algorithm(info)
 	func = "main_algorithm"
 	_.starts(module, func)
 
-	local error, keys, out_args, orig_stem, for_category, old_value, cases
-
-	-- todo: Инициализировать `forms` прямо здесь, чтобы не вызывать потом постоянно finalize...
-
-	-- ... = extract_stress_type(...)
-	-- if error then
-	--     out_args = result.finalize(info, error)
-	--     _.ends(module, func)
-	--     return out_args
-	-- end
+	local keys, for_category, cases
 
 --	INFO: Если ударение не указано:
 	if not info.stress_type then
@@ -53,20 +45,16 @@ local function main_algorithm(info)
 			for i, key in pairs(keys) do  -- list
 				info.out_args[key] = info.word.stressed
 			end
-			_.ends(module, func)
-			return info.out_args
+			return _.ends(module, func)
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
 		elseif _.has_value(info.rest_index) then
-			-- todo: save/process error
-			--  error='Нераспознанная часть индекса: ' .. info.rest_index)
-			_.ends(module, func)
-			return info.out_args
+			r.add_error(info, 'Нераспознанная часть индекса: ' .. info.rest_index)
+			return _.ends(module, func)
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:
 		else  -- todo: put this somewhere upper?
-			_.ends(module, func)
-			return info.out_args
+			return _.ends(module, func)
 		end
 	end
 
@@ -91,10 +79,8 @@ local function main_algorithm(info)
 	-- fixme: Здесь раньше было определение типа основы
 
 	if not info.stem.type then
-		-- todo: save/process error
-		--  dict(error='Неизвестный тип основы')
-		_.ends(module, func)
-		return info.out_args
+		r.add_error(info, 'Неизвестный тип основы')
+		return _.ends(module, func)
 	end
 
 	-- -------------------------------------------------------------------------
@@ -166,10 +152,8 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 
 --	INFO: Достаём всю информацию из аргументов (args):
 	--   основа, род, одушевлённость и т.п.
-	local info, error
-	info, error = parse.parse(base, args)
-	if error then
-		-- todo: save/process error
+	local info = parse.parse(base, args)
+	if r.has_error(info) then
 		_.ends(module, func)
 		return info.out_args
 	end
@@ -199,7 +183,7 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	end
 
 	if info.noun then
-		noun_forms.special_cases(info.out_args, args, info.index, info.word.unstressed)
+		noun_forms.special_cases(info)
 	end
 
 	result.forward_args(info)

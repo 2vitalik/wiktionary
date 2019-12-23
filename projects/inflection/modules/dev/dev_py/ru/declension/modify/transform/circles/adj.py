@@ -12,8 +12,7 @@ module = 'modify.transform.circles.adj'
 def apply_adj_specific_1_2(func, stems, gender, rest_index):  # export
     if not _.endswith(stems['srt-sg'], 'нн'):
         # todo: log some error?
-        _.ends(module, func)
-        return
+        return _.ends(module, func)
     # end
     if _.contains(rest_index, ['%(1%)', '①']):
         if gender == 'm':

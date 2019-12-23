@@ -5,6 +5,9 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '..'
+
+
 local module = 'init.parse.noun'
 
 
@@ -175,7 +178,8 @@ function export.extract_gender_animacy(info)
 			_.log_value(info.rest_index, 'info.rest_index')
 			return _.ends(module, func)
 		end
-		return {error = 'TODO'}  -- dict -- TODO: process such errors
+		r.add_error(info, 'TODO: process such errors')
+		return _.ends(module, func)
 	elseif info.adj then
 		_.log_value(info.index, 'info.index (п)')
 		orig_index = mw.text.trim(info.index)

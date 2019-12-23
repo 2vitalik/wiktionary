@@ -8,13 +8,14 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/adj')  -- '..'
 local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/pronoun')  -- '..'
 local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/noun')  -- '..'
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '..'
 
 
 local module = 'init.process.stress'
 
 
 -- @starts
-function export.extract_stress_type(rest_index)
+function export.extract_stress_type(i)
 	func = "extract_stress_type"
 	_.starts(module, func)
 
@@ -29,11 +30,11 @@ function export.extract_stress_type(rest_index)
 	local stress_type, allowed_stress_types
 
 --	INFO: Извлечение ударения из оставшейся части индекса:
-	stress_type = _.extract(rest_index, "([abcdef][′']?[′']?[/]?[abc]?[′']?[′']?)")
+	i.stress_type = _.extract(i.rest_index, "([abcdef][′']?[′']?[/]?[abc]?[′']?[′']?)")
 
 --	INFO: Замена особых апострофов в ударении на обычные:
-	if stress_type then
-		stress_type = _.replaced(stress_type, '′', "'")
+	if i.stress_type then
+		i.stress_type = _.replaced(i.stress_type, '′', "'")
 	end
 
 --	INFO: Список допустимых схем ударений:
@@ -44,13 +45,11 @@ function export.extract_stress_type(rest_index)
 	}
 
 --	INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
-	if stress_type and not _.equals(stress_type, allowed_stress_types) then
-		_.ends(module, func)
-		return stress_type, {error='Ошибка: Неправильная схема ударения: ' .. stress_type}  -- dict
+	if i.stress_type and not _.equals(i.stress_type, allowed_stress_types) then
+		r.add_error(i, 'Ошибка: Неправильная схема ударения: ' .. i.stress_type)
 	end
 
 	_.ends(module, func)
-	return stress_type, nil  -- INFO: `nil` здесь -- признак, что нет ошибок
 end
 
 

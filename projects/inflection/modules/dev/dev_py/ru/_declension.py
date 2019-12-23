@@ -11,11 +11,12 @@ from .declension.output import result
 from .declension.output.forms import common as form
 from .declension.output.forms import noun as noun_forms
 from .declension.output import index
+from .declension.output import result as r
 
 module = 'declension'  # local
 
 
-def prepare_stash():
+def prepare_stash():  # todo rename to `prepare_regexp_templates`
     _.clear_stash()
     _.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
     _.add_stash('{vowel+ё}', '[аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
@@ -25,16 +26,7 @@ def prepare_stash():
 
 @a.starts(module)
 def main_algorithm(func, info):
-    # local error, keys, out_args, orig_stem, for_category, old_value, cases
-
-    # todo: Инициализировать `forms` прямо здесь, чтобы не вызывать потом постоянно finalize...
-
-    # ... = extract_stress_type(...)
-    # if error:
-    #     out_args = result.finalize(info, error)
-    #     _.ends(module, func)
-    #     return out_args
-    # # end
+    # local keys, for_category, cases
 
     # INFO: Если ударение не указано:
     if not info.stress_type:
@@ -50,20 +42,16 @@ def main_algorithm(func, info):
             for i, key in enumerate(keys):
                 info.out_args[key] = info.word.stressed
             # end
-            _.ends(module, func)
-            return info.out_args
+            return _.ends(module, func)
 
         # INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
         elif _.has_value(info.rest_index):
-            # todo: save/process error
-            #  error='Нераспознанная часть индекса: ' + info.rest_index)
-            _.ends(module, func)
-            return info.out_args
+            r.add_error(info, 'Нераспознанная часть индекса: ' + info.rest_index)
+            return _.ends(module, func)
 
         # INFO: Если индекса вообще нет, то и формы просто не известны:
         else:  # todo: put this somewhere upper?
-            _.ends(module, func)
-            return info.out_args
+            return _.ends(module, func)
         # end
     # end
 
@@ -88,10 +76,8 @@ def main_algorithm(func, info):
     # fixme: Здесь раньше было определение типа основы
 
     if not info.stem.type:
-        # todo: save/process error
-        #  dict(error='Неизвестный тип основы')
-        _.ends(module, func)
-        return info.out_args
+        r.add_error(info, 'Неизвестный тип основы')
+        return _.ends(module, func)
     # end
 
     # -------------------------------------------------------------------------
@@ -160,10 +146,8 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
 
     # INFO: Достаём всю информацию из аргументов (args):
     #   основа, род, одушевлённость и т.п.
-    # local info, error
-    info, error = parse.parse(base, args)
-    if error:
-        # todo: save/process error
+    info = parse.parse(base, args)  # local
+    if r.has_error(info):
         _.ends(module, func)
         return info.out_args
     # end
@@ -193,7 +177,7 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
     # end
 
     if info.noun:
-        noun_forms.special_cases(info.out_args, args, info.index, info.word.unstressed)
+        noun_forms.special_cases(info)
     # end
 
     result.forward_args(info)

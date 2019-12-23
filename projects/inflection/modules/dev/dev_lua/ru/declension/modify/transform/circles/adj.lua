@@ -15,8 +15,7 @@ function export.apply_adj_specific_1_2(stems, gender, rest_index)
 
 	if not _.endswith(stems['srt-sg'], 'нн') then
 		-- todo: log some error?
-		_.ends(module, func)
-		return
+		return _.ends(module, func)
 	end
 	if _.contains(rest_index, {'%(1%)', '①'}) then
 		if gender == 'm' then
