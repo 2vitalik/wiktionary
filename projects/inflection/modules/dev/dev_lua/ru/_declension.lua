@@ -48,24 +48,25 @@ local function main_algorithm(info)
 				'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
 				'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
 			}  -- list
-			out_args = {}  -- dict
-			out_args['зализняк'] = '0'
-			out_args['скл'] = 'не'
+			info.out_args['зализняк'] = '0'
+			info.out_args['скл'] = 'не'
 			for i, key in pairs(keys) do  -- list
-				out_args[key] = info.word.stressed
+				info.out_args[key] = info.word.stressed
 			end
 			_.ends(module, func)
-			return result.finalize(info, out_args)
+			return info.out_args
 
 --		INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
 		elseif _.has_value(info.rest_index) then
+			-- todo: save/process error
+			--  error='Нераспознанная часть индекса: ' .. info.rest_index)
 			_.ends(module, func)
-			return result.finalize(info, {error='Нераспознанная часть индекса: ' .. info.rest_index})  -- b-dict
+			return info.out_args
 
 --		INFO: Если индекса вообще нет, то и формы просто не известны:
 		else  -- todo: put this somewhere upper?
 			_.ends(module, func)
-			return result.finalize(info, {})  -- b-dict
+			return info.out_args
 		end
 	end
 
@@ -90,8 +91,10 @@ local function main_algorithm(info)
 	-- fixme: Здесь раньше было определение типа основы
 
 	if not info.stem.type then
+		-- todo: save/process error
+		--  dict(error='Неизвестный тип основы')
 		_.ends(module, func)
-		return result.finalize(info, {error='Неизвестный тип основы'})  -- b-dict
+		return info.out_args
 	end
 
 	-- -------------------------------------------------------------------------
@@ -166,9 +169,9 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	local info, error
 	info, error = parse.parse(base, args)
 	if error then
-		out_args = result.finalize(info, error)
+		-- todo: save/process error
 		_.ends(module, func)
-		return out_args
+		return info.out_args
 	end
 
 	info.frame = frame
@@ -199,8 +202,7 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 		noun_forms.special_cases(info.out_args, args, info.index, info.word.unstressed)
 	end
 
-	result.finalize(info, info.out_args)
-	-- todo: put `forward_args` here instead of `finalize`
+	result.forward_args(info)
 
 	_.log_table(info.out_args, "info.out_args")
 	_.ends(module, func)

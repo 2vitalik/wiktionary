@@ -5,7 +5,12 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '.'
+
+
 local module = 'output.init_out_args'
+
+-- todo: move this to root `init` package
 
 
 -- Формирование параметров рода и одушевлённости для подстановки в шаблон
@@ -116,6 +121,8 @@ local function init_out_args(i)
 	if not _.has_key(o['error_category']) and i.word.cleared ~= i.base then
 		o['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
 	end
+
+	result.forward_args(i)
 
 	_.ends(module, func)
 end

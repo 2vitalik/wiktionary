@@ -12,13 +12,16 @@ local module = 'output.result'
 
 
 -- @starts
-local function forward_args(out_args, info)
+local function forward_args(i)
 	func = "forward_args"
 	_.starts(module, func)
 
-	local keys, args
+	-- info: Используется дважды -- при инициализации, и потом в самом конце
 
-	args = info.args
+	local keys, args
+	local o = i.out_args
+
+	args = i.args
 	keys = {
 		'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
 		'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
@@ -26,12 +29,12 @@ local function forward_args(out_args, info)
 		'nom-pl2', 'gen-pl2', 'dat-pl2', 'acc-pl2', 'ins-pl2', 'prp-pl2',
 		'voc-sg',  'loc-sg',  'prt-sg',
 	}  -- list
-	for i, key in pairs(keys) do  -- list
+	for j, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
 			if args[key] == '-' then
-				out_args[key] = args[key]
+				o[key] = args[key]
 			else
-				out_args[key] = args[key] .. '<sup>△</sup>'
+				o[key] = args[key] .. '<sup>△</sup>'
 			end
 		end
 	end
@@ -43,33 +46,21 @@ local function forward_args(out_args, info)
 		'pt', 'st', 'затрудн', 'клитика',
 		'коммент', 'тип', 'степень',
 	}  -- list
-	for i, key in pairs(keys) do  -- list
+	for j, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
-			out_args[key] = args[key]
+			o[key] = args[key]
 		end
 	end
 
-	if _.has_key(out_args['слоги']) then
-		if not _.contains(out_args['слоги'], '%<') then
-			out_args['слоги'] = syllables.get_syllables(out_args['слоги'])
+	if _.has_key(o['слоги']) then
+		if not _.contains(o['слоги'], '%<') then
+			o['слоги'] = syllables.get_syllables(o['слоги'])
 		end
 	else
-		out_args['слоги'] = info.word.unstressed  -- fixme: может всё-таки stressed?
+		o['слоги'] = i.word.unstressed  -- fixme: может всё-таки stressed?
 	end
 
 	_.ends(module, func)
-end
-
-
--- @starts
-function export.finalize(info, out_args)
-	func = "finalize"
-	_.starts(module, func)
-
-	forward_args(out_args, info)  -- fixme: move this to the ending of the main function
-
-	_.ends(module, func)
-	return out_args
 end
 
 

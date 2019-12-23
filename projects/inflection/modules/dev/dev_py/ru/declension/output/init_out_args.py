@@ -5,7 +5,12 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
+from ..output import result as result
+
+
 module = 'output.init_out_args'  # local
+
+# todo: move this to root `init` package
 
 
 # Формирование параметров рода и одушевлённости для подстановки в шаблон
@@ -107,6 +112,8 @@ def init_out_args(func, i):
     if not _.has_key(o, 'error_category') and i.word.cleared != i.base:
         o['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
     # end
+
+    result.forward_args(i)
 
     _.ends(module, func)
 # end

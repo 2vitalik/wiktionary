@@ -12,10 +12,13 @@ module = 'output.result'  # local
 
 
 @a.starts(module)
-def forward_args(func, out_args, info):
-    # local keys, args
+def forward_args(func, i):
+    # info: Используется дважды -- при инициализации, и потом в самом конце
 
-    args = info.args
+    # local keys, args
+    o = i.out_args  # local
+
+    args = i.args
     keys = [
         'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
         'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
@@ -23,12 +26,12 @@ def forward_args(func, out_args, info):
         'nom-pl2', 'gen-pl2', 'dat-pl2', 'acc-pl2', 'ins-pl2', 'prp-pl2',
         'voc-sg',  'loc-sg',  'prt-sg',
     ]  # list
-    for i, key in enumerate(keys):
+    for j, key in enumerate(keys):
         if _.has_value(args, key):
             if args[key] == '-':
-                out_args[key] = args[key]
+                o[key] = args[key]
             else:
-                out_args[key] = args[key] + '<sup>△</sup>'
+                o[key] = args[key] + '<sup>△</sup>'
             # end
         # end
     # end
@@ -40,30 +43,21 @@ def forward_args(func, out_args, info):
         'pt', 'st', 'затрудн', 'клитика',
         'коммент', 'тип', 'степень',
     ]  # list
-    for i, key in enumerate(keys):
+    for j, key in enumerate(keys):
         if _.has_value(args, key):
-            out_args[key] = args[key]
+            o[key] = args[key]
         # end
     # end
 
-    if _.has_key(out_args, 'слоги'):
-        if not _.contains(out_args['слоги'], '%<'):
-            out_args['слоги'] = syllables.get_syllables(out_args['слоги'])
+    if _.has_key(o, 'слоги'):
+        if not _.contains(o['слоги'], '%<'):
+            o['слоги'] = syllables.get_syllables(o['слоги'])
         # end
     else:
-        out_args['слоги'] = info.word.unstressed  # fixme: может всё-таки stressed?
+        o['слоги'] = i.word.unstressed  # fixme: может всё-таки stressed?
     # end
 
     _.ends(module, func)
-# end
-
-
-@a.starts(module)
-def finalize(func, info, out_args):  # export
-    forward_args(out_args, info)  # fixme: move this to the ending of the main function
-
-    _.ends(module, func)
-    return out_args
 # end
 
 
