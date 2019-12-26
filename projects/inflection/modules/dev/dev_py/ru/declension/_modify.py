@@ -13,9 +13,9 @@ module = 'modify'  # local
 
 
 @a.starts(module)
-def modify(func, i):  # export                                             #
-    _prepare.prepare(i)                                                    #
-    _transform.transform(i)                                                #
+def modify(func, i):  # export                                                #
+    _prepare.prepare(i)                                                       #
+    _transform.transform(i)                                                   #
                                                                               #
     _.ends(module, func)                                                      #
 # end                                                                         #

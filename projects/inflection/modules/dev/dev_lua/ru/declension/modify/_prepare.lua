@@ -19,8 +19,6 @@ function export.prepare(i)
 
 --	INFO: Generates `.endings` and `.stems`
 
-	-- todo: create info.data.* !!!
-
 	-- todo: logging info
 	endings.get_endings(i)
 

@@ -30,7 +30,12 @@ function export.get_zaliznyak(i)
 		['f-3rd-sibilant'] = '8',
 		['n-3rd'] = '8',
 	}
-	local index = stem_types[i.stem.type]
+	local index = '?'
+	if _.contains(i.rest_index, '0') then
+		index = '0'
+	else
+		index = stem_types[i.stem.type]
+	end
 	if _.contains(i.rest_index, '°') then
 		index = index .. '°'
 	elseif _.contains(i.rest_index, '%*') then
@@ -61,8 +66,15 @@ function export.get_zaliznyak(i)
 		index = index .. ', ё'
 	end
 
+	local o = i.out_args
+	o['зализняк1'] = index
+	value = o['зализняк1']  local  -- for category
+	value = _.replaced(value, '①', '(1)')
+	value = _.replaced(value, '②', '(2)')
+	value = _.replaced(value, '③', '(3)')
+	o['зализняк'] = value
+
 	_.ends(module, func)
-	return index
 end
 
 

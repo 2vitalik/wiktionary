@@ -5,6 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
+from ..output import index
 from ..output import result as result
 
 
@@ -101,7 +102,8 @@ def init_out_args(func, i):
     o['stress_type'] = i.stress_type  # for categories   -- is really used?
 
     o['dev'] = dev_prefix
-    o['зализняк'] = '??'  # значение по умолчанию
+
+    index.get_zaliznyak(i)
 
     additional_arguments(i)
 

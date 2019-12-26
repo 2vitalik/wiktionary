@@ -5,6 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
+local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- '.' =
 local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '.'
 
 
@@ -110,7 +111,8 @@ local function init_out_args(i)
 	o['stress_type'] = i.stress_type  -- for categories   -- is really used?
 
 	o['dev'] = dev_prefix
-	o['зализняк'] = '??'  -- значение по умолчанию
+
+	index.get_zaliznyak(i)
 
 	additional_arguments(i)
 

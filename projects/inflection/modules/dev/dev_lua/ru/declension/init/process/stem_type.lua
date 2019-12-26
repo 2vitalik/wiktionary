@@ -114,6 +114,8 @@ function export.get_stem_type(i)  -- INFO: Определение типа ос�
 	end
 	if i.stem.type == '' then
 		i.stem.type = 'hard'
+		-- r.add_error(i, 'Неизвестный тип основы')
+		-- return _.ends(module, func)
 	end
 
 --	INFO: Выбор подходящего `stem_type` из двух базовых типов: 'hard' и 'soft'

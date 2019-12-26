@@ -48,7 +48,7 @@ def init_info(func, i):
     if several_vowels and not has_stress:
         _.log_info('Ошибка: Не указано ударение в слове')
         r.add_error(i, 'Ошибка: Не указано ударение в слове')
-        i.out_args.error_category = 'Ошибка в шаблоне "сущ-ru": не указано ударение в слове'
+        i.out_args.error_category = 'Ошибка в шаблоне "сущ-ru" (не указано ударение в слове)'
     # end
 
     _.ends(module, func)
@@ -92,6 +92,7 @@ def parse(func, base, args):  # export
     info.stem = a.AttrDict()  # AttrDict                                      #
 
     # INFO: Достаём значения из параметров:
+    # todo: move this to `init_info` ?
     info.base = base
     info.args = args
     info.lang = mw.text.trim(args['lang'])
@@ -103,6 +104,8 @@ def parse(func, base, args):  # export
     info.data = a.AttrDict()  # AttrDict
     info.out_args = a.AttrDict()  # AttrDict
     info.out_args.error = ''
+
+    info.has_index = True  # изначально предполагаем, что индекс есть
 
     _.log_value(info.index, 'info.index')
     _.log_value(info.word.stressed, 'info.word.stressed')

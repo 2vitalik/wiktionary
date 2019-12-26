@@ -16,8 +16,6 @@ module = 'modify.prepare'  # local
 def prepare(func, i):  # export
     # INFO: Generates `.endings` and `.stems`
 
-    # todo: create info.data.* !!!
-
     # todo: logging info
     endings.get_endings(i)
 

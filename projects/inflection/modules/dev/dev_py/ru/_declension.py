@@ -10,7 +10,6 @@ from .declension import _modify as m
 from .declension.output import result
 from .declension.output.forms import common as form
 from .declension.output.forms import noun as noun_forms
-from .declension.output import index
 from .declension.output import result as r
 
 module = 'declension'  # local
@@ -25,115 +24,74 @@ def prepare_stash():  # todo rename to `prepare_regexp_templates` or patterns
 
 
 @a.starts(module)
-def main_algorithm(func, i):
+def run_gender(func, i):
     o = i.out_args  # local
 
-    # INFO: Если ударение не указано:
-    if not i.stress_type:
-
-        # INFO: Может быть это просто несклоняемая схема:
-        if _.contains(i.rest_index, '^0'):  # todo: put this somewhere upper? before checking stress? or inside sub-algorithm?
-            # local keys
-            keys = [
-                'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
-                'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
-            ]  # list
-            o['зализняк'] = '0'
-            o['скл'] = 'не'
-            for j, key in enumerate(keys):
-                o[key] = i.word.stressed
-            # end
-            return _.ends(module, func)
-
-        # INFO: Если это не несклоняемая схема, но есть какой-то индекс -- это ОШИБКА:
-        elif _.has_value(i.rest_index):
-            r.add_error(i, 'Нераспознанная часть индекса: ' + i.rest_index)
-            return _.ends(module, func)
-
-        # INFO: Если индекса вообще нет, то и формы просто не известны:
-        else:  # todo: put this somewhere upper?
-            return _.ends(module, func)
+    if _.startswith(i.rest_index, '0'):
+        # todo: move to special function
+        # local keys
+        keys = [
+            'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+            'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
+        ]  # list
+        for j, key in enumerate(keys):
+            o[key] = i.word.stressed
         # end
-    # end
-
-    # INFO: Итак, ударение мы получили.
-
-    # INFO: Добавление ударения для `stem.stressed` (если его не было)
-    # INFO: Например, в слове только один слог, или ударение было на окончание
-    if not _.contains(i.stem.stressed, '[́ ё]'):  # and not info.absent_stress ??
-        if _.equals(i.stress_type, ["f", "f'"]):
-            i.stem.stressed = _.replaced(i.stem.stressed, '^({consonant}*)({vowel})', '%1%2́ ')
-        elif _.contains(i.rest_index, '%*'):
-            pass  # *** поставим ударение ниже, после чередования
-        else:
-            i.stem.stressed = _.replaced(i.stem.stressed, '({vowel})({consonant}*)$', '%1́ %2')
-        # end
-    # end
-
-    _.log_value(i.stem.stressed, 'info.stem.stressed')
-
-    # -------------------------------------------------------------------------
-
-    # fixme: Здесь раньше было определение типа основы
-
-    if not i.stem.type:
-        r.add_error(i, 'Неизвестный тип основы')
         return _.ends(module, func)
     # end
 
-    # -------------------------------------------------------------------------
+    m.modify(i)
+    form.generate_out_args(i)
 
-    # todo: `main_algo` will have only further lines?
+    if i.adj:
+        # todo: move to special function
+        if i.gender != '':
+            # local cases
+            cases = [
+                'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+                'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
+                'srt-sg', 'srt-pl',
+            ]  # list
+
+            for c, case in enumerate(cases):
+                key = case + '-' + i.gender
+                o[key] = o[case]
+            # end
+            if i.gender == 'f':
+                o['ins-sg2-f'] = o['ins-sg2']
+            # end
+        # end
+
+        if i.gender == 'm':
+            o['acc-sg-m-a'] = o['gen-sg-m']
+            o['acc-sg-m-n'] = o['nom-sg-m']
+        elif i.gender == '':
+            o['acc-pl-a'] = o['gen-pl']
+            o['acc-pl-n'] = o['nom-pl']
+        # end
+    # end
+
+    _.ends(module, func)
+# end
+
+
+@a.starts(module)
+def run_info(func, i):  # todo rename to `run_info`
+    if not i.has_index:
+        return
+    # end
 
     if i.noun:
-        m.modify(i)
-        form.generate_out_args(i)
-
+        run_gender(i)
     elif i.adj:
-        # local cases
-        cases = [
-            'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
-            'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
-            'srt-sg', 'srt-pl',
-        ]  # list
-
         genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
         for j, gender in enumerate(genders):
             # todo: copy info?
             i.gender = gender
             _.log_value(i.gender, 'info.gender')
-
-            m.modify(i)
-
-            if gender == '':  # todo: move all this logic inside `generate_out_args` ?
-                form.generate_out_args(i)
-            else:
-                form.generate_out_args(i)
-                for c, case in enumerate(cases):
-                    key = case + '-' + gender
-                    o[key] = o[case]
-                # end
-                if gender == 'f':
-                    o['ins-sg2-f'] = o['ins-sg2']
-                # end
-            # end
+            run_gender(i)
         # end
-
-        o['acc-sg-m-a'] = o['gen-sg-m']
-        o['acc-sg-m-n'] = o['nom-sg-m']
-        o['acc-pl-a'] = o['gen-pl']
-        o['acc-pl-n'] = o['nom-pl']
-
-        i.gender = ''  # redundant?
     # end
-
-    o['зализняк1'] = index.get_zaliznyak(i)
-
-    value = o['зализняк1']  # local  # for category
-    value = _.replaced(value, '①', '(1)')
-    value = _.replaced(value, '②', '(2)')
-    value = _.replaced(value, '③', '(3)')
-    o['зализняк'] = value
 
     _.ends(module, func)
 # end
@@ -141,6 +99,7 @@ def main_algorithm(func, i):
 
 @a.starts(module)
 def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
+
     # todo: move this to another place?
     mw.log('=================================================================')
 
@@ -154,28 +113,32 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
         return info.out_args
     # end
 
-    info.frame = frame
+    info.frame = frame  # todo: move to `parse`
 
     # INFO: Запуск основного алгоритма и получение результирующих словоформ:
+    # todo: move this `if` block inside `run_info` and run it recursively :)
     if info.variations:
         _.log_info("Случай с вариациями '//'")
         info_1 = info.variations[0]  # local
         info_2 = info.variations[1]  # local
         # todo: ... = o.output(m.modify(info_1))
-        main_algorithm(info_1)
-        main_algorithm(info_2)
+        run_info(info_1)
+        run_info(info_2)
         info.out_args = form.join_forms(info_1.out_args, info_2.out_args)
+        # todo: form.join_variations()
+        # todo: check for errors inside variations
     elif info.plus:
         _.log_info("Случай с '+'")
         out_args_plus = []  # list  # local
         for i, sub_info in enumerate(info.plus):
-            main_algorithm(sub_info)
+            run_info(sub_info)
             out_args_plus.append(sub_info.out_args)
         # end
         info.out_args = form.plus_forms(out_args_plus)
+        # todo: form.plus_out_args()
     else:
         _.log_info('Стандартный случай без вариаций')
-        main_algorithm(info)
+        run_info(info)
     # end
 
     if info.noun:
