@@ -7,7 +7,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 from ...init.parse import noun as noun_parse
 from ...init import _process as p
-from ...output import result as r
+from ...run.out import result as r
 
 
 module = 'init.parse.common'  # local

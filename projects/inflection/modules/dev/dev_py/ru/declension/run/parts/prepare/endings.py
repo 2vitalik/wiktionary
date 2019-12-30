@@ -5,10 +5,10 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...data.endings import adj as adj_endings
-from ...data.endings import pronoun as pronoun_endings
-from ...data.endings import noun as noun_endings
-from ...modify.transform.circles import noun as noun_circles
+from ....data.endings import adj as adj_endings
+from ....data.endings import pronoun as pronoun_endings
+from ....data.endings import noun as noun_endings
+from ....run.parts.transform.circles import noun as noun_circles
 
 
 # constants:
@@ -57,8 +57,10 @@ def choose_endings_stress(func, i):
     # local stress
     d = i.data  # local
 
-    if adj:
-        stress = stress_schema['ending']['nom-sg'] and stressed or unstressed
+    # todo: we can generate one table for all genders only once at the beginning !!! and just use/load it here
+
+    if i.adj:
+        stress = i.stress_schema['ending']['nom-sg'] and stressed or unstressed
 
         if i.gender == 'm' and i.stem.base_type == 'hard':
             d.endings['nom-sg'] = d.endings['nom-sg'][stress]

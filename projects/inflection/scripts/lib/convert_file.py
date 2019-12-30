@@ -42,6 +42,9 @@ regexps_MULTILINE = {
         (r'from \.((?:declension\.)?\.*)(\w+)\.(\w+)\.(\w+) import (\w+) as (\w+)',
          "local \\6 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4/\\5')  -- '\\1'"),
 
+        (r'from \.((?:declension\.)?\.*)(\w+)\.(\w+)\.(\w+)\.(\w+) import (\w+) as (\w+)',
+         "local \\7 = require('Module:' .. dev_prefix .. 'inflection/ru/declension/\\2/\\3/\\4/\\5/\\6')  -- '\\1'"),
+
         (r"local ([^=]+) = require\('Module:' .. dev_prefix .. 'inflection/ru/([^']*)/_(\w+)'\)([^\n]*)\n",
          "local \\1 = require('Module:' .. dev_prefix .. 'inflection/ru/\\2/\\3')\\4  -- '_' /\\3\n"),
 
@@ -183,6 +186,9 @@ regexps_MULTILINE = {
 
         (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)'",
          'from .\\6\\2.\\3.\\4 import \\5 as \\1'),
+
+        (r"local (\w+) = require\('Module:' \.\. dev_prefix \.\. 'inflection/ru/declension/(\w+)/(\w+)/(\w+)/(\w+)/(\w+)'\)  -- '((?:declension\.)?\.*)'",
+         'from .\\7\\2.\\3.\\4.\\5 import \\6 as \\1'),
 
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),

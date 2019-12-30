@@ -5,9 +5,9 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ..modify.transform import degree as degree
-from ..modify.transform import reducable as reducable
-from ..modify.transform.circles import adj as adj_circles
+from ...run.parts.transform import degree as degree
+from ...run.parts.transform import reducable as reducable
+from ...run.parts.transform.circles import adj as adj_circles
 
 
 module = 'modify.transform'  # local

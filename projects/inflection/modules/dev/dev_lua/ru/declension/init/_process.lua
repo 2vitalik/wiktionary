@@ -7,8 +7,8 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stem_type')  -- '.'
 local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stress')  -- '.'
-local o = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/init_out_args')  -- '.'
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '.'
+local o = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/init_out_args')  -- '.'
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- '.'
 
 
 local module = 'init.process'

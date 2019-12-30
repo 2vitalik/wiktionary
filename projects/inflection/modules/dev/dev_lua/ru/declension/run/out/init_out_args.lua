@@ -5,8 +5,8 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/index')  -- '.' =
-local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '.'
+local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/index')  -- '..'
+local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- '..'
 
 
 local module = 'output.init_out_args'

@@ -5,10 +5,10 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/adj')  -- '..'
-local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/pronoun')  -- '..'
-local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/noun')  -- '..'
-local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/transform/circles/noun')  -- '..'
+local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/adj')  -- '...'
+local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/pronoun')  -- '...'
+local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/noun')  -- '...'
+local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/circles/noun')  -- '...'
 
 
 -- constants:

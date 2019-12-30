@@ -6,11 +6,11 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .declension.init.parse import common as parse
-from .declension import _modify as m
-from .declension.output import result
-from .declension.output.forms import common as form
-from .declension.output.forms import noun as noun_forms
-from .declension.output import result as r
+from .declension import _parts as p
+from .declension.run.out import result as r
+from .declension.run.out.forms import common as form
+from .declension.run.out.forms import noun as noun_forms
+
 
 module = 'declension'  # local
 
@@ -40,7 +40,7 @@ def run_gender(func, i):
         return _.ends(module, func)
     # end
 
-    m.modify(i)
+    p.generate_parts(i)
     form.generate_out_args(i)
 
     if i.adj:
@@ -145,7 +145,7 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
         noun_forms.special_cases(info)
     # end
 
-    result.forward_args(info)
+    r.forward_args(info)
 
     _.log_table(info.out_args, "info.out_args")
     _.ends(module, func)
@@ -154,3 +154,6 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
 
 
 # return export
+
+
+# todo: rename `i.data` to `i.parts`

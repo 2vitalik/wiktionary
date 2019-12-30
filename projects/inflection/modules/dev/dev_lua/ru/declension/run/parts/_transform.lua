@@ -5,9 +5,9 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/transform/degree')  -- '.'
-local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/transform/reducable')  -- '.'
-local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/transform/circles/adj')  -- '.'
+local degree = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/degree')  -- '..'
+local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/reducable')  -- '..'
+local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/circles/adj')  -- '..'
 
 
 local module = 'modify.transform'

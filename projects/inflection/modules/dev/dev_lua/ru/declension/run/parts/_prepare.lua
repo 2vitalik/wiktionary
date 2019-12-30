@@ -5,8 +5,8 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/prepare/endings')  -- '.'
-local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify/prepare/stress_apply')  -- '.'
+local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/prepare/endings')  -- '..'
+local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/prepare/stress_apply')  -- '..'
 
 
 local module = 'modify.prepare'

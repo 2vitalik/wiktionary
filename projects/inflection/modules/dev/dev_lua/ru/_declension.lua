@@ -6,11 +6,11 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
-local m = require('Module:' .. dev_prefix .. 'inflection/ru/declension/modify')  -- '_' /modify
-local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- 'declension.' =
-local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/common')  -- 'declension.'
-local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/forms/noun')  -- 'declension.'
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- 'declension.'
+local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/parts')  -- '_' /parts
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- 'declension.'
+local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/common')  -- 'declension.'
+local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/noun')  -- 'declension.'
+
 
 local module = 'declension'
 
@@ -43,7 +43,7 @@ local function run_gender(i)
 		return _.ends(module, func)
 	end
 
-	m.modify(i)
+	p.generate_parts(i)
 	form.generate_out_args(i)
 
 	if i.adj then
@@ -154,7 +154,7 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 		noun_forms.special_cases(info)
 	end
 
-	result.forward_args(info)
+	r.forward_args(info)
 
 	_.log_table(info.out_args, "info.out_args")
 	_.ends(module, func)
@@ -163,3 +163,6 @@ end
 
 
 return export
+
+
+-- todo: rename `i.data` to `i.parts`

@@ -7,8 +7,8 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 from ..init.process import stem_type as stem_type
 from ..init.process import stress as stress
-from ..output import init_out_args as o
-from ..output import result as r
+from ..run.out import init_out_args as o
+from ..run.out import result as r
 
 
 module = 'init.process'  # local

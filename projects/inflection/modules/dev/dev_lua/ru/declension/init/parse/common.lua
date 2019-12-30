@@ -7,7 +7,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local noun_parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/noun')  -- '..'
 local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process')  -- '..'  -- '_' /process
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/output/result')  -- '..'
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- '..'
 
 
 local module = 'init.parse.common'
