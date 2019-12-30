@@ -37,34 +37,6 @@ local function run_gender(i)
 	p.generate_parts(i)
 	form.generate_out_args(i)
 
-	if i.adj then
-		-- todo: move to special function
-		if i.gender ~= '' then
-			local cases
-			cases = {
-				'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
-				'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
-				'srt-sg', 'srt-pl',
-			}  -- list
-
-			for c, case in pairs(cases) do  -- list
-				key = case .. '-' .. i.gender
-				o[key] = o[case]
-			end
-			if i.gender == 'f' then
-				o['ins-sg2-f'] = o['ins-sg2']
-			end
-		end
-
-		if i.gender == 'm' then
-			o['acc-sg-m-a'] = o['gen-sg-m']
-			o['acc-sg-m-n'] = o['nom-sg-m']
-		elseif i.gender == '' then
-			o['acc-pl-a'] = o['gen-pl']
-			o['acc-pl-n'] = o['nom-pl']
-		end
-	end
-
 	_.ends(module, func)
 end
 
@@ -81,12 +53,49 @@ local function run_info(i)  -- todo rename to `run_info`
 	if i.noun then
 		run_gender(i)
 	elseif i.adj then
+		local o = i.out_args
 		genders = {'m', 'n', 'f', ''}  -- plural (without gender) should be last one?
 		for j, gender in pairs(genders) do  -- list
-			-- todo: copy info?
-			i.gender = gender
-			_.log_value(i.gender, 'info.gender')
-			run_gender(i)
+			local i_copy = i.copy()
+			i_copy.gender = gender
+			_.log_value(i_copy.gender, 'info.gender')
+			run_gender(i_copy)
+
+			local o_copy = i_copy.out_args
+
+			local cases
+			if i_copy.gender ~= '' then
+				cases = {
+					'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+					'srt-sg',
+				}  -- list
+			else
+				cases = {
+					'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
+					'srt-pl',
+					'comparative', 'comparative2'
+				}  -- list
+
+			for c, case in pairs(cases) do  -- list
+				if i_copy.gender ~= '' then
+					key = case .. '-' .. i_copy.gender
+				else
+					key = case
+				end
+				o[key] = o_copy[case]
+			end
+			if i_copy.gender == 'f' then
+				o['ins-sg2-f'] = o_copy['ins-sg2']
+			end
+
+			if i_copy.gender == 'm' then
+				o['acc-sg-m-a'] = o['gen-sg-m']
+				o['acc-sg-m-n'] = o['nom-sg-m']
+			elseif i_copy.gender == '' then
+				o['acc-pl-a'] = o_copy['gen-pl']
+				o['acc-pl-n'] = o_copy['nom-pl']
+			end
+
 		end
 	end
 

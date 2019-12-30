@@ -34,34 +34,6 @@ def run_gender(func, i):
     p.generate_parts(i)
     form.generate_out_args(i)
 
-    if i.adj:
-        # todo: move to special function
-        if i.gender != '':
-            # local cases
-            cases = [
-                'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
-                'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
-                'srt-sg', 'srt-pl',
-            ]  # list
-
-            for c, case in enumerate(cases):
-                key = case + '-' + i.gender
-                o[key] = o[case]
-            # end
-            if i.gender == 'f':
-                o['ins-sg2-f'] = o['ins-sg2']
-            # end
-        # end
-
-        if i.gender == 'm':
-            o['acc-sg-m-a'] = o['gen-sg-m']
-            o['acc-sg-m-n'] = o['nom-sg-m']
-        elif i.gender == '':
-            o['acc-pl-a'] = o['gen-pl']
-            o['acc-pl-n'] = o['nom-pl']
-        # end
-    # end
-
     _.ends(module, func)
 # end
 
@@ -75,12 +47,49 @@ def run_info(func, i):  # todo rename to `run_info`
     if i.noun:
         run_gender(i)
     elif i.adj:
+        o = i.out_args  # local
         genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
         for j, gender in enumerate(genders):
-            # todo: copy info?
-            i.gender = gender
-            _.log_value(i.gender, 'info.gender')
-            run_gender(i)
+            i_copy = i.copy()  # local
+            i_copy.gender = gender
+            _.log_value(i_copy.gender, 'info.gender')
+            run_gender(i_copy)
+
+            o_copy = i_copy.out_args  # local
+
+            # local cases
+            if i_copy.gender != '':
+                cases = [
+                    'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
+                    'srt-sg',
+                ]  # list
+            else:
+                cases = [
+                    'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
+                    'srt-pl',
+                    'comparative', 'comparative2'
+                ]  # list
+
+            for c, case in enumerate(cases):
+                if i_copy.gender != '':
+                    key = case + '-' + i_copy.gender
+                else:
+                    key = case
+                # end
+                o[key] = o_copy[case]
+            # end
+            if i_copy.gender == 'f':
+                o['ins-sg2-f'] = o_copy['ins-sg2']
+            # end
+
+            if i_copy.gender == 'm':
+                o['acc-sg-m-a'] = o['gen-sg-m']
+                o['acc-sg-m-n'] = o['nom-sg-m']
+            elif i_copy.gender == '':
+                o['acc-pl-a'] = o_copy['gen-pl']
+                o['acc-pl-n'] = o_copy['nom-pl']
+            # end
+
         # end
     # end
 
