@@ -1,3 +1,4 @@
+import copy
 import functools
 
 from projects.inflection.modules.dev.dev_py import tools as _
@@ -13,7 +14,10 @@ class AttrDict(dict):
         return
 
     def copy(self):
-        return AttrDict(self.__dict__)
+        return AttrDict({
+            key: value.copy() if type(value) == AttrDict else copy.copy(value)
+            for key, value in self.items()
+        })
 
 
 # class Dict(dict):
