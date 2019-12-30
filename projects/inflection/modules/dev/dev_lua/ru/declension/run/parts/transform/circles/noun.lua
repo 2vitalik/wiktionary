@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 -- constants:
 local unstressed = 1
 local stressed = 2
-local module = 'modify.transform.circles.noun'
+local module = 'run.parts.transform.circles.noun'
 
 
 -- @starts

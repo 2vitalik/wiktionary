@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/reducable')  -- '...'
 
 
-local module = 'modify.transform.degree'
+local module = 'run.parts.transform.degree'
 
 
 -- @starts

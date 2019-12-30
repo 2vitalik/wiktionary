@@ -9,7 +9,7 @@ from ....run.out.forms import noun as noun_forms
 from ....run.out.forms import adj as adj_forms
 
 
-module = 'output.forms.common'  # local
+module = 'run.out.forms.common'  # local
 
 
 @a.call(module)

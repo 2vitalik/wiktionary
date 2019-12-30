@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local syllables = require("Модуль:слоги")
 
 
-local module = 'output.result'
+local module = 'run.out.result'
 
 
 -- @starts

@@ -14,7 +14,7 @@ local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declensio
 -- constants:
 local unstressed = 1
 local stressed = 2
-local module = 'modify.prepare.endings'
+local module = 'run.parts.prepare.endings'
 
 
 -- Схлопывание: Выбор окончаний в зависимости от рода и типа основы

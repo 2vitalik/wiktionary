@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'modify.prepare.stress_apply'
+local module = 'run.parts.prepare.stress_apply'
 
 
 -- TODO: вместо "endings" может передавать просто data

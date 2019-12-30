@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'output.forms.noun'  # local
+module = 'run.out.forms.noun'  # local
 
 
 def remove_stress_if_one_syllable(value):  # export

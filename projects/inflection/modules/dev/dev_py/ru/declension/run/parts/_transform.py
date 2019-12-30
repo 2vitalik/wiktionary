@@ -10,7 +10,7 @@ from ...run.parts.transform import reducable as reducable
 from ...run.parts.transform.circles import adj as adj_circles
 
 
-module = 'modify.transform'  # local
+module = 'run.parts.transform'  # local
 
 
 @a.starts(module)

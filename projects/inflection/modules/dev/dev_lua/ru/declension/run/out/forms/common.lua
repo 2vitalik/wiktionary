@@ -9,7 +9,7 @@ local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/
 local adj_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/adj')  -- '...'
 
 
-local module = 'output.forms.common'
+local module = 'run.out.forms.common'
 
 
 -- @call

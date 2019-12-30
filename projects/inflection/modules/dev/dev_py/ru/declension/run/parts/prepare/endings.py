@@ -14,7 +14,7 @@ from ....run.parts.transform.circles import noun as noun_circles
 # constants:
 unstressed = 0  # local
 stressed = 1  # local
-module = 'modify.prepare.endings'  # local
+module = 'run.parts.prepare.endings'  # local
 
 
 # Схлопывание: Выбор окончаний в зависимости от рода и типа основы

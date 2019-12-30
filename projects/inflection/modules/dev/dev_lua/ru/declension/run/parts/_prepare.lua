@@ -9,7 +9,7 @@ local endings = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run
 local stress_apply = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/prepare/stress_apply')  -- '..'
 
 
-local module = 'modify.prepare'
+local module = 'run.parts.prepare'
 
 
 -- @starts

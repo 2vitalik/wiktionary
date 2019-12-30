@@ -10,7 +10,7 @@ local reducable = require('Module:' .. dev_prefix .. 'inflection/ru/declension/r
 local adj_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/circles/adj')  -- '..'
 
 
-local module = 'modify.transform'
+local module = 'run.parts.transform'
 
 
 -- @starts

@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-module = 'output.forms.adj'
+module = 'run.out.forms.adj'
 
 
 -- @starts

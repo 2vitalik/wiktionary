@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'output.forms.adj'
+module = 'run.out.forms.adj'
 
 
 @a.starts(module)

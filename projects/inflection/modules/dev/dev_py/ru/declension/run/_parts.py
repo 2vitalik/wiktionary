@@ -9,7 +9,7 @@ from ..run.parts import _prepare as _prepare
 from ..run.parts import _transform as _transform
 
 
-module = 'modify'  # local
+module = 'run.parts'  # local
 
 
 @a.starts(module)

@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ....run.parts.transform import reducable as reducable
 
 
-module = 'modify.transform.degree'  # local
+module = 'run.parts.transform.degree'  # local
 
 
 @a.starts(module)

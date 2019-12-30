@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'output.forms.noun'
+local module = 'run.out.forms.noun'
 
 
 function export.remove_stress_if_one_syllable(value)

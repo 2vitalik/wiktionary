@@ -9,7 +9,7 @@ from ...run.out import index as index
 from ...run.out import result as result
 
 
-module = 'output.init_out_args'  # local
+module = 'run.out.init_out_args'  # local
 
 # todo: move this to root `init` package
 

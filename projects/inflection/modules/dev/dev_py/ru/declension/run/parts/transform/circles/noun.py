@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 # constants:
 unstressed = 0  # local
 stressed = 1  # local
-module = 'modify.transform.circles.noun'  # local
+module = 'run.parts.transform.circles.noun'  # local
 
 
 @a.starts(module)

@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-module = 'modify.transform.circles.adj'
+module = 'run.parts.transform.circles.adj'
 
 
 -- @starts

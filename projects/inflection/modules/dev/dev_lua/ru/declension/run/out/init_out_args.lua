@@ -9,7 +9,7 @@ local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/o
 local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- '..'
 
 
-local module = 'output.init_out_args'
+local module = 'run.out.init_out_args'
 
 -- todo: move this to root `init` package
 

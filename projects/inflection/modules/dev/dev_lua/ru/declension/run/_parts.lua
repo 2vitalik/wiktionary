@@ -9,7 +9,7 @@ local _prepare = require('Module:' .. dev_prefix .. 'inflection/ru/declension/ru
 local _transform = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform')  -- '.'  -- '_' /transform
 
 
-local module = 'modify'
+local module = 'run.parts'
 
 
 -- @starts

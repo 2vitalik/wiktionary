@@ -9,7 +9,7 @@ from ...run.parts.prepare import endings as endings
 from ...run.parts.prepare import stress_apply as stress_apply
 
 
-module = 'modify.prepare'  # local
+module = 'run.parts.prepare'  # local
 
 
 @a.starts(module)
