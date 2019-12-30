@@ -14,11 +14,11 @@ module = 'init.parse.common'  # local
 
 
 @a.starts(module)
-def init_info(func, i):
+def init_info(func, i):  # todo rename to `init_stem`
     # local several_vowels, has_stress
 
     # INFO: Исходное слово без ударения:
-    i.word.unstressed = _.replaced(i.word.stressed, '́ ', '')
+    i.word.unstressed = _.replaced(i.word.stressed, '́ ', '')  # todo: move outside this function
 
     # INFO: Исходное слово вообще без ударений (в т.ч. без грависа):
     i.word.cleared = _.replaced(_.replaced(_.replaced(i.word.unstressed, '̀', ''), 'ѐ', 'е'), 'ѝ', 'и')
@@ -92,7 +92,6 @@ def parse(func, base, args):  # export
     info.stem = a.AttrDict()  # AttrDict                                      #
 
     # INFO: Достаём значения из параметров:
-    # todo: move this to `init_info` ?
     info.base = base
     info.args = args
     info.lang = mw.text.trim(args['lang'])
@@ -140,7 +139,7 @@ def parse(func, base, args):  # export
     _.log_value(info.rest_index, 'info.rest_index')
 
     # INFO: stem, stem.stressed, etc.
-    init_info(info)
+    init_info(info)  # todo: rename to `init_stem`
     if r.has_error(info):
         _.ends(module, func)
         return info

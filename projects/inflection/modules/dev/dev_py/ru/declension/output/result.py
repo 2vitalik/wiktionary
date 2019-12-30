@@ -12,7 +12,7 @@ module = 'output.result'  # local
 
 
 @a.starts(module)
-def forward_args(func, i):
+def forward_args(func, i):  # export
     # info: Используется дважды -- при инициализации, и потом в самом конце
 
     # local keys, args
@@ -61,13 +61,13 @@ def forward_args(func, i):
 # end
 
 
-def has_error(i):
-    return i.out_args.error
+def has_error(i):  # export
+    return i.out_args.error != ''
 # end
 
 
 @a.call(module)
-def add_error(i, error):
+def add_error(i, error):  # export
     o = i.out_args  # local
 
     if o.error:

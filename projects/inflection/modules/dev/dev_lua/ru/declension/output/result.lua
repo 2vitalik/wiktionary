@@ -12,7 +12,7 @@ local module = 'output.result'
 
 
 -- @starts
-local function forward_args(i)
+function export.forward_args(i)
 	func = "forward_args"
 	_.starts(module, func)
 
@@ -64,13 +64,13 @@ local function forward_args(i)
 end
 
 
-local function has_error(i)
-	return i.out_args.error
+function export.has_error(i)
+	return i.out_args.error ~= ''
 end
 
 
 -- @call
-local function add_error(i, error)
+function export.add_error(i, error)
 	func = "add_error"
 	_.call(module, func)
 

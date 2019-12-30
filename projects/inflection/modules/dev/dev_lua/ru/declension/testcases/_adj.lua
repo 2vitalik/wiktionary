@@ -36,11 +36,11 @@ function tests:check(word_stressed, index, expected, comment)
 
 	local forms = inflection.test(data_name, base, args)
 	local forms_keys = {
-		'nom_sg_m', 'gen_sg_m', 'dat_sg_m', 'ins_sg_m', 'prp_sg_m',
-		'nom_sg_n',
-		'nom_sg_f', 'gen_sg_f', 'acc_sg_f', 'ins_sg2_f',
-		'nom_pl',   'gen_pl',   'ins_pl',
-		'srt_sg_m', 'srt_sg_n', 'srt_sg_f', 'srt_pl',
+		'nom-sg-m', 'gen-sg-m', 'dat-sg-m', 'ins-sg-m', 'prp-sg-m',
+		'nom-sg-n',
+		'nom-sg-f', 'gen-sg-f', 'acc-sg-f', 'ins-sg2-f',
+		'nom-pl',   'gen-pl',   'ins-pl',
+		'srt-sg-m', 'srt-sg-n', 'srt-sg-f', 'srt-pl',
 		'comparative',
 	}
 	local expected_list = mw.text.split(expected, ' | ')

@@ -15,6 +15,12 @@ function export.get_zaliznyak(i)
 	_.starts(module, func)
 
 	-- TODO: process <...> cases properly
+	local o = i.out_args
+
+	if not i.has_index then
+		o['зализняк1'] = '??'
+		return _.ends(module, func)
+	end
 
 	local stem_types
 	stem_types = {
@@ -66,7 +72,6 @@ function export.get_zaliznyak(i)
 		index = index .. ', ё'
 	end
 
-	local o = i.out_args
 	o['зализняк1'] = index
 	value = o['зализняк1']  local  -- for category
 	value = _.replaced(value, '①', '(1)')

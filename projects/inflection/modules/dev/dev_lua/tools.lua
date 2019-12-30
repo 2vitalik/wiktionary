@@ -32,13 +32,13 @@ function export.replaced(str, pattern, replace_to)
 end
 
 function export.replace(dict, key, pattern, replace_to)
-	if key == 'all_sg' then
-		local keys = {'gen_sg', 'dat_sg', 'prp_sg' }  -- without 'nom_sg', 'acc_sg' and 'ins_sg'
+	if key == 'all-sg' then
+		local keys = {'gen-sg', 'dat-sg', 'prp-sg' }  -- without 'nom-sg', 'acc-sg' and 'ins-sg'
 		for i, key in pairs(keys) do
 			dict[key] = export.replaced(dict[key], pattern, replace_to)
 		end
-	elseif key == 'all_pl' then
-		local keys = {'nom_pl', 'gen_pl', 'dat_pl', 'ins_pl', 'prp_pl' }  -- without 'acc_pl'
+	elseif key == 'all-pl' then
+		local keys = {'nom-pl', 'gen-pl', 'dat-pl', 'ins-pl', 'prp-pl' }  -- without 'acc-pl'
 		for i, key in pairs(keys) do
 			dict[key] = export.replaced(dict[key], pattern, replace_to)
 		end

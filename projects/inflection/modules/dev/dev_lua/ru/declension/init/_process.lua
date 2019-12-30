@@ -28,20 +28,22 @@ function export.process(i)
 		return i
 	end
 
---	INFO: Если ударение не указано и это не несклоняемая схема:
-	if not i.stress_type and not _.contains(i.rest_index, '0') then
+	if not i.stress_type then  -- если ударение не указано
+		if _.contains(i.rest_index, '0') then  -- если несклоняемая схема
+			i.stress_type = ''
+		else
+--			INFO: Если при этом есть какой-то индекс, это явно ОШИБКА
+			if _.has_value(i.rest_index) then
+				r.add_error(i, 'Нераспознанная часть индекса: ' .. i.rest_index)
+				_.ends(module, func)
+				return i
+			end
 
---		INFO: Если при этом есть какой-то индекс, это явно ОШИБКА
-		if _.has_value(i.rest_index) then
-			r.add_error(i, 'Нераспознанная часть индекса: ' .. i.rest_index)
+--			INFO: Если же индекса вообще нет, то и формы просто не известны:
+			i.has_index = false
 			_.ends(module, func)
 			return i
 		end
-
---		INFO: Если же индекса вообще нет, то и формы просто не известны:
-		i.has_index = false
-		_.ends(module, func)
-		return i
 	end
 
 	_.log_info('Вычисление схемы ударения')

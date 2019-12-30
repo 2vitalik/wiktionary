@@ -59,7 +59,7 @@ def get_standard_noun_endings():  # export
     e.n.hard['ins-sg'] = 'ом'
     e.n.hard['nom-pl'] = 'а'
     e.n.hard['gen-pl'] = ['', '']
-    e.n.soft['nom-sg'] = 'е',  # was: ['е', 'ё']
+    e.n.soft['nom-sg'] = 'е'  # was: ['е', 'ё']
     e.n.soft['gen-sg'] = 'я'
     e.n.soft['dat-sg'] = 'ю'
     e.n.soft['ins-sg'] = ['ем', 'ём']

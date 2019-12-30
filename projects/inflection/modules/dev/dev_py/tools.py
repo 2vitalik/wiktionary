@@ -33,13 +33,13 @@ def replaced(str, pattern, replace_to):
 
 
 def replace(dict, key, pattern, replace_to):
-    if key == 'all_sg':
-        keys = ['gen_sg', 'dat_sg', 'prp_sg']  # without 'nom_sg', 'acc_sg' and 'ins_sg'
+    if key == 'all-sg':
+        keys = ['gen-sg', 'dat-sg', 'prp-sg']  # without 'nom-sg', 'acc-sg' and 'ins-sg'
         for key in keys:
             dict[key] = replaced(dict[key], pattern, replace_to)
 
-    elif key == 'all_pl':
-        keys = ['nom_pl', 'gen_pl', 'dat_pl', 'ins_pl', 'prp_pl']  # without 'acc_pl'
+    elif key == 'all-pl':
+        keys = ['nom-pl', 'gen-pl', 'dat-pl', 'ins-pl', 'prp-pl']  # without 'acc-pl'
         for key in keys:
             dict[key] = replaced(dict[key], pattern, replace_to)
 
@@ -124,7 +124,7 @@ def starts(module, name):
     level += 4
 
 
-def ends(module, name):
+def ends(module, name):  # todo: add last argument to `return`
     global level
     level -= 4
     # log('↙ . ' + module + '.' + name + '()')

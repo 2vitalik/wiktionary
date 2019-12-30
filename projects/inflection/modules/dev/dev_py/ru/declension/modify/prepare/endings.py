@@ -109,7 +109,7 @@ def get_endings(func, i):  # export
 
     d = i.data  # local
 
-    d.endings = get_base_endings(i)  # local
+    d.endings = get_base_endings(i)
 
     # INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
     if i.adj:  # or info.pronoun

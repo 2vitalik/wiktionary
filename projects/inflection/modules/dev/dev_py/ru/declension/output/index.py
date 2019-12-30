@@ -12,6 +12,12 @@ module = 'output.index'  # local
 @a.starts(module)
 def get_zaliznyak(func, i):  # export
     # TODO: process <...> cases properly
+    o = i.out_args  # local
+
+    if not i.has_index:
+        o['зализняк1'] = '??'
+        return _.ends(module, func)
+    # end
 
     # local stem_types
     stem_types = {
@@ -63,7 +69,6 @@ def get_zaliznyak(func, i):  # export
         index = index + ', ё'
     # end
 
-    o = i.out_args  # local
     o['зализняк1'] = index
     value = o['зализняк1']  # local  # for category
     value = _.replaced(value, '①', '(1)')
