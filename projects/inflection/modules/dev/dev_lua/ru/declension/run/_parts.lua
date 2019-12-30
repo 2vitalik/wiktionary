@@ -5,8 +5,8 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local _prepare = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/prepare')  -- ''  -- '_' /prepare
-local _transform = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform')  -- ''  -- '_' /transform
+local _prepare = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/prepare')  -- '.'  -- '_' /prepare
+local _transform = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform')  -- '.'  -- '_' /transform
 
 
 local module = 'modify'

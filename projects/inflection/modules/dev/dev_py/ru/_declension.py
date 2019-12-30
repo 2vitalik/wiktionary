@@ -6,7 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .declension.init.parse import common as parse
-from .declension import _parts as p
+from .declension.run import _parts as p
 from .declension.run.out import result as r
 from .declension.run.out.forms import common as form
 from .declension.run.out.forms import noun as noun_forms
