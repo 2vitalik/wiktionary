@@ -13,6 +13,7 @@ declension_files = [
     'ru/declension/init/_process',
     'ru/declension/init/process/stem_type',
     'ru/declension/init/process/stress',
+    'ru/declension/_run',
     'ru/declension/run/_parts',
     'ru/declension/run/parts/_prepare',
     'ru/declension/run/parts/prepare/endings',
