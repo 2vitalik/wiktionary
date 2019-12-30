@@ -111,6 +111,16 @@ def init_out_args(func, i):  # export
         forward_gender_animacy(i)
     # end
 
+    if _.contains(i.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
+        o['краткая'] = '⊠'
+    elif _.contains(i.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
+        o['краткая'] = '✕'
+    elif _.contains(i.rest_index, ['%-', '—', '−']):
+        o['краткая'] = '−'
+    else:
+        o['краткая'] = '1'
+    # end
+
     if not _.has_key(o, 'error_category') and i.word.cleared != i.base:
         o['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
     # end

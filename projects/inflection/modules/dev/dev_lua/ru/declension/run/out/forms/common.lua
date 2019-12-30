@@ -144,15 +144,6 @@ function export.generate_out_args(i)
 	init_forms(i)
 	if i.adj then
 		init_srt_forms(i)
-		if _.contains(i.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
-			o['краткая'] = '⊠'
-		elseif _.contains(i.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
-			o['краткая'] = '✕'
-		elseif _.contains(i.rest_index, {'%-', '—', '−'}) then
-			o['краткая'] = '−'
-		else
-			o['краткая'] = '1'
-		end
 	end
 
 	fix_stress(o)
