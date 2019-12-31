@@ -100,7 +100,7 @@ def parse(func, base, args):  # export
     info.word.stressed = mw.text.trim(args['слово'])
     info.noun = (info.unit == 'noun')
 
-    info.data = a.AttrDict()  # AttrDict
+    info.parts = a.AttrDict()  # AttrDict
     info.out_args = a.AttrDict()  # AttrDict
     info.out_args.error = ''
 

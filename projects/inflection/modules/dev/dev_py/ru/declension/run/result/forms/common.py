@@ -15,20 +15,20 @@ module = 'run.out.forms.common'  # local
 @a.call(module)
 def init_forms(i):  # Генерация словоформ
     o = i.out_args  # local
-    d = i.data  # local
+    p = i.parts  # local
 
-    o['nom-sg'] = d.stems['nom-sg'] + d.endings['nom-sg']
-    o['gen-sg'] = d.stems['gen-sg'] + d.endings['gen-sg']
-    o['dat-sg'] = d.stems['dat-sg'] + d.endings['dat-sg']
+    o['nom-sg'] = p.stems['nom-sg'] + p.endings['nom-sg']
+    o['gen-sg'] = p.stems['gen-sg'] + p.endings['gen-sg']
+    o['dat-sg'] = p.stems['dat-sg'] + p.endings['dat-sg']
     o['acc-sg'] = ''
-    o['ins-sg'] = d.stems['ins-sg'] + d.endings['ins-sg']
-    o['prp-sg'] = d.stems['prp-sg'] + d.endings['prp-sg']
-    o['nom-pl'] = d.stems['nom-pl'] + d.endings['nom-pl']
-    o['gen-pl'] = d.stems['gen-pl'] + d.endings['gen-pl']
-    o['dat-pl'] = d.stems['dat-pl'] + d.endings['dat-pl']
+    o['ins-sg'] = p.stems['ins-sg'] + p.endings['ins-sg']
+    o['prp-sg'] = p.stems['prp-sg'] + p.endings['prp-sg']
+    o['nom-pl'] = p.stems['nom-pl'] + p.endings['nom-pl']
+    o['gen-pl'] = p.stems['gen-pl'] + p.endings['gen-pl']
+    o['dat-pl'] = p.stems['dat-pl'] + p.endings['dat-pl']
     o['acc-pl'] = ''
-    o['ins-pl'] = d.stems['ins-pl'] + d.endings['ins-pl']
-    o['prp-pl'] = d.stems['prp-pl'] + d.endings['prp-pl']
+    o['ins-pl'] = p.stems['ins-pl'] + p.endings['ins-pl']
+    o['prp-pl'] = p.stems['prp-pl'] + p.endings['prp-pl']
 
     # TODO: может инициировать и вообще везде работать уже с дефисами? Например, функцией сразу же преобразовывать
 # end
@@ -37,10 +37,10 @@ def init_forms(i):  # Генерация словоформ
 @a.starts(module)
 def init_srt_forms(func, i):  # todo move to `init_forms` (with if i.adj) ?
     o = i.out_args  # local
-    d = i.data  # local
+    p = i.parts  # local
 
-    o['srt-sg'] = d.stems['srt-sg'] + d.endings['srt-sg']
-    o['srt-pl'] = d.stems['srt-pl'] + d.endings['srt-pl']
+    o['srt-sg'] = p.stems['srt-sg'] + p.endings['srt-sg']
+    o['srt-pl'] = p.stems['srt-pl'] + p.endings['srt-pl']
     _.ends(module, func)
 # end
 
@@ -64,7 +64,7 @@ def fix_stress(func, o):
 @a.starts(module)
 def choose_accusative_forms(func, i):
     o = i.out_args  # local
-    d = i.data  # local
+    p = i.parts  # local
 
     o['acc-sg-in'] = ''
     o['acc-sg-an'] = ''
@@ -84,7 +84,7 @@ def choose_accusative_forms(func, i):
         if _.equals(i.stem.type, ['f-3rd', 'f-3rd-sibilant']):
             o['acc-sg'] = o['nom-sg']
         else:
-            o['acc-sg'] = d.stems['acc-sg'] + d.endings['acc-sg']  # todo: don't use `data` here?
+            o['acc-sg'] = p.stems['acc-sg'] + p.endings['acc-sg']  # todo: don't use `data` here?
         # end
     elif i.gender == 'n':
         o['acc-sg'] = o['nom-sg']

@@ -61,7 +61,7 @@ local function choose_endings_stress(i)
 	_.starts(module, func)
 
 	local stress
-	local d = i.data
+	local p = i.parts
 
 	-- todo: we can generate one table for all genders only once at the beginning !!! and just use/load it here
 
@@ -69,42 +69,42 @@ local function choose_endings_stress(i)
 		stress = i.stress_schema['ending']['nom-sg'] and stressed or unstressed
 
 		if i.gender == 'm' and i.stem.base_type == 'hard' then
-			d.endings['nom-sg'] = d.endings['nom-sg'][stress]
+			p.endings['nom-sg'] = p.endings['nom-sg'][stress]
 		end
 
 		stress = i.stress_schema['ending']['srt-sg-n'] and stressed or unstressed
 
 		if i.gender == 'n' and i.stem.base_type == 'soft' then
-			d.endings['srt-sg'] = d.endings['srt-sg'][stress]
+			p.endings['srt-sg'] = p.endings['srt-sg'][stress]
 		end
 	elseif i.pronoun then  -- TODO: может применить такой подход для всех случаев вообще?
 		local keys = {'nom-sg', 'gen-sg', 'dat-sg', 'ins-sg', 'prp-sg'}  -- list
 		for j, key in pairs(keys) do  -- list
-			if type(d.endings[key]) == 'table' then
+			if type(p.endings[key]) == 'table' then
 				stress = i.stress_schema['ending'][key] and stressed or unstressed
-				d.endings[key] = d.endings[key][stress]
+				p.endings[key] = p.endings[key][stress]
 			end
 		end
 	else
 		stress = i.stress_schema['ending']['dat-sg'] and stressed or unstressed
 
 		if i.gender == 'f' and i.stem.base_type == 'soft' then
-			d.endings['dat-sg'] = d.endings['dat-sg'][stress]
+			p.endings['dat-sg'] = p.endings['dat-sg'][stress]
 		end
 
 		stress = i.stress_schema['ending']['prp-sg'] and stressed or unstressed
 
-		d.endings['prp-sg'] = d.endings['prp-sg'][stress]
+		p.endings['prp-sg'] = p.endings['prp-sg'][stress]
 
 		stress = i.stress_schema['ending']['ins-sg'] and stressed or unstressed
 
 		if i.stem.base_type == 'soft' then
-			d.endings['ins-sg'] = d.endings['ins-sg'][stress]
+			p.endings['ins-sg'] = p.endings['ins-sg'][stress]
 		end
 
 		stress = i.stress_schema['ending']['gen-pl'] and stressed or unstressed
 
-		d.endings['gen-pl'] = d.endings['gen-pl'][stress]
+		p.endings['gen-pl'] = p.endings['gen-pl'][stress]
 	end
 
 	_.ends(module, func)
@@ -118,12 +118,12 @@ function export.get_endings(i)
 
 --	INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
 
-	local d = i.data
+	local p = i.parts
 
-	d.endings = get_base_endings(i)
+	p.endings = get_base_endings(i)
 
 --	INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
-	if i.adj then  -- or info.pronoun
+	if i.adj then  -- or i.pronoun
 		adj_endings.fix_adj_pronoun_endings(i, false)
 	elseif i.pronoun then
 		pronoun_endings.fix_pronoun_noun_endings(i)
@@ -141,7 +141,7 @@ function export.get_endings(i)
 
 --	INFO: Особые случаи: `копьё с d*` и `питьё с b*`
 	if i.gender == 'n' and i.stem.base_type == 'soft' and _.endswith(i.word.unstressed, 'ё') then
-		d.endings['nom-sg'] = 'ё'
+		p.endings['nom-sg'] = 'ё'
 	end
 
 	_.ends(module, func)

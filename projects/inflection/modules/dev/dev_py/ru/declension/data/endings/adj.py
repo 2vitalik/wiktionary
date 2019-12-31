@@ -84,31 +84,31 @@ def get_standard_adj_endings():  # export
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 @a.starts(module)
 def fix_adj_pronoun_endings(func, i, pronoun):  # export
-    d = i.data  # local
+    p = i.parts  # local
 
     # INFO: Replace "ы" to "и"
     if _.equals(i.stem.type, ['velar', 'sibilant']):
         if i.gender == 'm':
             if i.adj:
-                d.endings['nom-sg'][unstressed] = 'ий'
+                p.endings['nom-sg'][unstressed] = 'ий'
             # end
-            d.endings['ins-sg'] = 'им'
+            p.endings['ins-sg'] = 'им'
         # end
         if i.gender == 'n':
-            d.endings['ins-sg'] = 'им'
+            p.endings['ins-sg'] = 'им'
         # end
 
         if i.adj:
-            d.endings['nom-pl'] = 'ие'
+            p.endings['nom-pl'] = 'ие'
         elif pronoun:
-            d.endings['nom-pl'] = 'и'
+            p.endings['nom-pl'] = 'и'
         # end
-        d.endings['gen-pl'] = 'их'
-        d.endings['dat-pl'] = 'им'
-        d.endings['ins-pl'] = 'ими'
-        d.endings['prp-pl'] = 'их'
+        p.endings['gen-pl'] = 'их'
+        p.endings['dat-pl'] = 'им'
+        p.endings['ins-pl'] = 'ими'
+        p.endings['prp-pl'] = 'их'
         if i.adj:
-            d.endings['srt-pl'] = 'и'
+            p.endings['srt-pl'] = 'и'
         # end
     # end
 
@@ -117,29 +117,29 @@ def fix_adj_pronoun_endings(func, i, pronoun):  # export
         if not i.stress_schema['ending']['sg']:
             if i.gender == 'm':
                 if i.adj:
-                    d.endings['nom-sg'][stressed] = 'ей'
+                    p.endings['nom-sg'][stressed] = 'ей'
                 # end
-                d.endings['gen-sg'] = 'его'
-                d.endings['dat-sg'] = 'ему'
-                d.endings['prp-sg'] = 'ем'
+                p.endings['gen-sg'] = 'его'
+                p.endings['dat-sg'] = 'ему'
+                p.endings['prp-sg'] = 'ем'
             # end
             if i.gender == 'n':
-                d.endings['nom-sg'] = 'ее'
-                d.endings['gen-sg'] = 'его'
-                d.endings['dat-sg'] = 'ему'
-                d.endings['prp-sg'] = 'ем'
+                p.endings['nom-sg'] = 'ее'
+                p.endings['gen-sg'] = 'его'
+                p.endings['dat-sg'] = 'ему'
+                p.endings['prp-sg'] = 'ем'
             # end
             if i.gender == 'f':
-                d.endings['gen-sg'] = 'ей'
-                d.endings['dat-sg'] = 'ей'
-                d.endings['ins-sg'] = 'ей'
-                d.endings['prp-sg'] = 'ей'
+                p.endings['gen-sg'] = 'ей'
+                p.endings['dat-sg'] = 'ей'
+                p.endings['ins-sg'] = 'ей'
+                p.endings['prp-sg'] = 'ей'
             # end
         # end
         if not i.stress_schema['ending']['srt-sg-n']:
             if i.gender == 'n':
                 if i.adj:
-                    d.endings['srt-sg'] = 'е'
+                    p.endings['srt-sg'] = 'е'
                 # end
             # end
         # end
@@ -149,7 +149,7 @@ def fix_adj_pronoun_endings(func, i, pronoun):  # export
     if _.equals(i.stem.type, {'vowel'}):
         if i.gender == 'm':
             if i.adj:
-                d.endings['srt-sg'] = 'й'
+                p.endings['srt-sg'] = 'й'
             # end
         # end
     # end

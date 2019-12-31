@@ -36,8 +36,8 @@ def add_comparative(func, i):  # export
         o['comparative'] = new_stem + 'е'
     else:
         if _.contains(i.rest_index, ['%(2%)', '②']):  # todo: special variable for this
-            o['comparative'] = i.data.stems['nom-sg'] + 'ее'
-            o['comparative2'] = i.data.stems['nom-sg'] + 'ей'
+            o['comparative'] = i.parts.stems['nom-sg'] + 'ее'
+            o['comparative2'] = i.parts.stems['nom-sg'] + 'ей'
         else:
             if _.equals(i.stress_type, ['a', 'a/a']):
                 o['comparative'] = i.stem.stressed + 'ее'

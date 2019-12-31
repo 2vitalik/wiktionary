@@ -142,43 +142,43 @@ function export.fix_pronoun_noun_endings(i)
 	func = "fix_pronoun_noun_endings"
 	_.starts(module, func)
 
-	local d = i.data
+	local p = i.parts
 
 --	INFO: Replace "ы" to "и"
 	if _.equals(i.stem.type, {'sibilant'}) then
 		if _.In(i.gender, {'m', 'n'}) then
-			d.endings['ins-sg'] = 'им'
+			p.endings['ins-sg'] = 'им'
 		end
 
-		d.endings['nom-pl'] = 'и'
-		d.endings['gen-pl'] = 'их'
-		d.endings['dat-pl'] = 'им'
-		d.endings['ins-pl'] = 'ими'
-		d.endings['prp-pl'] = 'их'
+		p.endings['nom-pl'] = 'и'
+		p.endings['gen-pl'] = 'их'
+		p.endings['dat-pl'] = 'им'
+		p.endings['ins-pl'] = 'ими'
+		p.endings['prp-pl'] = 'их'
 	end
 
 --	INFO: Other Replace
 	if _.equals(i.stem.type, {'sibilant'}) then
 		if i.gender == 'n' then
-			d.endings['nom-sg'] = {'е', 'о' }
+			p.endings['nom-sg'] = {'е', 'о' }
 		end
 		if _.In(i.gender, {'m', 'n'}) then
-			d.endings['gen-sg'] = {'его', 'ого'}
-			d.endings['dat-sg'] = {'ему', 'ому'}
-			d.endings['prp-sg'] = {'ем', 'ом'}
+			p.endings['gen-sg'] = {'его', 'ого'}
+			p.endings['dat-sg'] = {'ему', 'ому'}
+			p.endings['prp-sg'] = {'ем', 'ом'}
 		end
 		if i.gender == 'f' then
-			d.endings['gen-sg'] = {'ей', 'ой'}
-			d.endings['dat-sg'] = {'ей', 'ой'}
-			d.endings['ins-sg'] = {'ей', 'ой'}
-			d.endings['prp-sg'] = {'ей', 'ой'}
+			p.endings['gen-sg'] = {'ей', 'ой'}
+			p.endings['dat-sg'] = {'ей', 'ой'}
+			p.endings['ins-sg'] = {'ей', 'ой'}
+			p.endings['prp-sg'] = {'ей', 'ой'}
 		end
 	end
 
 	if _.equals(i.stem.type, {'vowel'}) then
 		if _.In(i.gender, {'m', 'n'}) then
-			d.endings['gen-sg'] = 'его'
-			d.endings['dat-sg'] = 'ему'
+			p.endings['gen-sg'] = 'его'
+			p.endings['dat-sg'] = 'ему'
 		end
 	end
 

@@ -20,10 +20,10 @@ def prepare(func, i):  # export
     endings.get_endings(i)
 
     # todo: logging info
-    i.data.stems = dict()  # dict
+    i.parts.stems = dict()  # dict
     stress_apply.apply_stress_type(i)
-    _.log_table(i.data.stems, 'info.data.stems')
-    _.log_table(i.data.endings, 'info.data.endings')
+    _.log_table(i.parts.stems, 'info.parts.stems')
+    _.log_table(i.parts.endings, 'info.parts.endings')
 
     _.ends(module, func)
 # end
