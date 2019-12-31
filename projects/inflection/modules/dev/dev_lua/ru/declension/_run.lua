@@ -56,7 +56,7 @@ local function run_info(i)  -- todo rename to `run_info`
 		local o = i.out_args
 		genders = {'m', 'n', 'f', ''}  -- plural (without gender) should be last one?
 		for j, gender in pairs(genders) do  -- list
-			local i_copy = i.copy()
+			local i_copy = mw.clone(i)
 			i_copy.gender = gender
 			_.log_value(i_copy.gender, 'info.gender')
 			run_gender(i_copy)
@@ -75,6 +75,7 @@ local function run_info(i)  -- todo rename to `run_info`
 					'srt-pl',
 					'comparative', 'comparative2'
 				}  -- list
+			end
 
 			for c, case in pairs(cases) do  -- list
 				if i_copy.gender ~= '' then

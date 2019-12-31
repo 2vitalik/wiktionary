@@ -50,7 +50,7 @@ def run_info(func, i):  # todo rename to `run_info`
         o = i.out_args  # local
         genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
         for j, gender in enumerate(genders):
-            i_copy = i.copy()  # local
+            i_copy = mw.clone(i)  # local
             i_copy.gender = gender
             _.log_value(i_copy.gender, 'info.gender')
             run_gender(i_copy)
@@ -69,6 +69,7 @@ def run_info(func, i):  # todo rename to `run_info`
                     'srt-pl',
                     'comparative', 'comparative2'
                 ]  # list
+            # end
 
             for c, case in enumerate(cases):
                 if i_copy.gender != '':
