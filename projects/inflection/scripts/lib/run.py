@@ -52,6 +52,7 @@ def run(unit, word, index):
             ('Д. ', 'dat-sg', 'dat-pl'),
             ('В. ', 'acc-sg', 'acc-pl'),
             ('Тв.', 'ins-sg', 'ins-pl'),
+            ('Тв2', 'ins-sg2', '-'),
             ('Пр.', 'prp-sg', 'prp-pl'),
         ]
         lens = [0] * 2

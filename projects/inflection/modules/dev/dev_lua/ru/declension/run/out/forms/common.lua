@@ -255,7 +255,7 @@ function export.plus_forms(sub_forms)  -- todo: rename to `out_args`
 	keys = {
 		'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
 		'nom-pl',  'gen-pl',  'dat-pl',  'acc-pl',  'ins-pl',  'prp-pl',
-		-- 'ins-sg2',
+		'ins-sg2',
 		'зализняк1', 'зализняк',
 		'error',
 	}  -- list

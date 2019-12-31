@@ -231,13 +231,13 @@ def plus_forms(func, sub_forms):  # export  # todo: rename to `out_args`
     keys = [
         'nom-sg',  'gen-sg',  'dat-sg',  'acc-sg',  'ins-sg',  'prp-sg',
         'nom-pl',  'gen-pl',  'dat-pl',  'acc-pl',  'ins-pl',  'prp-pl',
-        # 'ins-sg2',
+        'ins-sg2',
         'зализняк1', 'зализняк',
         'error',
     ]  # list
     out_args = sub_forms[0]  # todo: rename to `out_args`
     for i, forms2 in enumerate(sub_forms):  # todo: rename to `out_args`
-        if i != 1:
+        if i != 0:
             for j, key in enumerate(keys):
                 if not out_args[key] and forms2[key]:  # INFO: Если out_args[key] == None
                     out_args[key] = forms2[key]
