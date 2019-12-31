@@ -130,6 +130,10 @@ def generate_out_args(func, i):  # export
 
     fix_stress(o)
 
+    if i.adj:
+        adj_forms.add_comparative(i)
+    # end
+
     for key, value in o.items():
         # replace 'ё' with 'е' when unstressed
         # if _.contains_once(info.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(info.rest_index, 'ё'):  -- trying to bug-fix
@@ -152,10 +156,6 @@ def generate_out_args(func, i):  # export
 
     if i.noun:
         noun_forms.apply_specific_3(i)
-    # end
-
-    if i.adj:
-        adj_forms.add_comparative(i)
     # end
 
     for key, value in o.items():

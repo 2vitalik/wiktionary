@@ -148,6 +148,10 @@ function export.generate_out_args(i)
 
 	fix_stress(o)
 
+	if i.adj then
+		adj_forms.add_comparative(i)
+	end
+
 	for key, value in pairs(o) do
 		-- replace 'ё' with 'е' when unstressed
 		-- if _.contains_once(info.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(info.rest_index, 'ё') then  -- trying to bug-fix
@@ -170,10 +174,6 @@ function export.generate_out_args(i)
 
 	if i.noun then
 		noun_forms.apply_specific_3(i)
-	end
-
-	if i.adj then
-		adj_forms.add_comparative(i)
 	end
 
 	for key, value in pairs(o) do
