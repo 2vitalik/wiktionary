@@ -9,7 +9,7 @@ local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/
 local adj_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/adj')  -- '...'
 
 
-local module = 'run.out.forms.common'
+local module = 'run.result.forms.common'
 
 
 -- @call
@@ -17,21 +17,21 @@ local function init_forms(i)  -- Генерация словоформ
 	func = "init_forms"
 	_.call(module, func)
 
-	local o = i.out_args
+	local r = i.result
 	local p = i.parts
 
-	o['nom-sg'] = p.stems['nom-sg'] .. p.endings['nom-sg']
-	o['gen-sg'] = p.stems['gen-sg'] .. p.endings['gen-sg']
-	o['dat-sg'] = p.stems['dat-sg'] .. p.endings['dat-sg']
-	o['acc-sg'] = ''
-	o['ins-sg'] = p.stems['ins-sg'] .. p.endings['ins-sg']
-	o['prp-sg'] = p.stems['prp-sg'] .. p.endings['prp-sg']
-	o['nom-pl'] = p.stems['nom-pl'] .. p.endings['nom-pl']
-	o['gen-pl'] = p.stems['gen-pl'] .. p.endings['gen-pl']
-	o['dat-pl'] = p.stems['dat-pl'] .. p.endings['dat-pl']
-	o['acc-pl'] = ''
-	o['ins-pl'] = p.stems['ins-pl'] .. p.endings['ins-pl']
-	o['prp-pl'] = p.stems['prp-pl'] .. p.endings['prp-pl']
+	r['nom-sg'] = p.stems['nom-sg'] .. p.endings['nom-sg']
+	r['gen-sg'] = p.stems['gen-sg'] .. p.endings['gen-sg']
+	r['dat-sg'] = p.stems['dat-sg'] .. p.endings['dat-sg']
+	r['acc-sg'] = ''
+	r['ins-sg'] = p.stems['ins-sg'] .. p.endings['ins-sg']
+	r['prp-sg'] = p.stems['prp-sg'] .. p.endings['prp-sg']
+	r['nom-pl'] = p.stems['nom-pl'] .. p.endings['nom-pl']
+	r['gen-pl'] = p.stems['gen-pl'] .. p.endings['gen-pl']
+	r['dat-pl'] = p.stems['dat-pl'] .. p.endings['dat-pl']
+	r['acc-pl'] = ''
+	r['ins-pl'] = p.stems['ins-pl'] .. p.endings['ins-pl']
+	r['prp-pl'] = p.stems['prp-pl'] .. p.endings['prp-pl']
 
 	-- TODO: может инициировать и вообще везде работать уже с дефисами? Например, функцией сразу же преобразовывать
 end
@@ -42,11 +42,11 @@ local function init_srt_forms(i)  -- todo move to `init_forms` (with if i.adj) ?
 	func = "init_srt_forms"
 	_.starts(module, func)
 
-	local o = i.out_args
 	local p = i.parts
+	local r = i.result
 
-	o['srt-sg'] = p.stems['srt-sg'] .. p.endings['srt-sg']
-	o['srt-pl'] = p.stems['srt-pl'] .. p.endings['srt-pl']
+	r['srt-sg'] = p.stems['srt-sg'] .. p.endings['srt-sg']
+	r['srt-pl'] = p.stems['srt-pl'] .. p.endings['srt-pl']
 	_.ends(module, func)
 end
 
@@ -75,40 +75,40 @@ local function choose_accusative_forms(i)
 	func = "choose_accusative_forms"
 	_.starts(module, func)
 
-	local o = i.out_args
 	local p = i.parts
+	local r = i.result
 
-	o['acc-sg-in'] = ''
-	o['acc-sg-an'] = ''
-	o['acc-pl-in'] = ''
-	o['acc-pl-an'] = ''
+	r['acc-sg-in'] = ''
+	r['acc-sg-an'] = ''
+	r['acc-pl-in'] = ''
+	r['acc-pl-an'] = ''
 
 	if i.gender == 'm' or (i.gender == 'n' and i.output_gender == 'm') then
 		if i.animacy == 'in' then
-			o['acc-sg'] = o['nom-sg']
+			r['acc-sg'] = r['nom-sg']
 		elseif i.animacy == 'an' then
-			o['acc-sg'] = o['gen-sg']
+			r['acc-sg'] = r['gen-sg']
 		else
-			o['acc-sg-in'] = o['nom-sg']
-			o['acc-sg-an'] = o['gen-sg']
+			r['acc-sg-in'] = r['nom-sg']
+			r['acc-sg-an'] = r['gen-sg']
 		end
 	elseif i.gender == 'f' then
 		if _.equals(i.stem.type, {'f-3rd', 'f-3rd-sibilant'}) then
-			o['acc-sg'] = o['nom-sg']
+			r['acc-sg'] = r['nom-sg']
 		else
-			o['acc-sg'] = p.stems['acc-sg'] .. p.endings['acc-sg']  -- todo: don't use `data` here?
+			r['acc-sg'] = p.stems['acc-sg'] .. p.endings['acc-sg']  -- todo: don't use `data` here?
 		end
 	elseif i.gender == 'n' then
-		o['acc-sg'] = o['nom-sg']
+		r['acc-sg'] = r['nom-sg']
 	end
 
 	if i.animacy == 'in' then
-		o['acc-pl'] = o['nom-pl']
+		r['acc-pl'] = r['nom-pl']
 	elseif i.animacy == 'an' then
-		o['acc-pl'] = o['gen-pl']
+		r['acc-pl'] = r['gen-pl']
 	else
-		o['acc-pl-in'] = o['nom-pl']
-		o['acc-pl-an'] = o['gen-pl']
+		r['acc-pl-in'] = r['nom-pl']
+		r['acc-pl-an'] = r['gen-pl']
 	end
 
 	_.ends(module, func)
@@ -120,13 +120,13 @@ local function second_ins_case(i)
 	func = "second_ins_case"
 	_.starts(module, func)
 
-	local o = i.out_args
+	local r = i.result
 
 	-- Второй творительный
 	if i.gender == 'f' then
-		local ins_sg2 = _.replaced(o['ins-sg'], 'й$', 'ю')
-		if ins_sg2 ~= o['ins-sg'] then
-			o['ins-sg2'] = ins_sg2
+		local ins_sg2 = _.replaced(r['ins-sg'], 'й$', 'ю')
+		if ins_sg2 ~= r['ins-sg'] then
+			r['ins-sg2'] = ins_sg2
 		end
 	end
 
@@ -139,27 +139,27 @@ function export.generate_out_args(i)
 	func = "generate_out_args"
 	_.starts(module, func)
 
-	local o = i.out_args
+	local r = i.result
 
 	init_forms(i)
 	if i.adj then
 		init_srt_forms(i)
 	end
 
-	fix_stress(o)
+	fix_stress(r)
 
 	if i.adj then
 		adj_forms.add_comparative(i)
 	end
 
-	for key, value in pairs(o) do
+	for key, value in pairs(r) do
 		-- replace 'ё' with 'е' when unstressed
-		-- if _.contains_once(info.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(info.rest_index, 'ё') then  -- trying to bug-fix
+		-- if _.contains_once(i.stem.unstressed, 'ё') and _.contains(value, '́ ') and _.contains(i.rest_index, 'ё') then  -- trying to bug-fix
 		if _.contains_once(value, 'ё') and _.contains(value, '́ ') and _.contains(i.rest_index, 'ё') then
 			if i.adj and _.contains(i.stress_type, "a'") and i.gender == 'f' and key == 'srt-sg' then
-				o[key] = _.replaced(value, 'ё', 'е') .. ' // ' .. _.replaced(value, '́', '')
+				r[key] = _.replaced(value, 'ё', 'е') .. ' // ' .. _.replaced(value, '́', '')
 			else
-				o[key] = _.replaced(value, 'ё', 'е')  -- обычный случай
+				r[key] = _.replaced(value, 'ё', 'е')  -- обычный случай
 			end
 		end
 	end
@@ -176,9 +176,9 @@ function export.generate_out_args(i)
 		noun_forms.apply_specific_3(i)
 	end
 
-	for key, value in pairs(o) do
+	for key, value in pairs(r) do
 --		INFO Удаляем ударение, если только один слог:
-		o[key] = noun_forms.remove_stress_if_one_syllable(value)
+		r[key] = noun_forms.remove_stress_if_one_syllable(value)
 	end
 
 	if i.adj then
@@ -189,7 +189,7 @@ function export.generate_out_args(i)
 				'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
 			}  -- list
 			for j, key in pairs(keys) do  -- list
-				o[key] = o[key] .. 'ся'
+				r[key] = r[key] .. 'ся'
 			end
 		end
 	end
@@ -222,7 +222,7 @@ function export.join_forms(out_args_1, out_args_2)  -- todo: rename to `out_args
 	out_args = out_args_1
 	out_args['зализняк-1'] = out_args_1['зализняк']
 	out_args['зализняк-2'] = out_args_2['зализняк']
-	for i, key in pairs(keys) do  -- list
+	for j, key in pairs(keys) do  -- list
 		if not _.has_key(out_args[key]) and not _.has_key(out_args_2[key]) then
 			-- pass
 		elseif not _.has_key(out_args[key]) and _.has_key(out_args_2[key]) then  -- INFO: Если out_args[key] == nil
@@ -260,8 +260,8 @@ function export.plus_forms(sub_forms)  -- todo: rename to `out_args`
 		'error',
 	}  -- list
 	out_args = sub_forms[1]  -- todo: rename to `out_args`
-	for i, forms2 in pairs(sub_forms) do  -- list  -- todo: rename to `out_args`
-		if i ~= 1 then
+	for j, forms2 in pairs(sub_forms) do  -- list  -- todo: rename to `out_args`
+		if j ~= 1 then
 			for j, key in pairs(keys) do  -- list
 				if not out_args[key] and forms2[key] then  -- INFO: Если out_args[key] == nil
 					out_args[key] = forms2[key]

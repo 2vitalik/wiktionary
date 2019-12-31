@@ -6,10 +6,10 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from ...run.result import index as index
-from ...run.result import result as result
+from ...run.result import forward as forward
 
 
-module = 'run.out.init_out_args'  # local
+module = 'run.result.init_out_args'  # local
 
 # todo: move this to root `init` package
 
@@ -17,17 +17,17 @@ module = 'run.out.init_out_args'  # local
 # Формирование параметров рода и одушевлённости для подстановки в шаблон
 @a.starts(module)
 def forward_gender_animacy(func, i):
-    o = i.out_args  # local
+    r = i.result  # local
 
     # Род:
     genders = dict(m='муж', f='жен', n='ср', mf='мж', mn='мс', fm='жм', fn='жс', nm='см', nf='сж')  # dict  # local
 
     if i.common_gender:
-        o['род'] = 'общ'
+        r['род'] = 'общ'
     elif i.output_gender:
-        o['род'] = genders[i.output_gender]
+        r['род'] = genders[i.output_gender]
     elif i.gender:
-        o['род'] = genders[i.gender]
+        r['род'] = genders[i.gender]
     else:
         pass
     # end
@@ -40,9 +40,9 @@ def forward_gender_animacy(func, i):
     animacies['an//in'] = 'одуш-неодуш'
 
     if i.output_animacy:
-        o['кат'] = animacies[i.output_animacy]
+        r['кат'] = animacies[i.output_animacy]
     else:
-        o['кат'] = animacies[i.animacy]
+        r['кат'] = animacies[i.animacy]
     # end
 
     _.ends(module, func)
@@ -51,40 +51,40 @@ def forward_gender_animacy(func, i):
 
 @a.starts(module)
 def additional_arguments(func, i):
-    o = i.out_args  # local
+    r = i.result  # local
 
     # RU (склонение)
     if _.contains(i.rest_index, '0'):
-        o['скл'] = 'не'
+        r['скл'] = 'не'
     elif i.adj:
-        o['скл'] = 'а'
+        r['скл'] = 'а'
     elif i.pronoun:
-        o['скл'] = 'мс'
+        r['скл'] = 'мс'
     elif _.endswith(i.word.unstressed, '[ая]'):
-        o['скл'] = '1'
+        r['скл'] = '1'
     else:
         if i.gender == 'm' or i.gender == 'n':
-            o['скл'] = '2'
+            r['скл'] = '2'
         else:
-            o['скл'] = '3'
+            r['скл'] = '3'
         # end
     # end
 
     # RU (чередование)
     if _.contains(i.index, '%*'):
-        o['чередование'] = '1'
+        r['чередование'] = '1'
     # end
 
     if i.pt:
-        o['pt'] = '1'
+        r['pt'] = '1'
     # end
 
     # RU ("-" в индексе)
     # TODO: Здесь может быть глюк, если случай глобального `//` и `rest_index` пуст (а исходный `index` не подходит, т.к. там может быть не тот дефис -- в роде)
     if i.rest_index:
         if _.contains(i.rest_index, ['%-', '—', '−']):
-            o['st'] = '1'
-            o['затрудн'] = '1'
+            r['st'] = '1'
+            r['затрудн'] = '1'
         # end
     else:
         pass  # TODO
@@ -96,12 +96,12 @@ def additional_arguments(func, i):
 
 @a.starts(module)
 def init_out_args(func, i):  # export
-    o = i.out_args  # local
+    r = i.result  # local
 
-    o['stem_type'] = i.stem.type  # for testcases
-    o['stress_type'] = i.stress_type  # for categories   -- is really used?
+    r['stem_type'] = i.stem.type  # for testcases
+    r['stress_type'] = i.stress_type  # for categories   -- is really used?
 
-    o['dev'] = dev_prefix
+    r['dev'] = dev_prefix
 
     index.get_zaliznyak(i)
 
@@ -112,20 +112,20 @@ def init_out_args(func, i):  # export
     # end
 
     if _.contains(i.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
-        o['краткая'] = '⊠'
+        r['краткая'] = '⊠'
     elif _.contains(i.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
-        o['краткая'] = '✕'
+        r['краткая'] = '✕'
     elif _.contains(i.rest_index, ['%-', '—', '−']):
-        o['краткая'] = '−'
+        r['краткая'] = '−'
     else:
-        o['краткая'] = '1'
+        r['краткая'] = '1'
     # end
 
-    if not _.has_key(o, 'error_category') and i.word.cleared != i.base:
-        o['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
+    if not _.has_key(r, 'error_category') and i.word.cleared != i.base:
+        r['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
     # end
 
-    result.forward_args(i)
+    forward.forward_args(i)
 
     _.ends(module, func)
 # end

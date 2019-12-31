@@ -32,7 +32,7 @@ def get_noun_stress_schema(func, stress_type):  # export  # INFO: Вычисле
     stress_schema.ending['nom-pl'] = _.equals(stress_type, ["b", "b'", "c"])
 
     types = ['stem', 'ending']
-    for i, type in enumerate(types):
+    for j, type in enumerate(types):
         sg_value = stress_schema[type]['sg']
         stress_schema[type]['nom-sg'] = sg_value
         stress_schema[type]['gen-sg'] = sg_value

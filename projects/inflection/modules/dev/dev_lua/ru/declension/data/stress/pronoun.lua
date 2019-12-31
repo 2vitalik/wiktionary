@@ -30,7 +30,7 @@ function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисле�
 	types = {'stem', 'ending'}
 	sg_cases = {'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg'}  -- list
 	pl_cases = {'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl'}  -- list
-	for i, type in pairs(types) do  -- list
+	for j, type in pairs(types) do  -- list
 		sg_value = stress_schema[type]['sg']
 		pl_value = stress_schema[type]['pl']
 		for j, case in pairs(sg_cases) do  -- list

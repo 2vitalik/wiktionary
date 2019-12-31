@@ -33,9 +33,9 @@ def apply_stress_type(func, i):  # export
 
     # TODO: Remove redundant duplicated code (with above)
     # If we have "ё" specific
-    # _.log_value(info.stem.type, 'info.stem.type')
-    # if _.contains(info.rest_index, 'ё') and info.stem.type != 'n-3rd':  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
-    #     info.stem.stressed = _.replaced(info.stem.stressed, 'е́?([^е]*)$', 'ё%1')
+    # _.log_value(i.stem.type, 'i.stem.type')
+    # if _.contains(i.rest_index, 'ё') and i.stem.type != 'n-3rd':  -- Не уверен насчёт необходимости проверки 'n-3rd' здесь, сделал для "время °"
+    #     i.stem.stressed = _.replaced(i.stem.stressed, 'е́?([^е]*)$', 'ё%1')
     # # end
 
     # TODO: process this individually !!!!

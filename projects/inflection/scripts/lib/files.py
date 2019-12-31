@@ -26,9 +26,10 @@ declension_files = [
     'ru/declension/run/result/forms/common',
     'ru/declension/run/result/forms/noun',
     'ru/declension/run/result/forms/adj',
+    'ru/declension/run/result/error',
+    'ru/declension/run/result/forward',
     'ru/declension/run/result/index',
     'ru/declension/run/result/init_out_args',
-    'ru/declension/run/result/result',
 ]
 
 testcases_files = [

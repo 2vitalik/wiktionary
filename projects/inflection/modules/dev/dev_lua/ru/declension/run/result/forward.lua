@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local syllables = require("Модуль:слоги")
 
 
-local module = 'run.out.result'
+local module = 'run.result.forward'
 
 
 -- @starts
@@ -16,10 +16,10 @@ function export.forward_args(i)
 	func = "forward_args"
 	_.starts(module, func)
 
-	-- info: Используется дважды -- при инициализации, и потом в самом конце
+--	INFO: Используется дважды -- при инициализации, и потом в самом конце
 
 	local keys, args
-	local o = i.out_args
+	local r = i.result
 
 	args = i.args
 	keys = {
@@ -32,9 +32,9 @@ function export.forward_args(i)
 	for j, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
 			if args[key] == '-' then
-				o[key] = args[key]
+				r[key] = args[key]
 			else
-				o[key] = args[key] .. '<sup>△</sup>'
+				r[key] = args[key] .. '<sup>△</sup>'
 			end
 		end
 	end
@@ -48,38 +48,19 @@ function export.forward_args(i)
 	}  -- list
 	for j, key in pairs(keys) do  -- list
 		if _.has_value(args[key]) then
-			o[key] = args[key]
+			r[key] = args[key]
 		end
 	end
 
-	if _.has_key(o['слоги']) then
-		if not _.contains(o['слоги'], '%<') then
-			o['слоги'] = syllables.get_syllables(o['слоги'])
+	if _.has_key(r['слоги']) then
+		if not _.contains(r['слоги'], '%<') then
+			r['слоги'] = syllables.get_syllables(r['слоги'])
 		end
 	else
-		o['слоги'] = i.word.unstressed  -- fixme: может всё-таки stressed?
+		r['слоги'] = i.word.unstressed  -- fixme: может всё-таки stressed?
 	end
 
 	_.ends(module, func)
-end
-
-
-function export.has_error(i)
-	return i.out_args.error ~= ''
-end
-
-
--- @call
-function export.add_error(i, error)
-	func = "add_error"
-	_.call(module, func)
-
-	local o = i.out_args
-
-	if o.error then
-		o.error = o.error .. '<br/>'
-	end
-	o.error = o.error .. error
 end
 
 

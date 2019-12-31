@@ -27,7 +27,7 @@ def get_pronoun_stress_schema(func, stress_type):  # export  # INFO: Вычис�
     types = ['stem', 'ending']
     sg_cases = ['nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg']  # list
     pl_cases = ['nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl']  # list
-    for i, type in enumerate(types):
+    for j, type in enumerate(types):
         sg_value = stress_schema[type]['sg']
         pl_value = stress_schema[type]['pl']
         for j, case in enumerate(sg_cases):

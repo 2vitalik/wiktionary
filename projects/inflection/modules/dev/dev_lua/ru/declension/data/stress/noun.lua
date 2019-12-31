@@ -35,7 +35,7 @@ function export.get_noun_stress_schema(stress_type)  -- INFO: Вычислени
 	stress_schema.ending['nom-pl'] = _.equals(stress_type, {"b", "b'", "c"})
 
 	types = {'stem', 'ending'}
-	for i, type in pairs(types) do  -- list
+	for j, type in pairs(types) do  -- list
 		sg_value = stress_schema[type]['sg']
 		stress_schema[type]['nom-sg'] = sg_value
 		stress_schema[type]['gen-sg'] = sg_value

@@ -16,14 +16,14 @@ module = 'run.parts.prepare'  # local
 def prepare(func, i):  # export
     # INFO: Generates `.endings` and `.stems`
 
-    # todo: logging info
+    # todo: logging information
     endings.get_endings(i)
 
-    # todo: logging info
+    # todo: logging information
     i.parts.stems = dict()  # dict
     stress_apply.apply_stress_type(i)
-    _.log_table(i.parts.stems, 'info.parts.stems')
-    _.log_table(i.parts.endings, 'info.parts.endings')
+    _.log_table(i.parts.stems, 'i.parts.stems')
+    _.log_table(i.parts.endings, 'i.parts.endings')
 
     _.ends(module, func)
 # end

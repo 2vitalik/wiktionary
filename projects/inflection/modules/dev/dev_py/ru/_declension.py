@@ -6,7 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .declension.init.parse import common as parse
-from .declension.run.result import result as r
+from .declension.run.result import error as e
 from .declension import _run as run
 
 
@@ -25,18 +25,19 @@ def prepare_stash():  # todo rename to `prepare_regexp_templates` or patterns
 def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
     prepare_stash()  # INFO: Заполняем шаблоны для регулярок
 
-    info = parse.parse(base, args)  # local
-    info.frame = frame  # todo: move to `parse`
-    if r.has_error(info):
+    # `i` -- main `info` object
+    i = parse.parse(base, args)  # local
+    i.frame = frame  # todo: move to `parse`
+    if e.has_error(i):
         _.ends(module, func)
-        return info.out_args
+        return i.result
     # end
 
     # INFO: Запуск основного алгоритма и получение результирующих словоформ:
-    run.run(info)
+    run.run(i)
 
     _.ends(module, func)
-    return info.out_args
+    return i.result
 # end
 
 

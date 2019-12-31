@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ...data.stress import adj as adj_stress
 from ...data.stress import pronoun as pronoun_stress
 from ...data.stress import noun as noun_stress
-from ...run.result import result as r
+from ...run.result import error as e
 
 
 module = 'init.process.stress'  # local
@@ -43,7 +43,7 @@ def extract_stress_type(func, i):  # export
 
     # INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
     if i.stress_type and not _.equals(i.stress_type, allowed_stress_types):
-        r.add_error(i, 'Ошибка: Неправильная схема ударения: ' + i.stress_type)
+        e.add_error(i, 'Ошибка: Неправильная схема ударения: ' + i.stress_type)
     # end
 
     _.ends(module, func)

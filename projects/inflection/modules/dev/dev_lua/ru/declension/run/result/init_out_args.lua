@@ -6,10 +6,10 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local index = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/index')  -- '..'
-local result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- '..'
+local forward = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forward')  -- '..'
 
 
-local module = 'run.out.init_out_args'
+local module = 'run.result.init_out_args'
 
 -- todo: move this to root `init` package
 
@@ -20,17 +20,17 @@ local function forward_gender_animacy(i)
 	func = "forward_gender_animacy"
 	_.starts(module, func)
 
-	local o = i.out_args
+	local r = i.result
 
 	-- Род:
 	local genders = {m='муж', f='жен', n='ср', mf='мж', mn='мс', fm='жм', fn='жс', nm='см', nf='сж'}  -- dict
 
 	if i.common_gender then
-		o['род'] = 'общ'
+		r['род'] = 'общ'
 	elseif i.output_gender then
-		o['род'] = genders[i.output_gender]
+		r['род'] = genders[i.output_gender]
 	elseif i.gender then
-		o['род'] = genders[i.gender]
+		r['род'] = genders[i.gender]
 	else
 		-- pass
 	end
@@ -43,9 +43,9 @@ local function forward_gender_animacy(i)
 	animacies['an//in'] = 'одуш-неодуш'
 
 	if i.output_animacy then
-		o['кат'] = animacies[i.output_animacy]
+		r['кат'] = animacies[i.output_animacy]
 	else
-		o['кат'] = animacies[i.animacy]
+		r['кат'] = animacies[i.animacy]
 	end
 
 	_.ends(module, func)
@@ -57,40 +57,40 @@ local function additional_arguments(i)
 	func = "additional_arguments"
 	_.starts(module, func)
 
-	local o = i.out_args
+	local r = i.result
 
 	-- RU (склонение)
 	if _.contains(i.rest_index, '0') then
-		o['скл'] = 'не'
+		r['скл'] = 'не'
 	elseif i.adj then
-		o['скл'] = 'а'
+		r['скл'] = 'а'
 	elseif i.pronoun then
-		o['скл'] = 'мс'
+		r['скл'] = 'мс'
 	elseif _.endswith(i.word.unstressed, '[ая]') then
-		o['скл'] = '1'
+		r['скл'] = '1'
 	else
 		if i.gender == 'm' or i.gender == 'n' then
-			o['скл'] = '2'
+			r['скл'] = '2'
 		else
-			o['скл'] = '3'
+			r['скл'] = '3'
 		end
 	end
 
 	-- RU (чередование)
 	if _.contains(i.index, '%*') then
-		o['чередование'] = '1'
+		r['чередование'] = '1'
 	end
 
 	if i.pt then
-		o['pt'] = '1'
+		r['pt'] = '1'
 	end
 
 	-- RU ("-" в индексе)
 	-- TODO: Здесь может быть глюк, если случай глобального `//` и `rest_index` пуст (а исходный `index` не подходит, т.к. там может быть не тот дефис -- в роде)
 	if i.rest_index then
 		if _.contains(i.rest_index, {'%-', '—', '−'}) then
-			o['st'] = '1'
-			o['затрудн'] = '1'
+			r['st'] = '1'
+			r['затрудн'] = '1'
 		end
 	else
 		-- pass  -- TODO
@@ -105,12 +105,12 @@ function export.init_out_args(i)
 	func = "init_out_args"
 	_.starts(module, func)
 
-	local o = i.out_args
+	local r = i.result
 
-	o['stem_type'] = i.stem.type  -- for testcases
-	o['stress_type'] = i.stress_type  -- for categories   -- is really used?
+	r['stem_type'] = i.stem.type  -- for testcases
+	r['stress_type'] = i.stress_type  -- for categories   -- is really used?
 
-	o['dev'] = dev_prefix
+	r['dev'] = dev_prefix
 
 	index.get_zaliznyak(i)
 
@@ -121,20 +121,20 @@ function export.init_out_args(i)
 	end
 
 	if _.contains(i.rest_index, {'⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)'}) then
-		o['краткая'] = '⊠'
+		r['краткая'] = '⊠'
 	elseif _.contains(i.rest_index, {'✕', '×', 'x', 'х', 'X', 'Х'}) then
-		o['краткая'] = '✕'
+		r['краткая'] = '✕'
 	elseif _.contains(i.rest_index, {'%-', '—', '−'}) then
-		o['краткая'] = '−'
+		r['краткая'] = '−'
 	else
-		o['краткая'] = '1'
+		r['краткая'] = '1'
 	end
 
-	if not _.has_key(o['error_category']) and i.word.cleared ~= i.base then
-		o['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
+	if not _.has_key(r['error_category']) and i.word.cleared ~= i.base then
+		r['error_category'] = 'Ошибка в шаблоне "сущ-ru" (слово не совпадает с заголовком статьи)'
 	end
 
-	result.forward_args(i)
+	forward.forward_args(i)
 
 	_.ends(module, func)
 end

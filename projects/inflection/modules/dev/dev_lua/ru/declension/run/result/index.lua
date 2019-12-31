@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'run.out.index'
+local module = 'run.result.index'
 
 
 -- Получение индекса Зализняка
@@ -16,10 +16,10 @@ function export.get_zaliznyak(i)
 
 	-- TODO: process <...> cases properly
 	--  also e.g. "2*a .. <п 1a>"
-	local o = i.out_args
+	local r = i.result
 
 	if not i.has_index then
-		o['зализняк1'] = '??'
+		r['зализняк1'] = '??'
 		return _.ends(module, func)
 	end
 
@@ -73,12 +73,12 @@ function export.get_zaliznyak(i)
 		index = index .. ', ё'
 	end
 
-	o['зализняк1'] = index
-	value = o['зализняк1']  local  -- for category
+	r['зализняк1'] = index
+	value = r['зализняк1']  local  -- for category
 	value = _.replaced(value, '①', '(1)')
 	value = _.replaced(value, '②', '(2)')
 	value = _.replaced(value, '③', '(3)')
-	o['зализняк'] = value
+	r['зализняк'] = value
 
 	_.ends(module, func)
 end

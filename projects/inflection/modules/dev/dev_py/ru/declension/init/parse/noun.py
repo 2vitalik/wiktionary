@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...run.result import result as r
+from ...run.result import error as e
 
 
 module = 'init.parse.noun'  # local
@@ -37,7 +37,7 @@ def extract_gender_animacy(func, i):  # export
 
     if _.startswith(i.index, 'п'):
         i.adj = True
-    elif _.extract(i.index, '^м//ж') or _.extract(i.index, '^m//f'):  # todo: info: похоже все такие случаи либо 0, либо <...>
+    elif _.extract(i.index, '^м//ж') or _.extract(i.index, '^m//f'):  # todo: INFO: похоже все такие случаи либо 0, либо <...>
         i.gender = 'mf'
         i.animacy = 'in'
     elif _.extract(i.index, '^м//с') or _.extract(i.index, '^m//n'):
@@ -105,7 +105,7 @@ def extract_gender_animacy(func, i):  # export
 
     # Удаляем теперь соответствующий кусок индекса
     if (i.gender or i.gender == '') and i.animacy and not i.adj and not i.pronoun:
-        _.log_value(i.index, 'info.index')
+        _.log_value(i.index, 'i.index')
         orig_index = mw.text.trim(i.index)
 
 #        # local test1 = _.replaced(i.index, '^mf a ?', '')
@@ -134,66 +134,66 @@ def extract_gender_animacy(func, i):  # export
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "mf a" из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^[mnf]+ [a-z/]+ ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "[mnf] [in/an]" из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^мн%.? неод%.? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мн. неод." из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^мн%.? одуш%.? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мн. одуш." из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^мн%.? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мн." из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^[-мжсо/]+%,? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "м/ж/с/мо/жо/со/..." из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
-        r.add_error(i, 'TODO: process such errors')
+        e.add_error(i, 'TODO: process such errors')
         return _.ends(module, func)
     elif i.adj:
-        _.log_value(i.index, 'info.index (п)')
+        _.log_value(i.index, 'i.index (п)')
         orig_index = mw.text.trim(i.index)
 
         rest_index = _.replaced(i.index, '^п ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "п" из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
     elif i.pronoun:
-        _.log_value(i.index, 'info.index (мс)')
+        _.log_value(i.index, 'i.index (мс)')
         orig_index = mw.text.trim(i.index)
 
         rest_index = _.replaced(i.index, '^мс ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             mw.log('  # Удаление "мс" из индекса')
-            _.log_value(i.rest_index, 'info.rest_index')
+            _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
     # end

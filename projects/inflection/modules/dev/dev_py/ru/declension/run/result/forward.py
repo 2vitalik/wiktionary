@@ -8,15 +8,15 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from projects.inflection.modules.dev.dev_py.a import syllables
 
 
-module = 'run.out.result'  # local
+module = 'run.result.forward'  # local
 
 
 @a.starts(module)
 def forward_args(func, i):  # export
-    # info: Используется дважды -- при инициализации, и потом в самом конце
+    # INFO: Используется дважды -- при инициализации, и потом в самом конце
 
     # local keys, args
-    o = i.out_args  # local
+    r = i.result  # local
 
     args = i.args
     keys = [
@@ -29,9 +29,9 @@ def forward_args(func, i):  # export
     for j, key in enumerate(keys):
         if _.has_value(args, key):
             if args[key] == '-':
-                o[key] = args[key]
+                r[key] = args[key]
             else:
-                o[key] = args[key] + '<sup>△</sup>'
+                r[key] = args[key] + '<sup>△</sup>'
             # end
         # end
     # end
@@ -45,35 +45,19 @@ def forward_args(func, i):  # export
     ]  # list
     for j, key in enumerate(keys):
         if _.has_value(args, key):
-            o[key] = args[key]
+            r[key] = args[key]
         # end
     # end
 
-    if _.has_key(o, 'слоги'):
-        if not _.contains(o['слоги'], '%<'):
-            o['слоги'] = syllables.get_syllables(o['слоги'])
+    if _.has_key(r, 'слоги'):
+        if not _.contains(r['слоги'], '%<'):
+            r['слоги'] = syllables.get_syllables(r['слоги'])
         # end
     else:
-        o['слоги'] = i.word.unstressed  # fixme: может всё-таки stressed?
+        r['слоги'] = i.word.unstressed  # fixme: может всё-таки stressed?
     # end
 
     _.ends(module, func)
-# end
-
-
-def has_error(i):  # export
-    return i.out_args.error != ''
-# end
-
-
-@a.call(module)
-def add_error(i, error):  # export
-    o = i.out_args  # local
-
-    if o.error:
-        o.error = o.error + '<br/>'
-    # end
-    o.error = o.error + error
 # end
 
 

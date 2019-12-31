@@ -6,7 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- 'declension.'
+local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- 'declension.'
 local run = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run')  -- '_' /run
 
 
@@ -28,18 +28,19 @@ function export.forms(base, args, frame)  -- todo: rename to `out_args`
 
 	prepare_stash()  -- INFO: Заполняем шаблоны для регулярок
 
-	local info = parse.parse(base, args)
-	info.frame = frame  -- todo: move to `parse`
-	if r.has_error(info) then
+	-- `i` -- main `info` object
+	local i = parse.parse(base, args)
+	i.frame = frame  -- todo: move to `parse`
+	if e.has_error(i) then
 		_.ends(module, func)
-		return info.out_args
+		return i.result
 	end
 
 --	INFO: Запуск основного алгоритма и получение результирующих словоформ:
-	run.run(info)
+	run.run(i)
 
 	_.ends(module, func)
-	return info.out_args
+	return i.result
 end
 
 

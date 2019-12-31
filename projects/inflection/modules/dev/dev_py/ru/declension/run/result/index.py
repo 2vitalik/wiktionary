@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'run.out.index'  # local
+module = 'run.result.index'  # local
 
 
 # Получение индекса Зализняка
@@ -13,10 +13,10 @@ module = 'run.out.index'  # local
 def get_zaliznyak(func, i):  # export
     # TODO: process <...> cases properly
     #  also e.g. "2*a + <п 1a>"
-    o = i.out_args  # local
+    r = i.result  # local
 
     if not i.has_index:
-        o['зализняк1'] = '??'
+        r['зализняк1'] = '??'
         return _.ends(module, func)
     # end
 
@@ -70,12 +70,12 @@ def get_zaliznyak(func, i):  # export
         index = index + ', ё'
     # end
 
-    o['зализняк1'] = index
-    value = o['зализняк1']  # local  # for category
+    r['зализняк1'] = index
+    value = r['зализняк1']  # local  # for category
     value = _.replaced(value, '①', '(1)')
     value = _.replaced(value, '②', '(2)')
     value = _.replaced(value, '③', '(3)')
-    o['зализняк'] = value
+    r['зализняк'] = value
 
     _.ends(module, func)
 # end

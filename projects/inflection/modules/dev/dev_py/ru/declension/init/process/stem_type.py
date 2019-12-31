@@ -108,7 +108,7 @@ def get_stem_type(func, i):  # export  # INFO: Определение типа �
     # end
     if i.stem.type == '':
         i.stem.type = 'hard'
-        # r.add_error(i, 'Неизвестный тип основы')
+        # e.add_error(i, 'Неизвестный тип основы')
         # return _.ends(module, func)
     # end
 

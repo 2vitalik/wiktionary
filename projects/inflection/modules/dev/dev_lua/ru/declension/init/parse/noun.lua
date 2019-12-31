@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- '..'
+local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- '..'
 
 
 local module = 'init.parse.noun'
@@ -43,7 +43,7 @@ function export.extract_gender_animacy(i)
 
 	if _.startswith(i.index, 'п') then
 		i.adj = true
-	elseif _.extract(i.index, '^м//ж') or _.extract(i.index, '^m//f') then  -- todo: info: похоже все такие случаи либо 0, либо <...>
+	elseif _.extract(i.index, '^м//ж') or _.extract(i.index, '^m//f') then  -- todo: INFO: похоже все такие случаи либо 0, либо <...>
 		i.gender = 'mf'
 		i.animacy = 'in'
 	elseif _.extract(i.index, '^м//с') or _.extract(i.index, '^m//n') then
@@ -111,7 +111,7 @@ function export.extract_gender_animacy(i)
 
 	-- Удаляем теперь соответствующий кусок индекса
 	if (i.gender or i.gender == '') and i.animacy and not i.adj and not i.pronoun then
-		_.log_value(i.index, 'info.index')
+		_.log_value(i.index, 'i.index')
 		orig_index = mw.text.trim(i.index)
 
 --		local test1 = _.replaced(i.index, '^mf a ?', '')
@@ -140,66 +140,66 @@ function export.extract_gender_animacy(i)
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "mf a" из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 		rest_index = _.replaced(i.index, '^[mnf]+ [a-z/]+ ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "[mnf] [in/an]" из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 		rest_index = _.replaced(i.index, '^мн%.? неод%.? ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "мн. неод." из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 		rest_index = _.replaced(i.index, '^мн%.? одуш%.? ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "мн. одуш." из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 		rest_index = _.replaced(i.index, '^мн%.? ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "мн." из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 		rest_index = _.replaced(i.index, '^[-мжсо/]+%,? ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "м/ж/с/мо/жо/со/..." из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		r.add_error(i, 'TODO: process such errors')
+		e.add_error(i, 'TODO: process such errors')
 		return _.ends(module, func)
 	elseif i.adj then
-		_.log_value(i.index, 'info.index (п)')
+		_.log_value(i.index, 'i.index (п)')
 		orig_index = mw.text.trim(i.index)
 
 		rest_index = _.replaced(i.index, '^п ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "п" из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 	elseif i.pronoun then
-		_.log_value(i.index, 'info.index (мс)')
+		_.log_value(i.index, 'i.index (мс)')
 		orig_index = mw.text.trim(i.index)
 
 		rest_index = _.replaced(i.index, '^мс ?', '')
 		if rest_index ~= orig_index then
 			i.rest_index = mw.text.trim(rest_index)
 			mw.log('  -- Удаление "мс" из индекса')
-			_.log_value(i.rest_index, 'info.rest_index')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 	end

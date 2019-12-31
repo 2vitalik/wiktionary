@@ -6,7 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts')  -- ''  -- '_' /parts
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- ''
+local forward = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forward')  -- ''
 local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/common')  -- ''
 local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/noun')  -- ''
 
@@ -19,7 +19,7 @@ local function run_gender(i)
 	func = "run_gender"
 	_.starts(module, func)
 
-	local o = i.out_args
+	local r = i.result
 
 	if _.startswith(i.rest_index, '0') then
 		-- todo: move to special function
@@ -29,7 +29,7 @@ local function run_gender(i)
 			'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
 		}  -- list
 		for j, key in pairs(keys) do  -- list
-			o[key] = i.word.stressed
+			r[key] = i.word.stressed
 		end
 		return _.ends(module, func)
 	end
@@ -53,15 +53,15 @@ local function run_info(i)  -- todo rename to `run_info`
 	if i.noun then
 		run_gender(i)
 	elseif i.adj then
-		local o = i.out_args
+		local r = i.result
 		genders = {'m', 'n', 'f', ''}  -- plural (without gender) should be last one?
 		for j, gender in pairs(genders) do  -- list
 			local i_copy = mw.clone(i)
 			i_copy.gender = gender
-			_.log_value(i_copy.gender, 'info.gender')
+			_.log_value(i_copy.gender, 'i.gender')
 			run_gender(i_copy)
 
-			local o_copy = i_copy.out_args
+			local r_copy = i_copy.result
 
 			local cases
 			if i_copy.gender ~= '' then
@@ -83,18 +83,18 @@ local function run_info(i)  -- todo rename to `run_info`
 				else
 					key = case
 				end
-				o[key] = o_copy[case]
+				r[key] = r_copy[case]
 			end
 			if i_copy.gender == 'f' then
-				o['ins-sg2-f'] = o_copy['ins-sg2']
+				r['ins-sg2-f'] = r_copy['ins-sg2']
 			end
 
 			if i_copy.gender == 'm' then
-				o['acc-sg-m-a'] = o['gen-sg-m']
-				o['acc-sg-m-n'] = o['nom-sg-m']
+				r['acc-sg-m-a'] = r['gen-sg-m']
+				r['acc-sg-m-n'] = r['nom-sg-m']
 			elseif i_copy.gender == '' then
-				o['acc-pl-a'] = o_copy['gen-pl']
-				o['acc-pl-n'] = o_copy['nom-pl']
+				r['acc-pl-a'] = r_copy['gen-pl']
+				r['acc-pl-n'] = r_copy['nom-pl']
 			end
 
 		end
@@ -105,42 +105,42 @@ end
 
 
 -- @starts
-function export.run(info)
+function export.run(i)
 	func = "run"
 	_.starts(module, func)
 
 	-- todo: move this `if` block inside `run_info` and run it recursively :)
-	if info.variations then
+	if i.variations then
 		_.log_info("Случай с вариациями '//'")
-		local info_1 = info.variations[1]
-		local info_2 = info.variations[2]
+		local i1 = i.variations[1]
+		local i2 = i.variations[2]
 		-- todo: ... = o.output(m.modify(info_1))
-		run_info(info_1)
-		run_info(info_2)
-		info.out_args = form.join_forms(info_1.out_args, info_2.out_args)
+		run_info(i1)
+		run_info(i2)
+		i.result = form.join_forms(i1.result, i2.result)
 		-- todo: form.join_variations()
 		-- todo: check for errors inside variations
-	elseif info.plus then
+	elseif i.plus then
 		_.log_info("Случай с '+'")
 		local out_args_plus = {}  -- list
-		for i, sub_info in pairs(info.plus) do  -- list
+		for j, sub_info in pairs(i.plus) do  -- list
 			run_info(sub_info)
-			table.insert(out_args_plus, sub_info.out_args)
+			table.insert(out_args_plus, sub_info.result)
 		end
-		info.out_args = form.plus_forms(out_args_plus)
+		i.result = form.plus_forms(out_args_plus)
 		-- todo: form.plus_out_args()
 	else
 		_.log_info('Стандартный случай без вариаций')
-		run_info(info)
+		run_info(i)
 	end
 
-	if info.noun then
-		noun_forms.special_cases(info)
+	if i.noun then
+		noun_forms.special_cases(i)
 	end
 
-	r.forward_args(info)
+	forward.forward_args(i)
 
-	_.log_table(info.out_args, "info.out_args")
+	_.log_table(i.result, "i.result")
 	_.ends(module, func)
 end
 

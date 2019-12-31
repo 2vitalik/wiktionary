@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/adj')  -- '..'
 local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/pronoun')  -- '..'
 local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/noun')  -- '..'
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- '..'
+local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- '..'
 
 
 local module = 'init.process.stress'
@@ -46,7 +46,7 @@ function export.extract_stress_type(i)
 
 --	INFO: Если ударение есть и оно не из допустимого списка -- это ошибка
 	if i.stress_type and not _.equals(i.stress_type, allowed_stress_types) then
-		r.add_error(i, 'Ошибка: Неправильная схема ударения: ' .. i.stress_type)
+		e.add_error(i, 'Ошибка: Неправильная схема ударения: ' .. i.stress_type)
 	end
 
 	_.ends(module, func)

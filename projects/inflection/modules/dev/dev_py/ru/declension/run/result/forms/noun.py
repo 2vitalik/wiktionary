@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'run.out.forms.noun'  # local
+module = 'run.result.forms.noun'  # local
 
 
 def remove_stress_if_one_syllable(value):  # export
@@ -19,7 +19,7 @@ def remove_stress_if_one_syllable(value):  # export
 @a.starts(module)
 def apply_obelus(func, i):  # export
     if _.contains(i.rest_index, '÷'):
-        i.out_args['obelus'] = '1'
+        i.result['obelus'] = '1'
     # end
     _.ends(module, func)
 # end
@@ -27,15 +27,15 @@ def apply_obelus(func, i):  # export
 
 @a.starts(module)
 def apply_specific_3(func, i):  # export
-    o = i.out_args  # local
+    r = i.result  # local
 
     # Специфика по (3)
     if _.contains(i.rest_index, '%(3%)') or _.contains(i.rest_index, '③'):
-        if _.endswith(o['prp-sg'], 'и'):
-            o['prp-sg'] = o['prp-sg'] + '&nbsp;//<br />' + _.replaced(o['prp-sg'], 'и$', 'е')
+        if _.endswith(r['prp-sg'], 'и'):
+            r['prp-sg'] = r['prp-sg'] + '&nbsp;//<br />' + _.replaced(r['prp-sg'], 'и$', 'е')
         # end
-        if i.gender == 'f' and _.endswith(o['dat-sg'], 'и'):
-            o['dat-sg'] = o['dat-sg'] + '&nbsp;//<br />' + _.replaced(o['dat-sg'], 'и$', 'е')
+        if i.gender == 'f' and _.endswith(r['dat-sg'], 'и'):
+            r['dat-sg'] = r['dat-sg'] + '&nbsp;//<br />' + _.replaced(r['dat-sg'], 'и$', 'е')
         # end
     # end
 
@@ -48,13 +48,13 @@ def apply_specific_3(func, i):  # export
 
 @a.starts(module)
 def prt_case(func, i):  # Разделительный падеж
-    o = i.out_args  # local
+    r = i.result  # local
 
     if _.contains(i.index, 'Р2') or _.contains(i.index, 'Р₂'):
-        o['prt-sg'] = o['dat-sg']
+        r['prt-sg'] = r['dat-sg']
     # end
     if _.has_value(i.args, 'Р'):
-        o['prt-sg'] = i.args['Р']
+        r['prt-sg'] = i.args['Р']
     # end
 
     _.ends(module, func)
@@ -63,15 +63,15 @@ def prt_case(func, i):  # Разделительный падеж
 
 @a.starts(module)
 def loc_case(func, i):  # Местный падеж
-    o = i.out_args  # local
+    r = i.result  # local
 
     if _.contains(i.index, 'П2') or _.contains(i.index, 'П₂'):
-        loc = o['dat-sg']  # local
+        loc = r['dat-sg']  # local
         loc = _.replaced(loc, '́ ', '')
         loc = _.replaced(loc, 'ё', 'е')
         loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
         loc = remove_stress_if_one_syllable(loc)  # = export.
-        o['loc-sg'] = loc
+        r['loc-sg'] = loc
         loc_prep = _.extract(i.index, 'П2%((.+)%)')  # local
         if not loc_prep:
             loc_prep = _.extract(i.index, 'П₂%((.+)%)')
@@ -79,13 +79,13 @@ def loc_case(func, i):  # Местный падеж
         if not loc_prep:
             loc_prep = 'в, на'
         # end
-        o['loc-sg'] = '(' + loc_prep + ') ' + o['loc-sg']
+        r['loc-sg'] = '(' + loc_prep + ') ' + r['loc-sg']
         if _.contains(i.index, '%[П'):
-            o['loc-sg'] = o['loc-sg'] + '&nbsp;//<br />' + o['prp-sg']
+            r['loc-sg'] = r['loc-sg'] + '&nbsp;//<br />' + r['prp-sg']
         # end
     # end
     if _.has_value(i.args, 'М'):
-        o['loc-sg'] = i.args['М']
+        r['loc-sg'] = i.args['М']
     # end
 
     _.ends(module, func)
@@ -94,15 +94,15 @@ def loc_case(func, i):  # Местный падеж
 
 @a.starts(module)
 def voc_case(func, i):  # Звательный падеж
-    o = i.out_args  # local
+    r = i.result  # local
 
     if _.has_value(i.args, 'З'):
-        o['voc-sg'] = i.args['З']
+        r['voc-sg'] = i.args['З']
     elif _.contains(i.index, 'З'):
         if _.endswith(i.word.unstressed, ['а', 'я']):
-            o['voc-sg'] = o['gen-pl']
+            r['voc-sg'] = r['gen-pl']
         else:
-            o['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
+            r['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
         # end
     # end
 

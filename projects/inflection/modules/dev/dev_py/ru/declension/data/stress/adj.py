@@ -36,7 +36,7 @@ def get_adj_stress_schema(func, stress_type):  # export  # INFO: Вычисле�
         'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
         'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
     ]  # list
-    for i, type in enumerate(types):
+    for j, type in enumerate(types):
         sg_value = stress_schema[type]['full']  # local
         for j, case in enumerate(cases):
             stress_schema[type][case] = sg_value

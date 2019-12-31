@@ -6,7 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .run import _parts as p
-from .run.result import result as r
+from .run.result import forward as forward
 from .run.result.forms import common as form
 from .run.result.forms import noun as noun_forms
 
@@ -16,7 +16,7 @@ module = 'run'  # local
 
 @a.starts(module)
 def run_gender(func, i):
-    o = i.out_args  # local
+    r = i.result  # local
 
     if _.startswith(i.rest_index, '0'):
         # todo: move to special function
@@ -26,7 +26,7 @@ def run_gender(func, i):
             'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
         ]  # list
         for j, key in enumerate(keys):
-            o[key] = i.word.stressed
+            r[key] = i.word.stressed
         # end
         return _.ends(module, func)
     # end
@@ -47,15 +47,15 @@ def run_info(func, i):  # todo rename to `run_info`
     if i.noun:
         run_gender(i)
     elif i.adj:
-        o = i.out_args  # local
+        r = i.result  # local
         genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
         for j, gender in enumerate(genders):
             i_copy = mw.clone(i)  # local
             i_copy.gender = gender
-            _.log_value(i_copy.gender, 'info.gender')
+            _.log_value(i_copy.gender, 'i.gender')
             run_gender(i_copy)
 
-            o_copy = i_copy.out_args  # local
+            r_copy = i_copy.result  # local
 
             # local cases
             if i_copy.gender != '':
@@ -77,18 +77,18 @@ def run_info(func, i):  # todo rename to `run_info`
                 else:
                     key = case
                 # end
-                o[key] = o_copy[case]
+                r[key] = r_copy[case]
             # end
             if i_copy.gender == 'f':
-                o['ins-sg2-f'] = o_copy['ins-sg2']
+                r['ins-sg2-f'] = r_copy['ins-sg2']
             # end
 
             if i_copy.gender == 'm':
-                o['acc-sg-m-a'] = o['gen-sg-m']
-                o['acc-sg-m-n'] = o['nom-sg-m']
+                r['acc-sg-m-a'] = r['gen-sg-m']
+                r['acc-sg-m-n'] = r['nom-sg-m']
             elif i_copy.gender == '':
-                o['acc-pl-a'] = o_copy['gen-pl']
-                o['acc-pl-n'] = o_copy['nom-pl']
+                r['acc-pl-a'] = r_copy['gen-pl']
+                r['acc-pl-n'] = r_copy['nom-pl']
             # end
 
         # end
@@ -99,39 +99,39 @@ def run_info(func, i):  # todo rename to `run_info`
 
 
 @a.starts(module)
-def run(func, info):  # export
+def run(func, i):  # export
     # todo: move this `if` block inside `run_info` and run it recursively :)
-    if info.variations:
+    if i.variations:
         _.log_info("Случай с вариациями '//'")
-        info_1 = info.variations[0]  # local
-        info_2 = info.variations[1]  # local
+        i1 = i.variations[0]  # local
+        i2 = i.variations[1]  # local
         # todo: ... = o.output(m.modify(info_1))
-        run_info(info_1)
-        run_info(info_2)
-        info.out_args = form.join_forms(info_1.out_args, info_2.out_args)
+        run_info(i1)
+        run_info(i2)
+        i.result = form.join_forms(i1.result, i2.result)
         # todo: form.join_variations()
         # todo: check for errors inside variations
-    elif info.plus:
+    elif i.plus:
         _.log_info("Случай с '+'")
         out_args_plus = []  # list  # local
-        for i, sub_info in enumerate(info.plus):
+        for j, sub_info in enumerate(i.plus):
             run_info(sub_info)
-            out_args_plus.append(sub_info.out_args)
+            out_args_plus.append(sub_info.result)
         # end
-        info.out_args = form.plus_forms(out_args_plus)
+        i.result = form.plus_forms(out_args_plus)
         # todo: form.plus_out_args()
     else:
         _.log_info('Стандартный случай без вариаций')
-        run_info(info)
+        run_info(i)
     # end
 
-    if info.noun:
-        noun_forms.special_cases(info)
+    if i.noun:
+        noun_forms.special_cases(i)
     # end
 
-    r.forward_args(info)
+    forward.forward_args(i)
 
-    _.log_table(info.out_args, "info.out_args")
+    _.log_table(i.result, "i.result")
     _.ends(module, func)
 # end
 

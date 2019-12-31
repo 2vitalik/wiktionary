@@ -39,7 +39,7 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 		'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
 		'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
 	}  -- list
-	for i, type in pairs(types) do  -- list
+	for j, type in pairs(types) do  -- list
 		local sg_value = stress_schema[type]['full']
 		for j, case in pairs(cases) do  -- list
 			stress_schema[type][case] = sg_value
