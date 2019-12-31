@@ -8,13 +8,16 @@ def replace_stress(value):
     return value.replace('́', "'")
 
 
-def noun(word, index):
+def noun(word, index=None):
+    if not index:
+        word, index = word.split('|')
     run('noun',  word, index)
 
 
-def adj(word, index):
-    # todo: only one argument separated by '|'
+def adj(word, index=None):
     # todo: dev-параметр
+    if not index:
+        word, index = word.split('|')
     run('adj',  word, index)
 
 
