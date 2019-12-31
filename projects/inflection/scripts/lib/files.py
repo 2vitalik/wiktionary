@@ -23,12 +23,12 @@ declension_files = [
     'ru/declension/run/parts/transform/circles/noun',
     'ru/declension/run/parts/transform/degree',
     'ru/declension/run/parts/transform/reducable',
-    'ru/declension/run/out/forms/common',
-    'ru/declension/run/out/forms/noun',
-    'ru/declension/run/out/forms/adj',
-    'ru/declension/run/out/index',
-    'ru/declension/run/out/init_out_args',
-    'ru/declension/run/out/result',
+    'ru/declension/run/result/forms/common',
+    'ru/declension/run/result/forms/noun',
+    'ru/declension/run/result/forms/adj',
+    'ru/declension/run/result/index',
+    'ru/declension/run/result/init_out_args',
+    'ru/declension/run/result/result',
 ]
 
 testcases_files = [

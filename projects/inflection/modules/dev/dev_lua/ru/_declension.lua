@@ -6,7 +6,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse/common')  -- 'declension.'
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- 'declension.'
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- 'declension.'
 local run = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run')  -- '_' /run
 
 
@@ -47,3 +47,4 @@ return export
 
 
 -- todo: rename `i.data` to `i.parts`
+-- todo: rename `i.out_args` to `i.result`

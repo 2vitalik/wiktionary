@@ -8,7 +8,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 from ...data.stress import adj as adj_stress
 from ...data.stress import pronoun as pronoun_stress
 from ...data.stress import noun as noun_stress
-from ...run.out import result as r
+from ...run.result import result as r
 
 
 module = 'init.process.stress'  # local

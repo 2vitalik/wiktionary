@@ -5,8 +5,8 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...run.out import index as index
-from ...run.out import result as result
+from ...run.result import index as index
+from ...run.result import result as result
 
 
 module = 'run.out.init_out_args'  # local

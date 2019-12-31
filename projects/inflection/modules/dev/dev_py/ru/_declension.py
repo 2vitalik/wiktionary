@@ -6,7 +6,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .declension.init.parse import common as parse
-from .declension.run.out import result as r
+from .declension.run.result import result as r
 from .declension import _run as run
 
 
@@ -44,3 +44,4 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
 
 
 # todo: rename `i.data` to `i.parts`
+# todo: rename `i.out_args` to `i.result`

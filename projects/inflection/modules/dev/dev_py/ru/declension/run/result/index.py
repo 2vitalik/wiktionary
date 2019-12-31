@@ -12,6 +12,7 @@ module = 'run.out.index'  # local
 @a.starts(module)
 def get_zaliznyak(func, i):  # export
     # TODO: process <...> cases properly
+    #  also e.g. "2*a + <п 1a>"
     o = i.out_args  # local
 
     if not i.has_index:

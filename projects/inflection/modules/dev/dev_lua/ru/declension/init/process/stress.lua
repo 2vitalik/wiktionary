@@ -8,7 +8,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/adj')  -- '..'
 local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/pronoun')  -- '..'
 local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/noun')  -- '..'
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- '..'
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- '..'
 
 
 local module = 'init.process.stress'

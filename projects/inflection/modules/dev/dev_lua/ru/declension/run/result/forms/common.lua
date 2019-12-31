@@ -5,8 +5,8 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/noun')  -- '...'
-local adj_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/adj')  -- '...'
+local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/noun')  -- '...'
+local adj_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/adj')  -- '...'
 
 
 local module = 'run.out.forms.common'

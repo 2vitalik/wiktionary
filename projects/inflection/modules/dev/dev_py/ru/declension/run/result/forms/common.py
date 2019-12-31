@@ -5,8 +5,8 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ....run.out.forms import noun as noun_forms
-from ....run.out.forms import adj as adj_forms
+from ....run.result.forms import noun as noun_forms
+from ....run.result.forms import adj as adj_forms
 
 
 module = 'run.out.forms.common'  # local

@@ -6,9 +6,9 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .run import _parts as p
-from .run.out import result as r
-from .run.out.forms import common as form
-from .run.out.forms import noun as noun_forms
+from .run.result import result as r
+from .run.result.forms import common as form
+from .run.result.forms import noun as noun_forms
 
 
 module = 'run'  # local

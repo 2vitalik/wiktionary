@@ -6,9 +6,9 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts')  -- ''  -- '_' /parts
-local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/result')  -- ''
-local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/common')  -- ''
-local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/out/forms/noun')  -- ''
+local r = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/result')  -- ''
+local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/common')  -- ''
+local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/noun')  -- ''
 
 
 local module = 'run'

@@ -15,6 +15,7 @@ function export.get_zaliznyak(i)
 	_.starts(module, func)
 
 	-- TODO: process <...> cases properly
+	--  also e.g. "2*a .. <п 1a>"
 	local o = i.out_args
 
 	if not i.has_index then
