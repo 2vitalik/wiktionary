@@ -5,7 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from .declension.init.parse import common as parse
+from .declension.init import _parse as parse
 from .declension.run.result import error as e
 from .declension import _run as run
 
@@ -26,8 +26,7 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
     prepare_stash()  # INFO: Заполняем шаблоны для регулярок
 
     # `i` -- main `info` object
-    i = parse.parse(base, args)  # local
-    i.frame = frame  # todo: move to `parse`
+    i = parse.parse(base, args, frame)  # local
     if e.has_error(i):
         _.ends(module, func)
         return i.result
@@ -42,7 +41,3 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
 
 
 # return export
-
-
-# todo: rename `i.data` to `i.parts`
-# todo: rename `i.out_args` to `i.result`
