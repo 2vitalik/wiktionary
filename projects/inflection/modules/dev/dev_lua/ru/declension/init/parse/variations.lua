@@ -16,7 +16,7 @@ local module = 'init.parse.variations'
 
 
 -- @starts
-local function process_animacy_variations(i)
+function export.process_animacy_variations(i)
 	func = "process_animacy_variations"
 	_.starts(module, func)
 
@@ -36,7 +36,7 @@ end
 
 
 -- @starts
-local function process_plus(i, plus_words, plus_index)
+function export.process_plus(i, plus_words, plus_index)
 	func = "process_plus"
 	_.starts(module, func)
 
@@ -72,7 +72,7 @@ end
 
 
 -- @starts
-local function process_brackets_variations(i)
+function export.process_brackets_variations(i)
 	func = "process_brackets_variations"
 	_.starts(module, func)
 
@@ -97,7 +97,7 @@ end
 
 
 -- @starts
-local function process_full_variations(i, parts)
+function export.process_full_variations(i, parts)
 	func = "process_full_variations"
 	_.starts(module, func)
 

@@ -14,7 +14,7 @@ local module = 'init.parse.angle_brackets'
 
 
 -- @starts
-local function angle_brackets(i)
+function export.angle_brackets(i)
 	func = "angle_brackets"
 	_.starts(module, func)
 

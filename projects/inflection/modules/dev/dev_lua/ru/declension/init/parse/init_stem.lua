@@ -12,7 +12,7 @@ local module = 'init.parse.init_stem'
 
 
 -- @starts
-local function init_stem(i)  -- todo rename to `init_stem`
+function export.init_stem(i)  -- todo rename to `init_stem`
 	func = "init_stem"
 	_.starts(module, func)
 

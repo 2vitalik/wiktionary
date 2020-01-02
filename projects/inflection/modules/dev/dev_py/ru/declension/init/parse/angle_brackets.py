@@ -14,7 +14,7 @@ module = 'init.parse.angle_brackets'  # local
 
 
 @a.starts(module)
-def angle_brackets(func, i):
+def angle_brackets(func, i):  # export
     angle_index = _.extract(i.rest_index, '%<([^>]+)%>')  # local
     if angle_index:
         if not i.pt:

@@ -16,7 +16,7 @@ module = 'init.parse.variations'  # local
 
 
 @a.starts(module)
-def process_animacy_variations(func, i):
+def process_animacy_variations(func, i):  # export
     # INFO: Клонируем две вариации на основании текущих данных
     i_1 = mw.clone(i)  # local
     i_2 = mw.clone(i)  # local
@@ -33,7 +33,7 @@ def process_animacy_variations(func, i):
 
 
 @a.starts(module)
-def process_plus(func, i, plus_words, plus_index):
+def process_plus(func, i, plus_words, plus_index):  # export
     i.plus = []  # list
     n_plus = a.table_len(plus_index)  # local
     for j in range(n_plus):
@@ -66,7 +66,7 @@ def process_plus(func, i, plus_words, plus_index):
 
 
 @a.starts(module)
-def process_brackets_variations(func, i):
+def process_brackets_variations(func, i):  # export
     # INFO: Клонируем две вариации на основании текущих данных
     i_1 = mw.clone(i)  # local
     i_2 = mw.clone(i)  # local
@@ -88,7 +88,7 @@ def process_brackets_variations(func, i):
 
 
 @a.starts(module)
-def process_full_variations(func, i, parts):
+def process_full_variations(func, i, parts):  # export
     # INFO: Клонируем две вариации на основании текущих данных
     i_1 = mw.clone(i)  # local
     i_2 = mw.clone(i)  # local

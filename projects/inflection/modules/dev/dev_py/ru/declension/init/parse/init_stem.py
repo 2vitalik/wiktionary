@@ -12,7 +12,7 @@ module = 'init.parse.init_stem'  # local
 
 
 @a.starts(module)
-def init_stem(func, i):  # todo rename to `init_stem`
+def init_stem(func, i):  # export  # todo rename to `init_stem`
 
     # INFO: Исходное слово без ударения:
     i.word.unstressed = _.replaced(i.word.stressed, '́ ', '')  # todo: move outside this function
