@@ -44,7 +44,7 @@ function export.process_plus(i, plus_words, plus_index)
 	local n_plus = table.getn(plus_index)
 	for j = 1, n_plus do
 		local i_copy = mw.clone(i)
-		i_copy.word.stressed = plus_words[i]
+		i_copy.word.stressed = plus_words[j]
 
 		init_stem.init_stem(i_copy)
 		if e.has_error(i_copy) then

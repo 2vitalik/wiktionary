@@ -38,7 +38,7 @@ def process_plus(func, i, plus_words, plus_index):  # export
     n_plus = a.table_len(plus_index)  # local
     for j in range(n_plus):
         i_copy = mw.clone(i)  # local
-        i_copy.word.stressed = plus_words[i]
+        i_copy.word.stressed = plus_words[j]
 
         init_stem.init_stem(i_copy)
         if e.has_error(i_copy):
