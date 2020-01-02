@@ -9,7 +9,7 @@ local module = 'run.result.variations'
 
 
 -- @starts
-function export.join_forms(out_args_1, out_args_2)  -- todo: rename to `out_args`
+function export.join_forms(out_args_1, out_args_2)  -- todo: rename to `variations`
 	func = "join_forms"
 	_.starts(module, func)
 

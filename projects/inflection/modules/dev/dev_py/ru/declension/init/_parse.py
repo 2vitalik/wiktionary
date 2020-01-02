@@ -82,7 +82,7 @@ def parse(func, base, args, frame):  # export
     # end
 
     # INFO: Проверяем случай с вариациями:
-    variations = mw.text.split(i.rest_index, '//')  # local  # todo: rename
+    variations = mw.text.split(i.rest_index, '//')  # local
     n_variations = a.table_len(variations)  # local
 
     if n_variations == 1:  # INFO: Дополнительных вариаций нет

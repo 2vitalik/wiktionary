@@ -85,7 +85,7 @@ function export.parse(base, args, frame)
 	end
 
 --	INFO: Проверяем случай с вариациями:
-	variations = mw.text.split(i.rest_index, '//')  local  -- todo: rename
+	local variations = mw.text.split(i.rest_index, '//')
 	local n_variations = table.getn(variations)
 
 	if n_variations == 1 then  -- INFO: Дополнительных вариаций нет
