@@ -8,6 +8,7 @@ declension_files = [
     'ru/declension/data/stress/pronoun',
     'ru/declension/data/template/adj',
     'ru/declension/data/template/noun',
+    'ru/declension/_init',
     'ru/declension/init/_parse',
     'ru/declension/init/parse/angle_brackets',
     'ru/declension/init/parse/init_stem',

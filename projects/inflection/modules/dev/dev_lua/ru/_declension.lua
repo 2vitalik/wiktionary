@@ -5,7 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local parse = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/parse')  -- 'declension.'  -- '_' /parse
+local init = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init')  -- '_' /init
 local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- 'declension.'
 local run = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run')  -- '_' /run
 
@@ -13,23 +13,12 @@ local run = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run')  
 local module = 'declension'
 
 
-local function prepare_stash()  -- todo rename to `prepare_regexp_templates` or patterns
-	_.clear_stash()
-	_.add_stash('{vowel}', '[аеиоуыэюяАЕИОУЫЭЮЯ]')
-	_.add_stash('{vowel+ё}', '[аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
-	_.add_stash('{consonant}', '[^аеёиоуыэюяАЕЁИОУЫЭЮЯ]')
-end
-
-
 -- @starts
 function export.forms(base, args, frame)  -- todo: rename to `out_args`
 	func = "forms"
 	_.starts(module, func)
 
-	prepare_stash()  -- INFO: Заполняем шаблоны для регулярок
-
-	-- `i` -- main `info` object
-	local i = parse.parse(base, args, frame)
+	local i = init.init_info(base, args, frame)
 	if e.has_error(i) then
 		return _.returns(module, func, i.result)
 	end
