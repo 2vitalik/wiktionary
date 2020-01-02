@@ -27,13 +27,16 @@ declension_files = [
     'ru/declension/run/parts/transform/circles/noun',
     'ru/declension/run/parts/transform/degree',
     'ru/declension/run/parts/transform/reducable',
+    'ru/declension/run/_result',
+    'ru/declension/run/result/forms/init',
     'ru/declension/run/result/forms/common',
     'ru/declension/run/result/forms/noun',
     'ru/declension/run/result/forms/adj',
     'ru/declension/run/result/error',
     'ru/declension/run/result/forward',
     'ru/declension/run/result/index',
-    'ru/declension/run/result/init_out_args',
+    'ru/declension/run/result/init_out_args',  # todo: rename
+    'ru/declension/run/result/variations',
 ]
 
 testcases_files = [

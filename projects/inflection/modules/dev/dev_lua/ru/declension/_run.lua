@@ -6,8 +6,9 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
 local p = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts')  -- ''  -- '_' /parts
+local res = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result')  -- ''  -- '_' /result
 local forward = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forward')  -- ''
-local form = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/common')  -- ''
+local v = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/variations')  -- ''
 local noun_forms = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/forms/noun')  -- ''
 
 
@@ -35,14 +36,14 @@ local function run_gender(i)
 	end
 
 	p.generate_parts(i)
-	form.generate_out_args(i)
+	res.generate_result(i)
 
 	_.ends(module, func)
 end
 
 
 -- @starts
-local function run_info(i)  -- todo rename to `run_info`
+local function run_info(i)
 	func = "run_info"
 	_.starts(module, func)
 
@@ -109,25 +110,24 @@ function export.run(i)
 	func = "run"
 	_.starts(module, func)
 
-	-- todo: move this `if` block inside `run_info` and run it recursively :)
+	-- todo: move this `if` block inside `run_info` and run it recursively? :)
 	if i.variations then
 		_.log_info("Случай с вариациями '//'")
 		local i1 = i.variations[1]
 		local i2 = i.variations[2]
-		-- todo: ... = o.output(m.modify(info_1))
 		run_info(i1)
 		run_info(i2)
-		i.result = form.join_forms(i1.result, i2.result)
+		i.result = v.join_forms(i1.result, i2.result)
 		-- todo: form.join_variations()
 		-- todo: check for errors inside variations
 	elseif i.plus then
 		_.log_info("Случай с '+'")
-		local out_args_plus = {}  -- list
+		local plus = {}  -- list
 		for j, sub_info in pairs(i.plus) do  -- list
 			run_info(sub_info)
-			table.insert(out_args_plus, sub_info.result)
+			table.insert(plus, sub_info.result)
 		end
-		i.result = form.plus_forms(out_args_plus)
+		i.result = v.plus_forms(plus)
 		-- todo: form.plus_out_args()
 	else
 		_.log_info('Стандартный случай без вариаций')
@@ -135,7 +135,7 @@ function export.run(i)
 	end
 
 	if i.noun then
-		noun_forms.special_cases(i)
+		noun_forms.special_cases(i)  -- todo: move to `run/result/generate_result`
 	end
 
 	forward.forward_args(i)

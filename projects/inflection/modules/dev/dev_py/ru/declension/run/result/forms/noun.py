@@ -115,6 +115,7 @@ def special_cases(func, i):  # export
     prt_case(i)
     loc_case(i)
     voc_case(i)
+
     _.ends(module, func)
 # end
 

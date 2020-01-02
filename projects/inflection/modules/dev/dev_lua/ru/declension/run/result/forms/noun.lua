@@ -133,6 +133,7 @@ function export.special_cases(i)
 	prt_case(i)
 	loc_case(i)
 	voc_case(i)
+
 	_.ends(module, func)
 end
 

@@ -6,8 +6,9 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 from .run import _parts as p
+from .run import _result as res
 from .run.result import forward as forward
-from .run.result.forms import common as form
+from .run.result import variations as v
 from .run.result.forms import noun as noun_forms
 
 
@@ -32,14 +33,14 @@ def run_gender(func, i):
     # end
 
     p.generate_parts(i)
-    form.generate_out_args(i)
+    res.generate_result(i)
 
     _.ends(module, func)
 # end
 
 
 @a.starts(module)
-def run_info(func, i):  # todo rename to `run_info`
+def run_info(func, i):
     if not i.has_index:
         return
     # end
@@ -100,25 +101,24 @@ def run_info(func, i):  # todo rename to `run_info`
 
 @a.starts(module)
 def run(func, i):  # export
-    # todo: move this `if` block inside `run_info` and run it recursively :)
+    # todo: move this `if` block inside `run_info` and run it recursively? :)
     if i.variations:
         _.log_info("Случай с вариациями '//'")
         i1 = i.variations[0]  # local
         i2 = i.variations[1]  # local
-        # todo: ... = o.output(m.modify(info_1))
         run_info(i1)
         run_info(i2)
-        i.result = form.join_forms(i1.result, i2.result)
+        i.result = v.join_forms(i1.result, i2.result)
         # todo: form.join_variations()
         # todo: check for errors inside variations
     elif i.plus:
         _.log_info("Случай с '+'")
-        out_args_plus = []  # list  # local
+        plus = []  # list  # local
         for j, sub_info in enumerate(i.plus):
             run_info(sub_info)
-            out_args_plus.append(sub_info.result)
+            plus.append(sub_info.result)
         # end
-        i.result = form.plus_forms(out_args_plus)
+        i.result = v.plus_forms(plus)
         # todo: form.plus_out_args()
     else:
         _.log_info('Стандартный случай без вариаций')
@@ -126,7 +126,7 @@ def run(func, i):  # export
     # end
 
     if i.noun:
-        noun_forms.special_cases(i)
+        noun_forms.special_cases(i)  # todo: move to `run/result/generate_result`
     # end
 
     forward.forward_args(i)
