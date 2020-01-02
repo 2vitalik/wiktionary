@@ -21,8 +21,7 @@ def process(func, i):  # export
     _.log_value(i.stress_type, 'i.stress_type')
 
     if e.has_error(i):
-        _.ends(module, func)
-        return i
+        return _.returns(module, func, i)
     # end
 
     if not i.stress_type:  # если ударение не указано
@@ -32,14 +31,12 @@ def process(func, i):  # export
             # INFO: Если при этом есть какой-то индекс, это явно ОШИБКА
             if _.has_value(i.rest_index):
                 e.add_error(i, 'Нераспознанная часть индекса: ' + i.rest_index)
-                _.ends(module, func)
-                return i
+                return _.returns(module, func, i)
             # end
 
             # INFO: Если же индекса вообще нет, то и формы просто не известны:
             i.has_index = False
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
         # end
     # end
 
@@ -72,8 +69,7 @@ def process(func, i):  # export
     _.log_info('Инициализируем `i.result`')
     o.init_out_args(i)
 
-    _.ends(module, func)
-    return i
+    return _.returns(module, func, i)
 # end
 
 

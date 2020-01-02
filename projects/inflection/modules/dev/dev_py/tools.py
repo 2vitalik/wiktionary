@@ -124,11 +124,19 @@ def starts(module, name):
     level += 4
 
 
-def ends(module, name):  # todo: add last argument to `return`
+def ends(module, name):
     global level
     level -= 4
     # log('↙ . ' + module + '.' + name + '()')
     log('↙ . ')
+
+
+def returns(module, name, result):
+    global level
+    level -= 4
+    # log('↙ . ' + module + '.' + name + '()')
+    log('↙ . ')
+    return result
 
 
 def log_value(value, name):

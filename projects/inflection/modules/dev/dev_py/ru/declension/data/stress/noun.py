@@ -46,8 +46,7 @@ def get_noun_stress_schema(func, stress_type):  # export  # INFO: Вычисле
         stress_schema[type]['prp-pl'] = pl_value
     # end
 
-    _.ends(module, func)
-    return stress_schema
+    return _.returns(module, func, stress_schema)
 # end
 
 

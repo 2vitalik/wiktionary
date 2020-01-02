@@ -49,8 +49,7 @@ def parse(func, base, args, frame):  # export
     if i.noun:  # fixme
         noun_parse.extract_gender_animacy(i)
         if e.has_error(i):
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
         # end
 
         _.log_value(i.gender, 'i.gender')
@@ -71,16 +70,14 @@ def parse(func, base, args, frame):  # export
     # INFO: stem, stem.stressed, etc.
     init_stem.init_stem(i)
     if e.has_error(i):
-        _.ends(module, func)
-        return i
+        return _.returns(module, func, i)
     # end
 
     if i.noun:
         # INFO: Случай, если род или одушевлённость не указаны:
         if (not i.gender or not i.animacy) and not i.pt:
             # INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
         # end
     # end
 
@@ -91,8 +88,7 @@ def parse(func, base, args, frame):  # export
     if n_variations == 1:  # INFO: Дополнительных вариаций нет
         if _.contains(i.animacy, '//'):  # INFO: Случаи 'in//an' и 'an//in'
             v.process_animacy_variations(i)
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
             # TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
         # end
 
@@ -103,22 +99,19 @@ def parse(func, base, args, frame):  # export
         n_plus = a.table_len(plus_index)  # local
         if n_plus > 1:
             v.process_plus(i, plus_words, plus_index)
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
         # end
 
         if i.noun:
             angle.angle_brackets(i)
             if e.has_error(i):
-                _.ends(module, func)
-                return i
+                return _.returns(module, func, i)
             # end
         # end
 
         if _.contains(i.rest_index, '%[%([12]%)%]') or _.contains(i.rest_index, '%[[①②]%]'):
             v.process_brackets_variations(i)
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
         # end
 
     elif n_variations == 2:  # INFO: Вариации "//" для ударения (и прочего индекса)
@@ -127,19 +120,16 @@ def parse(func, base, args, frame):  # export
         if _.contains(i.animacy, '//'):
             # INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
             e.add_error(i, 'Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?')
-            _.ends(module, func)
-            return i
+            return _.returns(module, func, i)
         # end
 
         v.process_full_variations(i, variations)
 
-        _.ends(module, func)
-        return i
+        return _.returns(module, func, i)
 
     else:  # INFO: Какая-то ошибка, слишком много "//" в индексе
         e.add_error(i, 'Ошибка: Слишком много частей для "//"')
-        _.ends(module, func)
-        return i
+        return _.returns(module, func, i)
     # end
 
     _.ends(module, func)

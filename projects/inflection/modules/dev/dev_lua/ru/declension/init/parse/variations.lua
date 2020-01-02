@@ -49,8 +49,7 @@ function export.process_plus(i, plus_words, plus_index)
 		init_stem.init_stem(i_copy)
 		if e.has_error(i_copy) then
 			e.add_error(i, i_copy.result.error)
-			_.ends(module, func)
-			return
+			return _.ends(module, func)
 		end
 
 		i_copy.rest_index = plus_index[j]
@@ -59,8 +58,7 @@ function export.process_plus(i, plus_words, plus_index)
 			angle.angle_brackets(i_copy)
 			if e.has_error(i_copy) then
 				e.add_error(i, i_copy.result.error)
-				_.ends(module, func)
-				return
+				return _.ends(module, func)
 			end
 		end
 
@@ -125,8 +123,7 @@ function export.process_full_variations(i, parts)
 --	INFO: Проверка на гипотетическую ошибку в алгоритме:
 	elseif not i_2.gender and i_2.animacy or i_2.gender and not i_2.animacy then
 		e.add_error(i, 'Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей')
-		_.ends(module, func)
-		return
+		return _.ends(module, func)
 
 --	INFO: Если что-то изменилось, значит, прошёл один из случаев, и значит у нас "полная" вариация (затрагивающая род)
 	elseif i.gender ~= i_2.gender or i.animacy ~= i_2.animacy or i.common_gender ~= i_2.common_gender then

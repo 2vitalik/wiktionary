@@ -52,8 +52,7 @@ function export.parse(base, args, frame)
 	if i.noun then  -- fixme
 		noun_parse.extract_gender_animacy(i)
 		if e.has_error(i) then
-			_.ends(module, func)
-			return i
+			return _.returns(module, func, i)
 		end
 
 		_.log_value(i.gender, 'i.gender')
@@ -74,16 +73,14 @@ function export.parse(base, args, frame)
 --	INFO: stem, stem.stressed, etc.
 	init_stem.init_stem(i)
 	if e.has_error(i) then
-		_.ends(module, func)
-		return i
+		return _.returns(module, func, i)
 	end
 
 	if i.noun then
 --		INFO: Случай, если род или одушевлённость не указаны:
 		if (not i.gender or not i.animacy) and not i.pt then
 --			INFO: Не показываем ошибку, просто считаем, что род или одушевлённость *ещё* не указаны
-			_.ends(module, func)
-			return i
+			return _.returns(module, func, i)
 		end
 	end
 
@@ -94,8 +91,7 @@ function export.parse(base, args, frame)
 	if n_variations == 1 then  -- INFO: Дополнительных вариаций нет
 		if _.contains(i.animacy, '//') then  -- INFO: Случаи 'in//an' и 'an//in'
 			v.process_animacy_variations(i)
-			_.ends(module, func)
-			return i
+			return _.returns(module, func, i)
 			-- TODO: А что если in//an одновременно со следующими случаями "[]" или "+"
 		end
 
@@ -106,22 +102,19 @@ function export.parse(base, args, frame)
 		local n_plus = table.getn(plus_index)
 		if n_plus > 1 then
 			v.process_plus(i, plus_words, plus_index)
-			_.ends(module, func)
-			return i
+			return _.returns(module, func, i)
 		end
 
 		if i.noun then
 			angle.angle_brackets(i)
 			if e.has_error(i) then
-				_.ends(module, func)
-				return i
+				return _.returns(module, func, i)
 			end
 		end
 
 		if _.contains(i.rest_index, '%[%([12]%)%]') or _.contains(i.rest_index, '%[[①②]%]') then
 			v.process_brackets_variations(i)
-			_.ends(module, func)
-			return i
+			return _.returns(module, func, i)
 		end
 
 	elseif n_variations == 2 then  -- INFO: Вариации "//" для ударения (и прочего индекса)
@@ -130,19 +123,16 @@ function export.parse(base, args, frame)
 		if _.contains(i.animacy, '//') then
 --			INFO: Если используются вариации одновременно и отдельно для одушевлённости и ударения
 			e.add_error(i, 'Ошибка: Случай с несколькими "//" пока не реализован. Нужно реализовать?')
-			_.ends(module, func)
-			return i
+			return _.returns(module, func, i)
 		end
 
 		v.process_full_variations(i, variations)
 
-		_.ends(module, func)
-		return i
+		return _.returns(module, func, i)
 
 	else  -- INFO: Какая-то ошибка, слишком много "//" в индексе
 		e.add_error(i, 'Ошибка: Слишком много частей для "//"')
-		_.ends(module, func)
-		return i
+		return _.returns(module, func, i)
 	end
 
 	_.ends(module, func)

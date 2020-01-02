@@ -240,8 +240,7 @@ function export.join_forms(out_args_1, out_args_2)  -- todo: rename to `out_args
 		end
 	end
 
-	_.ends(module, func)
-	return out_args
+	return _.returns(module, func, out_args)
 end
 
 
@@ -279,8 +278,7 @@ function export.plus_forms(sub_forms)  -- todo: rename to `out_args`
 		end
 	end
 
-	_.ends(module, func)
-	return out_args
+	return _.returns(module, func, out_args)
 end
 
 

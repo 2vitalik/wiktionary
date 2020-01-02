@@ -38,8 +38,7 @@ def get_pronoun_stress_schema(func, stress_type):  # export  # INFO: Вычис�
         # end
     # end
 
-    _.ends(module, func)
-    return stress_schema
+    return _.returns(module, func, stress_schema)
 # end
 
 

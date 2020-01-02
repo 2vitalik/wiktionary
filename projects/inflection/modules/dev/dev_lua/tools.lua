@@ -136,6 +136,13 @@ function export.ends(module, name)
     export.log('↙ . ')
 end
 
+function export.returns(module, name, result)
+    level = level - 4
+    -- log('↙ . ' .. module .. '.' .. name .. '()')
+    export.log('↙ . ')
+    return result
+end
+
 function export.log_value(value, name)
     export.log('= ' .. name .. ': "' .. tostring(value) .. '"')
 end

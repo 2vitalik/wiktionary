@@ -41,8 +41,7 @@ function export.get_pronoun_stress_schema(stress_type)  -- INFO: Вычисле�
 		end
 	end
 
-	_.ends(module, func)
-	return stress_schema
+	return _.returns(module, func, stress_schema)
 end
 
 

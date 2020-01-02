@@ -20,8 +20,7 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
         _.replace(stems, 'all-pl', '([ая]́ ?н)ин$', '%1')
         endings['nom-pl'] = 'е'
         endings['gen-pl'] = ''
-        _.ends(module, func)
-        return rest_index
+        return _.returns(module, func, rest_index)
     # end
 
     if _.contains(rest_index, '°') and _.endswith(word, 'ин'):
@@ -41,8 +40,7 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
         endings['gen-pl'] = ''
 
         reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)
-        _.ends(module, func)
-        return rest_index
+        return _.returns(module, func, rest_index)
     # end
 
     if _.contains(rest_index, '°') and _.endswith(word, ['ёночек', 'оночек']):
@@ -58,8 +56,7 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
 
         endings['gen-pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
 
-        _.ends(module, func)
-        return rest_index
+        return _.returns(module, func, rest_index)
     # end
 
     if _.contains(rest_index, '°') and gender == 'n' and _.endswith(word, 'мя'):
@@ -74,8 +71,7 @@ def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, s
         endings['prp-sg'] = 'и'
     # end
 
-    _.ends(module, func)
-    return rest_index
+    return _.returns(module, func, rest_index)
 # end
 
 

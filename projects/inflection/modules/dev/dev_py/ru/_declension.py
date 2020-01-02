@@ -28,15 +28,13 @@ def forms(func, base, args, frame):  # export  # todo: rename to `out_args`
     # `i` -- main `info` object
     i = parse.parse(base, args, frame)  # local
     if e.has_error(i):
-        _.ends(module, func)
-        return i.result
+        return _.returns(module, func, i.result)
     # end
 
     # INFO: Запуск основного алгоритма и получение результирующих словоформ:
     run.run(i)
 
-    _.ends(module, func)
-    return i.result
+    return _.returns(module, func, i.result)
 # end
 
 

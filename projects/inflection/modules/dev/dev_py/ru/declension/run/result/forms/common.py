@@ -219,8 +219,7 @@ def join_forms(func, out_args_1, out_args_2):  # export  # todo: rename to `out_
         # end
     # end
 
-    _.ends(module, func)
-    return out_args
+    return _.returns(module, func, out_args)
 # end
 
 
@@ -255,8 +254,7 @@ def plus_forms(func, sub_forms):  # export  # todo: rename to `out_args`
         # end
     # end
 
-    _.ends(module, func)
-    return out_args
+    return _.returns(module, func, out_args)
 # end
 
 

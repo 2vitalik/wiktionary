@@ -39,8 +39,7 @@ local function get_base_endings(i)
 		for j, key in pairs(keys) do  -- list
 			standard_endings['common'][i.stem.base_type][key] = ''
 		end
-		_.ends(module, func)
-		return standard_endings['common'][i.stem.base_type]
+		return _.returns(module, func, standard_endings['common'][i.stem.base_type])
 	end
 
 --	INFO: Заполнение из общих данных для всех родов:
@@ -49,8 +48,7 @@ local function get_base_endings(i)
 	end
 
 --	INFO: Возвращение соответствующих окончаний
-	_.ends(module, func)
-	return standard_endings[i.gender][i.stem.base_type]
+	return _.returns(module, func, standard_endings[i.gender][i.stem.base_type])
 end
 
 

@@ -34,8 +34,7 @@ local function get_stem_base_type(stem_type)
 	stem_base_types['f-3rd-sibilant'] = 'soft'
 	stem_base_types['n-3rd'] = 'hard'
 
-	_.ends(module, func)
-	return stem_base_types[stem_type]
+	return _.returns(module, func, stem_base_types[stem_type])
 end
 
 

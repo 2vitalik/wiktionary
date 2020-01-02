@@ -46,8 +46,7 @@ function export.get_adj_stress_schema(stress_type)  -- INFO: Вычислени�
 		end
 	end
 
-	_.ends(module, func)
-	return stress_schema
+	return _.returns(module, func, stress_schema)
 end
 
 

@@ -43,8 +43,7 @@ def process_plus(func, i, plus_words, plus_index):  # export
         init_stem.init_stem(i_copy)
         if e.has_error(i_copy):
             e.add_error(i, i_copy.result.error)
-            _.ends(module, func)
-            return
+            return _.ends(module, func)
         # end
 
         i_copy.rest_index = plus_index[j]
@@ -53,8 +52,7 @@ def process_plus(func, i, plus_words, plus_index):  # export
             angle.angle_brackets(i_copy)
             if e.has_error(i_copy):
                 e.add_error(i, i_copy.result.error)
-                _.ends(module, func)
-                return
+                return _.ends(module, func)
             # end
         # end
 
@@ -113,8 +111,7 @@ def process_full_variations(func, i, parts):  # export
     # INFO: Проверка на гипотетическую ошибку в алгоритме:
     elif not i_2.gender and i_2.animacy or i_2.gender and not i_2.animacy:
         e.add_error(i, 'Странная ошибка: После `extract_gender_animacy` не может быть частичной заполненности полей')
-        _.ends(module, func)
-        return
+        return _.ends(module, func)
 
     # INFO: Если что-то изменилось, значит, прошёл один из случаев, и значит у нас "полная" вариация (затрагивающая род)
     elif i.gender != i_2.gender or i.animacy != i_2.animacy or i.common_gender != i_2.common_gender:
