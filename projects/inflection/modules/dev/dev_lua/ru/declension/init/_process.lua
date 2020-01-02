@@ -7,7 +7,7 @@ local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 local stem_type = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stem_type')  -- '.'
 local stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/init/process/stress')  -- '.'
-local o = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/init_out_args')  -- '.'
+local init_result = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/init_result')  -- '.'
 local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- '.'
 
 
@@ -70,7 +70,7 @@ function export.process(i)
 	_.log_value(i.stem.stressed, 'i.stem.stressed')
 
 	_.log_info('Инициализируем `i.result`')
-	o.init_out_args(i)
+	init_result.init_result(i)
 
 	return _.returns(module, func, i)
 end

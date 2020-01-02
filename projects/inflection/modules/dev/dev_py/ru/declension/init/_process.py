@@ -7,7 +7,7 @@ dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 from ..init.process import stem_type as stem_type
 from ..init.process import stress as stress
-from ..run.result import init_out_args as o
+from ..run.result import init_result as init_result
 from ..run.result import error as e
 
 
@@ -67,7 +67,7 @@ def process(func, i):  # export
     _.log_value(i.stem.stressed, 'i.stem.stressed')
 
     _.log_info('Инициализируем `i.result`')
-    o.init_out_args(i)
+    init_result.init_result(i)
 
     return _.returns(module, func, i)
 # end

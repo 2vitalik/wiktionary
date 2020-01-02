@@ -35,7 +35,7 @@ declension_files = [
     'ru/declension/run/result/error',
     'ru/declension/run/result/forward',
     'ru/declension/run/result/index',
-    'ru/declension/run/result/init_out_args',  # todo: rename
+    'ru/declension/run/result/init_result',
     'ru/declension/run/result/variations',
 ]
 

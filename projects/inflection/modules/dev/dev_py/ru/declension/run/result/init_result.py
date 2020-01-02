@@ -95,7 +95,7 @@ def additional_arguments(func, i):
 
 
 @a.starts(module)
-def init_out_args(func, i):  # export
+def init_result(func, i):  # export
     r = i.result  # local
 
     r['stem_type'] = i.stem.type  # for testcases

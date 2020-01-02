@@ -101,8 +101,8 @@ end
 
 
 -- @starts
-function export.init_out_args(i)
-	func = "init_out_args"
+function export.init_result(i)
+	func = "init_result"
 	_.starts(module, func)
 
 	local r = i.result
