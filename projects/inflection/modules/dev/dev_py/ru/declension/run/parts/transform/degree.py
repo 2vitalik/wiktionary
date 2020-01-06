@@ -12,66 +12,68 @@ module = 'run.parts.transform.degree'  # local
 
 
 @a.starts(module)
-def apply_specific_degree(func, stems, endings, word, stem, stem_type, gender, stress_type, rest_index, data):  # export
+def apply_specific_degree(func, i):  # export
     # If degree sign °
+    p = i.parts  # local
+    word = i.word.unstressed  # local
 
-    if _.contains(rest_index, '°') and _.endswith(word, '[ая]нин'):
-        _.replace(stems, 'all-pl', '([ая])ни́ н$', '%1́ н')
-        _.replace(stems, 'all-pl', '([ая]́ ?н)ин$', '%1')
-        endings['nom-pl'] = 'е'
-        endings['gen-pl'] = ''
-        return _.returns(module, func, rest_index)
+    if _.contains(i.rest_index, '°') and _.endswith(word, '[ая]нин'):
+        _.replace(p.stems, 'all-pl', '([ая])ни́ н$', '%1́ н')
+        _.replace(p.stems, 'all-pl', '([ая]́ ?н)ин$', '%1')
+        p.endings['nom-pl'] = 'е'
+        p.endings['gen-pl'] = ''
+        return _.returns(module, func, i.rest_index)
     # end
 
-    if _.contains(rest_index, '°') and _.endswith(word, 'ин'):
-        _.replace(stems, 'all-pl', 'и́ ?н$', '')
-        if not _.contains(rest_index, ['%(1%)', '①']):
-            endings['nom-pl'] = 'е'
+    if _.contains(i.rest_index, '°') and _.endswith(word, 'ин'):
+        _.replace(p.stems, 'all-pl', 'и́ ?н$', '')
+        if not _.contains(i.rest_index, ['%(1%)', '①']):
+            p.endings['nom-pl'] = 'е'
         # end
-        endings['gen-pl'] = ''
+        p.endings['gen-pl'] = ''
     # end
 
-    if _.contains(rest_index, '°') and _.endswith(word, ['ёнок', 'онок']):
-        _.replace(stems, 'all-pl', 'ёнок$', 'я́т')
-        _.replace(stems, 'all-pl', 'о́нок$', 'а́т')
+    if _.contains(i.rest_index, '°') and _.endswith(word, ['ёнок', 'онок']):
+        _.replace(p.stems, 'all-pl', 'ёнок$', 'я́т')
+        _.replace(p.stems, 'all-pl', 'о́нок$', 'а́т')
 
         # INFO: Эмуляция среднего рода `1a` для форм мн. числа
-        endings['nom-pl'] = 'а'
-        endings['gen-pl'] = ''
+        p.endings['nom-pl'] = 'а'
+        p.endings['gen-pl'] = ''
 
-        reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, True)
-        return _.returns(module, func, rest_index)
+        reducable.apply_specific_reducable(i, i.gender, i.rest_index + '*', True)
+        return _.returns(module, func, i.rest_index)
     # end
 
-    if _.contains(rest_index, '°') and _.endswith(word, ['ёночек', 'оночек']):
+    if _.contains(i.rest_index, '°') and _.endswith(word, ['ёночек', 'оночек']):
 
-        _.replace(stems, 'all-pl', 'ёночек$', 'я́тк')
-        _.replace(stems, 'all-pl', 'о́ночек$', 'а́тк')
+        _.replace(p.stems, 'all-pl', 'ёночек$', 'я́тк')
+        _.replace(p.stems, 'all-pl', 'о́ночек$', 'а́тк')
 
         # INFO: Черездование для единичной формы (возможно применится также и для множественной, но это не страшно, потом заменится по идее)
-        reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, gender, stress_type, rest_index + '*', data, False)
+        reducable.apply_specific_reducable(i, i.gender, i.rest_index + '*', False)
 
         # INFO: По сути должно примениться только к мн. формам (случай `B`)
-        reducable.apply_specific_reducable(stems, endings, word, stem, stem_type, 'f', stress_type, rest_index + '*', data, False)
+        reducable.apply_specific_reducable(i, 'f', i.rest_index + '*', False)
 
-        endings['gen-pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
+        p.endings['gen-pl'] = ''  # INFO: Странный фикс, но он нужен.. <_<
 
-        return _.returns(module, func, rest_index)
+        return _.returns(module, func, i.rest_index)
     # end
 
-    if _.contains(rest_index, '°') and gender == 'n' and _.endswith(word, 'мя'):
-        _.replace(stems, 'all-sg', 'м$', 'мен')
-        _.replace(stems, 'ins-sg', 'м$', 'мен')
-        _.replace(stems, 'all-pl', 'м$', 'мен')
+    if _.contains(i.rest_index, '°') and i.gender == 'n' and _.endswith(word, 'мя'):
+        _.replace(p.stems, 'all-sg', 'м$', 'мен')
+        _.replace(p.stems, 'ins-sg', 'м$', 'мен')
+        _.replace(p.stems, 'all-pl', 'м$', 'мен')
 
-        endings['nom-sg'] = 'я'
-        endings['gen-sg'] = 'и'
-        endings['dat-sg'] = 'и'
-        endings['ins-sg'] = 'ем'
-        endings['prp-sg'] = 'и'
+        p.endings['nom-sg'] = 'я'
+        p.endings['gen-sg'] = 'и'
+        p.endings['dat-sg'] = 'и'
+        p.endings['ins-sg'] = 'ем'
+        p.endings['prp-sg'] = 'и'
     # end
 
-    return _.returns(module, func, rest_index)
+    return _.returns(module, func, i.rest_index)
 # end
 
 

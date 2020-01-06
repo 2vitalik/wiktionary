@@ -52,6 +52,10 @@ def parse(func, base, args, frame):  # export
             return _.returns(module, func, i)
         # end
 
+        # Будем расчитывать оба числа сразу вместе
+        i.calc_sg = True
+        i.calc_pl = True
+
         _.log_value(i.gender, 'i.gender')
         _.log_value(i.animacy, 'i.animacy')
         _.log_value(i.common_gender, 'i.common_gender')
@@ -62,6 +66,10 @@ def parse(func, base, args, frame):  # export
         i.animacy = ''  # fixme
         i.adj = True  # fixme
         i.rest_index = i.index  # fixme
+
+        # Будем расчитывать позже по отдельности
+        i.calc_sg = False
+        i.calc_pl = False
     # end
 
     _.log_value(i.pt, 'i.pt')

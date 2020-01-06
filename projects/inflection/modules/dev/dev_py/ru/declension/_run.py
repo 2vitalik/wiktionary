@@ -22,7 +22,7 @@ def run_gender(func, i):
     if _.startswith(i.rest_index, '0'):
         # todo: move to special function
         # local keys
-        keys = [
+        keys = [  # todo: depend on `calc_sg` and `calc_pl`
             'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
             'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
         ]  # list
@@ -49,49 +49,56 @@ def run_info(func, i):
         run_gender(i)
     elif i.adj:
         r = i.result  # local
-        genders = ['m', 'n', 'f', '']  # plural (without gender) should be last one?
+        orig = mw.clone(i)
+        genders = ['m', 'n', 'f', 'pl']  # plural (without gender) should be last one?
         for j, gender in enumerate(genders):
-            i_copy = mw.clone(i)  # local
-            i_copy.gender = gender
-            _.log_value(i_copy.gender, 'i.gender')
-            run_gender(i_copy)
+            ii = mw.clone(orig)  # local
+            ii.gender = gender
+            _.log_value(ii.gender, 'i.gender')
 
-            r_copy = i_copy.result  # local
+            if ii.gender != 'pl':
+                ii.calc_sg = True
+                _.log_value(ii.calc_sg, 'i.calc_sg')
+            else:
+                ii.calc_pl = True
+                _.log_value(ii.calc_pl, 'i.calc_pl')
+            # end
+
+            run_gender(ii)
+            r_copy = ii.result  # local
 
             # local cases
-            if i_copy.gender != '':
+            if ii.gender != 'pl':
                 cases = [
                     'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
                     'srt-sg',
                 ]  # list
+
+                for c, case in enumerate(cases):
+                    r[case + '-' + ii.gender] = r_copy[case]
+                # end
+
+                if ii.gender == 'f':
+                    r['ins-sg2-f'] = r_copy['ins-sg2']
+                # end
+                if ii.gender == 'm':
+                    r['acc-sg-m-a'] = r['gen-sg-m']
+                    r['acc-sg-m-n'] = r['nom-sg-m']
+                # end
             else:
                 cases = [
                     'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
                     'srt-pl',
                     'comparative', 'comparative2'
                 ]  # list
-            # end
 
-            for c, case in enumerate(cases):
-                if i_copy.gender != '':
-                    key = case + '-' + i_copy.gender
-                else:
-                    key = case
+                for c, case in enumerate(cases):
+                    r[case] = r_copy[case]
                 # end
-                r[key] = r_copy[case]
-            # end
-            if i_copy.gender == 'f':
-                r['ins-sg2-f'] = r_copy['ins-sg2']
-            # end
 
-            if i_copy.gender == 'm':
-                r['acc-sg-m-a'] = r['gen-sg-m']
-                r['acc-sg-m-n'] = r['nom-sg-m']
-            elif i_copy.gender == '':
                 r['acc-pl-a'] = r_copy['gen-pl']
                 r['acc-pl-n'] = r_copy['nom-pl']
             # end
-
         # end
     # end
 

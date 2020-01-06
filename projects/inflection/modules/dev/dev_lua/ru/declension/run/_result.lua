@@ -25,10 +25,12 @@ function export.generate_result(i)
 	if i.adj then
 		init_forms.init_srt_forms(i)
 	end
+	_.log_table(r, 'i.result')
 
-	common_forms.fix_stress(r)
+	common_forms.fix_stress(i)
 
-	if i.adj then
+	if i.adj and i.calc_pl then
+		-- `calc_pl` -- чтобы считать их только один раз, а не для каждого рода
 		adj_forms.add_comparative(i)
 	end
 

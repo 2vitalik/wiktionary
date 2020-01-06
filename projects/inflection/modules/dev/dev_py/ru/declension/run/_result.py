@@ -22,10 +22,12 @@ def generate_result(func, i):  # export
     if i.adj:
         init_forms.init_srt_forms(i)
     # end
+    _.log_table(r, 'i.result')
 
-    common_forms.fix_stress(r)
+    common_forms.fix_stress(i)
 
-    if i.adj:
+    if i.adj and i.calc_pl:
+        # `calc_pl` -- чтобы считать их только один раз, а не для каждого рода
         adj_forms.add_comparative(i)
     # end
 

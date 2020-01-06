@@ -5,9 +5,7 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-from ...data.stress import adj as adj_stress
-from ...data.stress import pronoun as pronoun_stress
-from ...data.stress import noun as noun_stress
+from shared_utils.io.json import json_load
 from ...run.result import error as e
 
 
@@ -35,7 +33,7 @@ def extract_stress_type(func, i):  # export
     # end
 
     # INFO: Список допустимых схем ударений:
-    allowed_stress_types = {
+    allowed_stress_types = {  # todo: special variables for that?
         'a', "a'", 'b', "b'", 'c', 'd', "d'", 'e', 'f', "f'", "f''",
         'a/a', 'a/b', 'a/c', "a/a'", "a/b'", "a/c'", "a/c''",
         'b/a', 'b/b', 'b/c', "b/a'", "b/b'", "b/c'", "b/c''",
@@ -52,13 +50,19 @@ def extract_stress_type(func, i):  # export
 
 @a.starts(module)
 def get_stress_schema(func, i):  # export
+    unit = ''  # todo: get from i.unit ?
     if i.adj:
-        i.stress_schema = adj_stress.get_adj_stress_schema(i.stress_type)
+        unit = 'adj'
     elif i.pronoun:
-        i.stress_schema = pronoun_stress.get_pronoun_stress_schema(i.stress_type)
+        unit = 'pronoun'
     else:
-        i.stress_schema = noun_stress.get_noun_stress_schema(i.stress_type)
+        unit = 'noun'
     # end
+    _.log_value(unit, 'unit')
+    _.log_value(i.unit, 'i.unit')
+
+    stress_schemas = json_load('../modules/dev/dev_py/ru/declension/data/stress/' + unit + '.json')
+    i.stress_schema = stress_schemas[i.stress_type]
 
     _.ends(module, func)
 # end

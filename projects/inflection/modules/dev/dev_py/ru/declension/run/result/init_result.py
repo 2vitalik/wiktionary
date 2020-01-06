@@ -111,14 +111,16 @@ def init_result(func, i):  # export
         forward_gender_animacy(i)
     # end
 
-    if _.contains(i.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
-        r['краткая'] = '⊠'
-    elif _.contains(i.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
-        r['краткая'] = '✕'
-    elif _.contains(i.rest_index, ['%-', '—', '−']):
-        r['краткая'] = '−'
-    else:
-        r['краткая'] = '1'
+    if i.adj:
+        if _.contains(i.rest_index, ['⊠', '%(x%)', '%(х%)', '%(X%)', '%(Х%)']):
+            r['краткая'] = '⊠'
+        elif _.contains(i.rest_index, ['✕', '×', 'x', 'х', 'X', 'Х']):
+            r['краткая'] = '✕'
+        elif _.contains(i.rest_index, ['%-', '—', '−']):
+            r['краткая'] = '−'
+        else:
+            r['краткая'] = '1'
+        # end
     # end
 
     if not _.has_key(r, 'error_category') and i.word.cleared != i.base:

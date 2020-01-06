@@ -133,42 +133,42 @@ def extract_gender_animacy(func, i):  # export
         rest_index = _.replaced(i.index, '^mf a ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "mf a" из индекса')
+            _.log_info('Удаление "mf a" из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^[mnf]+ [a-z/]+ ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "[mnf] [in/an]" из индекса')
+            _.log_info('Удаление "[mnf] [in/an]" из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^мн%.? неод%.? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "мн. неод." из индекса')
+            _.log_info('Удаление "мн. неод." из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^мн%.? одуш%.? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "мн. одуш." из индекса')
+            _.log_info('Удаление "мн. одуш." из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^мн%.? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "мн." из индекса')
+            _.log_info('Удаление "мн." из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
         rest_index = _.replaced(i.index, '^[-мжсо/]+%,? ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "м/ж/с/мо/жо/со/..." из индекса')
+            _.log_info('Удаление "м/ж/с/мо/жо/со/..." из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
@@ -181,7 +181,7 @@ def extract_gender_animacy(func, i):  # export
         rest_index = _.replaced(i.index, '^п ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "п" из индекса')
+            _.log_info('Удаление "п" из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
@@ -192,7 +192,7 @@ def extract_gender_animacy(func, i):  # export
         rest_index = _.replaced(i.index, '^мс ?', '')
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
-            mw.log('  # Удаление "мс" из индекса')
+            _.log_info('Удаление "мс" из индекса')
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end

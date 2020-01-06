@@ -55,6 +55,10 @@ function export.parse(base, args, frame)
 			return _.returns(module, func, i)
 		end
 
+		-- Будем расчитывать оба числа сразу вместе
+		i.calc_sg = true
+		i.calc_pl = true
+
 		_.log_value(i.gender, 'i.gender')
 		_.log_value(i.animacy, 'i.animacy')
 		_.log_value(i.common_gender, 'i.common_gender')
@@ -65,6 +69,10 @@ function export.parse(base, args, frame)
 		i.animacy = ''  -- fixme
 		i.adj = true  -- fixme
 		i.rest_index = i.index  -- fixme
+
+		-- Будем расчитывать позже по отдельности
+		i.calc_sg = false
+		i.calc_pl = false
 	end
 
 	_.log_value(i.pt, 'i.pt')

@@ -5,9 +5,7 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local adj_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/adj')  -- '..'
-local pronoun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/pronoun')  -- '..'
-local noun_stress = require('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/noun')  -- '..'
+-- from shared_utils.io.json import json_load
 local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- '..'
 
 
@@ -38,7 +36,7 @@ function export.extract_stress_type(i)
 	end
 
 --	INFO: Список допустимых схем ударений:
-	allowed_stress_types = {
+	allowed_stress_types = {  -- todo: special variables for that?
 		'a', "a'", 'b', "b'", 'c', 'd', "d'", 'e', 'f', "f'", "f''",
 		'a/a', 'a/b', 'a/c', "a/a'", "a/b'", "a/c'", "a/c''",
 		'b/a', 'b/b', 'b/c', "b/a'", "b/b'", "b/c'", "b/c''",
@@ -58,13 +56,19 @@ function export.get_stress_schema(i)
 	func = "get_stress_schema"
 	_.starts(module, func)
 
+	unit = ''  -- todo: get from i.unit ?
 	if i.adj then
-		i.stress_schema = adj_stress.get_adj_stress_schema(i.stress_type)
+		unit = 'adj'
 	elseif i.pronoun then
-		i.stress_schema = pronoun_stress.get_pronoun_stress_schema(i.stress_type)
+		unit = 'pronoun'
 	else
-		i.stress_schema = noun_stress.get_noun_stress_schema(i.stress_type)
+		unit = 'noun'
 	end
+	_.log_value(unit, 'unit')
+	_.log_value(i.unit, 'i.unit')
+
+	stress_schemas = mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/' .. unit)
+	i.stress_schema = stress_schemas[i.stress_type]
 
 	_.ends(module, func)
 end

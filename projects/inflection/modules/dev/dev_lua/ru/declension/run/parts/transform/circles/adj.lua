@@ -9,22 +9,31 @@ module = 'run.parts.transform.circles.adj'
 
 
 -- @starts
-function export.apply_adj_specific_1_2(stems, gender, rest_index)
+function export.apply_adj_specific_1_2(i)
 	func = "apply_adj_specific_1_2"
 	_.starts(module, func)
 
-	if not _.endswith(stems['srt-sg'], 'нн') then
-		-- todo: log some error?
-		return _.ends(module, func)
-	end
-	if _.contains(rest_index, {'%(1%)', '①'}) then
-		if gender == 'm' then
-			_.replace(stems, 'srt-sg', 'нн$', 'н')
+	local p = i.parts
+
+	if i.calc_sg then
+		if not _.endswith(p.stems['srt-sg'], 'нн') then
+			-- todo: log some error?
+			return _.ends(module, func)
+		end
+		if _.contains(i.rest_index, {'%(1%)', '①'}) then
+			if i.gender == 'm' then
+				_.replace(p.stems, 'srt-sg', 'нн$', 'н')
+			end
 		end
 	end
-	if _.contains(rest_index, {'%(2%)', '②'}) then
-		_.replace(stems, 'srt-sg', 'нн$', 'н')
-		_.replace(stems, 'srt-pl', 'нн$', 'н')
+
+	if _.contains(i.rest_index, {'%(2%)', '②'}) then
+		if i.calc_sg then
+			_.replace(p.stems, 'srt-sg', 'нн$', 'н')
+		end
+		if i.calc_pl then
+			_.replace(p.stems, 'srt-pl', 'нн$', 'н')
+		end
 	end
 
 	_.ends(module, func)

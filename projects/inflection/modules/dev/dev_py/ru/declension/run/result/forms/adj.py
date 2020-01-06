@@ -18,7 +18,7 @@ def add_comparative(func, i):  # export
         return _.ends(module, func)
     # end
 
-    if i.stem.type == 'velar':
+    if i.stem.type == '3-velar':
         new_stem = i.stem.unstressed
         if _.endswith(new_stem, 'к'):
             new_stem = _.replaced(new_stem, 'к$', 'ч')
@@ -36,8 +36,8 @@ def add_comparative(func, i):  # export
         r['comparative'] = new_stem + 'е'
     else:
         if _.contains(i.rest_index, ['%(2%)', '②']):  # todo: special variable for this
-            r['comparative'] = i.parts.stems['nom-sg'] + 'ее'
-            r['comparative2'] = i.parts.stems['nom-sg'] + 'ей'
+            r['comparative'] = i.parts.stems['nom-pl'] + 'ее'
+            r['comparative2'] = i.parts.stems['nom-pl'] + 'ей'
         else:
             if _.equals(i.stress_type, ['a', 'a/a']):
                 r['comparative'] = i.stem.stressed + 'ее'

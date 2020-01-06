@@ -50,6 +50,12 @@ regexps_MULTILINE = {
 
         # (r"\bmw\.text\.", 'mw.'),
 
+        (r"from shared_utils\.io\.json import json_load\n",
+         "# from shared_utils.io.json import json_load\n"),
+
+        (r"json_load\('\.\./modules/dev/dev_py/ru/declension/data/(\w+)/' \+ unit \+ '\.json'\)",
+         "mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/\\1/' + unit)"),
+
         (r'stressed = 1',
          r'stressed = 2'),
 
@@ -149,6 +155,9 @@ regexps_MULTILINE = {
         (r'if j ~= 0 then',
          'if j ~= 1 then'),
 
+        (" == list then  # type",
+         " == 'table' then  # type"),
+
         (r"(?<![&'])#(.*)$",
          '--\\1'),
 
@@ -195,6 +204,12 @@ regexps_MULTILINE = {
 
         # (r"\bmw\.text\.", 'mw.'),
         # (r"\bmw\.ustring\.", 'mw.'),
+
+        (r"-- from shared_utils\.io\.json import json_load\n",
+         "from shared_utils.io.json import json_load\n"),
+
+        (r"mw\.loadData\('Module:' .. dev_prefix .. 'inflection/ru/declension/data/(\w+)/' .. unit\)",
+         "json_load('../modules/dev/dev_py/ru/declension/data/\\1/' + unit + '.json')"),
 
         (r'stressed = 2',
          'stressed = 1'),
@@ -297,6 +312,9 @@ regexps_MULTILINE = {
 
         (r'if j != 1:',
          'if j != 0:'),
+
+        (" == 'table':  -- type",
+         " == list:  -- type"),
 
         (r"(\s)\['(.*)'\] = ",
          "\\1'\\2': "),
