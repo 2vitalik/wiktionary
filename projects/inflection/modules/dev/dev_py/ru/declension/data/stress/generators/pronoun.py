@@ -5,11 +5,13 @@ from projects.inflection.modules.dev.dev_py import tools as _
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-import sys, os; sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+import sys, os; sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
 try:
-    from data.endings.noun import dump_data
+    # чтобы запускать скрипт и импорт работал:
+    from data.endings.generators.noun import dump_data
 except ImportError:
-    from ...data.endings.noun import dump_data
+    # для IDE, чтобы она находила методы:
+    from ....data.endings.generators.noun import dump_data
 
 
 module = 'data.stress.pronoun'  # local
