@@ -81,7 +81,7 @@ function export.get_endings(i)
 
 	-- стр. 29: для 8-го типа склонения:
 	-- после шипящих `я` в окончаниях существительных заменяется на `а`
-	if i.stem_type == '8-third' and _.endswith(i.stem.unstressed, '[жчшщ]') then
+	if i.stem.type == '8-third' and _.endswith(i.stem.unstressed, '[жчшщ]') then
 		p.endings['dat-pl'] = 'ам'
 		p.endings['ins-pl'] = 'ами'
 		p.endings['prp-pl'] = 'ах'

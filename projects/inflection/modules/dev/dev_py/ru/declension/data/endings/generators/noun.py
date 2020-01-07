@@ -170,7 +170,7 @@ def fill_other_noun_endings(func, endings):
     for j, stem_type in enumerate(['3-velar', '4-sibilant']):
         endings['f'][stem_type]['gen-sg'] = 'и'
         endings['m'][stem_type]['nom-pl'] = 'и'
-        endings['n'][stem_type]['nom-pl'] = 'и'
+        endings['f'][stem_type]['nom-pl'] = 'и'
     # end
 
     # INFO: Replace unstressed "о" to "е"
@@ -179,7 +179,7 @@ def fill_other_noun_endings(func, endings):
         endings['m'][stem_type]['ins-sg'][unstressed] = 'ем'
         endings['n'][stem_type]['ins-sg'][unstressed] = 'ем'
         endings['f'][stem_type]['ins-sg'][unstressed] = 'ей'
-        endings['m'][stem_type]['gen-pl'] = ['ев', 'ев']  # TODO: should we change stressed value here or only unstressed?
+        endings['m'][stem_type]['gen-pl'] = ['ев', 'ов']  # TODO: should we change stressed value here or only unstressed?
     # end
 
     # INFO: Replace "ов", "ев", "ёв" and null to "ей"
