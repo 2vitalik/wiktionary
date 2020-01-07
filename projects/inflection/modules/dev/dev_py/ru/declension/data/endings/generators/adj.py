@@ -129,7 +129,7 @@ def fill_other_adj_endings(func, endings):
 
     # INFO: Replace unstressed "о" to "е"
     for j, stem_type in enumerate(['4-sibilant', '5-letter-ц']):
-        endings['m'][stem_type]['nom-sg'][unstressed] = 'ей'  # adj only  # fixme ???
+        # endings['m'][stem_type]['nom-sg'][unstressed] = 'ей'  # adj only  # fixme ???
         endings['m'][stem_type]['gen-sg'][unstressed] = 'его'
         endings['m'][stem_type]['dat-sg'][unstressed] = 'ему'
         endings['m'][stem_type]['prp-sg'][unstressed] = 'ем'
