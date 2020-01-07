@@ -1,3 +1,6 @@
+import colorama
+from colorama import Fore, Style
+
 from projects.inflection.modules.dev.dev_py import mw
 from projects.inflection.modules.dev.dev_py import utils as u
 
@@ -9,6 +12,7 @@ def trim_stress(str):
 
 stash = {}
 level = 0
+colorama.init()
 
 
 def clear_stash():
@@ -109,17 +113,59 @@ def log(value):
     mw.log(prefix + value)
 
 
+def green(value):
+    return f'{Fore.GREEN}{value}{Style.RESET_ALL}'
+
+
+def blue(value):
+    return f'{Fore.BLUE}{value}{Style.RESET_ALL}'
+
+
+def red(value):
+    return f'{Fore.RED}{value}{Style.RESET_ALL}'
+
+
+def green_line(func):
+    def wrapped(*args, **kwargs):
+        print(Fore.GREEN, end='')
+        res = func(*args, **kwargs)
+        print(Style.RESET_ALL, end='')
+        return res
+    return wrapped
+
+
+def blue_line(func):
+    def wrapped(*args, **kwargs):
+        print(Fore.BLUE, end='')
+        res = func(*args, **kwargs)
+        print(Style.RESET_ALL, end='')
+        return res
+    return wrapped
+
+
+def red_line(func):
+    def wrapped(*args, **kwargs):
+        print(Fore.RED, end='')
+        res = func(*args, **kwargs)
+        print(Style.RESET_ALL, end='')
+        return res
+    return wrapped
+
+
+@green_line
 def log_info(info):
     log('# ' + info)
 
 
+# @blue_line
 def call(module, name):
-    log('@ ' + module + '.' + name + '()')
+    log('@ ' + module + '.' + blue(name) + '()')
     global level
 
 
+# @blue_line
 def starts(module, name):
-    log('↘ @ ' + module + '.' + name + '():')
+    log('↘ @ ' + module + '.' + blue(name) + '():')
     global level
     level += 4
 
@@ -139,14 +185,15 @@ def returns(module, name, result):
     return result
 
 
+# @red_line
 def log_value(value, name):
-    log('= ' + name + ': "' + str(value) + '"')
+    log('= ' + name + ': ' + red('"' + str(value) + '"'))
 
 
 def log_table(t, name):
     log('- ' + name + ':')
     for key, value in t.items():
-        log('  ["' + str(key) + '"] = "' + str(value) + '"')
+        log('  ["' + str(key) + '"] = ' + red('"' + str(value) + '"'))
 
 
 def has_key(value, key=None):
