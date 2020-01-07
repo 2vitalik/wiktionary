@@ -64,7 +64,20 @@ function export.get_endings(i)
 	_.log_value(i.unit, 'i.unit')
 
 	all_endings = mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/' .. unit)
-	p.endings = mw.clone(all_endings[i.gender][i.stem.type])
+	local endings = all_endings[i.gender][i.stem.type]
+
+	-- клонирование окончаний
+	-- через mw.clone не работает, ошибка: "table from mw.loadData is read-only"
+	p.endings = {}  -- dict
+	local keys = {
+		'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg', 'srt-sg',
+		'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl', 'srt-pl',
+	}  -- list
+	for j, key in pairs(keys) do  -- list
+		if _.has_key(endings[key]) then
+			p.endings[key] = endings[key]
+		end
+	end
 
 	-- стр. 29: для 8-го типа склонения:
 	-- после шипящих `я` в окончаниях существительных заменяется на `а`

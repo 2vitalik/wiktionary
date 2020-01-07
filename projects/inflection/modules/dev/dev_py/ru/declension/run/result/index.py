@@ -20,22 +20,23 @@ def get_zaliznyak(func, i):  # export
         return _.ends(module, func)
     # end
 
-    # # local stem_types
-    # stem_types = {
-    #     '1-hard': '1',
-    #     '2-soft': '2',
-    #     '3-velar': '3',
-    #     '4-sibilant': '4',
-    #     '5-letter-ц': '5',
-    #     '6-vowel': '6',
-    #     '7-letter-и': '7',
-    #     '8-third': '8',
-    # }
+    # local stem_types
+    stem_types = {
+        '1-hard': '1',
+        '2-soft': '2',
+        '3-velar': '3',
+        '4-sibilant': '4',
+        '5-letter-ц': '5',
+        '6-vowel': '6',
+        '7-letter-и': '7',
+        '8-third': '8',
+    }
     index = '?'  # local
     if _.contains(i.rest_index, '0'):
         index = '0'
     else:
-        index = i.stem.type[0]
+        # index = i.stem.type[0]  -- TODO
+        index = stem_types[i.stem.type]
     # end
     if _.contains(i.rest_index, '°'):
         index = index + '°'
