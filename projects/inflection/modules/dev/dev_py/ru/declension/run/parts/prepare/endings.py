@@ -58,7 +58,14 @@ def get_endings(func, i):  # export
     _.log_value(i.unit, 'i.unit')
 
     all_endings = json_load('../modules/dev/dev_py/ru/declension/data/endings/' + unit + '.json')
-    endings = all_endings[i.gender][i.stem.type]  # local
+
+    gender = i.gender  # local
+    if i.unit == 'noun' and i.adj and i.gender == '':
+        # случай вида "мозоленогие" (сущ.), когда ед. числа нет и рода нет
+        gender = 'pl'
+        i.calc_sg = False  # todo: put this somewhere in the `parse` ?
+    # end
+    endings = all_endings[gender][i.stem.type]  # local
 
     # клонирование окончаний
     # через mw.clone не работает, ошибка: "table from mw.loadData is read-only"
@@ -67,7 +74,7 @@ def get_endings(func, i):  # export
         p.endings[key] = value
     # end
 
-    if i.unit == 'noun' and i.adj:
+    if i.unit == 'noun' and i.adj and i.gender != '':
         # для случая адъективного склонения существительных
         # нужно добавить не только текущий род, но и множественное число
         for key, value in all_endings['pl'][i.stem.type].items():

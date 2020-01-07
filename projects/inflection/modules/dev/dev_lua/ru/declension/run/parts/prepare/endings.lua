@@ -64,7 +64,14 @@ function export.get_endings(i)
 	_.log_value(i.unit, 'i.unit')
 
 	all_endings = mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/' .. unit)
-	local endings = all_endings[i.gender][i.stem.type]
+
+	local gender = i.gender
+	if i.unit == 'noun' and i.adj and i.gender == '' then
+		-- случай вида "мозоленогие" (сущ.), когда ед. числа нет и рода нет
+		gender = 'pl'
+		i.calc_sg = false  -- todo: put this somewhere in the `parse` ?
+	end
+	local endings = all_endings[gender][i.stem.type]
 
 	-- клонирование окончаний
 	-- через mw.clone не работает, ошибка: "table from mw.loadData is read-only"
@@ -73,7 +80,7 @@ function export.get_endings(i)
 		p.endings[key] = value
 	end
 
-	if i.unit == 'noun' and i.adj then
+	if i.unit == 'noun' and i.adj and i.gender ~= '' then
 		-- для случая адъективного склонения существительных
 		-- нужно добавить не только текущий род, но и множественное число
 		for key, value in pairs(all_endings['pl'][i.stem.type]) do
