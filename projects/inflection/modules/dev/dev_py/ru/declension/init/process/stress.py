@@ -68,7 +68,18 @@ def get_stress_schema(func, i):  # export
     _.log_value(i.unit, 'i.unit')
 
     stress_schemas = json_load('../modules/dev/dev_py/ru/declension/data/stress/' + unit + '.json')
-    i.stress_schema = stress_schemas[i.stress_type]
+    stress_schema = stress_schemas[i.stress_type]  # local
+
+    # ручное клонирование схемы ударения, т.к. потом через mw.clone не работает
+    # ошибка: "table from mw.loadData is read-only"
+    i.stress_schema = dict()  # dict
+    types = ['stem', 'ending']  # local
+    for j, type in enumerate(types):
+        i.stress_schema[type] = dict()  # dict
+        for case, value in stress_schema[type].items():
+            i.stress_schema[type][case] = value
+        # end
+    # end
 
     _.log_table(i.stress_schema['stem'], "i.stress_schema['stem']")
     _.log_table(i.stress_schema['ending'], "i.stress_schema['ending']")

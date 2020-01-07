@@ -74,7 +74,18 @@ function export.get_stress_schema(i)
 	_.log_value(i.unit, 'i.unit')
 
 	stress_schemas = mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/' .. unit)
-	i.stress_schema = stress_schemas[i.stress_type]
+	local stress_schema = stress_schemas[i.stress_type]
+
+	-- ручное клонирование схемы ударения, т.к. потом через mw.clone не работает
+	-- ошибка: "table from mw.loadData is read-only"
+	i.stress_schema = {}  -- dict
+	local types = {'stem', 'ending'}
+	for j, type in pairs(types) do  -- list
+		i.stress_schema[type] = {}  -- dict
+		for case, value in pairs(stress_schema[type]) do
+			i.stress_schema[type][case] = value
+		end
+	end
 
 	_.log_table(i.stress_schema['stem'], "i.stress_schema['stem']")
 	_.log_table(i.stress_schema['ending'], "i.stress_schema['ending']")

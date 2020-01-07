@@ -63,14 +63,8 @@ def get_endings(func, i):  # export
     # клонирование окончаний
     # через mw.clone не работает, ошибка: "table from mw.loadData is read-only"
     p.endings = dict()  # dict
-    keys = [  # local
-        'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg', 'srt-sg',
-        'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl', 'srt-pl',
-    ]  # list
-    for j, key in enumerate(keys):
-        if _.has_key(endings, key):
-            p.endings[key] = endings[key]
-        # end
+    for key, value in endings.items():
+        p.endings[key] = endings[key]
     # end
 
     # стр. 29: для 8-го типа склонения:
