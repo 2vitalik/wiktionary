@@ -70,7 +70,15 @@ function export.get_endings(i)
 	-- через mw.clone не работает, ошибка: "table from mw.loadData is read-only"
 	p.endings = {}  -- dict
 	for key, value in pairs(endings) do
-		p.endings[key] = endings[key]
+		p.endings[key] = value
+	end
+
+	if i.unit == 'noun' and i.adj then
+		-- для случая адъективного склонения существительных
+		-- нужно добавить не только текущий род, но и множественное число
+		for key, value in pairs(all_endings['pl'][i.stem.type]) do
+			p.endings[key] = value
+		end
 	end
 
 	-- стр. 29: для 8-го типа склонения:
