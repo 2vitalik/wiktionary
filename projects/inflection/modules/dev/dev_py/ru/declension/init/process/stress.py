@@ -50,6 +50,12 @@ def extract_stress_type(func, i):  # export
 
 @a.starts(module)
 def get_stress_schema(func, i):  # export
+    if _.contains(i.rest_index, '0'):
+        _.log_info('Игнорируем схему ударения для случая "0"')
+        i.stress_schema = dict()  # dict
+        return _.ends(module, func)
+    # end
+
     unit = ''  # todo: get from i.unit ?
     if i.adj:
         unit = 'adj'
@@ -63,6 +69,9 @@ def get_stress_schema(func, i):  # export
 
     stress_schemas = json_load('../modules/dev/dev_py/ru/declension/data/stress/' + unit + '.json')
     i.stress_schema = stress_schemas[i.stress_type]
+
+    _.log_table(i.stress_schema['stem'], "i.stress_schema['stem']")
+    _.log_table(i.stress_schema['ending'], "i.stress_schema['ending']")
 
     _.ends(module, func)
 # end

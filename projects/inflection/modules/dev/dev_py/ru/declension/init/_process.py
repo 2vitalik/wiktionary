@@ -42,8 +42,6 @@ def process(func, i):  # export
 
     _.log_info('Вычисление схемы ударения')
     stress.get_stress_schema(i)
-    _.log_table(i.stress_schema['stem'], "i.stress_schema['stem']")
-    _.log_table(i.stress_schema['ending'], "i.stress_schema['ending']")
 
     _.log_info('Определение типа основы (stem_type)')
     stem_type.get_stem_type(i)

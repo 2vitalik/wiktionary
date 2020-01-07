@@ -73,7 +73,7 @@ def extract_gender_animacy(func, i):  # export
         i.rest_index = i.index
     elif _.extract(i.index, '^мс'):
         i.pronoun = True
-    elif _.extract(i.index, '^м'):
+    elif _.extract(i.index, '^м'):  # fixme: сюда частично попадает необрабатываемый пока "м//мн."
         i.gender = 'm'
         i.animacy = get_cyrl_animacy(i.index, 'м')
         i.common_gender = False
@@ -165,7 +165,7 @@ def extract_gender_animacy(func, i):  # export
             _.log_value(i.rest_index, 'i.rest_index')
             return _.ends(module, func)
         # end
-        rest_index = _.replaced(i.index, '^[-мжсо/]+%,? ?', '')
+        rest_index = _.replaced(i.index, '^[-мжсо/]+%,? ?', '')   # fixme: сюда частично попадает необрабатываемый пока "м//мн."
         if rest_index != orig_index:
             i.rest_index = mw.text.trim(rest_index)
             _.log_info('Удаление "м/ж/с/мо/жо/со/..." из индекса')

@@ -21,7 +21,7 @@ module = 'data.stress.noun'  # local  # todo: rename to `stress_schemas`
 @a.starts(module)
 def generate_noun_stress_schemas(func):  # INFO: Вычисление схемы ударения
     # todo: special variable for this?
-    stress_types = ['a', 'b', 'c', 'd', 'e', 'f', "d'", "f'", "f''"]  # local
+    stress_types = ['a', 'b', 'c', 'd', 'e', 'f', "b'", "d'", "f'", "f''"]  # local
     res = dict()  # dict
 
     for j, stress_type in enumerate(stress_types):

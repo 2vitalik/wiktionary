@@ -22,7 +22,7 @@ local function run_gender(i)
 
 	local r = i.result
 
-	if _.startswith(i.rest_index, '0') then
+	if _.contains(i.rest_index, '0') then
 		-- todo: move to special function
 		local keys
 		keys = {  -- todo: depend on `calc_sg` and `calc_pl`

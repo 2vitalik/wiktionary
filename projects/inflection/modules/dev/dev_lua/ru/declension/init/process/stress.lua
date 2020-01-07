@@ -56,6 +56,12 @@ function export.get_stress_schema(i)
 	func = "get_stress_schema"
 	_.starts(module, func)
 
+	if _.contains(i.rest_index, '0') then
+		_.log_info('Игнорируем схему ударения для случая "0"')
+		i.stress_schema = {}  -- dict
+		return _.ends(module, func)
+	end
+
 	unit = ''  -- todo: get from i.unit ?
 	if i.adj then
 		unit = 'adj'
@@ -69,6 +75,9 @@ function export.get_stress_schema(i)
 
 	stress_schemas = mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/stress/' .. unit)
 	i.stress_schema = stress_schemas[i.stress_type]
+
+	_.log_table(i.stress_schema['stem'], "i.stress_schema['stem']")
+	_.log_table(i.stress_schema['ending'], "i.stress_schema['ending']")
 
 	_.ends(module, func)
 end

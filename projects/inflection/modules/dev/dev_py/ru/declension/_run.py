@@ -19,7 +19,7 @@ module = 'run'  # local
 def run_gender(func, i):
     r = i.result  # local
 
-    if _.startswith(i.rest_index, '0'):
+    if _.contains(i.rest_index, '0'):
         # todo: move to special function
         # local keys
         keys = [  # todo: depend on `calc_sg` and `calc_pl`
