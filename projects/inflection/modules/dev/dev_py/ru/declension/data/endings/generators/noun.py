@@ -233,6 +233,7 @@ def dump_data(filename, endings):
     write(f'{filename}.json', content)
 
     content = re.sub(r'"([^"]+)": ', r'["\1"] = ', content)
+    content = re.sub(r' = \[([^]]+)\]', r' = {\1}', content)
     content = 'return ' + content
     write(f'{filename}.lua', content)
 # end

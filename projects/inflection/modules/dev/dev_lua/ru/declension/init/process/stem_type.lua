@@ -23,7 +23,7 @@ local function get_stem_base_type(i)
 		return _.returns(module, func, '2-soft')
 	end
 
-	if _.equals(i.stem.type, ['8-third']) then
+	if _.equals(i.stem.type, {'8-third'}) then
 		if i.gender == 'n' then
 			return _.returns(module, func, '1-hard')
 		end
