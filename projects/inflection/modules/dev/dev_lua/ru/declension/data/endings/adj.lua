@@ -1,167 +1,262 @@
-local dev_prefix = ''
-dev_prefix = 'User:Vitalik/'  -- comment this on `prod` version
-
-local export = {}
-local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
-
-
--- constants:
-local unstressed = 1
-local stressed = 2
-local module = 'data.endings.adj'
-
-
--- Данные: все стандартные окончания для двух типов основ
--- @call
-function export.get_standard_adj_endings()
-	func = "get_standard_adj_endings"
-	_.call(module, func)
-
-	local e = {}  -- AttrDict
-	e.m = {}  -- AttrDict
-	e.f = {}  -- AttrDict
-	e.n = {}  -- AttrDict
-	e.common = {}  -- AttrDict
-	e.m.hard = {}  -- dict
-	e.m.soft = {}  -- dict
-	e.f.hard = {}  -- dict
-	e.f.soft = {}  -- dict
-	e.n.hard = {}  -- dict
-	e.n.soft = {}  -- dict
-	e.common.hard = {}  -- dict
-	e.common.soft = {}  -- dict
-	e.m.hard['nom-sg'] = {'ый', 'ой'}
-	e.m.hard['gen-sg'] = 'ого'
-	e.m.hard['dat-sg'] = 'ому'
-	e.m.hard['ins-sg'] = 'ым'
-	e.m.hard['prp-sg'] = 'ом'
-	e.m.hard['srt-sg'] = ''
-	e.m.soft['nom-sg'] = 'ий'
-	e.m.soft['gen-sg'] = 'его'
-	e.m.soft['dat-sg'] = 'ему'
-	e.m.soft['ins-sg'] = 'им'
-	e.m.soft['prp-sg'] = 'ем'
-	e.m.soft['srt-sg'] = 'ь'
-	e.f.hard['nom-sg'] = 'ая'
-	e.f.hard['gen-sg'] = 'ой'
-	e.f.hard['dat-sg'] = 'ой'
-	e.f.hard['acc-sg'] = 'ую'
-	e.f.hard['ins-sg'] = 'ой'
-	e.f.hard['prp-sg'] = 'ой'
-	e.f.hard['srt-sg'] = 'а'
-	e.f.soft['nom-sg'] = 'яя'
-	e.f.soft['gen-sg'] = 'ей'
-	e.f.soft['dat-sg'] = 'ей'
-	e.f.soft['acc-sg'] = 'юю'
-	e.f.soft['ins-sg'] = 'ей'
-	e.f.soft['prp-sg'] = 'ей'
-	e.f.soft['srt-sg'] = 'я'
-	e.n.hard['nom-sg'] = 'ое'
-	e.n.hard['gen-sg'] = 'ого'
-	e.n.hard['dat-sg'] = 'ому'
-	e.n.hard['ins-sg'] = 'ым'
-	e.n.hard['prp-sg'] = 'ом'
-	e.n.hard['srt-sg'] = 'о'
-	e.n.soft['nom-sg'] = 'ее'
-	e.n.soft['gen-sg'] = 'его'
-	e.n.soft['dat-sg'] = 'ему'
-	e.n.soft['ins-sg'] = 'им'
-	e.n.soft['prp-sg'] = 'ем'
-	e.n.soft['srt-sg'] = {'е', 'ё'}
-	e.common.hard['nom-pl'] = 'ые'
-	e.common.hard['gen-pl'] = 'ых'
-	e.common.hard['dat-pl'] = 'ым'
-	e.common.hard['ins-pl'] = 'ыми'
-	e.common.hard['prp-pl'] = 'ых'
-	e.common.hard['srt-pl'] = 'ы'
-	e.common.soft['nom-pl'] = 'ие'
-	e.common.soft['gen-pl'] = 'их'
-	e.common.soft['dat-pl'] = 'им'
-	e.common.soft['ins-pl'] = 'ими'
-	e.common.soft['prp-pl'] = 'их'
-	e.common.soft['srt-pl'] = 'и'
-	return e
-end
-
-
--- Изменение окончаний для остальных типов основ (базирующихся на первых двух)
--- @starts
-function export.fix_adj_pronoun_endings(i, pronoun)
-	func = "fix_adj_pronoun_endings"
-	_.starts(module, func)
-
-	local p = i.parts
-
---	INFO: Replace "ы" to "и"
-	if _.equals(i.stem.type, {'velar', 'sibilant'}) then
-		if i.gender == 'm' then
-			if i.adj then
-				p.endings['nom-sg'][unstressed] = 'ий'
-			end
-			p.endings['ins-sg'] = 'им'
-		end
-		if i.gender == 'n' then
-			p.endings['ins-sg'] = 'им'
-		end
-
-		if i.adj then
-			p.endings['nom-pl'] = 'ие'
-		elseif pronoun then
-			p.endings['nom-pl'] = 'и'
-		end
-		p.endings['gen-pl'] = 'их'
-		p.endings['dat-pl'] = 'им'
-		p.endings['ins-pl'] = 'ими'
-		p.endings['prp-pl'] = 'их'
-		if i.adj then
-			p.endings['srt-pl'] = 'и'
-		end
-	end
-
---	INFO: Replace unstressed "о" to "е"
-	if _.equals(i.stem.type, {'sibilant', 'letter-ц'}) then
-		if not i.stress_schema['ending']['sg'] then
-			if i.gender == 'm' then
-				if i.adj then
-					p.endings['nom-sg'][stressed] = 'ей'
-				end
-				p.endings['gen-sg'] = 'его'
-				p.endings['dat-sg'] = 'ему'
-				p.endings['prp-sg'] = 'ем'
-			end
-			if i.gender == 'n' then
-				p.endings['nom-sg'] = 'ее'
-				p.endings['gen-sg'] = 'его'
-				p.endings['dat-sg'] = 'ему'
-				p.endings['prp-sg'] = 'ем'
-			end
-			if i.gender == 'f' then
-				p.endings['gen-sg'] = 'ей'
-				p.endings['dat-sg'] = 'ей'
-				p.endings['ins-sg'] = 'ей'
-				p.endings['prp-sg'] = 'ей'
-			end
-		end
-		if not i.stress_schema['ending']['srt-sg-n'] then
-			if i.gender == 'n' then
-				if i.adj then
-					p.endings['srt-sg'] = 'е'
-				end
-			end
-		end
-	end
-
---	INFO: Replace "ь" to "й"
-	if _.equals(i.stem.type, {'vowel'}) then
-		if i.gender == 'm' then
-			if i.adj then
-				p.endings['srt-sg'] = 'й'
-			end
-		end
-	end
-
-	_.ends(module, func)
-end
-
-
-return export
+return {
+    ["m"] = {
+        ["1-hard"] = {
+            ["nom-sg"] = ["ый", "ой"],
+            ["gen-sg"] = ["ого", "ого"],
+            ["dat-sg"] = ["ому", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "ым",
+            ["prp-sg"] = ["ом", "ом"],
+            ["srt-sg"] = ""
+        },
+        ["2-soft"] = {
+            ["nom-sg"] = "ий",
+            ["gen-sg"] = "его",
+            ["dat-sg"] = "ему",
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = "ем",
+            ["srt-sg"] = "ь"
+        },
+        ["3-velar"] = {
+            ["nom-sg"] = ["ий", "ой"],
+            ["gen-sg"] = ["ого", "ого"],
+            ["dat-sg"] = ["ому", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = ["ом", "ом"],
+            ["srt-sg"] = ""
+        },
+        ["4-sibilant"] = {
+            ["nom-sg"] = ["ий", "ей"],
+            ["gen-sg"] = ["его", "ого"],
+            ["dat-sg"] = ["ему", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = ["ем", "ом"],
+            ["srt-sg"] = ""
+        },
+        ["5-letter-ц"] = {
+            ["nom-sg"] = ["ый", "ей"],
+            ["gen-sg"] = ["его", "ого"],
+            ["dat-sg"] = ["ему", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "ым",
+            ["prp-sg"] = ["ем", "ом"],
+            ["srt-sg"] = ""
+        },
+        ["6-vowel"] = {
+            ["nom-sg"] = "ий",
+            ["gen-sg"] = "его",
+            ["dat-sg"] = "ему",
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = "ем",
+            ["srt-sg"] = "й"
+        },
+        ["7-letter-и"] = {
+            ["nom-sg"] = "ий",
+            ["gen-sg"] = "его",
+            ["dat-sg"] = "ему",
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = "ем",
+            ["srt-sg"] = "ь"
+        }
+    },
+    ["f"] = {
+        ["1-hard"] = {
+            ["nom-sg"] = "ая",
+            ["gen-sg"] = ["ой", "ой"],
+            ["dat-sg"] = ["ой", "ой"],
+            ["acc-sg"] = "ую",
+            ["ins-sg"] = ["ой", "ой"],
+            ["prp-sg"] = ["ой", "ой"],
+            ["srt-sg"] = "а"
+        },
+        ["2-soft"] = {
+            ["nom-sg"] = "яя",
+            ["gen-sg"] = "ей",
+            ["dat-sg"] = "ей",
+            ["acc-sg"] = "юю",
+            ["ins-sg"] = "ей",
+            ["prp-sg"] = "ей",
+            ["srt-sg"] = "я"
+        },
+        ["3-velar"] = {
+            ["nom-sg"] = "ая",
+            ["gen-sg"] = ["ой", "ой"],
+            ["dat-sg"] = ["ой", "ой"],
+            ["acc-sg"] = "ую",
+            ["ins-sg"] = ["ой", "ой"],
+            ["prp-sg"] = ["ой", "ой"],
+            ["srt-sg"] = "а"
+        },
+        ["4-sibilant"] = {
+            ["nom-sg"] = "ая",
+            ["gen-sg"] = ["ей", "ой"],
+            ["dat-sg"] = ["ей", "ой"],
+            ["acc-sg"] = "ую",
+            ["ins-sg"] = ["ей", "ой"],
+            ["prp-sg"] = ["ей", "ой"],
+            ["srt-sg"] = "а"
+        },
+        ["5-letter-ц"] = {
+            ["nom-sg"] = "ая",
+            ["gen-sg"] = ["ей", "ой"],
+            ["dat-sg"] = ["ей", "ой"],
+            ["acc-sg"] = "ую",
+            ["ins-sg"] = ["ей", "ой"],
+            ["prp-sg"] = ["ей", "ой"],
+            ["srt-sg"] = "а"
+        },
+        ["6-vowel"] = {
+            ["nom-sg"] = "яя",
+            ["gen-sg"] = "ей",
+            ["dat-sg"] = "ей",
+            ["acc-sg"] = "юю",
+            ["ins-sg"] = "ей",
+            ["prp-sg"] = "ей",
+            ["srt-sg"] = "я"
+        },
+        ["7-letter-и"] = {
+            ["nom-sg"] = "яя",
+            ["gen-sg"] = "ей",
+            ["dat-sg"] = "ей",
+            ["acc-sg"] = "юю",
+            ["ins-sg"] = "ей",
+            ["prp-sg"] = "ей",
+            ["srt-sg"] = "я"
+        }
+    },
+    ["n"] = {
+        ["1-hard"] = {
+            ["nom-sg"] = ["ое", "ое"],
+            ["gen-sg"] = ["ого", "ого"],
+            ["dat-sg"] = ["ому", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "ым",
+            ["prp-sg"] = ["ом", "ом"],
+            ["srt-sg"] = ["о", "о"]
+        },
+        ["2-soft"] = {
+            ["nom-sg"] = "ее",
+            ["gen-sg"] = "его",
+            ["dat-sg"] = "ему",
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = "ем",
+            ["srt-sg"] = ["е", "ё"]
+        },
+        ["3-velar"] = {
+            ["nom-sg"] = ["ое", "ое"],
+            ["gen-sg"] = ["ого", "ого"],
+            ["dat-sg"] = ["ому", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = ["ом", "ом"],
+            ["srt-sg"] = ["о", "о"]
+        },
+        ["4-sibilant"] = {
+            ["nom-sg"] = ["ее", "ое"],
+            ["gen-sg"] = ["его", "ого"],
+            ["dat-sg"] = ["ему", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = ["ем", "ом"],
+            ["srt-sg"] = ["е", "о"]
+        },
+        ["5-letter-ц"] = {
+            ["nom-sg"] = ["ее", "ое"],
+            ["gen-sg"] = ["его", "ого"],
+            ["dat-sg"] = ["ему", "ому"],
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "ым",
+            ["prp-sg"] = ["ем", "ом"],
+            ["srt-sg"] = ["е", "о"]
+        },
+        ["6-vowel"] = {
+            ["nom-sg"] = "ее",
+            ["gen-sg"] = "его",
+            ["dat-sg"] = "ему",
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = "ем",
+            ["srt-sg"] = ["е", "ё"]
+        },
+        ["7-letter-и"] = {
+            ["nom-sg"] = "ее",
+            ["gen-sg"] = "его",
+            ["dat-sg"] = "ему",
+            ["acc-sg"] = "...",
+            ["ins-sg"] = "им",
+            ["prp-sg"] = "ем",
+            ["srt-sg"] = ["е", "ё"]
+        }
+    },
+    ["pl"] = {
+        ["1-hard"] = {
+            ["nom-pl"] = "ые",
+            ["gen-pl"] = "ых",
+            ["dat-pl"] = "ым",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ыми",
+            ["prp-pl"] = "ых",
+            ["srt-pl"] = "ы"
+        },
+        ["2-soft"] = {
+            ["nom-pl"] = "ие",
+            ["gen-pl"] = "их",
+            ["dat-pl"] = "им",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ими",
+            ["prp-pl"] = "их",
+            ["srt-pl"] = "и"
+        },
+        ["3-velar"] = {
+            ["nom-pl"] = "ие",
+            ["gen-pl"] = "их",
+            ["dat-pl"] = "им",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ими",
+            ["prp-pl"] = "их",
+            ["srt-pl"] = "и"
+        },
+        ["4-sibilant"] = {
+            ["nom-pl"] = "ие",
+            ["gen-pl"] = "их",
+            ["dat-pl"] = "им",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ими",
+            ["prp-pl"] = "их",
+            ["srt-pl"] = "и"
+        },
+        ["5-letter-ц"] = {
+            ["nom-pl"] = "ые",
+            ["gen-pl"] = "ых",
+            ["dat-pl"] = "ым",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ыми",
+            ["prp-pl"] = "ых",
+            ["srt-pl"] = "ы"
+        },
+        ["6-vowel"] = {
+            ["nom-pl"] = "ие",
+            ["gen-pl"] = "их",
+            ["dat-pl"] = "им",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ими",
+            ["prp-pl"] = "их",
+            ["srt-pl"] = "и"
+        },
+        ["7-letter-и"] = {
+            ["nom-pl"] = "ие",
+            ["gen-pl"] = "их",
+            ["dat-pl"] = "им",
+            ["acc-pl"] = "...",
+            ["ins-pl"] = "ими",
+            ["prp-pl"] = "их",
+            ["srt-pl"] = "и"
+        }
+    }
+}

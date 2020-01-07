@@ -1,53 +1,724 @@
-local dev_prefix = ''
-dev_prefix = 'User:Vitalik/'  -- comment this on `prod` version
-
-local export = {}
-local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
-
-
-local module = 'data.stress.adj'
-
-
--- Данные: ударность основы и окончания в зависимости от схемы ударения
--- @starts
-function export.get_adj_stress_schema(stress_type)  -- INFO: Вычисление схемы ударения
-	func = "get_adj_stress_schema"
-	_.starts(module, func)
-
-	-- todo: Сгенерировать все `stress_schema` для всех видов `stress_type` заранее и потом просто использовать/загружать их
-
-	-- общий подход следующий:
-	-- если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
-	local stress_schema = {}  -- AttrDict
-	stress_schema.stem = {}  -- dict
-	stress_schema.ending = {}  -- dict
-	stress_schema.stem['full'] = _.startswith(stress_type, {"a", "a/"})
-	stress_schema.stem['srt-sg-m'] = true
-	stress_schema.stem['srt-sg-f'] = _.endswith(stress_type, {"/a", "/a'"}) or _.equals(stress_type, {'a', "a'"})
-	stress_schema.stem['srt-sg-n'] = _.endswith(stress_type, {"/a", "/c", "/a'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'"})
-	stress_schema.stem['srt-pl'] = _.endswith(stress_type, {"/a", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'a', "a'", "b'"})
-	stress_schema.ending['full'] = _.startswith(stress_type, {"b", "b/"})
-	stress_schema.ending['srt-sg-m'] = false
-	stress_schema.ending['srt-sg-f'] = _.endswith(stress_type, {"/b", "/c", "/a'", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "a'", "b'"})
-	stress_schema.ending['srt-sg-n'] = _.endswith(stress_type, {"/b", "/b'", "/c''"}) or _.equals(stress_type, {'b', "b'"})
-	stress_schema.ending['srt-pl'] = _.endswith(stress_type, {"/b", "/b'", "/c'", "/c''"}) or _.equals(stress_type, {'b', "b'"})
-
-	local types = {'stem', 'ending'}
-	local cases
-	cases = {
-		'sg', 'pl',
-		'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',
-		'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',
-	}  -- list
-	for j, type in pairs(types) do  -- list
-		local sg_value = stress_schema[type]['full']
-		for j, case in pairs(cases) do  -- list
-			stress_schema[type][case] = sg_value
-		end
-	end
-
-	return _.returns(module, func, stress_schema)
-end
-
-
-return export
+return {
+    ["a"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["a'"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["b"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["b'"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["c"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["a/a"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["a/b"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["a/c"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["a/a'"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["a/b'"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["a/c'"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = true
+        }
+    },
+    ["a/c''"] = {
+        ["stem"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["b/a"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["b/b"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["b/c"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["b/a'"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = false
+        }
+    },
+    ["b/b'"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    },
+    ["b/c'"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = false,
+            ["srt-pl"] = true
+        }
+    },
+    ["b/c''"] = {
+        ["stem"] = {
+            ["nom-sg"] = false,
+            ["gen-sg"] = false,
+            ["dat-sg"] = false,
+            ["acc-sg"] = false,
+            ["ins-sg"] = false,
+            ["prp-sg"] = false,
+            ["nom-pl"] = false,
+            ["gen-pl"] = false,
+            ["dat-pl"] = false,
+            ["acc-pl"] = false,
+            ["ins-pl"] = false,
+            ["prp-pl"] = false,
+            ["srt-sg-m"] = true,
+            ["srt-sg-f"] = false,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        },
+        ["ending"] = {
+            ["nom-sg"] = true,
+            ["gen-sg"] = true,
+            ["dat-sg"] = true,
+            ["acc-sg"] = true,
+            ["ins-sg"] = true,
+            ["prp-sg"] = true,
+            ["nom-pl"] = true,
+            ["gen-pl"] = true,
+            ["dat-pl"] = true,
+            ["acc-pl"] = true,
+            ["ins-pl"] = true,
+            ["prp-pl"] = true,
+            ["srt-sg-m"] = false,
+            ["srt-sg-f"] = true,
+            ["srt-sg-n"] = true,
+            ["srt-pl"] = true
+        }
+    }
+}
