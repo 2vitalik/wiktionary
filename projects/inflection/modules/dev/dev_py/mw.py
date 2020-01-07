@@ -1,3 +1,4 @@
+import copy
 import re
 
 
@@ -6,11 +7,14 @@ def log(value):
 
 
 def clone(value):
+    if type(value) == dict:
+        return copy.deepcopy(value)
     return value.copy()
 
 
 def fix_re(value):
     return value.replace('%', '\\')
+
 
 class text:
     @staticmethod
