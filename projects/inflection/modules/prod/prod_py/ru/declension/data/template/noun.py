@@ -1,12 +1,12 @@
-from projects.inflection.modules.prod.prod_py import a
-from projects.inflection.modules.prod.prod_py import mw
-from projects.inflection.modules.prod.prod_py import tools as _
+from projects.inflection.modules.dev.dev_py import a
+from projects.inflection.modules.dev.dev_py import mw
+from projects.inflection.modules.dev.dev_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
 def template(base, args):  # export
-    return 'inflection/ru/noun'
+    return dev_prefix + 'inflection/ru/noun'  # перенести в data-модуль?
 # end
 
 

@@ -1,16 +1,14 @@
-from projects.inflection.modules.prod.prod_py import a
-from projects.inflection.modules.prod.prod_py import mw
-from projects.inflection.modules.prod.prod_py import tools as _
+from projects.inflection.modules.dev.dev_py import a
+from projects.inflection.modules.dev.dev_py import mw
+from projects.inflection.modules.dev.dev_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'noun.form'  # local
+module = 'run.result.forms.noun'  # local
 
 
 def remove_stress_if_one_syllable(value):  # export
-    # _.call('noun.forms', 'remove_stress_if_one_syllable')
-
     if _.contains_once(value, '{vowel+ё}'):
         return _.replaced(value, '́ ', '')
     # end
@@ -19,42 +17,44 @@ def remove_stress_if_one_syllable(value):  # export
 
 
 @a.starts(module)
-def apply_obelus(func, forms, rest_index):  # export
-    if _.contains(rest_index, '÷'):
-        forms['obelus'] = '1'
+def apply_obelus(func, i):  # export
+    if _.contains(i.rest_index, '÷'):
+        i.result['obelus'] = '1'
     # end
-
     _.ends(module, func)
 # end
 
 
 @a.starts(module)
-def apply_specific_3(func, forms, gender, rest_index):  # export
+def apply_specific_3(func, i):  # export
+    r = i.result  # local
+
     # Специфика по (3)
-    if _.contains(rest_index, '%(3%)') or _.contains(rest_index, '③'):
-        if _.endswith(forms['prp_sg'], 'и'):
-            forms['prp_sg'] = forms['prp_sg'] + '&nbsp;//<br />' + _.replaced(forms['prp_sg'], 'и$', 'е')
+    if _.contains(i.rest_index, '%(3%)') or _.contains(i.rest_index, '③'):
+        if _.endswith(r['prp-sg'], 'и'):
+            r['prp-sg'] = r['prp-sg'] + '&nbsp;//<br />' + _.replaced(r['prp-sg'], 'и$', 'е')
         # end
-        if gender == 'f' and _.endswith(forms['dat_sg'], 'и'):
-            forms['dat_sg'] = forms['dat_sg'] + '&nbsp;//<br />' + _.replaced(forms['dat_sg'], 'и$', 'е')
+        if i.gender == 'f' and _.endswith(r['dat-sg'], 'и'):
+            r['dat-sg'] = r['dat-sg'] + '&nbsp;//<br />' + _.replaced(r['dat-sg'], 'и$', 'е')
         # end
     # end
 
     _.ends(module, func)
 # end
-
 
 
 #------------------------------------------------------------------------------
 
 
 @a.starts(module)
-def prt_case(func, forms, args, index):  # Разделительный падеж
-    if _.contains(index, 'Р2') or _.contains(index, 'Р₂'):
-        forms['prt_sg'] = forms['dat_sg']
+def prt_case(func, i):  # Разделительный падеж
+    r = i.result  # local
+
+    if _.contains(i.index, 'Р2') or _.contains(i.index, 'Р₂'):
+        r['prt-sg'] = r['dat-sg']
     # end
-    if _.has_value(args, 'Р'):
-        forms['prt_sg'] = args['Р']
+    if _.has_value(i.args, 'Р'):
+        r['prt-sg'] = i.args['Р']
     # end
 
     _.ends(module, func)
@@ -62,31 +62,30 @@ def prt_case(func, forms, args, index):  # Разделительный паде
 
 
 @a.starts(module)
-def loc_case(func, forms, args, index):  # Местный падеж
-    # local loc, loc_prep
+def loc_case(func, i):  # Местный падеж
+    r = i.result  # local
 
-    if _.contains(index, 'П2') or _.contains(index, 'П₂'):
-        loc = forms['dat_sg']
+    if _.contains(i.index, 'П2') or _.contains(i.index, 'П₂'):
+        loc = r['dat-sg']  # local
         loc = _.replaced(loc, '́ ', '')
         loc = _.replaced(loc, 'ё', 'е')
         loc = _.replaced(loc, '({vowel})({consonant}*)$', '%1́ %2')
         loc = remove_stress_if_one_syllable(loc)  # = export.
-        forms['loc_sg'] = loc
-        loc_prep = '?'
-        loc_prep = _.extract(index, 'П2%((.+)%)')
+        r['loc-sg'] = loc
+        loc_prep = _.extract(i.index, 'П2%((.+)%)')  # local
         if not loc_prep:
-            loc_prep = _.extract(index, 'П₂%((.+)%)')
+            loc_prep = _.extract(i.index, 'П₂%((.+)%)')
         # end
         if not loc_prep:
             loc_prep = 'в, на'
         # end
-        forms['loc_sg'] = '(' + loc_prep + ') ' + forms['loc_sg']
-        if _.contains(index, '%[П'):
-            forms['loc_sg'] = forms['loc_sg'] + '&nbsp;//<br />' + forms['prp_sg']
+        r['loc-sg'] = '(' + loc_prep + ') ' + r['loc-sg']
+        if _.contains(i.index, '%[П'):
+            r['loc-sg'] = r['loc-sg'] + '&nbsp;//<br />' + r['prp-sg']
         # end
     # end
-    if _.has_value(args, 'М'):
-        forms['loc_sg'] = args['М']
+    if _.has_value(i.args, 'М'):
+        r['loc-sg'] = i.args['М']
     # end
 
     _.ends(module, func)
@@ -94,14 +93,16 @@ def loc_case(func, forms, args, index):  # Местный падеж
 
 
 @a.starts(module)
-def voc_case(func, forms, args, index, word):  # Звательный падеж
-    if _.has_value(args, 'З'):
-        forms['voc_sg'] = args['З']
-    elif _.contains(index, 'З'):
-        if _.endswith(word, ['а', 'я']):
-            forms['voc_sg'] = forms['gen_pl']
+def voc_case(func, i):  # Звательный падеж
+    r = i.result  # local
+
+    if _.has_value(i.args, 'З'):
+        r['voc-sg'] = i.args['З']
+    elif _.contains(i.index, 'З'):
+        if _.endswith(i.word.unstressed, ['а', 'я']):
+            r['voc-sg'] = r['gen-pl']
         else:
-            forms['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
+            r['error'] = 'Ошибка: Для автоматического звательного падежа, слово должно оканчиваться на -а/-я'
         # end
     # end
 
@@ -110,10 +111,10 @@ def voc_case(func, forms, args, index, word):  # Звательный падеж
 
 
 @a.starts(module)
-def special_cases(func, forms, args, index, word):  # export
-    prt_case(forms, args, index)
-    loc_case(forms, args, index)
-    voc_case(forms, args, index, word)
+def special_cases(func, i):  # export
+    prt_case(i)
+    loc_case(i)
+    voc_case(i)
 
     _.ends(module, func)
 # end

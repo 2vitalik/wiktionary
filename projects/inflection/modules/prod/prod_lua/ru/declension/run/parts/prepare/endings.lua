@@ -5,102 +5,38 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local noun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/noun/endings')  -- '.'
-local adj_endings = require('Module:' .. dev_prefix .. 'inflection/ru/adj/endings')  -- '.'
-local pronoun_endings = require('Module:' .. dev_prefix .. 'inflection/ru/pronoun/endings')  -- '.'
+-- from shared_utils.io.json import json_load
+local noun_circles = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/parts/transform/circles/noun')  -- '...'
 
 
 -- constants:
 local unstressed = 1
 local stressed = 2
-local module = 'declension.endings'
-
-
--- Схлопывание: Выбор окончаний в зависимости от рода и типа основы
--- @starts
-local function get_base_endings(gender, base_stem_type, adj, pronoun)
-	func = "get_base_endings"
-	_.starts(module, func)
-
-	local standard_endings, keys
-
---	INFO: Получение списка всех стандартных окончаний
-	if adj then
-		standard_endings = adj_endings.get_standard_adj_endings()
-	elseif pronoun then
-		standard_endings = pronoun_endings.get_standard_pronoun_noun_endings()
-	else
-		standard_endings = noun_endings.get_standard_noun_endings()
-	end
-
-	if adj and gender == '' then  -- INFO: Случай с множественным числом
-		keys = {'nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg', 'srt_sg'}
-		for i, key in pairs(keys) do  -- list
-			standard_endings['common'][base_stem_type][key] = ''
-		end
-		_.ends(module, func)
-		return standard_endings['common'][base_stem_type]
-	end
-
---	INFO: Заполнение из общих данных для всех родов:
-	for key, value in pairs(standard_endings['common'][base_stem_type]) do
-		standard_endings[gender][base_stem_type][key] = value
-	end
-
---	INFO: Возвращение соответствующих окончаний
-	_.ends(module, func)
-	return standard_endings[gender][base_stem_type]
-end
+local module = 'run.parts.prepare.endings'
 
 
 -- Схлопывание: Выбор окончания среди двух вариантов в зависимости от схемы ударения
 -- @starts
-local function choose_endings_stress(endings, gender, base_stem_type, stress_schema, adj, pronoun)
+local function choose_endings_stress(i)
 	func = "choose_endings_stress"
 	_.starts(module, func)
 
-	local stress, keys
+	local p = i.parts
 
-	if adj then
-		stress = stress_schema['ending']['nom_sg'] and stressed or unstressed
-
-		if gender == 'm' and base_stem_type == 'hard' then
-			endings['nom_sg'] = endings['nom_sg'][stress]
+	local keys = {
+		'nom-sg', 'gen-sg', 'dat-sg', 'acc-sg', 'ins-sg', 'prp-sg',  -- 'srt-sg',
+		'nom-pl', 'gen-pl', 'dat-pl', 'acc-pl', 'ins-pl', 'prp-pl',  -- 'srt-pl',
+	}  -- list
+	for j, key in pairs(keys) do  -- list
+		if _.has_key(p.endings[key]) and type(p.endings[key]) == 'table' then  -- type
+			local stress = i.stress_schema['ending'][key] and stressed or unstressed
+			p.endings[key] = p.endings[key][stress]
 		end
+	end
 
-		stress = stress_schema['ending']['srt_sg_n'] and stressed or unstressed
-
-		if gender == 'n' and base_stem_type == 'soft' then
-			endings['srt_sg'] = endings['srt_sg'][stress]
-		end
-	elseif pronoun then  -- TODO: может применить такой подход для всех случаев вообще?
-		keys = {'nom_sg', 'gen_sg', 'dat_sg', 'ins_sg', 'prp_sg'}  -- list
-		for i, key in pairs(keys) do  -- list
-			if type(endings[key]) == 'table' then
-				stress = stress_schema['ending'][key] and stressed or unstressed
-				endings[key] = endings[key][stress]
-			end
-		end
-	else
-		stress = stress_schema['ending']['dat_sg'] and stressed or unstressed
-
-		if gender == 'f' and base_stem_type == 'soft' then
-			endings['dat_sg'] = endings['dat_sg'][stress]
-		end
-
-		stress = stress_schema['ending']['prp_sg'] and stressed or unstressed
-
-		endings['prp_sg'] = endings['prp_sg'][stress]
-
-		stress = stress_schema['ending']['ins_sg'] and stressed or unstressed
-
-		if base_stem_type == 'soft' then
-			endings['ins_sg'] = endings['ins_sg'][stress]
-		end
-
-		stress = stress_schema['ending']['gen_pl'] and stressed or unstressed
-
-		endings['gen_pl'] = endings['gen_pl'][stress]
+	if i.adj and i.gender == 'n' then
+		local stress = i.stress_schema['ending']['srt-sg-n'] and stressed or unstressed
+		p.endings['srt-sg'] = p.endings['srt-sg'][stress]
 	end
 
 	_.ends(module, func)
@@ -108,39 +44,72 @@ end
 
 
 -- @starts
-function export.get_endings(data)
+function export.get_endings(i)
 	func = "get_endings"
 	_.starts(module, func)
 
---	INFO: Выбор базовых окончаний по роду и типу основы ('hard' или 'soft')
-	local endings
+--	INFO: Выбор базовых окончаний по роду и типу основы ('1-hard' или '2-soft')
 
-	endings = get_base_endings(data.gender, data.base_stem_type, data.adj, data.pronoun)
+	local p = i.parts
 
---	INFO: Изменение окончаний для нестандартного типов основы ('velar', 'sibilant', 'vowel' и т.п.)
-	if data.adj then  -- or data.pronoun
-		adj_endings.fix_adj_pronoun_endings(endings, data.gender, data.stem_type, data.stress_schema, data.adj, false)
-	elseif data.pronoun then
-		pronoun_endings.fix_pronoun_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
+	unit = ''  -- todo: get from i.unit ?
+	if i.adj then
+		unit = 'adj'
+	elseif i.pronoun then
+		unit = 'pronoun'
 	else
-		noun_endings.fix_noun_endings(endings, data.gender, data.stem_type, data.stress_schema)
+		unit = 'noun'
+	end
+	_.log_value(unit, 'unit')
+	_.log_value(i.unit, 'i.unit')
+
+	all_endings = mw.loadData('Module:' .. dev_prefix .. 'inflection/ru/declension/data/endings/' .. unit)
+
+	local gender = i.gender
+	if i.unit == 'noun' and i.adj and i.gender == '' then
+		-- случай вида "мозоленогие" (сущ.), когда ед. числа нет и рода нет
+		gender = 'pl'
+		i.calc_sg = false  -- todo: put this somewhere in the `parse` ?
+	end
+	local endings = all_endings[gender][i.stem.type]
+
+	-- клонирование окончаний
+	-- через mw.clone не работает, ошибка: "table from mw.loadData is read-only"
+	p.endings = {}  -- dict
+	for key, value in pairs(endings) do
+		p.endings[key] = value
+	end
+
+	if i.unit == 'noun' and i.adj and i.gender ~= '' then
+		-- для случая адъективного склонения существительных
+		-- нужно добавить не только текущий род, но и множественное число
+		for key, value in pairs(all_endings['pl'][i.stem.type]) do
+			p.endings[key] = value
+		end
+	end
+
+	-- стр. 29: для 8-го типа склонения:
+	-- после шипящих `я` в окончаниях существительных заменяется на `а`
+	if i.stem.type == '8-third' and _.endswith(i.stem.unstressed, '[жчшщ]') then
+		p.endings['dat-pl'] = 'ам'
+		p.endings['ins-pl'] = 'ами'
+		p.endings['prp-pl'] = 'ах'
 	end
 
 	-- apply special cases (1) or (2) in index
-	if not data.adj and not data.pronoun then
-		noun_endings.apply_noun_specific_1_2(endings, data.gender, data.stem_type, data.base_stem_type, data.rest_index)
+	if not i.adj and not i.pronoun then  -- todo: move outside here (into `modify` package)
+		noun_circles.apply_noun_specific_1_2(i)
 	end
 
 	-- Resolve stressed/unstressed cases of endings
-	choose_endings_stress(endings, data.gender, data.base_stem_type, data.stress_schema, data.adj, data.pronoun)
+	choose_endings_stress(i)
 
 --	INFO: Особые случаи: `копьё с d*` и `питьё с b*`
-	if data.gender == 'n' and data.base_stem_type == 'soft' and _.endswith(data.word, 'ё') then
-		endings['nom_sg'] = 'ё'
+	if i.gender == 'n' and i.stem.base_type == '2-soft' and _.endswith(i.word.unstressed, 'ё') then
+		p.endings['nom-sg'] = 'ё'
 	end
 
 	_.ends(module, func)
-	return endings
 end
 
 

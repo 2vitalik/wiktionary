@@ -5,7 +5,10 @@ local export = {}
 local _ = require('Module:' .. dev_prefix .. 'inflection/tools')
 
 
-local module = 'noun.parse_args'
+local e = require('Module:' .. dev_prefix .. 'inflection/ru/declension/run/result/error')  -- '..'
+
+
+local module = 'init.parse.noun'
 
 
 -- @call
@@ -26,7 +29,7 @@ end
 
 
 -- @starts
-function export.extract_gender_animacy(data)
+function export.extract_gender_animacy(i)
 	func = "extract_gender_animacy"
 	_.starts(module, func)
 
@@ -36,63 +39,63 @@ function export.extract_gender_animacy(data)
 	-- ж//жо - f ina//a
 	-- мо - m a
 	-- с  - n ina
-	data.pt = false
+	i.pt = false
 
-	if _.startswith(data.index, 'п') then
-		data.adj = true
-	elseif _.extract(data.index, '^м//ж') or _.extract(data.index, '^m//f') then
-		data.gender = 'mf'
-		data.animacy = 'in'
-	elseif _.extract(data.index, '^м//с') or _.extract(data.index, '^m//n') then
-		data.gender = 'mn'
-		data.animacy = 'in'
-	elseif _.extract(data.index, '^ж//м') or _.extract(data.index, '^f//m') then
-		data.gender = 'fm'
-		data.animacy = 'in'
-	elseif _.extract(data.index, '^ж//с') or _.extract(data.index, '^f//n') then
-		data.gender = 'fn'
-		data.animacy = 'in'
-	elseif _.extract(data.index, '^с//м') or _.extract(data.index, '^n//m') then
-		data.gender = 'nm'
-		data.animacy = 'in'
-	elseif _.extract(data.index, '^с//ж') or _.extract(data.index, '^n//m') then
-		data.gender = 'nm'
-		data.animacy = 'in'
-	elseif _.extract(data.index, '^мо%-жо') or _.extract(data.index, '^mf a') then
-		data.gender = 'f'
-		data.animacy = 'an'
-		data.common_gender = true
-	elseif _.extract(data.index, '^мн') then
-		data.gender = ''
-		data.animacy = ''
-		data.common_gender = false
-		data.pt = true
-		if _.extract(data.index, 'одуш') then
-			data.animacy = 'an'
-		elseif _.extract(data.index, 'неод') then
-			data.animacy = 'in'
+	if _.startswith(i.index, 'п') then
+		i.adj = true
+	elseif _.extract(i.index, '^м//ж') or _.extract(i.index, '^m//f') then  -- todo: INFO: похоже все такие случаи либо 0, либо <...>
+		i.gender = 'mf'
+		i.animacy = 'in'
+	elseif _.extract(i.index, '^м//с') or _.extract(i.index, '^m//n') then
+		i.gender = 'mn'
+		i.animacy = 'in'
+	elseif _.extract(i.index, '^ж//м') or _.extract(i.index, '^f//m') then
+		i.gender = 'fm'
+		i.animacy = 'in'
+	elseif _.extract(i.index, '^ж//с') or _.extract(i.index, '^f//n') then
+		i.gender = 'fn'
+		i.animacy = 'in'
+	elseif _.extract(i.index, '^с//м') or _.extract(i.index, '^n//m') then
+		i.gender = 'nm'
+		i.animacy = 'in'
+	elseif _.extract(i.index, '^с//ж') or _.extract(i.index, '^n//m') then
+		i.gender = 'nm'
+		i.animacy = 'in'
+	elseif _.extract(i.index, '^мо%-жо') or _.extract(i.index, '^mf a') then
+		i.gender = 'f'
+		i.animacy = 'an'
+		i.common_gender = true
+	elseif _.extract(i.index, '^мн') then
+		i.gender = ''
+		i.animacy = ''
+		i.common_gender = false
+		i.pt = true
+		if _.extract(i.index, 'одуш') then
+			i.animacy = 'an'
+		elseif _.extract(i.index, 'неод') then
+			i.animacy = 'in'
 		end
 		-- TODO: Также удалить это ниже для rest_index, аналогично как удаляется м, мо и т.п.
-		data.rest_index = data.index
-	elseif _.extract(data.index, '^мс') then
-		data.pronoun = true
-	elseif _.extract(data.index, '^м') then
-		data.gender = 'm'
-		data.animacy = get_cyrl_animacy(data.index, 'м')
-		data.common_gender = false
-	elseif _.extract(data.index, '^ж') then
-		data.gender = 'f'
-		data.animacy = get_cyrl_animacy(data.index, 'ж')
-		data.common_gender = false
-	elseif _.extract(data.index, '^с') then
-		data.gender = 'n'
-		data.animacy = get_cyrl_animacy(data.index, 'с')
-		data.common_gender = false
+		i.rest_index = i.index
+	elseif _.extract(i.index, '^мс') then
+		i.pronoun = true
+	elseif _.extract(i.index, '^м') then  -- fixme: сюда частично попадает необрабатываемый пока "м//мн."
+		i.gender = 'm'
+		i.animacy = get_cyrl_animacy(i.index, 'м')
+		i.common_gender = false
+	elseif _.extract(i.index, '^ж') then
+		i.gender = 'f'
+		i.animacy = get_cyrl_animacy(i.index, 'ж')
+		i.common_gender = false
+	elseif _.extract(i.index, '^с') then
+		i.gender = 'n'
+		i.animacy = get_cyrl_animacy(i.index, 'с')
+		i.common_gender = false
 	else
-		data.gender = _.extract(data.index, '^([mnf])')
-		data.animacy = _.extract(data.index, '^[mnf] ([a-z/]+)')
-		data.common_gender = false
-		if data.animacy then
+		i.gender = _.extract(i.index, '^([mnf])')
+		i.animacy = _.extract(i.index, '^[mnf] ([a-z/]+)')
+		i.common_gender = false
+		if i.animacy then
 			convert_animacy = {}
 			convert_animacy['in'] = 'in'
 			convert_animacy['an'] = 'an'
@@ -102,100 +105,101 @@ function export.extract_gender_animacy(data)
 			convert_animacy['ina//a'] = 'in//an'
 			convert_animacy['anin'] = 'an//in'
 			convert_animacy['inan'] = 'in//an'
-			data.animacy = convert_animacy[data.animacy]
+			i.animacy = convert_animacy[i.animacy]
 		end
 	end
 
 	-- Удаляем теперь соответствующий кусок индекса
-	if (data.gender or data.gender == '') and data.animacy and not data.adj and not data.pronoun then
-		_.log_value(data.index, 'data.index')
-		orig_index = mw.text.trim(data.index)
+	if (i.gender or i.gender == '') and i.animacy and not i.adj and not i.pronoun then
+		_.log_value(i.index, 'i.index')
+		orig_index = mw.text.trim(i.index)
 
---		local test1 = _.replaced(data.index, '^mf a ?', '')
+--		local test1 = _.replaced(i.index, '^mf a ?', '')
 --		mw.log('test1 = ' .. mw.text.trim(test1))
 --
---		local test2 = _.replaced(data.index, '^mf a ', '')
+--		local test2 = _.replaced(i.index, '^mf a ', '')
 --		mw.log('test2 = ' .. mw.text.trim(test2))
 --
---		local test3 = _.replaced(data.index, 'mf a ', '')
+--		local test3 = _.replaced(i.index, 'mf a ', '')
 --		mw.log('test3 = ' .. mw.text.trim(test3))
 --
---		local test4 = _.replaced(data.index, 'mf a', '')
+--		local test4 = _.replaced(i.index, 'mf a', '')
 --		mw.log('test4 = ' .. mw.text.trim(test4))
 --
---		local test5 = mw.text.trim(_.replaced(data.index, '^mf a ?', ''))
+--		local test5 = mw.text.trim(_.replaced(i.index, '^mf a ?', ''))
 --		mw.log('test5 = ' .. test5)
 --
---		local test6 = _.replaced(data.index, '^mf a ?', '')
+--		local test6 = _.replaced(i.index, '^mf a ?', '')
 --		mw.log('test6 = ' .. test6)
 --		local test7 = mw.text.trim(test6)
 --		mw.log('test7 = ' .. test7)
 
 		-- TODO: Simplify things a bit here (сделать циклом!):
 
-		rest_index = _.replaced(data.index, '^mf a ?', '')
+		rest_index = _.replaced(i.index, '^mf a ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "mf a" из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "mf a" из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		rest_index = _.replaced(data.index, '^[mnf]+ [a-z/]+ ?', '')
+		rest_index = _.replaced(i.index, '^[mnf]+ [a-z/]+ ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "[mnf] [in/an]" из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "[mnf] [in/an]" из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		rest_index = _.replaced(data.index, '^мн%.? неод%.? ?', '')
+		rest_index = _.replaced(i.index, '^мн%.? неод%.? ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "мн. неод." из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "мн. неод." из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		rest_index = _.replaced(data.index, '^мн%.? одуш%.? ?', '')
+		rest_index = _.replaced(i.index, '^мн%.? одуш%.? ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "мн. одуш." из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "мн. одуш." из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		rest_index = _.replaced(data.index, '^мн%.? ?', '')
+		rest_index = _.replaced(i.index, '^мн%.? ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "мн." из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "мн." из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		rest_index = _.replaced(data.index, '^[-мжсо/]+%,? ?', '')
+		rest_index = _.replaced(i.index, '^[-мжсо/]+%,? ?', '')   -- fixme: сюда частично попадает необрабатываемый пока "м//мн."
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "м/ж/с/мо/жо/со/..." из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "м/ж/с/мо/жо/со/..." из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-		return {error = 'TODO'}  -- dict -- TODO: process such errors
-	elseif data.adj then
-		_.log_value(data.index, 'data.index (п)')
-		orig_index = mw.text.trim(data.index)
+		e.add_error(i, 'TODO: process such errors')
+		return _.ends(module, func)
+	elseif i.adj then
+		_.log_value(i.index, 'i.index (п)')
+		orig_index = mw.text.trim(i.index)
 
-		rest_index = _.replaced(data.index, '^п ?', '')
+		rest_index = _.replaced(i.index, '^п ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "п" из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "п" из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
-	elseif data.pronoun then
-		_.log_value(data.index, 'data.index (мс)')
-		orig_index = mw.text.trim(data.index)
+	elseif i.pronoun then
+		_.log_value(i.index, 'i.index (мс)')
+		orig_index = mw.text.trim(i.index)
 
-		rest_index = _.replaced(data.index, '^мс ?', '')
+		rest_index = _.replaced(i.index, '^мс ?', '')
 		if rest_index ~= orig_index then
-			data.rest_index = mw.text.trim(rest_index)
-			mw.log('  -- Удаление "мс" из индекса')
-			_.log_value(data.rest_index, 'data.rest_index')
+			i.rest_index = mw.text.trim(rest_index)
+			_.log_info('Удаление "мс" из индекса')
+			_.log_value(i.rest_index, 'i.rest_index')
 			return _.ends(module, func)
 		end
 	end

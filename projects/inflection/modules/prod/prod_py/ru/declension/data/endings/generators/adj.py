@@ -1,194 +1,169 @@
-from projects.inflection.modules.prod.prod_py import a
-from projects.inflection.modules.prod.prod_py import mw
-from projects.inflection.modules.prod.prod_py import tools as _
+from projects.inflection.modules.dev.dev_py import a
+from projects.inflection.modules.dev.dev_py import mw
+from projects.inflection.modules.dev.dev_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
+
+import sys, os; sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+try:
+    # чтобы запускать скрипт и импорт работал:
+    from data.endings.generators.noun import copy_other_endings, dump_data
+except ImportError:
+    # для IDE, чтобы она находила методы:
+    from ....data.endings.generators.noun import copy_other_endings, dump_data
 
 
 # constants:
 unstressed = 0  # local
 stressed = 1  # local
-module = 'adj.endings'  # local
+genders = ['m', 'n', 'f', 'pl']  # local
+
+module = 'data.endings.adj'  # local
 
 
 # Данные: все стандартные окончания для двух типов основ
 @a.call(module)
-def get_standard_adj_endings():  # export
-    # TODO: Возвращать ключи уже с дефисами вместо подчёркиваний
-    return dict(
-        m = dict(
-            hard = dict(
-                nom_sg = ['ый', 'ой'],
-                gen_sg = 'ого',
-                dat_sg = 'ому',
-                ins_sg = 'ым',
-                prp_sg = 'ом',
-                srt_sg = '',
-            ),  # dict
-            soft = dict(
-                nom_sg = 'ий',
-                gen_sg = 'его',
-                dat_sg = 'ему',
-                ins_sg = 'им',
-                prp_sg = 'ем',
-                srt_sg = 'ь',
-            ),  # dict
-        ),  # dict
-        f = dict(
-            hard = dict(
-                nom_sg = 'ая',
-                gen_sg = 'ой',
-                dat_sg = 'ой',
-                acc_sg = 'ую',
-                ins_sg = 'ой',
-                prp_sg = 'ой',
-                srt_sg = 'а',
-            ),  # dict
-            soft = dict(
-                nom_sg = 'яя',
-                gen_sg = 'ей',
-                dat_sg = 'ей',
-                acc_sg = 'юю',
-                ins_sg = 'ей',
-                prp_sg = 'ей',
-                srt_sg = 'я',
-            ),  # dict
-        ),  # dict
-        n = dict(
-            hard = dict(
-                nom_sg = 'ое',
-                gen_sg = 'ого',
-                dat_sg = 'ому',
-                ins_sg = 'ым',
-                prp_sg = 'ом',
-                srt_sg='о',
-            ),  # dict
-            soft = dict(
-                nom_sg = 'ее',
-                gen_sg = 'его',
-                dat_sg = 'ему',
-                ins_sg = 'им',
-                prp_sg = 'ем',
-                srt_sg=['е', 'ё'],
-            ),  # dict
-        ),  # dict
-        common = dict(  # common endings
-            hard = dict(
-                nom_pl = 'ые',
-                gen_pl = 'ых',
-                dat_pl = 'ым',
-                ins_pl = 'ыми',
-                prp_pl = 'ых',
-                srt_pl = 'ы',
-            ),  # dict
-            soft = dict(
-                nom_pl = 'ие',
-                gen_pl = 'их',
-                dat_pl = 'им',
-                ins_pl = 'ими',
-                prp_pl = 'их',
-                srt_pl = 'и',
-            ),  # dict
-        ),  # dict
-    )  # dict
-    # todo: сразу преобразовать в дефисы
+def base_adj_endings():
+    return {
+        'm': {
+            '1-hard': {
+                'nom-sg': ['ый', 'ой'],
+                'gen-sg': ['ого', 'ого'],
+                'dat-sg': ['ому', 'ому'],
+                'acc-sg': '...',
+                'ins-sg': 'ым',
+                'prp-sg': ['ом', 'ом'],
+                'srt-sg': '',
+            },
+            '2-soft': {
+                'nom-sg': 'ий',
+                'gen-sg': 'его',
+                'dat-sg': 'ему',
+                'acc-sg': '...',
+                'ins-sg': 'им',
+                'prp-sg': 'ем',
+                'srt-sg': 'ь',
+            },
+        },
+        'f': {
+            '1-hard': {
+                'nom-sg': 'ая',
+                'gen-sg': ['ой', 'ой'],
+                'dat-sg': ['ой', 'ой'],
+                'acc-sg': 'ую',
+                'ins-sg': ['ой', 'ой'],
+                'prp-sg': ['ой', 'ой'],
+                'srt-sg': 'а',
+            },
+            '2-soft': {
+                'nom-sg': 'яя',
+                'gen-sg': 'ей',
+                'dat-sg': 'ей',
+                'acc-sg': 'юю',
+                'ins-sg': 'ей',
+                'prp-sg': 'ей',
+                'srt-sg': 'я',
+            },
+        },
+        'n': {
+            '1-hard': {
+                'nom-sg': ['ое', 'ое'],
+                'gen-sg': ['ого', 'ого'],
+                'dat-sg': ['ому', 'ому'],
+                'acc-sg': '...',
+                'ins-sg': 'ым',
+                'prp-sg': ['ом', 'ом'],
+                'srt-sg': ['о', 'о'],
+            },
+            '2-soft': {
+                'nom-sg': 'ее',
+                'gen-sg': 'его',
+                'dat-sg': 'ему',
+                'acc-sg': '...',
+                'ins-sg': 'им',
+                'prp-sg': 'ем',
+                'srt-sg': ['е', 'ё'],
+            },
+        },
+        'pl': {  # plural endings
+            '1-hard': {
+                'nom-pl': 'ые',
+                'gen-pl': 'ых',
+                'dat-pl': 'ым',
+                'acc-pl': '...',
+                'ins-pl': 'ыми',
+                'prp-pl': 'ых',
+                'srt-pl': 'ы',
+            },
+            '2-soft': {
+                'nom-pl': 'ие',
+                'gen-pl': 'их',
+                'dat-pl': 'им',
+                'acc-pl': '...',
+                'ins-pl': 'ими',
+                'prp-pl': 'их',
+                'srt-pl': 'и',
+            },
+        },
+    }
 # end
 
 
 # Изменение окончаний для остальных типов основ (базирующихся на первых двух)
 @a.starts(module)
-def fix_adj_pronoun_endings(func, endings, gender, stem_type, stress_schema, adj, pronoun):  # export
+def fill_other_adj_endings(func, endings):
     # INFO: Replace "ы" to "и"
-    if _.equals(stem_type, ['velar', 'sibilant']):
-        if gender == 'm':
-            if adj:
-                endings['nom_sg'][unstressed] = 'ий'
-            # end
-            endings['ins_sg'] = 'им'
-        # end
-        if gender == 'n':
-            endings['ins_sg'] = 'им'
-        # end
+    for j, stem_type in enumerate(['3-velar', '4-sibilant']):
+        endings['m'][stem_type]['nom-sg'][unstressed] = 'ий'  # adj only
+        endings['m'][stem_type]['ins-sg'] = 'им'
+        endings['n'][stem_type]['ins-sg'] = 'им'
 
-        if adj:
-            endings['nom_pl'] = 'ие'
-        elif pronoun:
-            endings['nom_pl'] = 'и'
-        # end
-        endings['gen_pl'] = 'их'
-        endings['dat_pl'] = 'им'
-        endings['ins_pl'] = 'ими'
-        endings['prp_pl'] = 'их'
-        if adj:
-            endings['srt_pl'] = 'и'
-        # end
+        endings['pl'][stem_type]['nom-pl'] = 'ие'  # adj only
+        # endings['pl'][stem_type]['nom-pl'] = 'и'  # pronoun only
+        endings['pl'][stem_type]['gen-pl'] = 'их'
+        endings['pl'][stem_type]['dat-pl'] = 'им'
+        endings['pl'][stem_type]['ins-pl'] = 'ими'
+        endings['pl'][stem_type]['prp-pl'] = 'их'
+        endings['pl'][stem_type]['srt-pl'] = 'и'  # adj only
     # end
 
     # INFO: Replace unstressed "о" to "е"
-    if _.equals(stem_type, ['sibilant', 'letter-ц']):
-        if not stress_schema['ending']['sg']:
-            if gender == 'm':
-                if adj:
-                    endings['nom_sg'][stressed] = 'ей'
-                # end
-                endings['gen_sg'] = 'его'
-                endings['dat_sg'] = 'ему'
-                endings['prp_sg'] = 'ем'
-            # end
-            if gender == 'n':
-                endings['nom_sg'] = 'ее'
-                endings['gen_sg'] = 'его'
-                endings['dat_sg'] = 'ему'
-                endings['prp_sg'] = 'ем'
-            # end
-            if gender == 'f':
-                endings['gen_sg'] = 'ей'
-                endings['dat_sg'] = 'ей'
-                endings['ins_sg'] = 'ей'
-                endings['prp_sg'] = 'ей'
-            # end
-        # end
-        if not stress_schema['ending']['srt_sg_n']:
-            if gender == 'n':
-                if adj:
-                    endings['srt_sg'] = 'е'
-                # end
-            # end
-        # end
+    for j, stem_type in enumerate(['4-sibilant', '5-letter-ц']):
+        # endings['m'][stem_type]['nom-sg'][unstressed] = 'ей'  # adj only  # fixme ???
+        endings['m'][stem_type]['gen-sg'][unstressed] = 'его'
+        endings['m'][stem_type]['dat-sg'][unstressed] = 'ему'
+        endings['m'][stem_type]['prp-sg'][unstressed] = 'ем'
+
+        endings['n'][stem_type]['nom-sg'][unstressed] = 'ее'
+        endings['n'][stem_type]['gen-sg'][unstressed] = 'его'
+        endings['n'][stem_type]['dat-sg'][unstressed] = 'ему'
+        endings['n'][stem_type]['prp-sg'][unstressed] = 'ем'
+
+        endings['f'][stem_type]['gen-sg'][unstressed] = 'ей'
+        endings['f'][stem_type]['dat-sg'][unstressed] = 'ей'
+        endings['f'][stem_type]['ins-sg'][unstressed] = 'ей'
+        endings['f'][stem_type]['prp-sg'][unstressed] = 'ей'
+
+        endings['n'][stem_type]['srt-sg'][unstressed] = 'е'  # adj only
     # end
 
     # INFO: Replace "ь" to "й"
-    if _.equals(stem_type, {'vowel'}):
-        if gender == 'm':
-            if adj:
-                endings['srt_sg'] = 'й'
-            # end
-        # end
-    # end
+    stem_type = '6-vowel'  # local
+    endings['m'][stem_type]['srt-sg'] = 'й'  # adj only
 
     _.ends(module, func)
 # end
 
 
 @a.starts(module)
-def apply_adj_specific_1_2(func, stems, gender, rest_index):  # export
-    if not _.endswith(stems['srt_sg'], 'нн'):
-        # todo: log some error?
-        _.ends(module, func)
-        return
-    # end
-    if _.contains(rest_index, ['%(1%)', '①']):
-        if gender == 'm':
-            _.replace(stems, 'srt_sg', 'нн$', 'н')
-        # end
-    # end
-    if _.contains(rest_index, ['%(2%)', '②']):
-        _.replace(stems, 'srt_sg', 'нн$', 'н')
-        _.replace(stems, 'srt_pl', 'нн$', 'н')
-    # end
-
-    _.ends(module, func)
+def generate_adj_endings(func):
+    endings = base_adj_endings()  # local
+    copy_other_endings(endings, genders)
+    fill_other_adj_endings(endings)
+    dump_data('adj', endings)
+    return _.returns(module, func, endings)
 # end
 
 
-# return export
+if __name__ == '__main__':
+    generate_adj_endings()

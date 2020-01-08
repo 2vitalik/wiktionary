@@ -1,55 +1,88 @@
-from projects.inflection.modules.prod.prod_py import a
-from projects.inflection.modules.prod.prod_py import mw
-from projects.inflection.modules.prod.prod_py import tools as _
+from projects.inflection.modules.dev.dev_py import a
+from projects.inflection.modules.dev.dev_py import mw
+from projects.inflection.modules.dev.dev_py import tools as _
 
 dev_prefix = 'User:Vitalik/'  # comment this on `prod` version
 
 
-module = 'noun.stress'  # local
+import sys, os; sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))))
+try:
+    # чтобы запускать скрипт и импорт работал:
+    from data.endings.generators.noun import dump_data
+except ImportError:
+    # для IDE, чтобы она находила методы:
+    from ....data.endings.generators.noun import dump_data
+
+
+module = 'data.stress.noun'  # local  # todo: rename to `stress_schemas`
 
 
 # Данные: ударность основы и окончания в зависимости от схемы ударения
 @a.starts(module)
-def get_noun_stress_schema(func, stress_type):  # export  # INFO: Вычисление схемы ударения
-    # local stress_schema, types, sg_value, pl_value
+def generate_noun_stress_schemas(func):  # INFO: Вычисление схемы ударения
+    # todo: special variable for this?
+    stress_types = ['a', 'b', 'c', 'd', 'e', 'f', "b'", "d'", "f'", "f''"]  # local
+    res = dict()  # dict
 
-    # общий подход следующий:
-    # если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
-    stress_schema = dict(  # dict
-        stem = dict(  # dict
-            sg     = _.equals(stress_type, ["a", "c", "e"]),
-            acc_sg = _.equals(stress_type, ["a", "c", "e", "d'", "f'"]),
-            ins_sg = _.equals(stress_type, ["a", "c", "e", "b'", "f''"]),
-            pl     = _.equals(stress_type, ["a", "d", "d'"]),
-            nom_pl = _.equals(stress_type, ["a", "d", "d'", "e", "f", "f'", "f''"]),
-        ),  # dict
-        ending = dict(  # dict
-            sg     = _.equals(stress_type, ["b", "b'", "d", "d'", "f", "f'", "f''"]),
-            acc_sg = _.equals(stress_type, ["b", "b'", "d", "f", "f''"]),
-            ins_sg = _.equals(stress_type, ["b", "d", "d'", "f", "f'"]),
-            pl     = _.equals(stress_type, ["b", "b'", "c", "e", "f", "f'", "f''"]),
-            nom_pl = _.equals(stress_type, ["b", "b'", "c"]),
-        ),  # dict
-    )  # dict
+    for j, stress_type in enumerate(stress_types):
+        stress_schema = dict()  # dict
+        stress_schema['stem'] = dict()  # dict
+        stress_schema['ending'] = dict()  # dict
 
-    types = ['stem', 'ending']
-    for i, type in enumerate(types):
-        sg_value = stress_schema[type]['sg']
-        stress_schema[type]['nom_sg'] = sg_value
-        stress_schema[type]['gen_sg'] = sg_value
-        stress_schema[type]['dat_sg'] = sg_value
-        stress_schema[type]['prp_sg'] = sg_value
+        # общий подход следующий:
+        # если схема среди перечисленных, значит, элемент под ударением (stressed), иначе — нет (unstressed)
+        stress_schema['stem']['sg']     = _.equals(stress_type, ["a", "c", "e"])
+        stress_schema['stem']['nom-sg'] = '...'
+        stress_schema['stem']['gen-sg'] = '...'
+        stress_schema['stem']['dat-sg'] = '...'
+        stress_schema['stem']['acc-sg'] = _.equals(stress_type, ["a", "c", "e", "d'", "f'"])
+        stress_schema['stem']['ins-sg'] = _.equals(stress_type, ["a", "c", "e", "b'", "f''"])
+        stress_schema['stem']['prp-sg'] = '...'
+        stress_schema['stem']['pl']     = _.equals(stress_type, ["a", "d", "d'"])
+        stress_schema['stem']['nom-pl'] = _.equals(stress_type, ["a", "d", "d'", "e", "f", "f'", "f''"])
+        stress_schema['stem']['gen-pl'] = '...'
+        stress_schema['stem']['dat-pl'] = '...'
+        stress_schema['stem']['ins-pl'] = '...'
+        stress_schema['stem']['prp-pl'] = '...'
+        stress_schema['ending']['sg']     = _.equals(stress_type, ["b", "b'", "d", "d'", "f", "f'", "f''"])
+        stress_schema['ending']['nom-sg'] = '...'
+        stress_schema['ending']['gen-sg'] = '...'
+        stress_schema['ending']['dat-sg'] = '...'
+        stress_schema['ending']['acc-sg'] = _.equals(stress_type, ["b", "b'", "d", "f", "f''"])
+        stress_schema['ending']['ins-sg'] = _.equals(stress_type, ["b", "d", "d'", "f", "f'"])
+        stress_schema['ending']['prp-sg'] = '...'
+        stress_schema['ending']['pl']     = _.equals(stress_type, ["b", "b'", "c", "e", "f", "f'", "f''"])
+        stress_schema['ending']['nom-pl'] = _.equals(stress_type, ["b", "b'", "c"])
+        stress_schema['ending']['gen-pl'] = '...'
+        stress_schema['ending']['dat-pl'] = '...'
+        stress_schema['ending']['ins-pl'] = '...'
+        stress_schema['ending']['prp-pl'] = '...'
 
-        pl_value = stress_schema[type]['pl']
-        stress_schema[type]['gen_pl'] = pl_value
-        stress_schema[type]['dat_pl'] = pl_value
-        stress_schema[type]['ins_pl'] = pl_value
-        stress_schema[type]['prp_pl'] = pl_value
+        types = ['stem', 'ending']  # local
+        for j, type in enumerate(types):
+            sg_value = stress_schema[type]['sg']  # local
+            stress_schema[type]['nom-sg'] = sg_value
+            stress_schema[type]['gen-sg'] = sg_value
+            stress_schema[type]['dat-sg'] = sg_value
+            stress_schema[type]['prp-sg'] = sg_value
+            del stress_schema[type]['sg']
+
+            pl_value = stress_schema[type]['pl']  # local
+            stress_schema[type]['gen-pl'] = pl_value
+            stress_schema[type]['dat-pl'] = pl_value
+            stress_schema[type]['ins-pl'] = pl_value
+            stress_schema[type]['prp-pl'] = pl_value
+            del stress_schema[type]['pl']
+        # end
+
+        res[stress_type] = stress_schema
     # end
 
-    _.ends(module, func)
-    return stress_schema
+    dump_data('noun', res)
+
+    return _.returns(module, func, res)
 # end
 
 
-# return export
+if __name__ == '__main__':
+    generate_noun_stress_schemas()
