@@ -76,7 +76,7 @@ def get_new_articles():
                 has_offensive = True
         if has_offensive:
             continue
-        if Page(title, content).ru:
+        if Page(title, content, silent=True).ru:
             new_titles.append(title)
     if latest_edited:
         set_latest_date(latest_edited)
