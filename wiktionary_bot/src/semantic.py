@@ -11,7 +11,7 @@ from core.conf.conf import ROOT_PATH, SYNC_PATH
 from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
 from libs.parse.storage_page import StoragePage
-from libs.storage.error import PageNotFound
+from libs.storage.error import PageNotFound, StorageError
 from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump
 from libs.utils.parse import remove_stress
@@ -111,6 +111,9 @@ class ShortReply:
         self.content = None
         self.buttons = None
         if self.is_regexp():
+            self.page_size = 30
+            self.page = self.homonym_index  # fixme
+            self.more = False
             self.regexp = self.title
             self.titles = self.filter_titles()
             if len(self.titles) == 1:
@@ -136,12 +139,16 @@ class ShortReply:
         return '[' in self.title or '?' in self.title or '*' in self.title
 
     def filter_titles(self):
+        i = 0
         titles = []
-        for title in storage.load_titles():
+        for title in storage.load_titles():  # todo: process self.lang_key
             if re.match(f'{self.regexp}$', title):
-                titles.append(title)
-                if len(title) > 100:
+                if i // self.page_size > self.page:
+                    self.more = True
                     break
+                if i // self.page_size == self.page:
+                    titles.append(title)
+                i += 1
         return titles
 
     def _regexp_text(self):
@@ -150,6 +157,12 @@ class ShortReply:
             text += f'Статьи в Викисловаре:\n'
             text += '\n'.join([f'▫️ ' + get_link(title)
                                for title in sorted(self.titles)])
+            if self.page or self.more:
+                text += f'\n\n👉 Показана <b>{self.page+1}-я</b> ' \
+                        f'страница результатов'
+                if self.more:
+                    text += f'\n🤖 Для других страниц добавляйте ' \
+                            f'<code>/{self.page+2}</code> и т.п.'
         else:
             text += '❌ Ничего не найдено'
         return text
@@ -189,12 +202,12 @@ class Reply(ShortReply):
     languages = load_languages()
 
     def __init__(self, title, lang_key='', homonym_index=0):
+        self.lang_key = lang_key
+        self.homonym_index = int(homonym_index)
+
         super().__init__(title)
 
         if self.title:
-            self.lang_key = lang_key
-            self.homonym_index = int(homonym_index)
-
             self.title_stressed = self.active_title
             self.lang_keys = []
             self.homonyms_count = 0
