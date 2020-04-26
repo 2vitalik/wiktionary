@@ -7,13 +7,14 @@ import telegram
 from pywikibot.exceptions import NoPage
 from shared_utils.common.dt import dtf
 
+from core.conf import conf
 from core.conf.conf import ROOT_PATH, SYNC_PATH
 from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
 from libs.parse.storage_page import StoragePage
 from libs.storage.error import PageNotFound, StorageError
 from libs.utils.collection import chunks
-from libs.utils.io import read, append, json_load, json_dump
+from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page
 from wiktionary_bot.config import ADMINS, data_path, logs_path
@@ -141,8 +142,14 @@ class ShortReply:
     def filter_titles(self):
         i = 0
         titles = []
-        for title in storage.load_titles():  # todo: process self.lang_key
-            if re.match(f'{self.regexp}$', title):
+        if self.lang_key:
+            path = join(conf.PARSED_STORAGE_PATH, 'lists', 'langs')
+            all_titles = read_lines(f'{path}/{self.lang_key}.txt',
+                                    ignore_absent=True)
+        else:
+            all_titles = storage.load_titles()
+        for title in all_titles:
+            if re.fullmatch(self.regexp, title):
                 if i // self.page_size > self.page:
                     self.more = True
                     break
