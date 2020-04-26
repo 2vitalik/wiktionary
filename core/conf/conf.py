@@ -17,6 +17,7 @@ except ImportError:
 MAIN_STORAGE_PATH = join(STORAGE_PATH, 'main')
 AUTHORS_STORAGE_PATH = join(STORAGE_PATH, 'authors')
 HTMLS_STORAGE_PATH = join(STORAGE_PATH, 'htmls')
+PARSED_STORAGE_PATH = join(STORAGE_PATH, 'parsed')
 REPORTS_PATH = join(STORAGE_PATH, 'reports')
 SYNC_PATH = join(STORAGE_PATH, 'sync')
 
