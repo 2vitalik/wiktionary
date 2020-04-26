@@ -46,6 +46,7 @@ def check_for_new_titles(bot):
                 title = title.replace('<', '&lt;')
                 title = title.replace('>', '&gt;')
                 title = title.strip('=').strip()
+                forum = forum.replace(' ', '%20')
                 link = f'→ <a href="https://ru.wiktionary.org/wiki/{forum}">' \
                        f'{title}</a>\n'
                 message_text += link
