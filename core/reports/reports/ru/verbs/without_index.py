@@ -1,9 +1,9 @@
-from core.reports.lib.large_report.base import BaseLargeReportMixin, \
-    PluralVerbs
+from core.reports.lib.large_report.first_letter import FirstLetterLargeReport
+from core.reports.lib.large_report.plurals import PluralVerbs
 from core.reports.lib.shortcuts import TitlesReport
 
 
-class VerbsWithoutIndex(TitlesReport, PluralVerbs, BaseLargeReportMixin):
+class VerbsWithoutIndex(TitlesReport, PluralVerbs, FirstLetterLargeReport):
     path = 'Отчёты/ru/Глаголы/Без классификации по Зализняку'
     short_title = 'Глаголы без классификации по Зализняку'
 
