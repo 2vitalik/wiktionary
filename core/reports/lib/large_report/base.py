@@ -6,7 +6,7 @@ from libs.utils.numbers import get_plural
 from libs.utils.unicode import unicode_sorted
 
 
-class BaseLargeReportMixin(BaseIterableReport):
+class BaseLargeReport(BaseIterableReport):
     plurals = None
 
     def __init__(self, *args, **kwargs):
@@ -20,28 +20,25 @@ class BaseLargeReportMixin(BaseIterableReport):
     def get_description(self, letter):
         return self.description  # default value
 
-    def save(self, root_prefix, debug=False):
-        grouped = defaultdict(list)
-        for key in self.entries:
-            letter = key[0].upper()
-            grouped[letter].append(key)
+    def group_entries(self):
+        raise NotImplementedError()
 
-        # todo: use ALL LETTERS optionally?
-        for letter in unicode_sorted(grouped.keys()):
-            keys = grouped[letter]
-            content = ''.join(self.entry_content(key) for key in keys)
+    def save(self, root_prefix, debug=False):
+        grouped = self.group_entries()
+        for key, entries in grouped.items():
+            content = ''.join(self.entry_content(entry) for entry in entries)
             # todo: index links to other letters?
             page_content = \
-                self.get_page_content(content, self.get_short_title(letter),
-                                      self.get_description(letter))
-            count = len(keys)
-            title = f'{root_prefix}/{self.path}/{letter}'
+                self.get_page_content(content, self.get_short_title(key),
+                                      self.get_description(key))
+            count = len(entries)
+            title = f'{root_prefix}/{self.path}/{key}'
             desc = f'Обновление отчёта: {count}'
             sync_save_page(title, page_content, desc)
 
             plural = get_plural(count, *self.plurals) if self.plurals else ''
             self._large_content += \
-                f"* '''[[/{letter}|{letter}]]''' — '''{count}''' {plural}\n"
+                f"* '''[[/{key}|{key}]]''' — '''{count}''' {plural}\n"
 
         super().save(root_prefix, debug)  # сохранение страницы индекса
 
