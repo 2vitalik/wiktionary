@@ -45,11 +45,3 @@ class BaseLargeReport(BaseIterableReport):
     @property
     def content(self):
         return self._large_content
-
-
-class PluralArticles:
-    plurals = ('статья', 'статьи', 'статей')
-
-
-class PluralVerbs:
-    plurals = ('глагол', 'глагола', 'глаголов')
