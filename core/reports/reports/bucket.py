@@ -5,6 +5,7 @@ from core.reports.reports.headers.duplicated_second_level import \
     DuplicatedSecondLevel
 from core.reports.reports.headers.wrong_first_level import WrongFirstLevel
 from core.reports.reports.headers.wrong_second_level import WrongSecondLevel
+from core.reports.reports.ru.verbs.reversed_index import VerbsReversedIndex
 from core.reports.reports.ru.verbs.without_index import VerbsWithoutIndex
 from core.reports.reports.ru.verbs.without_participles import \
     VerbsWithoutParticiples
@@ -56,6 +57,7 @@ Bucket.add({
         DuplicatedSecondLevel,
         TemplateKeyDuplicated,
         VerbsWithoutIndex,
+        VerbsReversedIndex,
         # DebugDivisibleLength,
     ],
     'all': [
