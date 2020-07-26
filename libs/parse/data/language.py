@@ -66,3 +66,11 @@ class LanguageData(BaseData):
             if m and m.is_verb() and not m.verb.has_index:
                 return True
         return False
+
+    def has_untranscribed_verb(self):
+        for homonym in self:
+            m = homonym.morphology
+            p = homonym.pronunciation
+            if m and m.is_verb() and not p.transcriptions.has_data:
+                return True
+        return False

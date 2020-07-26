@@ -9,6 +9,8 @@ from core.reports.reports.ru.verbs.reversed_index import VerbsReversedIndex
 from core.reports.reports.ru.verbs.without_index import VerbsWithoutIndex
 from core.reports.reports.ru.verbs.without_participles import \
     VerbsWithoutParticiples
+from core.reports.reports.ru.verbs.without_transcription import \
+    VerbsWithoutTranscription
 from core.reports.reports.templates.key_duplicated import TemplateKeyDuplicated
 
 
@@ -57,6 +59,7 @@ Bucket.add({
         DuplicatedSecondLevel,
         TemplateKeyDuplicated,
         VerbsWithoutIndex,
+        VerbsWithoutTranscription,
         VerbsReversedIndex,
         # DebugDivisibleLength,
     ],
