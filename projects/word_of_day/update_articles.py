@@ -103,34 +103,34 @@ def process_list(title):
         filename = f"{path}/{year}/{month}/{dtf}/{dt}.json"
         write(filename, new_content)
 
-        # if month == '02':  # just for debug
-        #     new_data = {
-        #         "1": "эктогенез",
-        #         "2": "неэтичность",
-        #         "3": "беляшная",
-        #         "4": "Даурия",
-        #         "5": "фавипиравир",
-        #         "6": "привет",  # changed
-        #         "7": "главк",
-        #         "8": "окснар",
-        #         "9": "спенсер",
-        #         "10": "медницкий",
-        #         "11": "пуржить",
-        #         "12": "неспроста",
-        #         # "13": "закавыка",  # removed
-        #         "14": "дерёвня",
-        #         "15": "недельный",
-        #         "16": "туалетка",
-        #         "17": "скаженный",
-        #         "18": "кринж",
-        #         "20": "полемизирующий",  # added
-        #         "22": "словолитня",
-        #         "23": "камчатный",
-        #         "24": "гуашь",
-        #         "25": "Потебня",
-        #         "26": "фильтрационный",
-        #         "27": "серебряник"
-        #     }
+        if debug and month == '02':
+            new_data = {
+                "1": "эктогенез",
+                "2": "неэтичность",
+                "3": "беляшная",
+                "4": "Даурия",
+                "5": "фавипиравир",
+                "6": "привет",  # changed
+                "7": "главк",
+                "8": "окснар",
+                "9": "спенсер",
+                "10": "медницкий",
+                "11": "пуржить",
+                "12": "неспроста",
+                # "13": "закавыка",  # removed
+                "14": "дерёвня",
+                "15": "недельный",
+                "16": "туалетка",
+                "17": "скаженный",
+                "18": "кринж",
+                "20": "полемизирующий",  # added
+                "22": "словолитня",
+                "23": "камчатный",
+                "24": "гуашь",
+                "25": "Потебня",
+                "26": "фильтрационный",
+                "27": "серебряник"
+            }
 
         # main function
         process_changes(old_data, new_data, month, year)
@@ -204,7 +204,8 @@ def add_template(title, day, month, year):
         send(f'❌ <b>Ошибка:</b> Другой шаблон в {link}')
         return
     content = f'{template}\n\n{content}'
-    save_page(title, content, 'Добавление шаблона {{слово дня}}')
+    if not debug:
+        save_page(title, content, 'Добавление шаблона {{слово дня}}')
 
 
 def remove_template(title, day, month, year):
@@ -217,9 +218,11 @@ def remove_template(title, day, month, year):
         return
     content = content.replace(f'{template}\n', '')
     content = content.replace(f'{template}', '')
-    save_page(title, content, 'Удаление шаблона {{слово дня}}')
+    if not debug:
+        save_page(title, content, 'Удаление шаблона {{слово дня}}')
 
 
 if __name__ == '__main__':
+    debug = False
     bot = Bot(conf.TELEGRAM_TOKEN)
     main()
