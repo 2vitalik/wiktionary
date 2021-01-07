@@ -6,6 +6,15 @@ ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
 STORAGE_PATH = join(ROOT_PATH, 'storage')
 LOGS_PATH = join(ROOT_PATH, 'logs')
+DATA_PATH = join(ROOT_PATH, 'data')
+
+TELEGRAM_TOKEN = None  # should be set in `local_conf.py`
+
+MAIN_GROUP_CHAT_ID = None  # should be set in `local_conf.py`
+NEW_CHANNEL_ID = None  # should be set in `local_conf.py`
+DEV_CHAT_ID = None  # should be set in `local_conf.py`
+
+ADMINS = []  # should be set in `local_conf.py`
 
 DEBUGGING = False
 
