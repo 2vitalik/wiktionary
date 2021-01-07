@@ -11,6 +11,8 @@ from telegram import Bot, ParseMode
 from core.conf import conf
 from libs.utils.wikibot import load_page, save_page
 
+debug = False
+bot = Bot(conf.TELEGRAM_TOKEN)
 path = f'{conf.DATA_PATH}/word_of_day'
 
 
@@ -44,7 +46,7 @@ def get_title_link(title):
     return f'<a href="{url}">{title}</a>'
 
 
-def main():
+def process_word_of_day():
     current_year = datetime.now().year
     content = load_page('Викисловарь:Слово_дня')
     content = \
@@ -223,6 +225,4 @@ def remove_template(title, day, month, year):
 
 
 if __name__ == '__main__':
-    debug = False
-    bot = Bot(conf.TELEGRAM_TOKEN)
-    main()
+    process_word_of_day()
