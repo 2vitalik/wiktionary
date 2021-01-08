@@ -150,6 +150,14 @@ def process_changes(old_data, new_data, month, year):
     month_name = get_month_name(month)
     date_suffix = f'{month_name} {year}'
 
+    for day, old_title in old_data.items():
+        if day not in new_data:
+            old_link = get_title_link(old_title)
+            send(f'🌀 Удаление за <b>{day} {date_suffix}</b>:\n'
+                 f'➖ {old_link}')
+            remove_template(old_title, day, month, year)
+            processed = True
+
     for day, new_title in new_data.items():
         old_title = old_data.get(day)
         if old_title == new_title:
@@ -169,14 +177,6 @@ def process_changes(old_data, new_data, month, year):
                  f'➕ {new_link}')
         add_template(new_title, day, month, year)
         processed = True
-
-    for day, old_title in old_data.items():
-        if day not in new_data:
-            old_link = get_title_link(old_title)
-            send(f'🌀 Удаление за <b>{day} {date_suffix}</b>:\n'
-                 f'➖ {old_link}')
-            remove_template(old_title, day, month, year)
-            processed = True
 
     if not processed:
         send('🤷🏻‍♂️ Странно, похоже никаких значимых изменений не было')
