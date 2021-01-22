@@ -426,7 +426,8 @@ def get_link(title, text=None, redirect=False):
     return f'<a href="{href}">{text}</a>'
 
 
-def process_message(bot, update):
+def process_message(update, context):
+    bot = context.bot
     chat_id = update.message.chat_id
     title = update.message.text.strip()
 
@@ -471,7 +472,7 @@ def process_message(bot, update):
         edit_message()
 
 
-def process_callback(bot, update):
+def process_callback(update, context):
     query = update.callback_query
     query_data = query.data
     title, lang, homonym = query_data.split('|')
