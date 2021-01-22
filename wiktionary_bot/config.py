@@ -8,9 +8,17 @@ MAIN_GROUP_CHAT_ID = None  # should be secure set in `local_config.py`
 NEW_CHANNEL_ID = None  # should be secure set in `local_config.py`
 DEV_CHAT_ID = None  # should be secure set in `local_config.py`
 
+TELEGRAM_ADMIN = None  # should be secure set in `local_config.py`
 ADMINS = [
     # should be secure set in `local_config.py`
 ]
+
+slack_hooks = {  # should be set in `local_conf.py`
+    'errors': None,
+    'status': None,
+    'messages': None,
+    'callbacks': None,
+}
 
 data_path = 'data'
 logs_path = 'logs'
