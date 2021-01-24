@@ -107,6 +107,14 @@ def load_languages():  # todo: move this to some `lib`
     return languages
 
 
+class ErrorReply:
+    def __init__(self, title):
+        self.title = title
+        self.text = f'▫️ <b>{title}</b>\n\n' \
+                    f'⛔️ Внутренняя ошибка в боте...'
+        self.buttons = None
+
+
 class ShortReply:
     def __init__(self, title):
         self.title = title
@@ -472,10 +480,21 @@ def process_message(update, context):
         reply = ShortReply(title)
         edit_message()
     else:
-        reply = StorageReply(title, lang, homonym)
-        edit_message()
-        reply = Reply(title, lang, homonym)
-        edit_message()
+        try:
+            reply = StorageReply(title, lang, homonym)
+            edit_message()
+        except StorageError as e:
+            reply = ErrorReply(title)
+            edit_message()
+            slack_exception('storage', e)
+
+        try:
+            reply = Reply(title, lang, homonym)
+            edit_message()
+        except Exception:
+            reply = ErrorReply(title)
+            edit_message()
+            raise
 
 
 @slack('callback')
