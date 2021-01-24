@@ -467,6 +467,7 @@ def process_message(update, context):
         edit(bot, chat.id, msg.message_id, reply.text, reply.buttons)
         slack_message(message, reply.text)
 
+    slack_message_raw(':large_green_circle:')
     if skip_content:
         reply = ShortReply(title)
         edit_message()
