@@ -18,6 +18,8 @@ from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page
 from wiktionary_bot.config import ADMINS, data_path, logs_path
+from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
+    slack_exception, slack_message_raw
 from wiktionary_bot.src.tpls import replace_tpl, replace_result
 from wiktionary_bot.src.utils import send, edit
 
@@ -426,6 +428,7 @@ def get_link(title, text=None, redirect=False):
     return f'<a href="{href}">{text}</a>'
 
 
+@slack('message')
 def process_message(update, context):
     bot = context.bot
     chat_id = update.message.chat_id
@@ -472,6 +475,7 @@ def process_message(update, context):
         edit_message()
 
 
+@slack('callback')
 def process_callback(update, context):
     query = update.callback_query
     query_data = query.data
@@ -491,5 +495,5 @@ def process_callback(update, context):
 
 
 if __name__ == '__main__':
-    reply = Reply('привет')
-    print(reply.text)
+    reply_test = Reply('привет')
+    print(reply_test.text)
