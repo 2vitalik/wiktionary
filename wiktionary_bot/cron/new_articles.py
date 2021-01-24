@@ -23,36 +23,38 @@ def convert_date(value):
                      value.hour, value.minute, value.second)
 
 
-def latest_date_file():
-    return join(data_path, 'new_articles', 'latest_new_article.txt')
+class latest_date:
+    filename = join(data_path, 'new_articles', 'latest_new_article.txt')
+
+    @classmethod
+    def get(cls):
+        return convert_date(datetime.strptime(read(cls.filename).strip(),
+                                              '%Y-%m-%d %H:%M:%S'))
+
+    @classmethod
+    def set(cls, value):
+        write(cls.filename, value.strftime('%Y-%m-%d %H:%M:%S'))
 
 
-def get_latest_date():
-    return convert_date(datetime.strptime(read(latest_date_file()).strip(),
-                                          '%Y-%m-%d %H:%M:%S'))
+class titles:
+    filename = join(data_path, 'new_articles', 'titles.txt')
 
+    @classmethod
+    def get(cls):
+        return set(read_lines(cls.filename))
 
-def set_latest_date(value):
-    write(latest_date_file(), value.strftime('%Y-%m-%d %H:%M:%S'))
-
-
-def titles_file():
-    return join(data_path, 'new_articles', 'titles.txt')
-
-
-def get_titles_set():
-    return set(read_lines(titles_file()))
-
-
-def append_title(title):
-    append(titles_file(), title)
+    @classmethod
+    def add(cls, title):
+        append(cls.filename, title)
 
 
 def get_new_articles():
-    old_titles = get_titles_set()
+    old_titles = titles.get()
     new_titles = []
+    start = None
+    # start = datetime(2021, 1, 24, 13, 50)  # just for debug
     generator = \
-        RecentChangesPageGenerator(end=get_latest_date(),
+        RecentChangesPageGenerator(start=start, end=latest_date.get(),
                                    namespaces=[Namespace.ARTICLES])
     latest_edited = None
     for page in generator:
@@ -80,7 +82,7 @@ def get_new_articles():
         if Page(title, content, silent=True).ru:
             new_titles.append(title)
     if latest_edited:
-        set_latest_date(latest_edited)
+        latest_date.set(latest_edited)
     return new_titles
 
 
@@ -94,7 +96,7 @@ def run():
         text = reply.text + get_author(title)
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             send(bot, chat_id, text, reply_markup=reply.buttons)
-        append_title(title)
+        titles.add(title)
 
 
 if __name__ == '__main__':
