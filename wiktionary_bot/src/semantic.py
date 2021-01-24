@@ -479,30 +479,29 @@ def process_message(update, context):
     title = title.strip()
     save_log(message, title)
 
-    def edit_message():
+    def edit_message(reply):
         edit(bot, chat.id, msg.message_id, reply.text, reply.buttons)
-        slack_message(message, reply.text)
+        replies.append(reply)
 
-    slack_message_raw(':large_green_circle:')
+    replies = []
     if skip_content:
-        reply = ShortReply(title)
-        edit_message()
+        edit_message(ShortReply(title))
     else:
         try:
-            reply = StorageReply(title, lang, homonym)
-            edit_message()
+            edit_message(StorageReply(title, lang, homonym))
         except StorageError as e:
-            reply = ErrorReply(title)
-            edit_message()
+            edit_message(ErrorReply(title))
             slack_exception('storage', e)
 
         try:
-            reply = Reply(title, lang, homonym)
-            edit_message()
+            edit_message(Reply(title, lang, homonym))
         except Exception:
-            reply = ErrorReply(title)
-            edit_message()
+            edit_message(ErrorReply(title))
             raise
+
+    slack_message_raw(':large_green_circle:')
+    for reply in replies:
+        slack_message(message, reply.text)
 
 
 @slack('callback')
