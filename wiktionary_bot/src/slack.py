@@ -1,22 +1,71 @@
+import re
 import traceback
 
 from shared_utils.api.slack.core import post_to_slack
 
 
-def slack_status(message):
-    post_to_slack('status', message)
+def slack_status(text):
+    post_to_slack('status', text)
 
 
-def slack_error(message):
-    post_to_slack('errors', message)
+def slack_error(text):
+    post_to_slack('errors', text)
 
 
-def slack_message_raw(message):
-    post_to_slack('messages', message)
+def slack_message_raw(text):
+    post_to_slack('messages', text)
 
 
-def slack_callback(message):
-    post_to_slack('callbacks', message)
+def slack_callback_raw(text):
+    post_to_slack('callbacks', text)
+
+
+def get_message_header(user, chat):
+    username = in_chat = in_chat_id = ''
+    if chat.id != user.id:
+        in_chat = f' in *{chat.title}*'
+        in_chat_id = f' in {chat.id}'
+    if user.username:
+        username = f' (<https://t.me/{user.username}|{user.username}>)'
+    return f'👤 *{user.full_name}*{username}{in_chat}   ' \
+           f' _// {user.id}{in_chat_id}_'
+
+
+def html_to_markdown(text):
+    text = text.replace('<b>', '*').replace('</b>', '*'). \
+        replace('<i>', '_').replace('</i>', '_')
+    text = re.sub('<a href="([^"]+)">([^<]+)</a>', r'<\1|\2>', text)
+    return text
+
+
+def add_quote(text):
+    return text.replace('\n', '\n> ')
+
+
+def slack_message(message, reply_text):
+    chat = message.chat
+    user = message.from_user
+    header = get_message_header(user, chat)
+    reply_text = add_quote(html_to_markdown(reply_text))
+
+    slack_message_raw(f'{header}\n\n' 
+                      f'🈯️ `{message.text}`\n\n' 
+                      f'> {reply_text}')
+
+
+def slack_callback(query, new_text):
+    message = query.message
+    user = query.from_user
+    chat = message.chat
+    header = get_message_header(user, chat)
+    old_text = add_quote(html_to_markdown(query.message.text_html))
+    new_text = add_quote(html_to_markdown(new_text))
+
+    slack_callback_raw(':red_circle:')
+    slack_callback_raw(f'{header}\n\n'
+                       f'> {old_text}\n\n'
+                       f'㊗️ `{query.data}`\n\n'
+                       f'> {new_text}')
 
 
 def simplify_traceback(traceback_text):
