@@ -16,7 +16,8 @@ from libs.storage.error import PageNotFound, StorageError
 from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
-from libs.utils.wikibot import load_page_with_redirect, load_page
+from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
+from wiktionary_bot import config
 from wiktionary_bot.config import ADMINS, data_path, logs_path
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
     slack_exception, slack_message_raw
@@ -504,17 +505,26 @@ def process_message(update, context):
         slack_message(message, reply.text)
 
 
+def get_author(title):
+    author = next(get_page(title).revisions(reverseOrder=True, total=1)).user
+    return f'\n➕ <i>добавил {author}</i>'
+
+
 @slack('callback')
 def process_callback(update, context):
     query = update.callback_query
-    query_data = query.data
+    message = query.message
+    old_text = message.text_html
 
-    title, lang, homonym = query_data.split('|')
+    title, lang, homonym = query.data.split('|')
     reply = Reply(title, lang, homonym)
-    old_text = query.message.text_html
-    if old_text.strip() != reply.text.strip():
+    new_text = reply.text
+    if message.chat.id == config.NEW_CHANNEL_ID:
+        new_text += get_author(title)
+
+    if old_text.strip() != new_text.strip():
         # todo: check also for buttons changes!
-        query.edit_message_text(reply.text, reply_markup=reply.buttons,
+        query.edit_message_text(new_text, reply_markup=reply.buttons,
                                 parse_mode=telegram.ParseMode.HTML,
                                 disable_web_page_preview=True)
     query.answer()

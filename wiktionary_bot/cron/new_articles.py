@@ -11,7 +11,7 @@ from libs.utils.io import write, read, read_lines, append
 from libs.utils.wikibot import Namespace
 from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, NEW_CHANNEL_ID, data_path
 from wiktionary_bot.cron.bots import bots
-from wiktionary_bot.src.semantic import Reply
+from wiktionary_bot.src.semantic import Reply, get_author
 from wiktionary_bot.src.utils import send
 
 
@@ -83,14 +83,15 @@ def get_new_articles():
     return new_titles
 
 
-if __name__ == '__main__':
+if __name__ == '__main__':  # todo: make it started only once instance (lock-file)
     bot = telegram.Bot(TELEGRAM_BOT_TOKEN)
     new_titles = get_new_articles()
     chat_id = NEW_CHANNEL_ID
     for title in reversed(new_titles):
         reply = Reply(title)
+        text = reply.text + get_author(title)
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
-            send(bot, chat_id, reply.text, reply_markup=reply.buttons)
+            send(bot, chat_id, text, reply_markup=reply.buttons)
         append_title(title)
 
 
