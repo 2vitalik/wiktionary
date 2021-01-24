@@ -8,6 +8,7 @@ from pywikibot.pagegenerators import RecentChangesPageGenerator
 
 from libs.parse.sections.page import Page
 from libs.utils.io import write, read, read_lines, append
+from libs.utils.lock import locked_repeat
 from libs.utils.wikibot import Namespace
 from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, NEW_CHANNEL_ID, data_path
 from wiktionary_bot.cron.bots import bots
@@ -83,7 +84,8 @@ def get_new_articles():
     return new_titles
 
 
-if __name__ == '__main__':  # todo: make it started only once instance (lock-file)
+@locked_repeat('new_articles')
+def run():
     bot = telegram.Bot(TELEGRAM_BOT_TOKEN)
     new_titles = get_new_articles()
     chat_id = NEW_CHANNEL_ID
@@ -93,6 +95,10 @@ if __name__ == '__main__':  # todo: make it started only once instance (lock-fil
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             send(bot, chat_id, text, reply_markup=reply.buttons)
         append_title(title)
+
+
+if __name__ == '__main__':
+    run()
 
 
 # todo: update current messages if they updates on Wiktionary?
