@@ -444,11 +444,17 @@ def process_message(update, context):
     title = message.text.strip()
     user = message.from_user
 
+    our_chat = chat.id == conf.MAIN_GROUP_CHAT_ID
+
     if '\n' in title or 'https://' in title or 'http://' in title:
+        if not our_chat:
+            slack_message(message, 'ignored')
         return
 
     if message.chat_id < 0:  # if we are in a group chat
         if not title.endswith(('=', '~', ' ?')):
+            if not our_chat:
+                slack_message(message, 'ignored')
             return
 
     if user.id in ADMINS and title.lower() == 'update!':
@@ -456,6 +462,8 @@ def process_message(update, context):
         data = json.loads(content)
         json_dump(tpls_filename, data)
         send(bot, chat.id, 'Done')
+        if not our_chat:
+            slack_message(message, 'Done')
         return
 
     # bot is typing:
