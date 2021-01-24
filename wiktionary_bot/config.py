@@ -1,5 +1,8 @@
 import os
 
+from shared_utils.conf import conf
+
+
 ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
 
 TELEGRAM_BOT_TOKEN = None  # should be secure set in `local_config.py`
@@ -22,6 +25,10 @@ slack_hooks = {  # should be set in `local_conf.py`
 
 data_path = 'data'
 logs_path = 'logs'
+
+conf.slack_path = f'{logs_path}/slack'
+conf.slack_multiline = True
+
 
 try:
     from .local_config import *
