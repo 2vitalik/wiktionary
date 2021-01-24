@@ -431,27 +431,28 @@ def get_link(title, text=None, redirect=False):
 @slack('message')
 def process_message(update, context):
     bot = context.bot
-    chat_id = update.message.chat_id
-    title = update.message.text.strip()
+    message = update.message
+    chat = message.chat
+    title = message.text.strip()
+    user = message.from_user
 
     if '\n' in title or 'https://' in title or 'http://' in title:
         return
 
-    if update.message.chat_id < 0:  # if we are in a group chat
+    if message.chat_id < 0:  # if we are in a group chat
         if not title.endswith(('=', '~', ' ?')):
             return
 
-    if update.message.from_user.id in ADMINS and \
-            title.lower() == 'update!':
+    if user.id in ADMINS and title.lower() == 'update!':
         content = load_page('User:VitalikBot/conf/telegram/tpls.json')
         data = json.loads(content)
         json_dump(tpls_filename, data)
-        send(bot, chat_id, 'Done')
+        send(bot, chat.id, 'Done')
         return
 
     # bot is typing:
-    bot.send_chat_action(chat_id=chat_id, action=telegram.ChatAction.TYPING)
-    msg = send(bot, chat_id, '🔎 <i>Делаю запрос...</i>')
+    bot.send_chat_action(chat_id=chat.id, action=telegram.ChatAction.TYPING)
+    msg = send(bot, chat.id, '🔎 <i>Делаю запрос...</i>')
 
     skip_content = title.endswith('==')
 
@@ -460,10 +461,10 @@ def process_message(update, context):
     lang, title = get_lang(title)
     title = re.sub(r'#(\w+)', '', title)
     title = title.strip()
-    save_log(update.message, title)
+    save_log(message, title)
 
     def edit_message():
-        edit(bot, chat_id, msg.message_id, reply.text, reply.buttons)
+        edit(bot, chat.id, msg.message_id, reply.text, reply.buttons)
 
     if skip_content:
         reply = ShortReply(title)
