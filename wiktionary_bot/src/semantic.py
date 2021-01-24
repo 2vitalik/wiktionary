@@ -479,6 +479,7 @@ def process_message(update, context):
 def process_callback(update, context):
     query = update.callback_query
     query_data = query.data
+
     title, lang, homonym = query_data.split('|')
     reply = Reply(title, lang, homonym)
     old_text = query.message.text_html
@@ -488,6 +489,9 @@ def process_callback(update, context):
                                 parse_mode=telegram.ParseMode.HTML,
                                 disable_web_page_preview=True)
     query.answer()
+
+    slack_callback(query, reply.text)
+
 
 # todo: catch any exception and send them to me!
 # todo: check if message was edited?
