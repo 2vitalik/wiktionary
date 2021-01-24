@@ -465,6 +465,7 @@ def process_message(update, context):
 
     def edit_message():
         edit(bot, chat.id, msg.message_id, reply.text, reply.buttons)
+        slack_message(message, reply.text)
 
     if skip_content:
         reply = ShortReply(title)
