@@ -1,3 +1,7 @@
+from __future__ import annotations
+
+from typing import Dict
+
 from libs.parse.groupers.sections.base import BaseSectionsGrouper
 from libs.parse.groupers.sections.blocks.any_blocks import AnyBlocksGrouper
 from libs.parse.groupers.sections.empty import EmptyBaseSectionsGrouper
@@ -7,14 +11,15 @@ from libs.utils.collection import chunks
 
 
 class BaseSection(BaseSectionsGrouper):
-    is_leaf = False
+    is_leaf: bool = False
     parse_pattern = None
     child_section_type = None
-    copy_top_to_sub_sections = False
+    copy_top_to_sub_sections: bool = False
 
-    def __init__(self, base, full_header, header, content, silent):
+    def __init__(self, base: str, full_header: str, header: str, content: str, silent: bool):
         super().__init__(base)
 
+        # leafs don't have sub-sections don't parse anything
         if not self.is_leaf:
             if not self.parse_pattern:
                 raise NotImplementedError('`parse_pattern` is absent')
@@ -23,18 +28,20 @@ class BaseSection(BaseSectionsGrouper):
 
         self.base = base
         if base:
-            self.title = base.title
-        self.full_header = full_header
-        self.header = header
-        self.content = content
-        self.silent = silent
+            self.title: str = base.title
+            """The page title"""
+        self.full_header: str = full_header  # Example: '\n\n= {{-ru-}} =\n'
+        self.header: str = header  # Example: '{{-ru-}}'
+        self.content: str = content
+        self.silent: bool = silent
 
-        self.is_parsing = False
-        self.parsed = False
+        self.is_parsing: bool = False
+        self.parsed: bool = False
         self._key = None
-        self._top = None
-        self._sub_sections = None
-        self._old_content = content
+        self._top: str = None
+        self._sub_sections: Dict[str, BaseSection] = None  # TODO: fix None
+        self._old_content: str = content
+        """The string that contains content of Section before any changes made"""
 
     def __str__(self):
         name = type(self).__name__
@@ -45,13 +52,13 @@ class BaseSection(BaseSectionsGrouper):
 
     def __eq__(self, other):
         return self.full_header == other.full_header and \
-            self.header == other.header and self.content == other.content
+               self.header == other.header and self.content == other.content
 
     def __bool__(self):
         return True  # т.к. этот элемент всегда "есть"
 
     @property
-    def key(self):
+    def key(self) -> str:
         if self._key is not None:
             return self._key
         if self.header is not None:
@@ -61,16 +68,21 @@ class BaseSection(BaseSectionsGrouper):
     @property
     @parsed
     def top(self):
+        """Returns the text between section's header but before the first sub-section.
+        So, for example, for Page this would be text of section 0.
+        TODO rename to more meaningful title"""
         return self._top
 
     @property
     @parsed
-    def sub_sections(self):
+    def sub_sections(self) -> Dict[str, BaseSection]:
         return self._sub_sections
 
     @property
     @parsed
     def keys(self):
+        """All children sections keys
+        TODO rename to more meaningful title"""
         return list(self._sub_sections.keys())
 
     @parsed

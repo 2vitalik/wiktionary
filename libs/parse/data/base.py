@@ -1,13 +1,16 @@
+from typing import Dict
+
+from libs.parse.sections.base import BaseSection
 from libs.parse.utils.decorators import parsed, parsing
 
 
 class BaseData:
-    def __init__(self, base):
+    def __init__(self, base: BaseSection):
         self.base = base
-        self._sub_data = None
+        self._sub_data: Dict[str, BaseData] = {}
 
-        self.is_parsing = False
-        self.parsed = False
+        self.is_parsing: bool = False
+        self.parsed: bool = False
 
     @property
     @parsed
