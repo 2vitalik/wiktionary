@@ -49,7 +49,7 @@ def slack_message(message, reply_text):
     reply_text = add_quote(html_to_markdown(reply_text))
 
     slack_message_raw(f'{header}\n\n' 
-                      f'🈯️ `{message.text}`\n\n' 
+                      f'🈂️ `{message.text}`\n\n' 
                       f'> {reply_text}')
 
 
