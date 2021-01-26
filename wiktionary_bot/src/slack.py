@@ -49,7 +49,7 @@ def slack_message(message, reply_text):
     reply_text = add_quote(html_to_markdown(reply_text))
 
     slack_message_raw(f'{header}\n\n' 
-                      f'🈂️ `{message.text}`\n\n' 
+                      f':large_blue_circle: `{message.text}`\n\n' 
                       f'> {reply_text}')
 
 
@@ -61,10 +61,10 @@ def slack_callback(query, new_text):
     old_text = add_quote(html_to_markdown(query.message.text_html))
     new_text = add_quote(html_to_markdown(new_text))
 
-    slack_callback_raw(':red_circle:')
+    slack_callback_raw(':red_circle: ' * 3)
     slack_callback_raw(f'{header}\n\n'
                        f'> {old_text}\n\n'
-                       f'㊗️ `{query.data}`\n\n'
+                       f':red_circle: `{query.data}`\n\n'
                        f'> {new_text}')
 
 

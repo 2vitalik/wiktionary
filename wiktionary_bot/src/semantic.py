@@ -497,7 +497,7 @@ def process_message(update, context):
             edit_message(ErrorReply(title))
             raise
 
-    slack_message_raw(':large_blue_circle:')
+    slack_message_raw(':large_blue_circle: ' * 3)
     for reply in replies:
         slack_message(message, reply.text)
 
