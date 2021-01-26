@@ -442,7 +442,7 @@ def process_message(update, context):
     title = message.text.strip()
     user = message.from_user
 
-    our_chat = chat.id == conf.MAIN_GROUP_CHAT_ID
+    our_chat = chat.id == conf.main_group_id
 
     if '\n' in title or 'https://' in title or 'http://' in title:
         if not our_chat:
