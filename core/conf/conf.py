@@ -7,14 +7,24 @@ ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 storage_path = join(ROOT_PATH, 'storage')
 logs_path = join(ROOT_PATH, 'logs')
 data_path = join(ROOT_PATH, 'data')
+slack_path = f'{logs_path}/slack'
 
-TELEGRAM_TOKEN = None  # should be set in `local_conf.py`
+telegram_token = None  # should be set in `local_conf.py`
 
-MAIN_GROUP_CHAT_ID = None  # should be set in `local_conf.py`
-NEW_CHANNEL_ID = None  # should be set in `local_conf.py`
-DEV_CHAT_ID = None  # should be set in `local_conf.py`
+main_group_id = None  # should be set in `local_conf.py`
+new_channel_id = None  # should be set in `local_conf.py`
+dev_chat_id = None  # should be set in `local_conf.py`
+bot_chat_id = None  # should be set in `local_conf.py`
 
+admin_user_id = None  # should be set in `local_conf.py`
 ADMINS = []  # should be set in `local_conf.py`
+
+slack_hooks = {  # should be set in `local_conf.py`
+    'errors': None,
+    'status': None,
+    'messages': None,
+    'callbacks': None,
+}
 
 DEBUGGING = False
 

@@ -5,7 +5,7 @@ from telegram import Bot
 from telegram.ext import Updater, MessageHandler, Filters, CallbackQueryHandler
 from shared_utils.conf import conf as shared_conf
 
-from wiktionary_bot import config
+from core.conf import conf
 from wiktionary_bot.src.semantic import process_message, process_callback
 from wiktionary_bot.src.slack import slack_status
 
@@ -15,15 +15,15 @@ def start():
         level=logging.DEBUG,
         format='[%(asctime)s] %(levelname)s (%(name)s):  %(message)s'
     )
-    shared_conf.slack_hooks = config.slack_hooks
-    shared_conf.slack_path = config.slack_path
+    shared_conf.slack_hooks = conf.slack_hooks
+    shared_conf.slack_path = conf.slack_path
     shared_conf.slack_multiline = True
 
-    bot = Bot(config.TELEGRAM_BOT_TOKEN)
-    bot.send_message(config.TELEGRAM_ADMIN, '💬 Starting the bot...')
+    bot = Bot(conf.telegram_token)
+    bot.send_message(conf.admin_user_id, '💬 Starting the bot...')
     slack_status('💬 Starting the bot...')
 
-    updater = Updater(token=config.TELEGRAM_BOT_TOKEN)
+    updater = Updater(token=conf.telegram_token)
     d = updater.dispatcher
 
     d.add_handler(MessageHandler(Filters.text, process_message))

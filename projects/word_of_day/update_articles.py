@@ -12,12 +12,12 @@ from core.conf import conf
 from libs.utils.wikibot import load_page, save_page
 
 debug = False
-bot = Bot(conf.TELEGRAM_TOKEN)
+bot = Bot(conf.telegram_token)
 path = f'{conf.data_path}/word_of_day'
 
 
 def send(message):
-    bot.sendMessage(conf.MAIN_GROUP_CHAT_ID, message,
+    bot.sendMessage(conf.main_group_id, message,
                     parse_mode=ParseMode.HTML, disable_web_page_preview=True)
 
 

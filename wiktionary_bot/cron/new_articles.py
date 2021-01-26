@@ -6,11 +6,11 @@ import telegram
 from pywikibot import Timestamp, NoPage
 from pywikibot.pagegenerators import RecentChangesPageGenerator
 
+from core.conf import conf
 from libs.parse.sections.page import Page
 from libs.utils.io import write, read, read_lines, append
 from libs.utils.lock import locked_repeat
 from libs.utils.wikibot import Namespace
-from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, NEW_CHANNEL_ID, data_path
 from wiktionary_bot.cron.bots import bots
 from wiktionary_bot.src.semantic import Reply, get_author
 from wiktionary_bot.src.utils import send
@@ -24,7 +24,7 @@ def convert_date(value):
 
 
 class latest_date:
-    filename = join(data_path, 'new_articles', 'latest_new_article.txt')
+    filename = join(conf.data_path, 'new_articles', 'latest_new_article.txt')
 
     @classmethod
     def get(cls):
@@ -37,7 +37,7 @@ class latest_date:
 
 
 class titles:
-    filename = join(data_path, 'new_articles', 'titles.txt')
+    filename = join(conf.data_path, 'new_articles', 'titles.txt')
 
     @classmethod
     def get(cls):
@@ -88,9 +88,9 @@ def get_new_articles():
 
 @locked_repeat('new_articles')
 def run():
-    bot = telegram.Bot(TELEGRAM_BOT_TOKEN)
+    bot = telegram.Bot(conf.telegram_token)
     new_titles = get_new_articles()
-    chat_id = NEW_CHANNEL_ID
+    chat_id = conf.new_channel_id
     for title in reversed(new_titles):
         reply = Reply(title)
         text = reply.text + get_author(title)

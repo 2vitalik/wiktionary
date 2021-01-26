@@ -8,7 +8,6 @@ from pywikibot.exceptions import NoPage
 from shared_utils.common.dt import dtf
 
 from core.conf import conf
-from core.conf.conf import ROOT_PATH, SYNC_PATH
 from core.storage.main import storage
 from libs.parse.online_page import OnlinePage
 from libs.parse.storage_page import StoragePage
@@ -17,15 +16,13 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
-from wiktionary_bot import config
-from wiktionary_bot.config import ADMINS, data_path, logs_path
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
     slack_exception, slack_message_raw
 from wiktionary_bot.src.tpls import replace_tpl, replace_result
 from wiktionary_bot.src.utils import send, edit
 
 
-tpls_filename = join(data_path, 'wiktionary_bot', 'tpls.json')
+tpls_filename = join(conf.data_path, 'wiktionary_bot', 'tpls.json')
 
 
 def clear_definitions(text):  # todo: move this to some `lib`
@@ -83,7 +80,7 @@ def clear_definitions(text):  # todo: move this to some `lib`
 
 
 def load_languages():  # todo: move this to some `lib`
-    path = join(SYNC_PATH, 'data', 'language-data.lua')
+    path = join(conf.SYNC_PATH, 'data', 'language-data.lua')
     content = read(path)
     languages = dict()
     """
@@ -399,7 +396,7 @@ class StorageReply(Reply):
 def save_log(message, title):  # todo: move it to some `utils`
     user = message.from_user
     name = f'{user.first_name} {user.last_name}'.strip()
-    path = join(logs_path, 'wiktionary_bot', 'messages',
+    path = join(conf.logs_path, 'wiktionary_bot', 'messages',
                 f'{dtf("Ym/Ymd")}.txt')
     append(path, f'[{message.date}] @{user.username} ({name}) #{user.id}\n'
                  f'{title}\n')
@@ -458,7 +455,7 @@ def process_message(update, context):
                 slack_message(message, 'ignored')
             return
 
-    if user.id in ADMINS and title.lower() == 'update!':
+    if user.id in conf.ADMINS and title.lower() == 'update!':
         content = load_page('User:VitalikBot/conf/telegram/tpls.json')
         data = json.loads(content)
         json_dump(tpls_filename, data)
@@ -519,7 +516,7 @@ def process_callback(update, context):
     title, lang, homonym = query.data.split('|')
     reply = Reply(title, lang, homonym)
     new_text = reply.text
-    if message.chat.id == config.NEW_CHANNEL_ID:
+    if message.chat.id == conf.new_channel_id:
         new_text += get_author(title)
 
     if old_text.strip() != new_text.strip():

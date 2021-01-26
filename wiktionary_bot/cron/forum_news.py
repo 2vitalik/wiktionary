@@ -5,9 +5,8 @@ from os.path import exists, join
 
 import telegram
 
+from core.conf import conf
 from libs.utils.wikibot import load_page
-from wiktionary_bot.config import TELEGRAM_BOT_TOKEN, MAIN_GROUP_CHAT_ID, \
-    data_path
 from wiktionary_bot.src.utils import send
 
 
@@ -26,7 +25,7 @@ def check_for_new_titles(bot):
     old_data = {}
     new_data = {}
 
-    json_path = join(data_path, 'forum_news', 'forums.json')
+    json_path = join(conf.data_path, 'forum_news', 'forums.json')
     if exists(json_path):
         with open(json_path, encoding='utf-8') as f:
             old_data = json.load(f)
@@ -51,7 +50,7 @@ def check_for_new_titles(bot):
                        f'{title}</a>\n'
                 message_text += link
             # chat_id = DEV_CHAT_ID
-            chat_id = MAIN_GROUP_CHAT_ID
+            chat_id = conf.main_group_id
             send(bot, chat_id, message_text)
 
     with open(json_path, 'w', encoding='utf-8') as f:
@@ -59,5 +58,5 @@ def check_for_new_titles(bot):
 
 
 if __name__ == '__main__':
-    bot = telegram.Bot(TELEGRAM_BOT_TOKEN)
+    bot = telegram.Bot(conf.telegram_token)
     check_for_new_titles(bot)
