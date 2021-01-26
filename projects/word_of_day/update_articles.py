@@ -13,7 +13,7 @@ from libs.utils.wikibot import load_page, save_page
 
 debug = False
 bot = Bot(conf.TELEGRAM_TOKEN)
-path = f'{conf.DATA_PATH}/word_of_day'
+path = f'{conf.data_path}/word_of_day'
 
 
 def send(message):

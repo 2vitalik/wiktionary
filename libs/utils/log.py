@@ -3,7 +3,7 @@ from os.path import join
 
 from shared_utils.api.slack.core import post_to_slack
 
-from core.conf.conf import LOGS_PATH
+from core.conf.conf import logs_path
 from libs.utils.dt import dtf, dt
 from libs.utils.io import ensure_parent_dir, append
 
@@ -30,7 +30,7 @@ def log_exception(slug):
                 return func(*args, **kwargs)
             except Exception as e:
                 log(f"exceptions/{slug}/{dtf('Ym/Ymd')}.txt",
-                    traceback.format_exc(), path=LOGS_PATH)
+                    traceback.format_exc(), path=logs_path)
                 post_to_slack(slug, traceback.format_exc())
                 raise
         return wrapped

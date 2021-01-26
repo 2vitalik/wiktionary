@@ -25,7 +25,7 @@ class LogsPathMixin:
             'authors': authors_storage.logs_path,
             # 'htmls': htmls_storage.logs_path,
             # 'reports': conf.MAIN_STORAGE_PATH,
-            'errors': join(conf.LOGS_PATH, 'exceptions'),
+            'errors': join(conf.logs_path, 'exceptions'),
         }
         root = kwargs['root']
         path = kwargs.get('path')
