@@ -16,6 +16,8 @@ def start():
         format='[%(asctime)s] %(levelname)s (%(name)s):  %(message)s'
     )
     shared_conf.slack_hooks = config.slack_hooks
+    shared_conf.slack_path = config.slack_path
+    shared_conf.slack_multiline = True
 
     bot = Bot(config.TELEGRAM_BOT_TOKEN)
     bot.send_message(config.TELEGRAM_ADMIN, '💬 Starting the bot...')

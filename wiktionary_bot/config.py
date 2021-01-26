@@ -1,7 +1,5 @@
 import os
 
-from shared_utils.conf import conf
-
 
 ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
 
@@ -25,9 +23,7 @@ slack_hooks = {  # should be set in `local_conf.py`
 
 data_path = 'data'
 logs_path = 'logs'
-
-conf.slack_path = f'{logs_path}/slack'
-conf.slack_multiline = True
+slack_path = f'{logs_path}/slack'
 
 
 try:
