@@ -500,8 +500,11 @@ def process_message(update, context):
     title = title.strip()
     save_log(message, title)
 
-    def edit_message(reply):
-        edit(bot, chat.id, msg.message_id, reply.text, reply.buttons)
+    def edit_message(reply, suffix=''):
+        buttons = reply.buttons
+        if message.chat.id == conf.new_channel_id:
+            buttons = None
+        edit(bot, chat.id, msg.message_id, reply.text + suffix, buttons)
         replies.append(reply)
 
     replies = []
@@ -515,7 +518,10 @@ def process_message(update, context):
             slack_exception('storage', e)
 
         try:
-            edit_message(Reply(title, lang, homonym))
+            suffix = ''
+            if message.chat.id == conf.new_channel_id:
+                suffix = get_author(title)
+            edit_message(Reply(title, lang, homonym), suffix)
         except Exception:
             edit_message(ErrorReply(title))
             raise
