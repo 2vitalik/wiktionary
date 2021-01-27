@@ -5,19 +5,19 @@ from shared_utils.api.slack.core import post_to_slack
 
 
 def slack_status(text):
-    post_to_slack('status', text)
+    post_to_slack('bot-status', text)
 
 
 def slack_error(text):
-    post_to_slack('errors', text)
+    post_to_slack('bot-errors', text)
 
 
 def slack_message_raw(text):
-    post_to_slack('messages', text)
+    post_to_slack('bot-messages', text)
 
 
 def slack_callback_raw(text):
-    post_to_slack('callbacks', text)
+    post_to_slack('bot-callbacks', text)
 
 
 def get_message_header(user, chat):

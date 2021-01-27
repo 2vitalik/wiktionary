@@ -1,6 +1,8 @@
 import os
 from os.path import join
 
+from shared_utils.conf import conf as shared_conf
+
 
 ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
@@ -20,10 +22,19 @@ admin_user_id = None  # should be set in `local_conf.py`
 ADMINS = []  # should be set in `local_conf.py`
 
 slack_hooks = {  # should be set in `local_conf.py`
-    'errors': None,
-    'status': None,
-    'messages': None,
-    'callbacks': None,
+    'all_pages-changed': None,
+    'all_pages-deleted': None,
+    'all_pages-errors': None,
+    'all_pages-status': None,
+    'recent-changed': None,
+    'recent-deleted': None,
+    'recent-errors': None,
+    'recent-status': None,
+    'recent-titles': None,
+    'bot-errors': None,
+    'bot-status': None,
+    'bot-messages': None,
+    'bot-callbacks': None,
 }
 
 DEBUGGING = False
@@ -44,3 +55,7 @@ try:
     from .local_paths import *  # we can change storage sub-paths here
 except ImportError:
     pass
+
+
+shared_conf.slack_hooks = slack_hooks
+shared_conf.slack_path = slack_path

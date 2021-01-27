@@ -15,8 +15,6 @@ def start():
         level=logging.DEBUG,
         format='[%(asctime)s] %(levelname)s (%(name)s):  %(message)s'
     )
-    shared_conf.slack_hooks = conf.slack_hooks
-    shared_conf.slack_path = conf.slack_path
     shared_conf.slack_multiline = True
 
     bot = Bot(conf.telegram_token)
