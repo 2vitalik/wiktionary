@@ -69,6 +69,7 @@ def get_new_articles():
     old_titles = titles.get()
     new_titles = []
     changed_titles = set()
+    deleted_titles = set()
     generator = RecentChangesPageGenerator(
         # start=datetime(2021, 1, 26, 23, 00),  # info: just for debug
         end=latest_date.get(),
@@ -86,6 +87,7 @@ def get_new_articles():
             if user in bots:
                 continue
         except NoPage:
+            deleted_titles.add(title)
             continue
         if title in new_titles:
             continue
@@ -106,13 +108,13 @@ def get_new_articles():
             new_titles.append(title)
     if latest_processed:
         latest_date.set(latest_processed)
-    return new_titles, changed_titles
+    return new_titles, changed_titles, deleted_titles
 
 
 @locked_repeat('new_articles')
 def process_new_articles():
     bot = telegram.Bot(conf.telegram_token)
-    new_titles, changed_titles = get_new_articles()
+    new_titles, changed_titles, deleted_titles = get_new_articles()
     chat_id = conf.new_channel_id
     for title in reversed(new_titles):
         reply = Reply(title)
@@ -128,6 +130,12 @@ def process_new_articles():
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             edit(bot, chat_id, message_id, text)
             slack_status(f'✏️ Сообщение для "`{title}`" было обновлено')
+    for title in deleted_titles:
+        if title in messages.ids:
+            message_id = messages.ids[title]
+            edit(bot, chat_id, message_id,
+                 "🙅🏻‍♂️ Статья была удалена из Викисловаря")
+            slack_status(f'❌️ Сообщение для "`{title}`" было "удалено"')
 
 
 if __name__ == '__main__':
