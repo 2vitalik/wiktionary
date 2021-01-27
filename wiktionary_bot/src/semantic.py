@@ -526,10 +526,6 @@ def process_message(update, context):
             if message.chat.id == conf.new_channel_id:
                 suffix = get_author(title)
             edit_message(Reply(title, lang, homonym), suffix)
-        except BadRequest as e:
-            if 'Message is not modified' in str(e):
-                return
-            raise
         except Exception:
             edit_message(ErrorReply(title))
             raise

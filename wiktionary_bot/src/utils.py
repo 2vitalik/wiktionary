@@ -1,4 +1,5 @@
 import telegram
+from telegram.error import BadRequest
 
 
 def send(bot, chat_id, text, reply_markup=None):
@@ -9,8 +10,14 @@ def send(bot, chat_id, text, reply_markup=None):
 
 
 def edit(bot, chat_id, msg_id, text, reply_markup=None):
-    bot.edit_message_text(text=text, chat_id=chat_id,
-                          message_id=msg_id,
-                          reply_markup=reply_markup,
-                          parse_mode=telegram.ParseMode.HTML,
-                          disable_web_page_preview=True)
+    try:
+        bot.edit_message_text(text=text, chat_id=chat_id,
+                              message_id=msg_id,
+                              reply_markup=reply_markup,
+                              parse_mode=telegram.ParseMode.HTML,
+                              disable_web_page_preview=True)
+        return True
+    except BadRequest as e:
+        if 'Message is not modified' in str(e):
+            return False
+        raise

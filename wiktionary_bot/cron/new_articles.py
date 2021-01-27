@@ -146,14 +146,14 @@ def process_new_articles():
         reply = Reply(title)
         text = reply.text + get_author(title)
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
-            edit(bot, chat_id, message_id, text)
-            slack_status(f'✏️ Сообщение для "`{title}`" было обновлено')
+            if edit(bot, chat_id, message_id, text):
+                slack_status(f'✏️ Сообщение для "`{title}`" было обновлено')
     for title in deleted_titles:
         if title in messages.ids:
             message_id = messages.ids[title]
-            edit(bot, chat_id, message_id,
-                 "🙅🏻‍♂️ Статья была удалена из Викисловаря")
-            slack_status(f'❌️ Сообщение для "`{title}`" было "удалено"')
+            removed_message = "🙅🏻‍♂️ Статья была удалена из Викисловаря"
+            if edit(bot, chat_id, message_id, removed_message):
+                slack_status(f'❌️ Сообщение для "`{title}`" было "удалено"')
 
 
 if __name__ == '__main__':
