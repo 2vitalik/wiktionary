@@ -442,11 +442,15 @@ def process_message(update, context):
     title = message.text.strip()
     user = message.from_user
 
-    our_chat = chat.id == conf.main_group_id
+    is_main_group = chat.id == conf.main_group_id
+    is_new_group = chat.id == conf.new_group_id
+    system_message = user.id == 777000
 
     if '\n' in title or 'https://' in title or 'http://' in title:
-        if not our_chat:
-            slack_message(message, 'ignored')
+        if is_main_group or is_new_group and system_message:
+            pass  # do nothing
+        else:
+            slack_message(message, 'ignore (multiline or link)')
         return
 
     if message.chat_id < 0:  # if we are in a group chat
@@ -460,7 +464,7 @@ def process_message(update, context):
         data = json.loads(content)
         json_dump(tpls_filename, data)
         send(bot, chat.id, 'Done')
-        if not our_chat:
+        if not is_main_group:
             slack_message(message, 'Done')
         return
 
