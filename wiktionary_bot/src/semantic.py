@@ -17,7 +17,7 @@ from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
-    slack_exception, slack_message_raw
+    slack_exception, slack_message_raw, slack_error
 from wiktionary_bot.src.tpls import replace_tpl, replace_result
 from wiktionary_bot.src.utils import send, edit
 
@@ -438,6 +438,9 @@ def get_link(title, text=None, redirect=False):
 def process_message(update, context):
     bot = context.bot
     message = update.message
+    if not message:
+        slack_error('❔ Событие без сообщения?')
+        return
     chat = message.chat
     title = message.text.strip()
     user = message.from_user
