@@ -4,7 +4,8 @@ from os.path import join
 
 import telegram
 from pywikibot import Timestamp, NoPage
-from pywikibot.pagegenerators import RecentChangesPageGenerator
+from pywikibot.pagegenerators import RecentChangesPageGenerator, \
+    LogeventsPageGenerator
 
 from core.conf import conf
 from libs.parse.sections.page import Page
@@ -70,6 +71,21 @@ def get_new_articles():
     new_titles = []
     changed_titles = set()
     deleted_titles = set()
+
+    # info: check for deleted pages:
+    generator = LogeventsPageGenerator(
+        end=latest_date.get(),
+        namespaces=[Namespace.ARTICLES],
+    )
+    for page in generator:
+        title = page.title()
+        try:
+            page.get(get_redirect=True)
+        except NoPage:
+            deleted_titles.add(title)
+            continue
+
+    # info: check for created and edited pages:
     generator = RecentChangesPageGenerator(
         # start=datetime(2021, 1, 26, 23, 00),  # info: just for debug
         end=latest_date.get(),
@@ -86,7 +102,7 @@ def get_new_articles():
             user = page.userName()
             if user in bots:
                 continue
-        except NoPage:
+        except NoPage:  # info: probably will never happen here
             deleted_titles.add(title)
             continue
         if title in new_titles:
