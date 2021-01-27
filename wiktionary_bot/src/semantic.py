@@ -460,7 +460,7 @@ def process_message(update, context):
                                "обновить", "обнови", "обновись"]
     reply_bot = None
     reply = message.reply_to_message
-    if reply and reply.from_user.id == conf.bot_chat_id:
+    if reply and reply.from_user.id in [conf.bot_chat_id, 777000]:
         reply_bot = reply
 
     if message.chat_id < 0:  # if we are in a group chat
