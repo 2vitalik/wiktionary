@@ -7,6 +7,7 @@ import telegram
 
 from core.conf import conf
 from libs.utils.wikibot import load_page
+from wiktionary_bot.src.slack import slack
 from wiktionary_bot.src.utils import send
 
 
@@ -21,6 +22,7 @@ forums = [
 ]
 
 
+@slack('forum_news')
 def check_for_new_titles(bot):
     old_data = {}
     new_data = {}

@@ -14,7 +14,7 @@ from libs.utils.lock import locked_repeat
 from libs.utils.wikibot import Namespace
 from wiktionary_bot.cron.bots import bots
 from wiktionary_bot.src.semantic import Reply, get_author
-from wiktionary_bot.src.slack import slack_status, slack_error
+from wiktionary_bot.src.slack import slack_status, slack_error, slack
 from wiktionary_bot.src.utils import send, edit
 
 
@@ -129,6 +129,7 @@ def get_new_articles():
 
 
 @locked_repeat('new_articles')
+@slack('new_articles')
 def process_new_articles():
     bot = telegram.Bot(conf.telegram_token)
     new_titles, changed_titles, deleted_titles = get_new_articles()
