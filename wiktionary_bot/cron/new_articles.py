@@ -51,17 +51,18 @@ class titles:
 def get_new_articles():
     old_titles = titles.get()
     new_titles = []
-    start = None
-    # start = datetime(2021, 1, 24, 13, 50)  # just for debug
-    generator = \
-        RecentChangesPageGenerator(start=start, end=latest_date.get(),
-                                   namespaces=[Namespace.ARTICLES])
+    generator = RecentChangesPageGenerator(
+        # start=datetime(2021, 1, 25, 16, 50),  # info: just for debug
+        end=latest_date.get(),
+        namespaces=[Namespace.ARTICLES],
+    )
     latest_edited = None
     for page in generator:
         title = page.title()
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
+            # print(edited, title)  # info: just for debug
             user = page.userName()
             if user in bots:
                 continue
@@ -87,7 +88,7 @@ def get_new_articles():
 
 
 @locked_repeat('new_articles')
-def run():
+def process_new_articles():
     bot = telegram.Bot(conf.telegram_token)
     new_titles = get_new_articles()
     chat_id = conf.new_channel_id
@@ -100,7 +101,7 @@ def run():
 
 
 if __name__ == '__main__':
-    run()
+    process_new_articles()
 
 
 # todo: update current messages if they updates on Wiktionary?
