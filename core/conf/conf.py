@@ -4,11 +4,11 @@ from os.path import join
 from shared_utils.conf import conf as shared_conf
 
 
-ROOT_PATH = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+root_path = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
 
-storage_path = join(ROOT_PATH, 'storage')
-logs_path = join(ROOT_PATH, 'logs')
-data_path = join(ROOT_PATH, 'data')
+storage_path = join(root_path, 'storage')  # should be changed in local_conf.py
+logs_path = join(root_path, 'logs')  # should be changed in local_conf.py
+data_path = join(root_path, 'data')  # should be changed in local_conf.py
 slack_path = f'{logs_path}/slack'
 
 telegram_token = None  # should be set in `local_conf.py`
@@ -20,7 +20,7 @@ dev_chat_id = None  # should be set in `local_conf.py`
 bot_chat_id = None  # should be set in `local_conf.py`
 
 admin_user_id = None  # should be set in `local_conf.py`
-ADMINS = []  # should be set in `local_conf.py`
+admin_ids = []  # should be set in `local_conf.py`
 
 slack_hooks = {  # should be set in `local_conf.py`
     'all_pages-changed': None,

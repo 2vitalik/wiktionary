@@ -70,7 +70,7 @@ def get_new_articles():
     new_titles = []
     changed_titles = set()
     generator = RecentChangesPageGenerator(
-        # start=datetime(2021, 1, 25, 16, 50),  # info: just for debug
+        # start=datetime(2021, 1, 26, 23, 00),  # info: just for debug
         end=latest_date.get(),
         namespaces=[Namespace.ARTICLES],
     )

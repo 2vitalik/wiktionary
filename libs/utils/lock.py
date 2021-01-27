@@ -9,7 +9,7 @@ from libs.utils.io import write
 def locked_repeat(slug):
     def decorator(func):
         def wrapped(*args, **kwargs):
-            lock_file = join(conf.ROOT_PATH, 'sys', 'lock', slug)
+            lock_file = join(conf.root_path, 'sys', 'lock', slug)
             if exists(lock_file):
                 print(dt(), f'Already locked: `{slug}`')
                 return

@@ -470,7 +470,7 @@ def process_message(update, context):
                 slack_message(message, 'ignore (chat messages)')
             return  # do nothing
 
-    if user.id in conf.ADMINS and title.lower() == 'update!':
+    if user.id in conf.admin_ids and title.lower() == 'update!':
         content = load_page('User:VitalikBot/conf/telegram/tpls.json')
         data = json.loads(content)
         json_dump(tpls_filename, data)
