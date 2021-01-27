@@ -453,11 +453,22 @@ def process_message(update, context):
             slack_message(message, 'ignore (multiline or link)')
         return
 
+    update_command = title in ["=", "update", "upd", "refresh",
+                               "обновить", "обнови", "обновись"]
+    reply_bot = None
+    reply = message.reply_to_message
+    if reply and reply.from_user.id == conf.bot_chat_id:
+        reply_bot = reply
+
     if message.chat_id < 0:  # if we are in a group chat
-        if not title.endswith(('=', '~', ' ?')):
-            if not our_chat:
-                slack_message(message, 'ignored')
-            return
+        if title.endswith(('=', '~', ' ?')):
+            pass  # okay
+        elif update_command and reply_bot:
+            pass  # okay
+        else:
+            if not is_main_group:
+                slack_message(message, 'ignore (chat messages)')
+            return  # do nothing
 
     if user.id in conf.ADMINS and title.lower() == 'update!':
         content = load_page('User:VitalikBot/conf/telegram/tpls.json')
@@ -468,9 +479,17 @@ def process_message(update, context):
             slack_message(message, 'Done')
         return
 
-    # bot is typing:
-    bot.send_chat_action(chat_id=chat.id, action=telegram.ChatAction.TYPING)
-    msg = send(bot, chat.id, '🔎 <i>Делаю запрос...</i>')
+    if update_command and reply_bot:
+        msg = reply_bot
+        m = re.search('<b>(?P<title>.*?)</b>', reply_bot.text_html)
+        if not m:
+            send(bot, chat.id, '🤷🏻‍♂️ Внутренняя ошибка '
+                               '(не получилось распарсить сообщение)')
+            return
+        title = remove_stress(m.group('title'))
+    else:
+        bot.send_chat_action(chat.id, telegram.ChatAction.TYPING)  # typing...
+        msg = send(bot, chat.id, '🔎 <i>Делаю запрос...</i>')
 
     skip_content = title.endswith('==')
 

@@ -15,6 +15,7 @@ telegram_token = None  # should be set in `local_conf.py`
 
 main_group_id = None  # should be set in `local_conf.py`
 new_channel_id = None  # should be set in `local_conf.py`
+new_group_id = None  # should be set in `local_conf.py`
 dev_chat_id = None  # should be set in `local_conf.py`
 bot_chat_id = None  # should be set in `local_conf.py`
 
