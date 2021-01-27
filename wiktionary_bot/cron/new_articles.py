@@ -13,6 +13,7 @@ from libs.utils.lock import locked_repeat
 from libs.utils.wikibot import Namespace
 from wiktionary_bot.cron.bots import bots
 from wiktionary_bot.src.semantic import Reply, get_author
+from wiktionary_bot.src.slack import slack_status, slack_error
 from wiktionary_bot.src.utils import send, edit
 
 
@@ -59,7 +60,7 @@ class messages:
     @classmethod
     def set(cls, title, message_id):
         if title in cls.ids:
-            pass  # todo: log to slack: message was recreated?
+            slack_error(f'⚠️ Сообщение для "`{title}`" уже было?')
         cls.ids[title] = message_id
         json_dump(cls.filename, cls.ids)
 
@@ -126,7 +127,7 @@ def process_new_articles():
         text = reply.text + get_author(title)
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             edit(bot, chat_id, message_id, text)
-            # todo: send report to slack!
+            slack_status(f'✏️ Сообщение для "`{title}`" было обновлено')
 
 
 if __name__ == '__main__':
