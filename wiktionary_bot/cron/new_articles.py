@@ -74,8 +74,9 @@ def get_new_articles():
 
     # info: check for deleted pages:
     generator = LogeventsPageGenerator(
+        # start=datetime(2021, 1, 27, 3, 30),  # info: just for debug
         end=latest_date.get(),
-        namespaces=[Namespace.ARTICLES],
+        namespace=Namespace.ARTICLES,
     )
     for page in generator:
         title = page.title()
