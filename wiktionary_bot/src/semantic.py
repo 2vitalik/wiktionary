@@ -6,6 +6,7 @@ from urllib.parse import quote
 import telegram
 from pywikibot.exceptions import NoPage
 from shared_utils.common.dt import dtf
+from telegram.error import BadRequest
 
 from core.conf import conf
 from core.storage.main import storage
@@ -460,7 +461,7 @@ def process_message(update, context):
                                "обновить", "обнови", "обновись"]
     reply_bot = None
     reply = message.reply_to_message
-    if reply and reply.from_user.id in [conf.bot_chat_id, 777000]:
+    if reply and reply.from_user.id in [conf.bot_chat_id, 777000]:  # fixme: 777000 doesn't work (and perhaps we don't need it?)
         reply_bot = reply
 
     if message.chat_id < 0:  # if we are in a group chat
@@ -525,6 +526,10 @@ def process_message(update, context):
             if message.chat.id == conf.new_channel_id:
                 suffix = get_author(title)
             edit_message(Reply(title, lang, homonym), suffix)
+        except BadRequest as e:
+            if 'Message is not modified' in str(e):
+                return
+            raise
         except Exception:
             edit_message(ErrorReply(title))
             raise
