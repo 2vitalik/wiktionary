@@ -25,7 +25,7 @@ def convert_date(value):
 
 
 class latest_date:
-    filename = join(conf.data_path, 'new_articles', 'latest_new_article.txt')
+    filename = join(conf.data_path, 'new_articles', 'latest_processed.txt')
 
     @classmethod
     def get(cls):
@@ -74,19 +74,19 @@ def get_new_articles():
         end=latest_date.get(),
         namespaces=[Namespace.ARTICLES],
     )
-    latest_edited = None
+    latest_processed = None
     for page in generator:
         title = page.title()
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
+            latest_processed = latest_processed or convert_date(edited)
             # print(edited, title)  # info: just for debug
             user = page.userName()
             if user in bots:
                 continue
         except NoPage:
             continue
-        latest_edited = latest_edited or convert_date(edited)
         if title in new_titles:
             continue
         if title in changed_titles:
@@ -104,8 +104,8 @@ def get_new_articles():
             continue
         if Page(title, content, silent=True).ru:
             new_titles.append(title)
-    if latest_edited:
-        latest_date.set(latest_edited)
+    if latest_processed:
+        latest_date.set(latest_processed)
     return new_titles, changed_titles
 
 
@@ -132,6 +132,3 @@ def process_new_articles():
 
 if __name__ == '__main__':
     process_new_articles()
-
-
-# todo: update current messages if they updates on Wiktionary?
