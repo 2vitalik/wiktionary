@@ -536,8 +536,12 @@ def process_message(update, context):
 
 
 def get_author(title):
-    author = next(get_page(title).revisions(reverseOrder=True, total=1)).user
-    return f'\n➕ <i>добавил {author}</i>'
+    try:
+        author = \
+            next(get_page(title).revisions(reverseOrder=True, total=1)).user
+        return f'\n➕ <i>добавил {author}</i>'
+    except NoPage:
+        return ''
 
 
 @slack('callback')
