@@ -46,7 +46,7 @@ def get_title_link(title):
     return f'<a href="{url}">{title}</a>'
 
 
-def process_word_of_day():
+def process_words_of_days():
     current_year = datetime.now().year
     content = load_page('Викисловарь:Слово_дня')
     content = \
@@ -225,4 +225,4 @@ def remove_template(title, day, month, year):
 
 
 if __name__ == '__main__':
-    process_word_of_day()
+    process_words_of_days()
