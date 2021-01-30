@@ -6,7 +6,6 @@ from urllib.parse import quote
 import telegram
 from pywikibot.exceptions import NoPage
 from shared_utils.common.dt import dtf
-from telegram.error import BadRequest
 
 from core.conf import conf
 from core.storage.main import storage

@@ -15,7 +15,7 @@ from libs.utils.wikibot import Namespace
 from wiktionary_bot.cron.bots import bots
 from wiktionary_bot.src.semantic import Reply, get_author
 from wiktionary_bot.src.slack import slack_status, slack_error, slack
-from wiktionary_bot.src.utils import send, edit
+from wiktionary_bot.src.utils import send, edit, check_offensive
 
 
 def convert_date(value):
@@ -114,15 +114,12 @@ def get_new_articles():
             if title in messages.ids:
                 changed_titles.add(title)
             continue
-        has_offensive = False
-        offensives = ['{{off}}', '{{offensive}}', '{{Offensive}}']
-        for offensive in offensives:
-            if offensive in content:
-                has_offensive = True
-        if has_offensive:
+        if check_offensive(content):
             continue
+
         if Page(title, content, silent=True).ru:
             new_titles.append(title)
+
     if latest_processed:
         latest_date.set(latest_processed)
     return new_titles, changed_titles, deleted_titles

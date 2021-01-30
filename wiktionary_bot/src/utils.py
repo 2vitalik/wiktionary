@@ -24,3 +24,11 @@ def edit(bot, chat_id, msg_id, text, reply_markup=None):
         if 'Message is not modified' in str(e):
             return False
         raise
+
+
+def check_offensive(content):  # todo: move to utils
+    offensives = ['{{off}}', '{{offensive}}', '{{Offensive}}']
+    for offensive in offensives:
+        if offensive in content:
+            return True
+    return False
