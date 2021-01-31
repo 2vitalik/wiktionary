@@ -31,7 +31,8 @@ class titles:
 
 def get_new_foreign():
     old_titles = titles.get()
-    new_titles = defaultdict(list)
+    new_by_lang = defaultdict(list)
+    new_set = set()
 
     now = datetime.now()
     end_date = datetime(now.year, now.month, now.day)
@@ -43,7 +44,7 @@ def get_new_foreign():
         if log_dt > end_date:
             break
 
-        if title in new_titles:
+        if title in new_set:
             continue
         if title in old_titles:
             continue
@@ -59,10 +60,11 @@ def get_new_foreign():
             continue
 
         for lang in langs:
-            new_titles[lang].append(page)
+            new_by_lang[lang].append(page)
             # print(title, lang)  # just for debugging
+        new_set.add(title)
 
-    return new_titles
+    return new_by_lang, new_set
 
 
 @slack('new_foreign')
@@ -71,11 +73,11 @@ def process_new_foreign():
     chat_id = conf.new_channel_id
     languages = load_languages()
 
-    new_titles = get_new_foreign()
-    if '' in new_titles:
-        del new_titles['']
+    new_by_lang, new_set = get_new_foreign()
+    if '' in new_by_lang:
+        del new_by_lang['']
 
-    sorted_data = sorted(new_titles.items(), key=lambda x: (-len(x[1]), x[0]))
+    sorted_data = sorted(new_by_lang.items(), key=lambda x: (-len(x[1]), x[0]))
     if not sorted_data:
         return  # no new foreign articles
 
@@ -147,6 +149,7 @@ def process_new_foreign():
 
     messages.save()
     send(bot, chat_id, main_message)
+    titles.add('\n'.join(new_set))
 
 
 if __name__ == '__main__':
