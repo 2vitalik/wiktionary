@@ -65,7 +65,7 @@ def get_new_foreign():
     return new_titles
 
 
-@slack('new_articles')
+@slack('new_foreign')
 def process_new_foreign():
     bot = telegram.Bot(conf.telegram_token)
     chat_id = conf.new_channel_id
