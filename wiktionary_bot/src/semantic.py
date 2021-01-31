@@ -16,6 +16,7 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
+from wiktionary_bot.cron.new_foreign_utils import messages
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
     slack_exception, slack_message_raw, slack_error
 from wiktionary_bot.src.tpls import replace_tpl, replace_result
@@ -448,6 +449,13 @@ def process_message(update, context):
     is_main_group = chat.id == conf.main_group_id
     is_new_group = chat.id == conf.new_group_id
     system_message = user.id == 777000
+
+    if is_new_group and title.startswith('➕ Новые статьи на других языках'):
+        sub_messages = messages.load()
+        for sub_message in sub_messages:
+            send(bot, conf.new_group_id, sub_message,
+                 reply_to=message.message_id)
+        return
 
     if '\n' in title or 'https://' in title or 'http://' in title:
         if is_main_group or is_new_group and system_message:
