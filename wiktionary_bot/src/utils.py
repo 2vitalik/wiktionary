@@ -6,7 +6,7 @@ from telegram.error import BadRequest, TimedOut, RetryAfter
 from wiktionary_bot.src.slack import slack_error
 
 
-def send(bot, chat_id, text, reply_markup=None, reply_to=None):
+def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
     try:
         return bot.send_message(chat_id=chat_id, text=text,
                                 reply_markup=reply_markup,
@@ -14,13 +14,13 @@ def send(bot, chat_id, text, reply_markup=None, reply_to=None):
                                 disable_web_page_preview=True,
                                 reply_to_message_id=reply_to)
     except (TimedOut, RetryAfter) as e:
-        print('TimedOut or RetryAfter Error: Pause for 1 minute...')
-        slack_error(f'*{e.__name__}*: {str(e)}\n\n'
-                    f'Pause for 1 minute...\n\n'
+        print(f'TimedOut or RetryAfter Error: Pause for {pause} minute...')
+        slack_error(f'*{type(e).__name__}*: {str(e)}\n\n'
+                    f'Pause for {pause} minute...\n\n'
                     f'>chat_id: {chat_id}\n\n'
                     f'>{text}')
-        time.sleep(60)
-        return send(bot, chat_id, text, reply_markup, reply_to)
+        time.sleep(pause)
+        return send(bot, chat_id, text, reply_markup, reply_to, pause * 2)
 
 
 def edit(bot, chat_id, msg_id, text, reply_markup=None):
