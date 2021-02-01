@@ -5,6 +5,9 @@ from libs.utils.dt import dtf
 from libs.utils.io import write, read
 
 
+new_foreign_header = '➕ Новые статьи на др. языках <i>(за сутки)</i>'
+
+
 class messages:
     data = []
     sep = '\n\n—————\n\n'

@@ -17,8 +17,7 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
-from wiktionary_bot.cron.new_foreign import new_foreign_header
-from wiktionary_bot.cron.new_foreign_utils import messages
+from wiktionary_bot.cron.new_foreign_utils import messages, new_foreign_header
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
     slack_exception, slack_message_raw, slack_error
 from wiktionary_bot.src.tpls import replace_tpl, replace_result

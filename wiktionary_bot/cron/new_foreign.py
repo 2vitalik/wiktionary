@@ -10,14 +10,11 @@ from core.storage.main import storage
 from libs.parse.sections.page import Page
 from libs.utils.io import read_lines, append
 from libs.utils.numbers import get_plural
-from wiktionary_bot.cron.new_foreign_utils import messages
+from wiktionary_bot.cron.new_foreign_utils import messages, new_foreign_header
 from wiktionary_bot.src.semantic import load_languages, clear_definitions, \
     get_link
 from wiktionary_bot.src.slack import slack
 from wiktionary_bot.src.utils import send, check_offensive
-
-
-new_foreign_header = '➕ Новые статьи на др. языках <i>(за сутки)</i>'
 
 
 class titles:
