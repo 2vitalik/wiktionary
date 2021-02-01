@@ -451,7 +451,7 @@ def process_message(update, context):
     is_new_group = chat.id == conf.new_group_id
     system_message = user.id == 777000
 
-    if is_new_group and title.startswith(new_foreign_header):
+    if is_new_group and message.text_markdown.startswith(new_foreign_header):
         sub_messages = messages.load()
         for sub_message in sub_messages:
             send(bot, conf.new_group_id, sub_message,
