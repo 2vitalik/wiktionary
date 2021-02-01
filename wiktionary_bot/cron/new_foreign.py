@@ -84,14 +84,15 @@ def process_new_foreign():
     if not sorted_data:
         return  # no new foreign articles
 
+    num_langs_to_show = 7
     main_message = f'{new_foreign_header}\n\n'
-    for lang, pages in sorted_data[:5]:
+    for lang, pages in sorted_data[:num_langs_to_show]:
         lang_text = languages.get(lang, f'Неизвестный').capitalize()
         lang_text += f' <code>{lang}</code>'
         count = len(pages)
         plural = get_plural(count, 'статья', 'статьи', 'статей')
         main_message += f'▪️ {lang_text} — <b>{count}</b> {plural}\n'
-    if len(sorted_data) > 5:
+    if len(sorted_data) > num_langs_to_show:
         main_message += f'▪️ <i>и ещё...</i>\n'
     main_message += '\n💬 Cписки статей в комментариях ↓'
 
