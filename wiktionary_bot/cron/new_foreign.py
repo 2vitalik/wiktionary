@@ -17,6 +17,9 @@ from wiktionary_bot.src.slack import slack
 from wiktionary_bot.src.utils import send, check_offensive
 
 
+new_foreign_header = '➕ Новые статьи на др. языках <i>(за сутки)</i>'
+
+
 class titles:
     filename = join(conf.data_path, 'new_foreign', 'titles.txt')
 
@@ -81,7 +84,7 @@ def process_new_foreign():
     if not sorted_data:
         return  # no new foreign articles
 
-    main_message = '➕ Новые статьи на других языках\n\n'
+    main_message = f'{new_foreign_header}\n\n'
     for lang, pages in sorted_data[:5]:
         lang_text = languages.get(lang, f'Неизвестный').capitalize()
         lang_text += f' <code>{lang}</code>'
@@ -89,8 +92,8 @@ def process_new_foreign():
         plural = get_plural(count, 'статья', 'статьи', 'статей')
         main_message += f'▪️ {lang_text} — <b>{count}</b> {plural}\n'
     if len(sorted_data) > 5:
-        main_message += f'▪️ <i>и др.</i>\n'
-    main_message += '\n💬 Новые слова см. в комментариях ↓'
+        main_message += f'▪️ <i>и ещё...</i>\n'
+    main_message += '\n💬 Cписки статей в комментариях ↓'
 
     msg_count_limit = 20
     max_count_limit = 50
