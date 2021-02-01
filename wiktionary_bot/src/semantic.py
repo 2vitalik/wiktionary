@@ -1,5 +1,6 @@
 import json
 import re
+import time
 from os.path import join
 from urllib.parse import quote
 
@@ -454,7 +455,8 @@ def process_message(update, context):
         sub_messages = messages.load()
         for sub_message in sub_messages:
             send(bot, conf.new_group_id, sub_message,
-                 reply_to=message.message_id)
+                 reply_to=message.message_id, pause=2)
+            time.sleep(1)
         return
 
     if '\n' in title or 'https://' in title or 'http://' in title:
