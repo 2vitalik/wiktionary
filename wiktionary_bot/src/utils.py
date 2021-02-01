@@ -3,7 +3,7 @@ import time
 import telegram
 from telegram.error import BadRequest, TimedOut, RetryAfter
 
-from wiktionary_bot.src.slack import slack_error
+from wiktionary_bot.src.slack import slack_error, add_quote
 
 
 def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
@@ -13,17 +13,17 @@ def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
                                 parse_mode=telegram.ParseMode.HTML,
                                 disable_web_page_preview=True,
                                 reply_to_message_id=reply_to)
-    except (TimedOut, RetryAfter) as e:
+    except (TimedOut, RetryAfter) as e:  # todo: join common part between `send` and `edit` and move to shared utils
         print(f'TimedOut or RetryAfter Error: Pause for {pause} minute...')
-        slack_error(f'*{type(e).__name__}*: {str(e)}\n\n'
+        slack_error(f'`send`  *{type(e).__name__}*: {str(e)}\n\n'
                     f'Pause for {pause} minute...\n\n'
                     f'>chat_id: {chat_id}\n\n'
-                    f'>{text}')
+                    f'>{add_quote(text)}')
         time.sleep(pause)
         return send(bot, chat_id, text, reply_markup, reply_to, pause * 2)
 
 
-def edit(bot, chat_id, msg_id, text, reply_markup=None):
+def edit(bot, chat_id, msg_id, text, reply_markup=None, pause=1):
     try:
         bot.edit_message_text(text=text, chat_id=chat_id,
                               message_id=msg_id,
@@ -36,6 +36,14 @@ def edit(bot, chat_id, msg_id, text, reply_markup=None):
         if 'Message is not modified' in str(e):
             return False
         raise
+    except (TimedOut, RetryAfter) as e:  # todo: join common part between `send` and `edit` and move to shared utils
+        print(f'TimedOut or RetryAfter Error: Pause for {pause} minute...')
+        slack_error(f'`edit`  *{type(e).__name__}*: {str(e)}\n\n'
+                    f'Pause for {pause} minute...\n\n'
+                    f'>chat_id: {chat_id}\n\n'
+                    f'>{add_quote(text)}')
+        time.sleep(pause)
+        return edit(bot, chat_id, text, reply_markup, pause * 2)
 
 
 def check_offensive(content):  # todo: move to utils
