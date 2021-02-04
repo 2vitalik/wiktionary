@@ -148,7 +148,8 @@ def process_new_articles():
     for title in deleted_titles:
         if title in messages.ids:
             message_id = messages.ids[title]
-            removed_message = "🙅🏻‍♂️ Статья была удалена из Викисловаря"
+            removed_message = \
+                f'🙅🏻‍♂️ Статья "{title}" была удалена из Викисловаря'
             if edit(bot, chat_id, message_id, removed_message):
                 slack_status(f'❌️ Сообщение для "`{title}`" было "удалено"')
 
