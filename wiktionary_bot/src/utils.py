@@ -14,9 +14,9 @@ def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
                                 disable_web_page_preview=True,
                                 reply_to_message_id=reply_to)
     except (TimedOut, RetryAfter) as e:  # todo: join common part between `send` and `edit` and move to shared utils
-        print(f'TimedOut or RetryAfter Error: Pause for {pause} minute...')
+        print(f'TimedOut or RetryAfter Error: Pause for {pause} seconds...')
         slack_error(f'`send`  *{type(e).__name__}*: {str(e)}\n\n'
-                    f'Pause for {pause} minute...\n\n'
+                    f'Pause for {pause} seconds...\n\n'
                     f'>chat_id: {chat_id}\n\n'
                     f'>{add_quote(text)}')
         time.sleep(pause)
