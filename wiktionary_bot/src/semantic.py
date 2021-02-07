@@ -17,6 +17,8 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
+from wiktionary_bot.cron.daily_stats_utils import daily_stats_header, \
+    daily_stats_messages
 from wiktionary_bot.cron.new_foreign_utils import new_foreign_messages, \
     new_foreign_header
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
@@ -454,6 +456,14 @@ def process_message(update, context):
 
     if is_new_group and message.text_html.startswith(new_foreign_header):
         sub_messages = new_foreign_messages.load()
+        for sub_message in sub_messages:
+            send(bot, conf.new_group_id, sub_message,
+                 reply_to=message.message_id, pause=2)
+            time.sleep(1)
+        return
+
+    if is_new_group and message.text_html.startswith(daily_stats_header):
+        sub_messages = daily_stats_messages.load()
         for sub_message in sub_messages:
             send(bot, conf.new_group_id, sub_message,
                  reply_to=message.message_id, pause=2)
