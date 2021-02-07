@@ -10,7 +10,8 @@ from core.storage.main import storage
 from libs.parse.sections.page import Page
 from libs.utils.io import read_lines, append
 from libs.utils.numbers import get_plural
-from wiktionary_bot.cron.new_foreign_utils import messages, new_foreign_header
+from wiktionary_bot.cron.new_foreign_utils import new_foreign_messages,\
+    new_foreign_header
 from wiktionary_bot.src.semantic import load_languages, clear_definitions, \
     get_link
 from wiktionary_bot.src.slack import slack
@@ -141,14 +142,14 @@ def process_new_foreign():
             current_message += block
         else:
             if current_message:
-                messages.append(current_message)
+                new_foreign_messages.append(current_message)
             current_count = len(pages)
             current_message = block
 
     if current_message:
-        messages.append(current_message)
+        new_foreign_messages.append(current_message)
 
-    messages.save()
+    new_foreign_messages.save()
     send(bot, chat_id, main_message)
     titles.add('\n'.join(new_set))
 

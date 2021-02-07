@@ -8,7 +8,7 @@ from libs.utils.io import write, read
 new_foreign_header = '➕ Новые статьи на др. языках <i>(за сутки)</i>'
 
 
-class messages:
+class new_foreign_messages:
     data = []
     sep = '\n\n—————\n\n'
     history_filename = join(conf.data_path, 'new_foreign', 'history',

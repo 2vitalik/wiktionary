@@ -17,7 +17,8 @@ from libs.utils.collection import chunks
 from libs.utils.io import read, append, json_load, json_dump, read_lines
 from libs.utils.parse import remove_stress
 from libs.utils.wikibot import load_page_with_redirect, load_page, get_page
-from wiktionary_bot.cron.new_foreign_utils import messages, new_foreign_header
+from wiktionary_bot.cron.new_foreign_utils import new_foreign_messages, \
+    new_foreign_header
 from wiktionary_bot.src.slack import slack_message, slack_callback, slack, \
     slack_exception, slack_message_raw, slack_error
 from wiktionary_bot.src.tpls import replace_tpl, replace_result
@@ -452,7 +453,7 @@ def process_message(update, context):
     system_message = user.id == 777000
 
     if is_new_group and message.text_html.startswith(new_foreign_header):
-        sub_messages = messages.load()
+        sub_messages = new_foreign_messages.load()
         for sub_message in sub_messages:
             send(bot, conf.new_group_id, sub_message,
                  reply_to=message.message_id, pause=2)
