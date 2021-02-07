@@ -92,7 +92,8 @@ def process_new_foreign():
         main_message += f'▪️ {lang_text} — <b>{count}</b> {plural}\n'
     if len(sorted_data) > num_langs_to_show:
         main_message += f'▪️ <i>и ещё...</i>\n'
-    main_message += '\n💬 Cписки статей в комментариях ↓'
+    main_message += '\n💬 Cписки статей в комментариях ↓\n\n' \
+                    '#другие_языки'
 
     msg_count_limit = 20
     max_count_limit = 50
