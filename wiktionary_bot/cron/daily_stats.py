@@ -167,7 +167,10 @@ def send_stats(diff_data):
     for key, icon, title, url in categories:
         message = f'{icon} <b>{title}:</b>\n\n'
         for lang, number in list(diff_data[key].items())[:10]:
-            lang_text = languages.get(lang, f'Неизвестный').capitalize()
+            if lang == 'simple':
+                lang_text = 'Английский'
+            else:
+                lang_text = languages.get(lang, f'Неизвестный').capitalize()
             lang_value = f'<a href="https://{lang}.{url}">{lang_text}</a>' \
                          f' <code>{lang}</code>'
             message += f'▪️ {diff_num(number)} — {lang_value}\n'
