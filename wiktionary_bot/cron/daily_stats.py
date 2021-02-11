@@ -117,7 +117,7 @@ def diff_num(value):
         return f'+<b>{value}</b>'
     if value < 0:
         return f'-<b>{-value}</b>'
-    return '0'
+    return '+0'
 
 
 def send_stats(diff_data):
@@ -165,6 +165,8 @@ def send_stats(diff_data):
     ]
 
     for key, icon, title, url in categories:
+        if not diff_data[key]:
+            continue
         message = f'{icon} <b>{title}:</b>\n\n'
         for lang, number in list(diff_data[key].items())[:10]:
             if lang == 'simple':
