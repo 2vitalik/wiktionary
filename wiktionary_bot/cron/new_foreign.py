@@ -73,6 +73,7 @@ def process_new_foreign():
     bot = telegram.Bot(conf.telegram_token)
     chat_id = conf.new_channel_id
     languages = load_languages()
+    languages['cmn'] = 'Китайский'
 
     new_by_lang, new_set = get_new_foreign()
     if '' in new_by_lang:
