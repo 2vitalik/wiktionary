@@ -137,7 +137,7 @@ def send_stats(diff_data):
     main_message = f'''
 {daily_stats_header}
 ▫️ {ru_goods}  всего новых статей
-▫️ {ru_other}  других новых станиц
+▫️ {ru_other}  других новых страниц
 ▫️ {ru_edits}  всего правок страниц
 ▫️ {ru_users}  новых пользователей
 ▫️ {ru_active}  активных пользователей
