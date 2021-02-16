@@ -134,6 +134,7 @@ def process_new_articles():
     for title in reversed(new_titles):
         reply = Reply(title)
         text = reply.text + get_author(title)
+        text = text.replace('   <i>// русский</i>', '')
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             msg = send(bot, chat_id, text)
             messages.set(title, msg.message_id)
@@ -142,6 +143,7 @@ def process_new_articles():
         message_id = messages.ids[title]
         reply = Reply(title)
         text = reply.text + get_author(title)
+        text = text.replace('   <i>// русский</i>', '')
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             if edit(bot, chat_id, message_id, text):
                 slack_status(f'✏️ Сообщение для "`{title}`" было обновлено')
