@@ -33,12 +33,18 @@ def check_for_new_titles(bot):
             old_data = json.load(f)
 
     for forum in forums:
+        old_titles = old_data.get(forum, [])
+
         content = load_page(forum)
         titles = re.findall('^==(.*)==\s*$', content, re.MULTILINE)
         titles = list(map(str.strip, titles))
         new_data[forum] = titles
-        old_titles = old_data.get(forum, [])
-        new_titles = list(set(titles) - set(old_titles))
+
+        new_titles = []
+        for title in titles:
+            if title not in old_titles:
+                new_titles.append(title)
+
         if new_titles:
             forum_name = forum[len('Викисловарь:'):]
             message_text = f'📝 <b>Новая тема на форуме!</b>\n' \
