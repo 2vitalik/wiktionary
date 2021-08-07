@@ -490,7 +490,8 @@ def process_message(update, context):
         elif update_command and reply_bot:
             pass  # okay
         else:
-            if not is_main_group:
+            if not is_main_group \
+                    and chat.id not in [-1001369947386, -1001163650570]:
                 slack_message(message, 'ignore (chat messages)')
             return  # do nothing
 
