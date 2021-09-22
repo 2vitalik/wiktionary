@@ -5,6 +5,7 @@ from os.path import join, exists
 
 from core.conf import conf
 from core.storage.updaters.mixins import UpdatersValuesMixin
+from libs.storage.error import StorageError
 from libs.parse.sections.page import Page
 from libs.storage.storage import Storage
 from libs.utils.dt import dtp, dtf
@@ -149,6 +150,29 @@ class MainStorage(UpdatersValuesMixin, ArticlesRedirectsLists, LogsIterator,
             count += 1
             if limit and count >= limit:
                 break
+
+    def iterate_pages_with_info(self, limit=None, silent=False):  # todo: start_from
+        from libs.parse.storage_page import IteratedStoragePage
+
+        # todo: skip_errors ? -- имеется в виду даже не возвращать ошибочные или возвращать с флагом?
+        # todo: sorted=...
+        # todo: cyrilic= latin=...
+        count = 0
+        iterator = zip(
+            storage.iterate('content'),
+            storage.iterate('info'),
+        )
+        for (title, content), (title_2, info) in iterator:
+            if title != title_2:
+                print(title, '≠', title_2)
+                raise StorageError('Internal storage error (inconsistency)')
+            yield title, \
+                  IteratedStoragePage(title, content, info, silent=silent)
+            count += 1
+            if limit and count >= limit:  # todo: fix use `i` instead of `count`
+                break
+
+    # todo: special methods to check if word title is in storage (check by `titles.txt`)
 
 
 storage = MainStorage()
