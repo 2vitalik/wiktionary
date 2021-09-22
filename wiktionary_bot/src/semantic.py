@@ -160,7 +160,7 @@ class ShortReply:
             all_titles = read_lines(f'{path}/{self.lang_key}.txt',
                                     ignore_absent=True)
         else:
-            all_titles = storage.load_titles()
+            all_titles = storage.load_articles()
         for title in all_titles:
             if re.fullmatch(self.regexp, title):
                 if i // self.page_size > self.page:
