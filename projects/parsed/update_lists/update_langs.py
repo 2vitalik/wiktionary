@@ -9,7 +9,7 @@ from libs.utils.io import write
 def update_langs():
     all_articles = defaultdict(list)
     without_redirects = defaultdict(list)
-    for title, page in storage.iterate_pages(silent=True):
+    for title, page in storage.iterate_pages_with_info(silent=True):
         for lang in page.languages.keys:
             all_articles[lang].append(title)
             if not page.is_redirect:
