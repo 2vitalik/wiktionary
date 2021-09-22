@@ -9,10 +9,12 @@ from libs.utils.io import write
 def update_langs():
     all_articles = defaultdict(list)
     without_redirects = defaultdict(list)
-    for title, page in storage.iterate_pages_with_info(silent=True):
+    # for title, page in storage.iterate_pages_with_info(silent=True):  # fixme: `iterate_pages_with_info` is not working
+    for title, page in storage.iterate_pages(silent=True):
         for lang in page.languages.keys:
             all_articles[lang].append(title)
-            if not page.is_redirect:
+            # if not page.is_redirect:  # fixme: it's not working...
+            if title not in storage.redirects_set:
                 without_redirects[lang].append(title)
 
     path = join(conf.PARSED_STORAGE_PATH, 'lists', 'langs')
