@@ -156,7 +156,7 @@ class ShortReply:
         i = 0
         titles = []
         if self.lang_key:
-            path = join(conf.PARSED_STORAGE_PATH, 'lists', 'langs')
+            path = join(conf.PARSED_STORAGE_PATH, 'lists', 'langs', 'articles')
             all_titles = read_lines(f'{path}/{self.lang_key}.txt',
                                     ignore_absent=True)
         else:
