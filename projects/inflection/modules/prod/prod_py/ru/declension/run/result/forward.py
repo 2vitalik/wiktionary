@@ -24,7 +24,8 @@ def forward_args(func, i):  # export
         'nom-sg2', 'gen-sg2', 'dat-sg2', 'acc-sg2', 'ins-sg2', 'prp-sg2',
         'nom-pl',  'gen-pl',  'dat-pl',  'acc-pl',  'ins-pl',  'prp-pl',
         'nom-pl2', 'gen-pl2', 'dat-pl2', 'acc-pl2', 'ins-pl2', 'prp-pl2',
-        'voc-sg',  'loc-sg',  'prt-sg',
+        'voc-sg',  'loc-sg',  'prt-sg', 'srt-sg-m', 'srt-sg-f', 'srt-sg-n',
+        'srt-pl', 'comparative', 'comparative2'
     ]  # list
     for j, key in enumerate(keys):
         if _.has_value(args, key):
