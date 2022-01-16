@@ -4,6 +4,7 @@ natsort
 python-telegram-bot
 pyuca
 pywikibot
+wikitextparser>=0.47.5
 regex
 requests
 
