@@ -72,6 +72,7 @@ class NounMorphologyMassUpdater(BaseMassUpdater):
 @locked_repeat('loaders/noun_morphology')
 def noun_morphology_mass_update():
     NounMorphologyMassUpdater().start()
+    print('ok')
 
 
 if __name__ == '__main__':

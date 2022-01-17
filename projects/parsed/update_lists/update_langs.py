@@ -25,6 +25,8 @@ def update_langs():
     for lang, titles in without_redirects.items():
         write(f'{path}/{lang or "-"}.txt', '\n'.join(titles))
 
+    print('ok')
+
 
 if __name__ == '__main__':
     update_langs()
