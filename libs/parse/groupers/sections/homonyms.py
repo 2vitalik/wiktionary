@@ -13,6 +13,9 @@ class HomonymsGrouper(BaseSectionsGrouper):
         if base_type not in types:
             # try to get parent class (e.g. useful for StoragePage etc.)
             base_type = type(base).__bases__[0].__name__
+            if base_type not in types:
+                # e.g. for several levels of inheritance
+                base_type = type(base).__bases__[0].__bases__[0].__name__
         self.level = types[base_type]['level']
         self.fields = types[base_type]['fields']
         self._debug_init()
