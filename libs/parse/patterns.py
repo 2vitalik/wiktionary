@@ -75,8 +75,11 @@ class R:
     lang_header = re.compile(f'^(= *{TP.lang_header} *= *)$', re.MULTILINE)
 
 
-def find_templates(content):
+def find_templates(content, only_content=False):
     for p in [TP.any_3, TP.any_2, TP.any_1]:
         templates = p.findall(content)
         for tpl in templates:
-            yield tpl
+            if only_content:
+                yield tpl[0]
+            else:
+                yield tpl
