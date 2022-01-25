@@ -83,3 +83,7 @@ def find_templates(content, only_content=False):
                 yield tpl[0]
             else:
                 yield tpl
+
+            # to avoid searching the same templates on the next iteration
+            #  of the first loop: [TP.any_3, TP.any_2, TP.any_1]
+            content = content.replace(tpl[0], '')
