@@ -21,6 +21,10 @@ class HomonymsGrouper(BaseSectionsGrouper):
         self._debug_init()
 
     def __iter__(self):
+        for _, homonym in self.iterate():
+            yield homonym
+
+    def iterate(self):
         self._debug_iter()
         for path, homonym in self.base.deep(self.level):
             yield path, homonym

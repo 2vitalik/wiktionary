@@ -4,6 +4,10 @@ from libs.utils.debug import debug
 
 class AnyBlocksGrouper(BaseBlocksGrouper):
     def __iter__(self):
+        for _, block in self.iterate():
+            yield block
+
+    def iterate(self):
         self._debug_iter()
         for path, block in self.base.deep(self.level):
             # `path` is (lang, homonym_header, header) here

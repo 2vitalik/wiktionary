@@ -5,6 +5,10 @@ class LanguagesGrouper(BaseSectionsGrouper):
     fields = ('lang', )
 
     def __iter__(self):
+        for _, lang_section in self.iterate():
+            yield lang_section
+
+    def iterate(self):
         for lang, lang_section in self.base.deep(1):
             path = (lang, )
             yield path, lang_section

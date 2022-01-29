@@ -3,6 +3,10 @@ from libs.parse.groupers.sections.blocks.base_blocks import BaseBlocksGrouper
 
 class SubBlocksGrouper(BaseBlocksGrouper):
     def __iter__(self):
+        for _, block in self.iterate():
+            yield block
+
+    def iterate(self):
         for path, block in self.base.deep(self.level):
             # `path` is (lang, homonym_header, header) here
             if self.header:  # если мы что-то ищем:
