@@ -29,7 +29,7 @@ class RecentFetcher(BaseFetcher):
     def run(self, start, end):
         start = reduce_seconds(start)
         end = reduce_seconds(end or self.updater.latest_edited)
-        msg = f'→ *{dt(end)}*'
+        msg = f':rocket: Started at *{dt(end)}*'
         if start:
             msg += f' (starting from {dt(start)})'
         self.updater.log_day('cron', msg)
@@ -44,6 +44,6 @@ class RecentFetcher(BaseFetcher):
             latest_edited = latest_edited or reduce_seconds(edited)
         if latest_edited:
             self.updater.latest_edited = latest_edited
-            msg = f'← *{dt(latest_edited)}*'
+            msg = f':white_check_mark: Finished at *{dt(latest_edited)}*'
             self.updater.log_day('cron', msg)
             post_to_slack(f'{self.slug}-status', msg)
