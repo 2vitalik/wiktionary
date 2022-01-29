@@ -15,9 +15,9 @@ class BaseUpdater(StorageLogsMixin):
         title = page.title()  # todo: except InvalidTitle ?
         self._debug_title(title)
         self.log_day('titles', title)
-        if self.slug == 'recent':
-            post_to_slack(f'{self.slug}-titles',
-                          f'<https://ru.wiktionary.org/wiki/{title}|{title}>')
+        # if self.slug == 'recent':
+        #     post_to_slack(f'{self.slug}-titles',
+        #                   f'<https://ru.wiktionary.org/wiki/{title}|{title}>')
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
