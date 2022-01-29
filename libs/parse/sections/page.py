@@ -10,8 +10,8 @@ from libs.utils.wikibot import load_page, save_page
 class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
     fields = ('lang', )
 
-    parse_pattern = R.first_header
-    child_section_type = LanguageSection
+    parse_pattern = R.first_header  # used in BaseSection._parse()
+    child_section_type = LanguageSection  # used in BaseSection._parse()
 
     def __init__(self, title, content, is_redirect=None, silent=False):
         super().__init__(base=None, full_header=None, header=None,

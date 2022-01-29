@@ -8,8 +8,10 @@ from libs.utils.collection import chunks
 
 class BaseSection(BaseSectionsGrouper):
     is_leaf = False
+
     parse_pattern = None
     child_section_type = None
+
     copy_top_to_sub_sections = False
 
     def __init__(self, base, full_header, header, content, silent):
@@ -21,7 +23,6 @@ class BaseSection(BaseSectionsGrouper):
             if not self.child_section_type:
                 raise NotImplementedError('`child_section_type` is absent')
 
-        self.base = base
         if base:
             self.title = base.title
         self.full_header = full_header
@@ -31,6 +32,7 @@ class BaseSection(BaseSectionsGrouper):
 
         self.is_parsing = False
         self.parsed = False
+
         self._key = None
         self._top = None
         self._sub_sections = None

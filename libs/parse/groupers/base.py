@@ -2,7 +2,7 @@ from libs.utils.collection import group
 
 
 class BaseGrouper:
-    fields = None
+    fields = None  # should be set in inheritance
 
     def __init__(self, base):
         self.base = base
@@ -40,10 +40,12 @@ class BaseGrouper:
             args = self.fields
         if last_dict and len(args) == len(self.fields):
             args = args[:-1]  # because last layer will be redundant
+
         cache_key = (args, last_dict, unique)
         if self._cache.get(cache_key) is None:
             indexes = [self.fields.index(arg) for arg in args]
             self._cache[cache_key] = group(self, indexes, last_dict, unique)
+
         return self._cache[cache_key]
 
     def __getattr__(self, item):
