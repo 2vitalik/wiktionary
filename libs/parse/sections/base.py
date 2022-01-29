@@ -25,6 +25,7 @@ class BaseSection(BaseSectionsGrouper):
 
         if base:
             self.title = base.title
+
         self.full_header = full_header
         self.header = header
         self.content = content
@@ -59,6 +60,12 @@ class BaseSection(BaseSectionsGrouper):
         if self.header is not None:
             return self.header
         return self.title
+
+    @property
+    def path(self):
+        if not self.base:
+            return ()
+        return self.base.path + (self.key, )
 
     @property
     @parsed
