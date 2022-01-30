@@ -14,7 +14,8 @@ class WrongLength(KeyTitle, SubLists):
     def check_page(self, page) -> list:
         values = []
         for lang, template in page.templates('длина слова'):
-            if m := re.match('^(\d+)', template.params):
+            m = re.match('^(\d+)', template.params)
+            if m:
                 length_from_tpl = int(m.group(1))
                 length_fom_title = len(page.title.replace('-', ''))
                 if length_from_tpl != length_fom_title:
