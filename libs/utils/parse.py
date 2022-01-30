@@ -17,3 +17,11 @@ def strip(text):
 def remove_stress(value):
     return value.replace('́', '').replace('̀', '').replace('ѐ', 'е'). \
         replace('ѝ', 'и')
+
+
+def find_comments(value):
+    return re.findall('<!--.*?-->', value, flags=re.DOTALL)
+
+
+def remove_comments(value):
+    return re.sub('<!--.*?-->', '', value, flags=re.DOTALL)
