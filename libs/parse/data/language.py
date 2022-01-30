@@ -106,6 +106,6 @@ class LanguageData(BaseData):
         for homonym in self:
             m = homonym.morphology
             p = homonym.pronunciation
-            if m and m.is_verb() and not p.transcriptions.has_data:
+            if m and m.is_verb() and p and not p.transcriptions.has_data:
                 return True
         return False
