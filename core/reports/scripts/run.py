@@ -160,21 +160,21 @@ class ReportsSaver:
         return content
 
 
-@log_exception('reports-errors')
+@log_exception('reports-all')
 @locked_repeat('reports')
 def reports_all(limit=None):
     ReportsUpdater().run(limit=limit)
     ReportsSaver().save()
 
 
-@log_exception('reports-errors')
+@log_exception('reports-recent')
 @locked_repeat('reports')
 def reports_recent():
     ReportsUpdater(only_recent=True).run()
     ReportsSaver().save()
 
 
-@log_exception('reports-errors')
+@log_exception('reports-debug')
 @locked_repeat('reports')
 def reports_debug(limit=None):
     ReportsUpdater().run(limit=limit)
