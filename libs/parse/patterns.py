@@ -16,7 +16,7 @@ class H:
         'related_words': 'Родственные слова',
         'etymology': 'Этимология',
         'phrases': 'Фразеологизмы и устойчивые сочетания',
-        'translate': 'Перевод',
+        'translation': 'Перевод',
         'bibliography': 'Библиография',
     }
     morphology = headers['morphology']
@@ -30,7 +30,7 @@ class H:
     related_words = headers['related_words']
     etymology = headers['etymology']
     phrases = headers['phrases']
-    translate = headers['translate']
+    translation = headers['translation']
     bibliography = headers['bibliography']
 
     @staticmethod
