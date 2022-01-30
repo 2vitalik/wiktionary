@@ -12,7 +12,7 @@ from core.reports.reports.ru.verbs.without_participles import \
 from core.reports.reports.ru.verbs.without_transcription import \
     VerbsWithoutTranscription
 from core.reports.reports.templates.key_duplicated import TemplateKeyDuplicated
-from core.reports.reports.templates.length.wrong_length import WrongLength
+from core.reports.reports.templates.tpl_length import WrongLength
 
 
 class Bucket:
