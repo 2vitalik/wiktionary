@@ -20,7 +20,7 @@ class Page(LanguagesGrouperMixin, DeepIterator, BaseSection):
         self.is_redirect = is_redirect  # todo: implement in inheritors
         self.is_category = title.startswith(u'Категория:')
         self.is_template = title.startswith(u'Шаблон:')
-        self.data = PageData(self)
+        self.data = PageData(self, self, self)
 
     def upload_changes(self, desc, minor=True, debug=False):
         server_content = load_page(self.title)
