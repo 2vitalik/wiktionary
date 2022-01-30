@@ -1,6 +1,8 @@
 import re
 from pprint import pprint
 
+from shared_utils.wiktionary.wikicode import nowiki_code
+
 from core.reports.lib.complex_report.base import BaseComplexReport
 from core.reports.lib.details_sublist.sub_lists import SubLists
 from core.reports.lib.mixins.key_title import KeyTitle
@@ -53,8 +55,7 @@ class WrongLength(BaseComplexReport):
             if not lang_from_page:
                 lang_from_page = '???'
 
-            tpl_content = \
-                f'<code><nowiki>{template.content}</nowiki></code>'
+            tpl_content = nowiki_code(template.content)
 
             m = re.fullmatch(r'^(?P<len>\d+)\|(?:lang=)?(?P<lang>[^=|}]+)$',
                              template.params)
