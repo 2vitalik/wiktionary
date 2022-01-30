@@ -5,6 +5,8 @@ from core.conf.conf import REPORTS_PATH
 from core.storage.main import storage
 from core.storage.postponed.base_updater import PostponedUpdaterMixin
 from libs.sync.saver import sync_save_page
+from libs.utils.dt import dt
+from libs.utils.lock import locked_repeat
 from libs.utils.log import log_exception
 from core.reports.reports.bucket import Bucket
 
@@ -75,8 +77,8 @@ class ReportsSaver:
     def __init__(self):
         print(datetime.now(), 'started reports saver')
         self.debug = False
-        self.root = 'Викисловарь:Отчёты/v3'
-        # self.root = 'Участник:Vitalik/Отчёты/v3'
+        # self.root = 'Викисловарь:Отчёты/v3'
+        self.root = 'Участник:Vitalik/Отчёты/v3'
         self.tree = {
             'Ошибки': {
                 'Важные': {},
@@ -158,26 +160,30 @@ class ReportsSaver:
         return content
 
 
-@log_exception('reports')
+@log_exception('reports-errors')
+@locked_repeat('reports')
 def reports_all(limit=None):
     ReportsUpdater().run(limit=limit)
     ReportsSaver().save()
 
 
-@log_exception('reports')
+@log_exception('reports-errors')
+@locked_repeat('reports')
 def reports_recent():
     ReportsUpdater(only_recent=True).run()
     ReportsSaver().save()
 
 
-@log_exception('reports')
+@log_exception('reports-errors')
+@locked_repeat('reports')
 def reports_debug(limit=None):
     ReportsUpdater().run(limit=limit)
     ReportsSaver().save(debug=True)
 
 
 if __name__ == '__main__':
-    reports_debug(30000)
+    # reports_debug(30000)
     # reports_recent()
     # reports_all()
-    # ReportsSaver().save()
+    ReportsUpdater().run()
+    ReportsSaver().save()
