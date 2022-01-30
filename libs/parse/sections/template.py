@@ -80,6 +80,14 @@ class Template:
     def all_args_order(self):
         return self._all_args_order
 
+    @property
+    @parsed
+    def has_data(self):
+        return any([
+            re.sub('<!--.*?-->', '', value).strip()  # fixme: а что если комментарий покрывает несколько параметров?
+            for value in self.args + list(self.kwargs.values())
+        ])
+
     @parsed
     def find_key(self, item):
         for key in self.kwargs:
