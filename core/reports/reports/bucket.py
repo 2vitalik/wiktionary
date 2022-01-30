@@ -60,12 +60,12 @@ Bucket.add({
         DuplicatedSecondLevel,
         TemplateKeyDuplicated,
         VerbsWithoutIndex,
-        # VerbsWithoutTranscription,
+        VerbsWithoutTranscription,
         VerbsReversedIndex,
         WrongLength,
         # DebugDivisibleLength,
     ],
     'all': [
-        # VerbsWithoutParticiples,
+        VerbsWithoutParticiples,
     ]
 })
