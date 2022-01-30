@@ -29,6 +29,9 @@ class MorphologyData(BaseBlockData):
             'syllables': self.base.templates('по-слогам', 'по-слогам').last_list(),
         }
         if word_type == 'verb':
-            self._sub_data['verb'] = VerbData(self.base)
+            self._sub_data['verb'] = VerbData(self.base, self, self.page)
         elif word_type == 'noun':
-            self._sub_data['noun'] = NounData(self.base)
+            self._sub_data['noun'] = NounData(self.base, self, self.page)
+
+
+# todo: special test-checker: пройтись по категориям "Существительные" и проверять, соответствует ли мой ответ
