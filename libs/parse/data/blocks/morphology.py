@@ -1,6 +1,7 @@
 from libs.parse.data.blocks.base import BaseBlockData
-from libs.parse.data.blocks.detailed.noun import NounData
-from libs.parse.data.blocks.detailed.verb import VerbData
+# from libs.parse.data.blocks.detailed.morphology.morpho import MorphoData
+from libs.parse.data.blocks.detailed.morphology.noun import NounData
+from libs.parse.data.blocks.detailed.morphology.verb import VerbData
 from libs.parse.utils.decorators import parsing, parsed
 
 
