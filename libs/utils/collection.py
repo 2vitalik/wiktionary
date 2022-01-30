@@ -60,7 +60,7 @@ def group(data, indexes, last_dict, unique):
     if len(indexes) == 0:  # fixme: написать для чего `len(indexes) == 0`
         result = []
 
-    for path, value in data:
+    for path, value in data.iterate():
         curr = result  #
         for i, index in enumerate(indexes):
             # prepare current key to use in dicts:
