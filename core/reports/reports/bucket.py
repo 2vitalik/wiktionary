@@ -66,6 +66,6 @@ Bucket.add({
         # DebugDivisibleLength,
     ],
     'all': [
-        VerbsWithoutParticiples,
+        # VerbsWithoutParticiples,  # has errors now...
     ]
 })

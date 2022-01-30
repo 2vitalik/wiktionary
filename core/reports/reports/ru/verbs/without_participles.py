@@ -182,7 +182,7 @@ class CustomDetails:
         return f'({aspect}) {stress}{participles_text}'
 
 
-class VerbsWithoutParticiples(BaseComplexReport):
+class VerbsWithoutParticiples(BaseComplexReport):  # fixme: disabled
     base_path = 'Отчёты/ru/Глаголы/Без созданных деепричастий'
     base_class = derive(KeyTitle, CustomDetails, ReversedIndex)
 
