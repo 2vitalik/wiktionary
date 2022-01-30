@@ -80,8 +80,8 @@ class ReportsSaver:
     def __init__(self):
         print(datetime.now(), 'started reports saver')
         self.debug = False
-        # self.root = 'Викисловарь:Отчёты/v3'
-        self.root = 'Участник:Vitalik/Отчёты/v3'
+        self.root = 'Викисловарь:Отчёты/v3'
+        # self.root = 'Участник:Vitalik/Отчёты/v3'
         self.tree = {
             'Ошибки': {
                 'Важные': {},
