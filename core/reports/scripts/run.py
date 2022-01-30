@@ -29,6 +29,8 @@ class ReportsUpdater(PostponedUpdaterMixin):
         iterator = storage.iterate_pages(silent=True, limit=limit)
         for i, (title, page) in enumerate(iterator):
             self._debug_title(i, title)
+            if not i % 10000:
+                print(dt(), i)
             self.update_page(page)
         self.convert_entries()
         self.export_entries('.current')
