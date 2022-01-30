@@ -11,6 +11,10 @@ class FilteredTemplatesGrouper(BaseTemplatesGrouper):
         self.patterns = kwargs.get('re')
 
     def __iter__(self):
+        for _, template in self.iterate():
+            yield _, template  # todo: fix to return only `template`?
+
+    def iterate(self):
         for path, (tpl_name, tpl_content) in self.iter_templates():
             iter_all = not self.names and not self.patterns
             iter_names = False
