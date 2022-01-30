@@ -5,7 +5,7 @@ from core.reports.lib.mixins.key_title import KeyTitle
 from libs.parse.storage_page import StoragePage
 
 
-class WrongLength(KeyTitle, SubLists):
+class WrongLength(KeyTitle, SubLists):  # todo: remove (see tpl_length.py)
     path = 'Ошибки/Средние/Шаблоны/Длина слова/Неверная длина'
     description = '''
         Указана неправильная длина в шаблоне {{шаблон|длина слова}}
