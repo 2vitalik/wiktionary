@@ -18,6 +18,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
         print(datetime.now(), 'started reports updater')
         self.only_recent = only_recent
         self.report_classes = report_classes
+        self.reports = self.get_reports()
 
     def run(self, limit=None):
         if self.only_recent:
@@ -29,7 +30,7 @@ class ReportsUpdater(PostponedUpdaterMixin):
         iterator = storage.iterate_pages(silent=True, limit=limit)
         for i, (title, page) in enumerate(iterator):
             self._debug_title(i, title)
-            if not i % 10000:
+            if not i % 100000:
                 print(dt(), i)
             self.update_page(page)
         self.convert_entries()
@@ -49,12 +50,12 @@ class ReportsUpdater(PostponedUpdaterMixin):
         self.export_entries('.current')
 
     def update_page(self, page):
-        for report in self.get_reports():
+        for report in self.reports:
             report.update_page(page)
         self._debug_processed()
 
     def remove_page(self, title):
-        for report in self.get_reports():
+        for report in self.reports:
             report.remove_page(title)
 
     def get_reports(self):
@@ -63,15 +64,15 @@ class ReportsUpdater(PostponedUpdaterMixin):
         return Bucket.get_reports(self.only_recent)
 
     def import_entries(self, suffix=''):
-        for report in self.get_reports():
+        for report in self.reports:
             report.import_entries(suffix)
 
     def export_entries(self, suffix=''):
-        for report in self.get_reports():
+        for report in self.reports:
             report.export_entries(suffix)
 
     def convert_entries(self):
-        for report in self.get_reports():
+        for report in self.reports:
             report.convert_entries()
 
 
@@ -183,9 +184,17 @@ def reports_debug(limit=None):
     ReportsSaver().save(debug=True)
 
 
+@log_exception('reports-some-debug')
+@locked_repeat('reports')
+def reports_some_debug(reports_classes, limit=None):
+    ReportsUpdater(reports_classes).run(limit=limit)
+    ReportsSaver().save(debug=True)
+
+
 if __name__ == '__main__':
     # reports_debug(30000)
     # reports_recent()
     # reports_all()
-    ReportsUpdater().run()
-    ReportsSaver().save()
+    # ReportsUpdater().run()
+    # ReportsSaver().save()
+    reports_some_debug([VerbsWithoutTranscription])
