@@ -16,6 +16,10 @@ print(
 )
 
 print(
+    page.keys  # -> [ lang, ... ]
+)
+
+print(
     list(page.languages.last_list())  # -> [ (path, LanguageSection), ... ]
 )
 
