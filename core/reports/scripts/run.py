@@ -177,6 +177,13 @@ def reports_recent():
     ReportsSaver().save()
 
 
+@log_exception('reports-some')
+@locked_repeat('reports')
+def reports_some(reports_classes, limit=None):
+    ReportsUpdater(reports_classes).run(limit=limit)
+    ReportsSaver().save()
+
+
 @log_exception('reports-debug')
 @locked_repeat('reports')
 def reports_debug(limit=None):
