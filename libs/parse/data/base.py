@@ -2,12 +2,18 @@ from libs.parse.utils.decorators import parsed, parsing
 
 
 class BaseData:
-    def __init__(self, base):
-        self.base = base
+    def __init__(self, section, base_data, page):
+        self.base = section  # todo: rename to `section`
+        self.base_data = base_data  # up to one level
+        self.page = page
         self._sub_data = None
 
         self.is_parsing = False
         self.parsed = False
+
+    @property
+    def title(self):
+        return self.page.title
 
     @property
     @parsed
