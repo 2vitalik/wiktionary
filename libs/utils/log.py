@@ -31,7 +31,9 @@ def log_exception(slug):
             except Exception as e:
                 log(f"exceptions/{slug}/{dtf('Ym/Ymd')}.txt",
                     traceback.format_exc(), path=logs_path)
-                post_to_slack(slug, traceback.format_exc())
+                post_to_slack('recent-errors',
+                              f':no_entry: `{slug}` Error in command\n\n' +
+                              traceback.format_exc())
                 raise
         return wrapped
     return decorator
