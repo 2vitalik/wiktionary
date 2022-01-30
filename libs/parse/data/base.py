@@ -1,6 +1,24 @@
 from libs.parse.utils.decorators import parsed, parsing
 
 
+def parsed_data(func):
+    def process(data):
+        if type(data) == dict:
+            return {
+                key: process(value)
+                for key, value in data.items()
+            }
+        if isinstance(data, BaseData):
+            return process(data.parsed_data)
+        return data  # just some value, not a dict
+
+    def wrapped(self, *args, **kwargs):
+        data = func(self, *args, **kwargs)
+        return process(data)
+
+    return wrapped
+
+
 class BaseData:
     def __init__(self, section, base_data, page):
         self.base = section  # todo: rename to `section`
@@ -42,4 +60,4 @@ class BaseData:
 
     @parsing
     def _parse(self):
-        pass
+        self._sub_data = {'error': 'NotImplementedError'}
