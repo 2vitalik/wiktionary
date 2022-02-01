@@ -19,12 +19,11 @@ class SimpleBlockHandler(BaseBlockHandler):
 
     def get_contents_and_title(self):
         block_content = read(self.path)
-        if not block_content:
-            if exists(f'{self.path}.bak'):
-                raise StorageError(f'Block is empty: "{self.path}"')
         if block_content:
             self.contents = block_content.split('\n')
         else:
+            # это тоже может быть, например, когда в файлы была единственная
+            # статья, котороая потом была удалена
             self.contents = []
         self.titles = [line.split('\t')[0] for line in self.contents]
 
