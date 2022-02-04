@@ -19,6 +19,7 @@ class WrongLength(BaseComplexReport):
         'Не в той языковой секции',
         'Неверный язык (секции нет)',
         'Неверная длина',
+        'В статьях с пробелами',
     ]
 
     def description(self, report_key):
@@ -38,6 +39,9 @@ class WrongLength(BaseComplexReport):
             'Неверная длина': '''
                 Указана неправильная длина в шаблоне {{шаблон|длина слова}}.
             ''',
+            'В статьях с пробелами': '''
+                Случаи использование шаблона в статьях с пробелами
+            ''',
         }
         return descriptions[report_key]
 
@@ -47,6 +51,7 @@ class WrongLength(BaseComplexReport):
             'Не в той языковой секции': [],
             'Неверный язык (секции нет)': [],
             'Неверная длина': [],
+            'В статьях с пробелами': [],
         }
 
         length_fom_page = len(page.title.replace('-', ''))
@@ -56,6 +61,11 @@ class WrongLength(BaseComplexReport):
                 lang_from_page = '???'
 
             tpl_content = nowiki_code(template.content)
+
+            if ' ' in page.title:
+                values['В статьях с пробелами'].append(
+                    f'{lang_from_page}: {tpl_content}'
+                )
 
             m = re.fullmatch(r'^(?P<len>\d+)\|(?:lang=)?(?P<lang>[^=|}]+)$',
                              template.params)
