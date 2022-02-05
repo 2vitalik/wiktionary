@@ -13,6 +13,7 @@ from core.reports.reports.ru.verbs.without_transcription import \
     VerbsWithoutTranscription
 from core.reports.reports.templates.key_duplicated import TemplateKeyDuplicated
 from core.reports.reports.templates.tpl_length import WrongLength
+from core.reports.reports.templates.tpl_multilang import MultilangTemplate
 
 
 class Bucket:
@@ -63,6 +64,7 @@ Bucket.add({
         VerbsWithoutTranscription,
         VerbsReversedIndex,
         WrongLength,
+        MultilangTemplate,
         # DebugDivisibleLength,
     ],
     'all': [
