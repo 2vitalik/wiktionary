@@ -1,5 +1,7 @@
 from os.path import join, exists, isfile
 
+from shared_utils.api.slack.core import post_to_slack
+
 from libs.storage.const import MAX_DEPTH
 from libs.storage.error import BlockNotFound
 from libs.utils.cache import Cache
@@ -21,6 +23,8 @@ class BaseBlockHandler:
         self.handler = handler
         try:
             self.path = self.old_block_path(title)
+            post_to_slack('recent-errors',
+                          '`old_block_path` was successful, strange!')
         except BlockNotFound:
             self.path = self.block_path(title)
         if is_locked(self.path):
