@@ -45,7 +45,7 @@ class MultilangTemplate(BaseComplexReport):
         }
         return descriptions[report_key]
 
-    def fill_values(self, report_key, tpls, suffix=''):
+    def fill_values(self, report_key, page, tpls, suffix=''):
         for tpl in tpls:
             tpl_content = nowiki_code(tpl.content)
             self.set(report_key, page.title, f'{tpl_content}{suffix}')
@@ -57,15 +57,15 @@ class MultilangTemplate(BaseComplexReport):
         num_tpls = len(tpls)
 
         if num_tpls > 1:
-            self.fill_values('Несколько шаблонов в одной статье', tpls)
+            self.fill_values('Несколько шаблонов в одной статье', page, tpls)
             return
 
         if num_from_page == 1 and num_tpls:
-            self.fill_values('Шаблон лишний', tpls)
+            self.fill_values('Шаблон лишний', page, tpls)
             return
 
         if num_from_page > 1 and not num_tpls:
-            self.fill_values('Не хватает шаблона', tpls)
+            self.fill_values('Не хватает шаблона', page, tpls)
             return
 
         if not num_tpls:
@@ -73,12 +73,12 @@ class MultilangTemplate(BaseComplexReport):
 
         params = tpls[0].params.replace(u'|', '').strip()
         if not params:
-            self.fill_values('Пустое количество языков', tpls)
+            self.fill_values('Пустое количество языков', page, tpls)
             return
 
         num_from_tpl = int(params)
         if num_from_tpl != num_from_page:
-            self.fill_values('Нерпавильное количество языков', tpls,
+            self.fill_values('Нерпавильное количество языков', page, tpls,
                              f" → '''{num_from_page}'''")
             return
 
