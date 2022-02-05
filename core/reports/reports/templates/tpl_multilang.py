@@ -10,16 +10,19 @@ from libs.utils.classes import derive
 
 
 class MultilangTemplate(BaseComplexReport):
-    base_path = 'Ошибки/Средние/Шаблоны/multilang'
-    base_class = derive(KeyTitle, SubLists)
+    def __init__(self):
+        super().__init__()
+        self.base_path = 'Ошибки/Средние/Шаблоны/multilang'
+        self.base_class = derive(KeyTitle, SubLists)
 
-    report_keys = [
-        'Не хватает шаблона',
-        'Шаблон лишний',
-        'Пустое количество языков',
-        'Нерпавильное количество языков',
-        'Несколько шаблонов в одной статье',
-    ]
+        self.report_keys = [
+            'Не хватает шаблона',
+            'Шаблон лишний',
+            'Пустое количество языков',
+            'Нерпавильное количество языков',
+            'Несколько шаблонов в одной статье',
+        ]
+        self.create_reports()
 
     def description(self, report_key):
         descriptions = {

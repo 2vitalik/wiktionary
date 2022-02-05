@@ -11,16 +11,19 @@ from libs.utils.classes import derive
 
 
 class WrongLength(BaseComplexReport):
-    base_path = 'Ошибки/Средние/Шаблоны/Длина слова'
-    base_class = derive(KeyTitle, SubLists)
+    def __init__(self):
+        super().__init__()
+        self.base_path = 'Ошибки/Средние/Шаблоны/Длина слова'
+        self.base_class = derive(KeyTitle, SubLists)
 
-    report_keys = [
-        'Нестандартное расположение параметров',
-        'Не в той языковой секции',
-        'Неверный язык (секции нет)',
-        'Неверная длина',
-        'В статьях с пробелами',
-    ]
+        self.report_keys = [
+            'Нестандартное расположение параметров',
+            'Не в той языковой секции',
+            'Неверный язык (секции нет)',
+            'Неверная длина',
+            'В статьях с пробелами',
+        ]
+        self.create_reports()
 
     def description(self, report_key):
         descriptions = {

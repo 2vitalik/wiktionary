@@ -116,13 +116,19 @@ class BaseBlockHandler:
             candidates.append((title[:i + 1], path))
 
         for prefix, candidate in candidates:
-            if not exists(candidate):
-                print(f"`write`: {candidate}")
-                write(candidate, self.default_empty(prefix))
-                return candidate
-            if is_locked(candidate):
-                raise LockedError(candidate)  # todo: several attempts
-            if isfile(candidate):
-                return candidate
+            for attempt in range(3):
+                if not exists(candidate):
+                    print(f"`write`: {candidate}")
+                    write(candidate, self.default_empty(prefix))
+                    return candidate
+                if is_locked(candidate):
+                    if attempt < 2:
+                        post_to_slack(
+                            'recent-errors',
+                            f'Locked #{attempt}: {prefix}, {candidate}'
+                        )
+                    raise LockedError(candidate)
+                if isfile(candidate):
+                    return candidate
 
         raise BlockNotFound(f"Path does't exist for title '{title}'")  # fixme: never should happen?
