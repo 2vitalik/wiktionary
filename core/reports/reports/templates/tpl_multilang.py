@@ -70,7 +70,8 @@ class MultilangTemplate(BaseComplexReport):
             return
 
         if num_from_page > 1 and not num_tpls:
-            self.fill_values('Не хватает шаблона', page, tpls)
+            langs = ', '.join(page.keys)
+            self.set('Не хватает шаблона', page.title, [langs])
             return
 
         if not num_tpls:
@@ -91,7 +92,8 @@ class MultilangTemplate(BaseComplexReport):
 if __name__ == '__main__':
     # page = StoragePage('Бергман')
     # page = StoragePage('Estocolmo')
-    page = StoragePage('аритметика')
+    # page = StoragePage('аритметика')
+    page = StoragePage('Adriana')
     r = MultilangTemplate()
     r.update_page(page)
     pprint(r.entries)
