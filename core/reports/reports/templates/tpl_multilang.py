@@ -46,9 +46,11 @@ class MultilangTemplate(BaseComplexReport):
         return descriptions[report_key]
 
     def fill_values(self, report_key, page, tpls, suffix=''):
+        values = []
         for tpl in tpls:
             tpl_content = nowiki_code(tpl.content)
-            self.set(report_key, page.title, f'{tpl_content}{suffix}')
+            values.append(f'{tpl_content}{suffix}')
+        self.set(report_key, page.title, values)
 
     def update_page(self, page):
         num_from_page = len(page.keys)
