@@ -1,7 +1,9 @@
 import os
 from os.path import join, exists
 
-from libs.storage.error import StorageError
+from shared_utils.api.slack.core import post_to_slack
+
+from libs.storage.error import StorageError, StorageAlreadyLocked
 from libs.storage.handlers import ContentStorageHandler, \
     SimpleStorageHandler
 from libs.utils.dt import dt, dtf
