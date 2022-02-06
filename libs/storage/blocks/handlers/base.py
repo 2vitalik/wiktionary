@@ -1,3 +1,4 @@
+import time
 from os.path import join, exists, isfile
 
 from shared_utils.api.slack.core import post_to_slack
@@ -127,6 +128,8 @@ class BaseBlockHandler:
                             'recent-errors',
                             f'Locked #{attempt}: {prefix}, {candidate}'
                         )
+                        time.sleep(1)
+                        continue
                     raise LockedError(candidate)
                 if isfile(candidate):
                     return candidate
