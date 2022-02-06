@@ -8,6 +8,7 @@ from libs.storage.handlers import ContentStorageHandler, \
     SimpleStorageHandler
 from libs.utils.dt import dt, dtf
 from libs.utils.io import write, read, write_lines, read_lines
+from libs.utils.log import Logger
 
 
 class Storage:
