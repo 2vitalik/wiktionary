@@ -9,6 +9,10 @@ from libs.utils.exceptions import SkipSlackErrorMixin
 from libs.utils.io import ensure_parent_dir, append
 
 
+class Logger:
+    slug = None
+
+
 def log(filename, line, path=None):
     if path:
         filename = join(path, filename)
@@ -28,7 +32,10 @@ def log_exception(slug):
     def decorator(func):
         def wrapped(*args, **kwargs):
             try:
-                return func(*args, **kwargs)
+                Logger.slug = slug
+                result = func(*args, **kwargs)
+                Logger.slug = None
+                return result
             except Exception as e:
                 log(f"exceptions/{slug}/{dtf('Ym/Ymd')}.txt",
                     traceback.format_exc(), path=logs_path)

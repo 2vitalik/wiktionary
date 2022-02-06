@@ -59,7 +59,8 @@ class Storage:
             }
             storage_name = storages.get(lock_filename, lock_filename)
             post_to_slack('recent-errors',
-                          f':lock: Storage is locked: {storage_name}')
+                          f':lock: `{Logger.slug}` '
+                          f'Storage is locked: {storage_name}')
             raise StorageAlreadyLocked(
                 f'Can\'t lock: Storage is already locked: "{lock_filename}"')
         write(lock_filename, dt())
