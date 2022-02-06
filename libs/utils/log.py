@@ -5,6 +5,7 @@ from shared_utils.api.slack.core import post_to_slack
 
 from core.conf.conf import logs_path
 from libs.utils.dt import dtf, dt
+from libs.utils.exceptions import SkipSlackErrorMixin
 from libs.utils.io import ensure_parent_dir, append
 
 
@@ -31,9 +32,10 @@ def log_exception(slug):
             except Exception as e:
                 log(f"exceptions/{slug}/{dtf('Ym/Ymd')}.txt",
                     traceback.format_exc(), path=logs_path)
-                post_to_slack('recent-errors',
-                              f':no_entry: `{slug}` Error in command\n\n' +
-                              traceback.format_exc())
+                if not isinstance(e, SkipSlackErrorMixin):
+                    post_to_slack('recent-errors',
+                                  f':no_entry: `{slug}` Error in command\n\n' +
+                                  traceback.format_exc())
                 raise
         return wrapped
     return decorator

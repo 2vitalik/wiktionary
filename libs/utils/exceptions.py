@@ -14,3 +14,7 @@ class LockedError(Exception):
 
 class UnlockError(Exception):
     pass
+
+
+class SkipSlackErrorMixin:
+    pass

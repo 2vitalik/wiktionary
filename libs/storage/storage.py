@@ -50,8 +50,16 @@ class Storage:
     def lock(self, lock_slug):
         lock_filename = self.lock_filename(lock_slug)
         if exists(lock_filename):
-            raise StorageError(f"Can't lock: Storage is already locked: "
-                               f'"{lock_filename}"')
+            storages = {
+                '/home/vitalik/storages/wiktionary/storage'
+                '/authors/sys/lock_recent':
+                    '*authors*',
+            }
+            storage_name = storages.get(lock_filename, lock_filename)
+            post_to_slack('recent-errors',
+                          f':lock: Storage is locked: {storage_name}')
+            raise StorageAlreadyLocked(
+                f'Can\'t lock: Storage is already locked: "{lock_filename}"')
         write(lock_filename, dt())
         self.locked = True
 
