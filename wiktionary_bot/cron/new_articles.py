@@ -73,6 +73,7 @@ def get_new_articles():
     deleted_titles = set()
 
     # info: check for deleted pages:
+    # print('LogeventsPageGenerator')
     generator = LogeventsPageGenerator(
         # start=datetime(2021, 1, 27, 3, 30),  # info: just for debug
         end=latest_date.get(),
@@ -80,6 +81,7 @@ def get_new_articles():
     )
     for page in generator:
         title = page.title()
+        # print(title)
         try:
             page.get(get_redirect=True)
         except NoPage:
@@ -92,9 +94,11 @@ def get_new_articles():
         end=latest_date.get(),
         namespaces=[Namespace.ARTICLES],
     )
+    # print('RecentChangesPageGenerator')
     latest_processed = None
     for page in generator:
         title = page.title()
+        # print(title)
         try:
             content = page.get(get_redirect=True)
             edited = page.editTime()
@@ -122,6 +126,7 @@ def get_new_articles():
 
     if latest_processed:
         latest_date.set(latest_processed)
+    # print('finished')
     return new_titles, changed_titles, deleted_titles
 
 
@@ -131,6 +136,7 @@ def process_new_articles():
     bot = telegram.Bot(conf.telegram_token)
     new_titles, changed_titles, deleted_titles = get_new_articles()
     chat_id = conf.new_channel_id
+    # print('sending...')
     for title in reversed(new_titles):
         reply = Reply(title)
         text = reply.text + get_author(title)
@@ -139,6 +145,7 @@ def process_new_articles():
             msg = send(bot, chat_id, text)
             messages.set(title, msg.message_id)
         titles.add(title)
+    # print('changing...')
     for title in changed_titles:
         message_id = messages.ids[title]
         reply = Reply(title)
@@ -147,6 +154,7 @@ def process_new_articles():
         if '🔻 Секция «Семантические свойства» не найдена' not in reply.text:
             if edit(bot, chat_id, message_id, text):
                 slack_status(f'✏️ Сообщение для "`{title}`" было обновлено')
+    # print('deleting...')
     for title in deleted_titles:
         if title in messages.ids:
             message_id = messages.ids[title]
