@@ -81,7 +81,7 @@ def get_new_articles():
     )
     for page in generator:
         title = page.title()
-        print(title)
+        # print(title)
         try:
             page.get(get_redirect=True)
         except NoPage:
@@ -94,8 +94,8 @@ def get_new_articles():
         end=latest_date.get(),
         namespaces=[Namespace.ARTICLES],
     )
-    print('RecentChangesPageGenerator')
-    slack_status(f'RecentChangesPageGenerator')
+    # print('RecentChangesPageGenerator')
+    # slack_status(f'RecentChangesPageGenerator')
     latest_processed = None
     for page in generator:
         title = page.title()
@@ -127,15 +127,15 @@ def get_new_articles():
 
     if latest_processed:
         latest_date.set(latest_processed)
-    print('finished')
-    slack_status(f'Finishing...')
+    # print('finished')
+    # slack_status(f'Finishing...')
     return new_titles, changed_titles, deleted_titles
 
 
 @locked_repeat('new_articles')
 @slack('new_articles')
 def process_new_articles():
-    slack_status(f'Starting...')
+    # slack_status(f'Starting...')
     bot = telegram.Bot(conf.telegram_token)
     new_titles, changed_titles, deleted_titles = get_new_articles()
     chat_id = conf.new_channel_id
