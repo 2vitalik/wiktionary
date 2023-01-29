@@ -37,7 +37,10 @@ class PostponedUpdaterMixin(DebugMixin):
     def latest_updated(self):
         if not exists(self.latest_updated_filename):
             return None
-        return dtp(read(self.latest_updated_filename))
+        content = read(self.latest_updated_filename)
+        if not content:
+            raise ValueError(f'Empty file: {self.latest_updated_filename}')
+        return dtp(content)
 
     @latest_updated.setter
     def latest_updated(self, value):
