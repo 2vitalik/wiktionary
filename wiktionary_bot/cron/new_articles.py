@@ -30,8 +30,10 @@ class latest_date:
 
     @classmethod
     def get(cls):
-        return convert_date(datetime.strptime(read(cls.filename).strip(),
-                                              '%Y-%m-%d %H:%M:%S'))
+        content = read(cls.filename).strip()
+        if not content:
+            raise ValueError(f'Empty file: {cls.filename}')
+        return convert_date(datetime.strptime(content, '%Y-%m-%d %H:%M:%S'))
 
     @classmethod
     def set(cls, value):
