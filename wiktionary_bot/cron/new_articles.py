@@ -32,7 +32,9 @@ class latest_date:
     def get(cls):
         content = read(cls.filename).strip()
         if not content:
-            raise ValueError(f'Empty file: {cls.filename}')
+            msg = f'Empty file: {cls.filename}'
+            slack_error(msg)
+            raise ValueError(msg)
         return convert_date(datetime.strptime(content, '%Y-%m-%d %H:%M:%S'))
 
     @classmethod

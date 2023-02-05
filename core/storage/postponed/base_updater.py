@@ -5,6 +5,7 @@ from core.storage.main import storage
 from core.storage.postponed.debug.debug import DebugMixin
 from libs.utils.dt import dtp, dt
 from libs.utils.io import read, write
+from wiktionary_bot.src.slack import slack_error
 
 
 class PostponedUpdaterMixin(DebugMixin):
@@ -39,7 +40,9 @@ class PostponedUpdaterMixin(DebugMixin):
             return None
         content = read(self.latest_updated_filename)
         if not content:
-            raise ValueError(f'Empty file: {self.latest_updated_filename}')
+            msg = f'Empty file: {self.latest_updated_filename}'
+            slack_error(msg)
+            raise ValueError(msg)
         return dtp(content)
 
     @latest_updated.setter
