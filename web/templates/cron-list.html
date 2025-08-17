@@ -10,8 +10,8 @@
     <table class="table table-bordered table-striped">
         <thead>
         <tr>
-            <th>Cron</th>
-            <th>Status</th>
+            <th>Cron Job</th>
+            <th>Status (working time)</th>
             <th>Reset</th>
         </tr>
         </thead>
@@ -19,7 +19,8 @@
         {% for cron in crons %}
             <tr>
                 <td>
-                    [{{ cron.prj }}] {{ cron.slug }}
+                    <span style="color: silver">[{{ cron.prj }}]</span>
+                    {{ cron.slug }}
                 </td>
                 <td>
                     {% if cron.status %}
@@ -27,10 +28,10 @@
                         (since {{ cron.modified|date:"b d, H:i:s"|capfirst }})
                     {% endif %}
                 </td>
-                <td style="padding: 5px; margin: 5px">
+                <td style="padding: 5px; margin: 5px; text-align: center">
                     {% if cron.status %}
                         {% if cron.reset_active %}
-                            <a class="btn btn-primary btn-sm" href="{% url 'cron-reset' cron.slug %}">Reset</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'cron-reset' cron.slug %}">Reset</a>
                         {% else %}
                             <button class="btn btn-sm" disabled>Reset</button>
                         {% endif %}
