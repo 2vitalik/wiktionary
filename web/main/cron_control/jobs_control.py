@@ -1,5 +1,6 @@
 import os
-from datetime import timedelta
+import re
+from datetime import timedelta, datetime
 from os.path import join, exists
 
 from django.conf import settings
@@ -54,7 +55,31 @@ def create_file(filename):
     return True
 
 
+def fix_time(time):
+    return time + timedelta(hours=3)
+
+
+def simplify(delta):
+    return re.sub('\.\d+$', '', str(delta))
+
+
+def get_modified(slug):
+    mtime = datetime.fromtimestamp(os.path.getmtime(job_started_file(slug)))
+    delta = datetime.now() - mtime
+
+    modified = fix_time(mtime)
+    delta_str = simplify(delta)
+    reset_active = delta > timedelta(days=1)
+
+    return modified, delta_str, reset_active
+
+
 def job_reset(slug):
+    if not job_started(slug):
+        return None
+    modified, delta_str, reset_active = get_modified(slug)
+    if not reset_active:
+        return None
     return remove_file(job_started_file(slug))
 
 

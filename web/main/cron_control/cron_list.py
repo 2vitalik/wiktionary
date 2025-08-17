@@ -1,18 +1,5 @@
-import os
-import re
-from datetime import datetime, timedelta
-
 from main.cron_control.all_jobs import all_cron_jobs
-from main.cron_control.jobs_control import job_started, job_started_file
-
-
-
-def fix_time(time):
-    return time + timedelta(hours=3)
-
-
-def simplify(delta):
-    return re.sub('\.\d+$', '', str(delta))
+from main.cron_control.jobs_control import job_started, get_modified
 
 
 def get_cron_list():
@@ -23,24 +10,17 @@ def get_cron_list():
             if prj == 'ws1':
                 status = job_started(slug)
                 modified = ''
-                delta = ''
                 delta_str = ''
                 reset_active = False
                 if status:
-                    mtime = datetime.fromtimestamp(os.path.getmtime(job_started_file(slug)))
-                    modified = fix_time(mtime)
-                    delta = datetime.now() - mtime
-                    delta_str = simplify(delta)
-                    reset_active = delta > timedelta(days=1)
+                    modified, delta_str, reset_active = get_modified(slug)
             else:
-                status = '?'
                 raise
             cron_list.append({
                 'prj': prj,
                 'slug': slug,
                 'status': status,
                 'modified': modified,
-                'delta': delta,
                 'delta_str': delta_str,
                 'reset_active': reset_active,
             })
