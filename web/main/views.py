@@ -12,6 +12,10 @@ from libs.parse.storage_page import StoragePage
 from libs.utils.io import read
 
 
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+
 class PageView(View):
     def get(self, request, *args, **kwargs):
         page = StoragePage(kwargs['title'], silent=True)

@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from main.views import PageView, LogsFileView, LogsFolderView, TextView
+from main.views import PageView, LogsFileView, LogsFolderView, TextView, \
+    IndexView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
+    path('', IndexView.as_view()),
     path('text/<str:text>', TextView.as_view()),
 
     path('page/<str:title>', PageView.as_view(),
