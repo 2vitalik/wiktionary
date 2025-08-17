@@ -11,7 +11,7 @@
         <thead>
         <tr>
             <th>Cron</th>
-            <th></th>
+            <th>Status</th>
             <th>Reset</th>
         </tr>
         </thead>
@@ -22,10 +22,19 @@
                     [{{ cron.prj }}] {{ cron.slug }}
                 </td>
                 <td>
-                    ...
+                    {% if cron.status %}
+                        <b>{{ cron.delta_str }}</b>
+                        (since {{ cron.modified|date:"b d, H:i:s"|capfirst }})
+                    {% endif %}
                 </td>
-                <td>
-                    <a href="#todo">Reset</a>
+                <td style="padding: 5px; margin: 5px">
+                    {% if cron.status %}
+                        {% if cron.reset_active %}
+                            <a class="btn btn-primary btn-sm" href="#todo">Reset</a>
+                        {% else %}
+                            <button class="btn btn-sm" disabled>Reset</button>
+                        {% endif %}
+                    {% endif %}
                 </td>
             </tr>
         {% endfor %}
