@@ -40,12 +40,12 @@ slack_hooks = {  # should be set in `local_conf.py`
 
 DEBUGGING = False
 
+ws1_jobs_path = '../words/files'
+
 try:
     from .local_conf import *
 except ImportError:
     pass
-
-ws1_jobs_path = '../words/files'
 
 MAIN_STORAGE_PATH = join(storage_path, 'main')
 AUTHORS_STORAGE_PATH = join(storage_path, 'authors')
