@@ -23,7 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', IndexView.as_view()),
-    path('cron/list/', CronListView.as_view()),
+    path('cron/', CronListView.as_view()),
     path('text/<str:text>', TextView.as_view()),
 
     path('page/<str:title>', PageView.as_view(),
