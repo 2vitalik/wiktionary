@@ -10,10 +10,24 @@ from projects.authors.authors_storage import authors_storage
 from core.storage.main import storage
 from libs.parse.storage_page import StoragePage
 from libs.utils.io import read
+from main.cron_control.cron_list import get_cron_list
 
 
 class IndexView(TemplateView):
     template_name = 'index.html'
+
+
+class CronListView(TemplateView):
+    template_name = 'cron-list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context.update({
+            'crons': get_cron_list(),
+        })
+        return context
+
 
 
 class PageView(View):

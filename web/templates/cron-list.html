@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Cron List
+{% endblock %}
+
+{% block content %}
+  <div class="p-3">
+    <h1 class="pb-2">Cron List</h1>
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th>Cron</th>
+            <th></th>
+            <th>Reset</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for cron in crons %}
+            <tr>
+                <td>
+                    {{ cron.prj }} {{ cron.slug }}
+                </td>
+                <td>
+                    ...
+                </td>
+                <td>
+                    <a href="#todo">Reset</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+  </div>
+{% endblock %}

@@ -1,0 +1,38 @@
+
+all_cron_jobs = {
+    'ws1': [  # old
+        {'name': 'recent', },
+        {'name': 'new_pages', },
+        {'name': 'build_reports', },
+        # {'name': 'allpages', },
+        {'name': 'fix_2nd_level', },
+        {'name': 'fix_length_wrong', },
+        {'name': 'add_new_cf', },
+        {'name': 'add_omonim_tpl', },
+        {'name': 'fix_labels', },
+        {'name': 'fix_morpho', },
+        {'name': 'apply_improve_changes', },
+        {'name': 'report', },
+        {'name': 'checkers_after', },
+        {'name': 'big_report', },
+        {'name': 'red_links', },
+        {'name': 'quality_ru', },
+        {'name': 'authors', },
+        {'name': 'index_reverse', },
+    ],
+    'ws2': [  # new
+        {'name': 'recent', },
+        {'name': 'update_langs', },
+        {'name': 'reports_recent', },
+        # {'name': 'recent_authors', },
+        {'name': 'reports_all', },
+        {'name': 'noun_morphology', },
+        {'name': 'forum_news', },
+        {'name': 'new_articles', },
+        {'name': 'new_foreign', },
+        {'name': 'daily_stats', },
+        {'name': 'send_daily_word', },
+        {'name': 'backup-storage', },
+        # {'name': 'word_of_day', },
+    ]
+}
