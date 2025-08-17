@@ -45,6 +45,8 @@ try:
 except ImportError:
     pass
 
+ws1_jobs_path = '../words/files'
+
 MAIN_STORAGE_PATH = join(storage_path, 'main')
 AUTHORS_STORAGE_PATH = join(storage_path, 'authors')
 HTMLS_STORAGE_PATH = join(storage_path, 'htmls')
