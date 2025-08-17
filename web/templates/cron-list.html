@@ -30,7 +30,7 @@
                 <td style="padding: 5px; margin: 5px">
                     {% if cron.status %}
                         {% if cron.reset_active %}
-                            <a class="btn btn-primary btn-sm" href="#todo">Reset</a>
+                            <a class="btn btn-primary btn-sm" href="{% url 'cron-reset' cron.slug %}">Reset</a>
                         {% else %}
                             <button class="btn btn-sm" disabled>Reset</button>
                         {% endif %}

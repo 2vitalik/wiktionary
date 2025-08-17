@@ -17,13 +17,14 @@ from django.contrib import admin
 from django.urls import path
 
 from main.views import PageView, LogsFileView, LogsFolderView, TextView, \
-    IndexView, CronListView
+    IndexView, CronListView, CronResetView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('', IndexView.as_view()),
-    path('cron/', CronListView.as_view()),
+    path('cron/', CronListView.as_view(), name='cron-list'),
+    path('cron/reset/<str:slug>/', CronResetView.as_view(), name='cron-reset'),
     path('text/<str:text>', TextView.as_view()),
 
     path('page/<str:title>', PageView.as_view(),

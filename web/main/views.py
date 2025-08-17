@@ -1,6 +1,7 @@
 import os
 from os.path import join
 
+from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.views import View
@@ -11,6 +12,7 @@ from core.storage.main import storage
 from libs.parse.storage_page import StoragePage
 from libs.utils.io import read
 from main.cron_control.cron_list import get_cron_list
+from main.cron_control.jobs_control import job_reset
 
 
 class IndexView(TemplateView):
@@ -28,6 +30,12 @@ class CronListView(TemplateView):
         })
         return context
 
+
+class CronResetView(TemplateView):
+    def get(self, request, *args, **kwargs):
+        if not job_reset(kwargs['slug']):
+            ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
+        return redirect('cron-list')
 
 
 class PageView(View):
