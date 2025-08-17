@@ -31,7 +31,7 @@ def get_cron_list():
                     modified = fix_time(mtime)
                     delta = datetime.now() - mtime
                     delta_str = simplify(delta)
-                    reset_active = delta > timedelta(minutes=10)
+                    reset_active = delta > timedelta(days=1)
             else:
                 status = '?'
                 raise
