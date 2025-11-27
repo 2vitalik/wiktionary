@@ -28,7 +28,7 @@
                         (since {{ cron.modified|date:"b d, H:i:s"|capfirst }})
                     {% endif %}
                 </td>
-                <td style="padding: 5px; margin: 5px; text-align: center">
+                <td class="text-center">
                     {% if cron.status %}
                         {% if cron.reset_active %}
                             <a class="btn btn-danger btn-sm" href="{% url 'cron-reset' cron.slug %}">Reset</a>
