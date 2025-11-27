@@ -18,7 +18,7 @@ def get_cron_list():
                 raise
             cron_list.append({
                 'prj': prj,
-                'slug': slug,
+                'slug': slug.replace('_', ' ').title(),
                 'status': status,
                 'modified': modified,
                 'delta_str': delta_str,
