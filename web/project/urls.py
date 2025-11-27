@@ -24,7 +24,7 @@ urlpatterns = [
 
     path('', IndexView.as_view()),
     path('cron/', CronListView.as_view(), name='cron-list'),
-    path('cron/reset/<str:slug>/', CronResetView.as_view(), name='cron-reset'),
+    path('cron/reset/<str:prj>/<str:slug>/', CronResetView.as_view(), name='cron-reset'),
     path('text/<str:text>', TextView.as_view()),
 
     path('page/<str:title>', PageView.as_view(),

@@ -33,8 +33,9 @@ class CronListView(TemplateView):
 
 class CronResetView(TemplateView):
     def get(self, request, *args, **kwargs):
-        if not job_reset(kwargs['slug']):
-            ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
+        if kwargs['prj'] == 'ws1':
+            if not job_reset(kwargs['slug']):
+                ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
         return redirect('cron-list')
 
 
