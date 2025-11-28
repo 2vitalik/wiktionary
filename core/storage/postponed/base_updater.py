@@ -1,13 +1,15 @@
 from genericpath import exists
 from os.path import join
 
+import telegram
+
 from core.conf import conf
 from core.storage.main import storage
 from core.storage.postponed.debug.debug import DebugMixin
 from libs.utils.dt import dtp, dt
 from libs.utils.io import read, write
 from wiktionary_bot.src.slack import slack_error
-from words.utils import tg_send
+from wiktionary_bot.src.utils import send
 
 
 class PostponedUpdaterMixin(DebugMixin):
@@ -44,7 +46,8 @@ class PostponedUpdaterMixin(DebugMixin):
         if not content:
             msg = f'⛔ Empty file: {self.latest_updated_filename}'
             slack_error(msg)
-            tg_send(conf.main_group_id, msg)
+            bot = telegram.Bot(conf.telegram_token)
+            send(bot, conf.main_group_id, msg)
             raise ValueError(msg)
         return dtp(content)
 

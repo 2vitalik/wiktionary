@@ -5,7 +5,6 @@ from telegram.error import BadRequest, TimedOut, RetryAfter
 
 from core.conf import conf
 from wiktionary_bot.src.slack import slack_error, add_quote
-from words.utils import tg_send
 
 
 def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
@@ -22,7 +21,7 @@ def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
                 f'>chat_id: {chat_id}\n\n' \
                 f'>{add_quote(text)}'
         slack_error(error)
-        tg_send(conf.admin_user_id, error)
+        send(bot, conf.admin_user_id, error)
         time.sleep(pause)
         return send(bot, chat_id, text, reply_markup, reply_to, pause * 2)
 
