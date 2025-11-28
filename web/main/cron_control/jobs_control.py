@@ -3,8 +3,6 @@ import re
 from datetime import timedelta, datetime
 from os.path import join, exists
 
-from django.conf import settings
-
 from core.conf import conf
 
 
