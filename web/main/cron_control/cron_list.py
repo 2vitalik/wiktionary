@@ -1,9 +1,11 @@
 from main.cron_control.all_jobs import all_cron_jobs
 from main.cron_control.jobs_control import job_started, get_modified
+from main.cron_control.new.cron_list import get_new_cron_list
 
 
 def get_cron_list():
-    cron_list = []
+    cron_list = get_new_cron_list()
+
     for prj, cron_jobs in all_cron_jobs.items():
         for cron_job in cron_jobs:
             slug = cron_job['name']

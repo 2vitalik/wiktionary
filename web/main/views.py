@@ -13,6 +13,7 @@ from libs.parse.storage_page import StoragePage
 from libs.utils.io import read
 from main.cron_control.cron_list import get_cron_list
 from main.cron_control.jobs_control import job_reset
+from main.cron_control.new.jobs_control import new_job_reset
 
 
 class IndexView(TemplateView):
@@ -33,7 +34,10 @@ class CronListView(TemplateView):
 
 class CronResetView(TemplateView):
     def get(self, request, *args, **kwargs):
-        if kwargs['prj'] == 'ws1':
+        if kwargs['prj'] == 'ws0':
+            if not new_job_reset(kwargs['slug']):
+                ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
+        elif kwargs['prj'] == 'ws1':
             if not job_reset(kwargs['slug']):
                 ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
         return redirect('cron-list')

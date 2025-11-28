@@ -40,6 +40,7 @@ slack_hooks = {  # should be set in `local_conf.py`
 
 DEBUGGING = False
 
+ws0_storage_path = '../storage'
 ws1_jobs_path = '../words/files'
 
 try:
