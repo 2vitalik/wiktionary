@@ -19,7 +19,7 @@
         {% for cron in crons %}
             <tr>
                 <td>
-                    <span style="color: silver">[{{ cron.prj }}]</span>
+                    <span style="{% if cron.prj == 'ws0' %}color: #aca;{% elif cron.prj == 'ws1' %}color: #aac;{% else %}color: silver;{% endif %}">[{{ cron.prj }}]</span>
                     <span class="text-nowrap">{{ cron.title }}</span>
                 </td>
                 <td>
