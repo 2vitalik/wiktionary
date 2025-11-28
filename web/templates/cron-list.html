@@ -25,7 +25,9 @@
                 <td>
                 {% if cron.status %}
                     <b>{{ cron.delta_str }}</b>
-                    <span class="text-muted small text-nowrap">(since {{ cron.modified|date:"b d, H:i:s"|capfirst }})</span>
+                    {% if cron.modified %}
+                        <span class="text-muted small text-nowrap">(since {{ cron.modified|date:"b d, H:i:s"|capfirst }})</span>
+                    {% endif %}
                 {% endif %}
                 </td>
                 <td class="text-center">
