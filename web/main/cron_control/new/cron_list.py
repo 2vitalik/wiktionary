@@ -45,7 +45,7 @@ def get_cron_job(slug):
             delta_str = simplify(delta)
 
             reset_active = delta > timedelta(days=1)
-            reset_active = delta > timedelta(minutes=1)  # fixme: for debugging...
+            # reset_active = delta > timedelta(minutes=1)  # fixme: for debugging...
         else:
             reset_active = True
 
