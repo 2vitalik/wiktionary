@@ -3,7 +3,9 @@ import time
 import telegram
 from telegram.error import BadRequest, TimedOut, RetryAfter
 
+from core.conf import conf
 from wiktionary_bot.src.slack import slack_error, add_quote
+from words.utils import tg_send
 
 
 def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
@@ -15,10 +17,12 @@ def send(bot, chat_id, text, reply_markup=None, reply_to=None, pause=1):
                                 reply_to_message_id=reply_to)
     except (TimedOut, RetryAfter) as e:  # todo: join common part between `send` and `edit` and move to shared utils
         print(f'TimedOut or RetryAfter Error: Pause for {pause} seconds...')
-        slack_error(f'`send`  *{type(e).__name__}*: {str(e)}\n\n'
-                    f'Pause for {pause} seconds...\n\n'
-                    f'>chat_id: {chat_id}\n\n'
-                    f'>{add_quote(text)}')
+        error = f'`send`  *{type(e).__name__}*: {str(e)}\n\n' \
+                f'Pause for {pause} seconds...\n\n' \
+                f'>chat_id: {chat_id}\n\n' \
+                f'>{add_quote(text)}'
+        slack_error(error)
+        tg_send(conf.admin_user_id, error)
         time.sleep(pause)
         return send(bot, chat_id, text, reply_markup, reply_to, pause * 2)
 
@@ -38,10 +42,11 @@ def edit(bot, chat_id, msg_id, text, reply_markup=None, pause=1):
         raise
     except (TimedOut, RetryAfter) as e:  # todo: join common part between `send` and `edit` and move to shared utils
         print(f'TimedOut or RetryAfter Error: Pause for {pause} minute...')
-        slack_error(f'`edit`  *{type(e).__name__}*: {str(e)}\n\n'
-                    f'Pause for {pause} minute...\n\n'
-                    f'>chat_id: {chat_id}\n\n'
-                    f'>{add_quote(text)}')
+        error = f'`edit`  *{type(e).__name__}*: {str(e)}\n\n' \
+                f'Pause for {pause} minute...\n\n' \
+                f'>chat_id: {chat_id}\n\n' \
+                f'>{add_quote(text)}'
+        slack_error(conf.admin_user_id, error)
         time.sleep(pause)
         return edit(bot, chat_id, text, reply_markup, pause * 2)
 
