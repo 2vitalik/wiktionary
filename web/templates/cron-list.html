@@ -33,7 +33,7 @@
                 <td class="text-center">
                     {% if cron.status %}
                         {% if cron.reset_active or admin %}
-                            <a class="btn btn-danger btn-sm" href="{% url 'cron-reset' cron.prj cron.slug %}">Reset</a>
+                            <a class="btn btn-danger btn-sm" href="{% url 'cron-reset' cron.prj cron.slug %}?{{ admin }}">Reset</a>
                         {% else %}
                             <button class="btn btn-sm" disabled>Reset</button>
                         {% endif %}

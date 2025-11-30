@@ -28,7 +28,7 @@ class CronListView(TemplateView):
 
         context.update({
             'crons': get_cron_list(),
-            'admin': 'admin' in self.request.GET,
+            'admin': 'admin' if 'admin' in self.request.GET else '',
         })
         return context
 
