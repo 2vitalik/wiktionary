@@ -35,10 +35,12 @@ class CronListView(TemplateView):
 
 class CronResetView(TemplateView):
     def get(self, request, *args, **kwargs):
+        is_admin = 'admin' in self.request.GET
+
         if kwargs['prj'] == 'ws0':
             if not new_job_reset(kwargs['slug']):
                 ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
-        elif kwargs['prj'] == 'ws1' and 'admin' in self.request.GET:
+        elif kwargs['prj'] == 'ws1' and is_admin:
             if not job_reset(kwargs['slug']):
                 ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
         return redirect('cron-list')
