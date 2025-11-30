@@ -2,6 +2,7 @@ import os
 from os.path import join
 
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.http import HttpResponse
 from django.views import View
@@ -43,7 +44,10 @@ class CronResetView(TemplateView):
         elif kwargs['prj'] == 'ws1' and is_admin:
             if not job_reset(kwargs['slug']):
                 ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
-        return redirect('cron-list')
+        url = reverse('cron-list')
+        if is_admin:
+            url += '?admin'
+        return redirect(url)
 
 
 class PageView(View):
