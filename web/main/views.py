@@ -28,6 +28,7 @@ class CronListView(TemplateView):
 
         context.update({
             'crons': get_cron_list(),
+            'admin': 'admin' in self.request.GET,
         })
         return context
 
@@ -37,7 +38,7 @@ class CronResetView(TemplateView):
         if kwargs['prj'] == 'ws0':
             if not new_job_reset(kwargs['slug']):
                 ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
-        elif kwargs['prj'] == 'ws1':
+        elif kwargs['prj'] == 'ws1' and 'admin' in self.request.GET:
             if not job_reset(kwargs['slug']):
                 ...  # todo: return render(request, 'jobs_error.html', {'error': u"Файл не найден"})
         return redirect('cron-list')
