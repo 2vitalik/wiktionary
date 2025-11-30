@@ -72,11 +72,11 @@ def get_modified(slug):
     return modified, delta_str, reset_active
 
 
-def job_reset(slug):
+def job_reset(slug, is_admin=False):
     if not job_started(slug):
         return None
     modified, delta_str, reset_active = get_modified(slug)
-    if not reset_active:
+    if not reset_active and not is_admin:
         return None
     return remove_file(job_started_file(slug))
 
